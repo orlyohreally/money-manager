@@ -1,27 +1,40 @@
-# MoneyManager
+# Money Manager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
+### Requirements
 
-## Development server
+Node.js v10.15.3  
+npm 6.4.1
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Installation
 
-## Code scaffolding
+Clone project
+```
+git clone https://github.com/orlyohreally/money-manager.git
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Install the dependencies
 
-## Build
+```
+npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run Angular project
 
-## Running unit tests
+```
+ng serve --proxy-config proxy.conf.json
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The project will be available at http://localhost:4200. 
 
-## Running end-to-end tests
+## Built with
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- [Angular 6](https://angular.io/) - front-end web app framework
+- [Angular Material](https://material.angular.io) - Material Design components for Angular
 
-## Further help
+## Authors
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- **Orly Knop** - [orlyohreally](https://github.com/orlyohreally)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details

@@ -1,0 +1,83 @@
+<div class="timelines">
+  <mgl-timeline class="styled-timeline">
+    <mgl-timeline-entry
+      class="payment"
+      *ngFor="let payment of payments; let i = index"
+      (expand)="onExpandEntry($event, payment)"
+    >
+      <mgl-timeline-entry-header (click)="onHeaderClick($event)">
+        <div>
+          <div class="timeline-extra-info" [ngClass]="payment.user.color">
+            <div class="timeline-date">
+              <span>{{ payment.date | date: "dd MMM yyyy" }}</span>
+            </div>
+            <div class="action-buttons">
+              <button mat-icon-button (click)="editPayment($event, payment)">
+                <mat-icon class="edit-button" aria-label="Edit payment info"
+                  >create</mat-icon
+                >
+              </button>
+              <button mat-icon-button (click)="removePayment($event, payment)">
+                <mat-icon class="remove-button" aria-label="Remove payment"
+                  >clear</mat-icon
+                >
+              </button>
+            </div>
+          </div>
+          <div class="payment-payer">{{ payment.user.name }}</div>
+        </div>
+      </mgl-timeline-entry-header>
+      <mgl-timeline-entry-content>
+        <div class="payment-info">
+          <div class="payment-amount">
+            ₪ {{ payment.amount }} - {{ payment.message }}
+          </div>
+          <div class="payment-receipt" *ngIf="!!payment.receipt">
+            <img src="{{ payment.receipt }}" />
+          </div>
+          <div class="payment-date-info">
+            <div class="payment-created-date">
+              Added {{ payment.created | date: "HH:mm dd:MM:yyyy" }}
+            </div>
+            <div
+              *ngIf="payment.created != payment.updated"
+              class="payment-updated-date"
+            >
+              Updated {{ payment.updated | date: "HH:mm dd:MM:yyyy" }}
+            </div>
+          </div>
+        </div>
+      </mgl-timeline-entry-content>
+      <mgl-timeline-entry-dot
+        [class]="payment.user.color"
+        size="70"
+        (click)="onDotClick($event)"
+      >
+        <div class="timeline-dot-content" *ngIf="!payment.expand">
+          ₪ {{ payment.amount }}
+        </div>
+      </mgl-timeline-entry-dot>
+    </mgl-timeline-entry>
+    <mgl-timeline-entry class="total-payment" (expand)="onExpandEntry($event, total)">
+      <mgl-timeline-entry-header (click)="onHeaderClick($event)">
+        <div class="timeline-total">
+          Total
+        </div>
+      </mgl-timeline-entry-header>
+      <mgl-timeline-entry-content>
+        <div class="payer-total-payment-amount" *ngFor="let payer of payers">
+          {{ payer.name }} - ₪{{ total.amounts[payer.name] }}
+        </div>
+      </mgl-timeline-entry-content>
+      <mgl-timeline-entry-dot
+        [class]="'accent'"
+        size="100"
+        (click)="onDotClick($event)"
+      >
+        <div class="timeline-dot-content" *ngIf="!total.expand">
+          ₪{{ total.sum }}
+        </div>
+      </mgl-timeline-entry-dot>
+    </mgl-timeline-entry>
+  </mgl-timeline>
+</div>

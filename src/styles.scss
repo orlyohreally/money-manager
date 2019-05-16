@@ -1,6 +1,4 @@
-@import "~angular-vertical-timeline/dist/vertical-timeline.css";
 @import "~@angular/material/theming";
-@import "~angular-mgl-timeline/theme";
 
 @include mat-core();
 
@@ -16,9 +14,9 @@ $candy-app-theme: mat-light-theme(
 );
 
 @include angular-material-theme($candy-app-theme);
-@include mgl-timeline-theme($candy-app-theme);
 
 @import "variables";
+@import "colors-classes";
 
 body,
 html {
@@ -28,4 +26,8 @@ html {
 
 .hidden {
   display: none !important;
+}
+
+button.mat-raised-button {
+  border-radius: 0;
 }

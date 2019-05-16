@@ -1,0 +1,55 @@
+<div class="payment-form">
+  <h1 mat-dialog-title>Payment by {{ user.name }}</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="paymentForm">
+      <mat-form-field>
+        <mat-label>Date of payment</mat-label>
+        <input
+          formControlName="paidAt"
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Subject of payment</mat-label>
+        <mat-select formControlName="subjectId">
+          <mat-option
+            *ngFor="let subject of paymentSubjects"
+            [value]="subject._id"
+          >
+            {{ subject.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="otherSubject">
+        <mat-label>Subject</mat-label>
+        <input type="text" matInput formControlName="newSubject" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Amount</mat-label>
+        <span matSuffix>₪ </span>
+        <input type="text" matInput formControlName="amount" />
+      </mat-form-field>
+      <!-- <div>
+        <mat-label>Receipt</mat-label>
+        <input type="file" (change)="onFileChange($event)" />
+      </div> -->
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="cancel()">
+      <mat-icon>clear</mat-icon>Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="savePayment()"
+      cdkFocusInitial
+    >
+      <mat-icon>done</mat-icon> Save
+    </button>
+  </div>
+</div>

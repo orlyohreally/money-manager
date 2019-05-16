@@ -1,8 +1,8 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { PaymentsComponent } from "./payments/payments.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { PaymentsTimelineComponent } from './payments-timeline/payments-timeline.component';
 
-const routes: Routes = [{ path: "", component: PaymentsComponent }];
+const routes: Routes = [{ path: '', component: PaymentsTimelineComponent }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

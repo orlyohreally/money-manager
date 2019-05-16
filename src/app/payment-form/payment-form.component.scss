@@ -1,0 +1,13 @@
+.payment-form {
+  ::ng-deep .mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+
+  ::ng-deep {
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+}

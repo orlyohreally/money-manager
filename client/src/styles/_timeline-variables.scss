@@ -1,0 +1,11 @@
+$timeline-width: 90%;
+$timeline-top-bottom-margin: 10px;
+$timeline-left-right-margin: calc(50% - #{$timeline-width / 2});
+
+$timeline-line-width: 5px;
+
+$timeline-dot-height: 50px;
+$timeline-dot-width: 100px;
+
+$timeline-entry-top-bottom-padding: 10px;
+$timeline-entry-left-right-padding: 0px;

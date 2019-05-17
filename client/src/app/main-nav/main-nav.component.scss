@@ -1,0 +1,23 @@
+@import "variables";
+.main-nav {
+  font-family: "Indie Flower", cursive;
+  .home-link {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+
+    .logo {
+      height: 35px;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+  }
+
+  app-main-menu {
+    width: 100%;
+  }
+}

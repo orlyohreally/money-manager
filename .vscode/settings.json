@@ -1,3 +1,6 @@
 {
-    "prettier.tslintIntegration": true
+    "prettier.tslintIntegration": true,
+    "cSpell.words": [
+        "Datepicker"
+    ]
 }

@@ -1,0 +1,17 @@
+.payments-timeline {
+  display: flex;
+  flex-wrap: wrap;
+
+  .payment {
+    display: block;
+    width: 100%;
+    @media (min-width: 600px) {
+      width: 50%;
+    }
+  }
+
+  .total-payment-amount {
+    display: block;
+    width: 100%;
+  }
+}

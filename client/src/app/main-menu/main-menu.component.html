@@ -1,0 +1,11 @@
+<div class="main-menu">
+  <div class="menu-left">
+    <app-main-menu-entry
+      *ngFor="let entry of menuEntries"
+      [entry]="entry"
+    ></app-main-menu-entry>
+  </div>
+  <div class="menu-right">
+    <app-new-payment></app-new-payment>
+  </div>
+</div>

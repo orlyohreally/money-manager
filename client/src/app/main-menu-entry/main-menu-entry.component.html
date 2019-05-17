@@ -1,0 +1,8 @@
+<button mat-button [matMenuTriggerFor]="menuEntry">
+  {{ entry.label }}
+</button>
+<mat-menu #menuEntry="matMenu">
+  <a [routerLink]="item.link" mat-menu-item *ngFor="let item of entry.items">
+    {{ item.label }}
+  </a>
+</mat-menu>

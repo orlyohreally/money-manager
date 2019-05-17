@@ -1,0 +1,55 @@
+<div class="payment-timeline-entry">
+  <div class="payment-timeline-entry-header" [ngClass]="classes">
+    <div class="payment-header-info">
+      <app-payment-subject
+        [paymentSubject]="paymentSubject"
+      ></app-payment-subject>
+      <app-money-amount [amount]="payment.amount"></app-money-amount>
+    </div>
+    <div class="action-buttons">
+      <button mat-icon-button (click)="expandEntry()" *ngIf="!!payment.receipt">
+        <mat-icon class="detail-button" aria-label="Look at payment info">
+          {{ !expanded ? "speaker_notes" : "speaker_notes_off" }}
+        </mat-icon>
+      </button>
+      <button mat-icon-button (click)="onEditPayment()">
+        <mat-icon class="edit-button" aria-label="Edit payment info">
+          create
+        </mat-icon>
+      </button>
+      <button mat-icon-button (click)="onRemovePayment()">
+        <mat-icon class="remove-button" aria-label="Remove payment">
+          clear
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="payment-timeline-entry-content">
+    <div class="payment-content-info">
+      <div class="payment-paid-date">
+        <span>
+          by
+          <app-member-payment-timeline
+            [member]="member"
+          ></app-member-payment-timeline
+        ></span>
+        <br />
+        <span> at {{ payment.paidAt | date: "HH:mm dd.MM.yyyy" }}</span>
+      </div>
+      <div class="payment-receipt" *ngIf="!!payment.receipt && expanded">
+        <img src="{{ payment.receipt }}" />
+      </div>
+      <div class="payment-date-info">
+        <div class="payment-created-date">
+          Added at {{ payment.createdAt | date: "HH:mm dd.MM.yyyy" }}
+        </div>
+        <div
+          *ngIf="payment.createdAt != payment.updatedAt"
+          class="payment-updated-date"
+        >
+          Updated at {{ payment.updatedAt | date: "HH:mm dd.MM.yyyy" }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

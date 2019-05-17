@@ -1,0 +1,18 @@
+{
+  "name": "money-manager-shared",
+  "version": "1.0.0",
+  "description": "Shared code for money-manager project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orlyohreally/money-manager.git"
+  },
+  "author": "Orly Knop",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/orlyohreally/money-manager/issues"
+  },
+  "homepage": "https://github.com/orlyohreally/money-manager#readme",
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}

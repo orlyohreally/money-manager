@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Payment } from '@shared/types/payment';
-import { Member } from '@shared/types/member';
-import { PaymentSubject } from '@shared/types/payment-subject';
+import { Payment, User as Member,  PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'app-payment-timeline-entry',

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
-  selector: 'app-money-amount',
-  templateUrl: './money-amount.component.html',
-  styleUrls: ['./money-amount.component.scss']
+  selector: "app-money-amount",
+  templateUrl: "./money-amount.component.html",
+  styleUrls: ["./money-amount.component.scss"]
 })
 export class MoneyAmountComponent implements OnInit {
   @Input() amount: number;
@@ -17,10 +17,10 @@ export class MoneyAmountComponent implements OnInit {
   public getColoringClass(): string {
     if (this.colorize) {
       return this.amount > 0
-        ? 'color-success'
+        ? "color-success"
         : this.amount < 0
-        ? 'color-danger'
-        : 'color-warning';
+        ? "color-danger"
+        : "color-warning";
     }
     return null;
   }
@@ -28,14 +28,14 @@ export class MoneyAmountComponent implements OnInit {
   public getDisplayValue(): string {
     const formatedAmount = Math.abs(this.amount)
       .toFixed(2)
-      .replace(/[.,]00/, '');
+      .replace(/[.,]00/, "");
     if (this.humanizeLook) {
-      if (this.humanizeLookType === 'negative') {
-        return this.amount < 0
+      if (this.humanizeLookType === "negative") {
+        return this.amount > 0
           ? `overpaid ₪ ${formatedAmount}`
-          : this.amount > 0
+          : this.amount < 0
           ? `needs to pay ₪ ${formatedAmount}`
-          : 'all paid';
+          : "all paid";
       } else {
         return `spent ₪ ${formatedAmount}`;
       }

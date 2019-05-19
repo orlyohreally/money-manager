@@ -1,38 +1,46 @@
-import { Injectable } from '@angular/core';
-import { PaymentSubject } from '@shared/types/payment-subject';
-import { Observable, of } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { PaymentSubject } from "@shared/types";
+import { Observable, of } from "rxjs";
+import { normalizedArray, normalize } from "@shared/utils";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class PaymentSubjectsService {
-  constructor() {}
-
-  public get(): Observable<PaymentSubject[]> {
-    return of([
+  public paymentSubjects: normalizedArray<PaymentSubject>;
+  constructor() {
+    this.paymentSubjects = normalize([
       {
-        _id: '1',
-        familyId: '1',
-        name: 'food',
-        icon: 'assets/payment-subjects-icons/grocery.png'
+        _id: "1",
+        familyId: "1",
+        name: "food",
+        icon: "assets/payment-subjects-icons/grocery.png"
       },
       {
-        _id: '2',
-        familyId: '1',
-        name: 'apartment',
-        icon: 'assets/payment-subjects-icons/apartment.png'
+        _id: "2",
+        familyId: "1",
+        name: "apartment",
+        icon: "assets/payment-subjects-icons/apartment.png"
       }
     ]);
   }
 
-  public aggregate(
-    subjects: PaymentSubject[]
-  ): { [id: string]: PaymentSubject } {
-    const reducer = (accumulator, currentValue) => {
-      return Object.assign(accumulator, currentValue);
-    };
-    return subjects
-      .map(subject => ({ [subject._id]: subject }))
-      .reduce(reducer);
+  public getSubjects(): Observable<normalizedArray<PaymentSubject>> {
+    return of(this.paymentSubjects);
+  }
+
+  public async createSubject(subject: PaymentSubject) {
+    return new Promise<string>((resolve, reject) => {
+      subject._id = "10"; //String(Number(Object.keys(this.paymentSubjects)) + 1);
+      this.paymentSubjects[subject._id] = subject;
+      resolve("success");
+    });
+  }
+
+  public async updateSubject(subject: PaymentSubject) {
+    return new Promise<string>((resolve, reject) => {
+      this.paymentSubjects[subject._id] = subject;
+      resolve("success");
+    });
   }
 }

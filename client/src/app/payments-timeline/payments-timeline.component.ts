@@ -1,24 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { PaymentsService } from '../payments.service';
-import { PaymentFormComponent } from '../payment-form/payment-form.component';
-import { Payment } from '@shared/types/payment';
-import { Member } from '@shared/types/member';
-import { MembersService } from '../members.service';
-import { PaymentSubjectsService } from '../payment-subjects.service';
-import { PaymentSubject } from '@shared/types/payment-subject';
+import { Component, OnInit } from "@angular/core";
+import { MatSnackBar, MatDialog } from "@angular/material";
+import { PaymentFormComponent } from "../payment-form/payment-form.component";
+import { MembersService } from "../members.service";
+import { PaymentsService } from "../payments.service";
+import { PaymentSubjectsService } from "../payment-subjects.service";
+import { PaymentSubject, Payment, User as Member } from "@shared/types";
 import {
+  normalize,
   getDischargedTotal,
-  getTotal,
-  aggregateAmountsByMember
-} from '@shared/utils/payments';
+  getTotalPaymentAmount,
+  aggregateAmountsByMember,
+  normalizedArray,
+  unnormalizeArray
+} from "@shared/utils";
+
 @Component({
-  selector: 'app-payments-timeline',
-  templateUrl: './payments-timeline.component.html',
-  styleUrls: ['./payments-timeline.component.scss']
+  selector: "app-payments-timeline",
+  templateUrl: "./payments-timeline.component.html",
+  styleUrls: ["./payments-timeline.component.scss"]
 })
 export class PaymentsTimelineComponent implements OnInit {
-  payments: Payment[];
+  payments: normalizedArray<Payment>;
   paymentAmounts: { [memberId: string]: number };
   members: Member[];
   transformedMembers: { [id: string]: Member };
@@ -37,41 +39,36 @@ export class PaymentsTimelineComponent implements OnInit {
     this.getPayments();
     this.getPaymentSubjects();
     this.getMembers();
-
     this.calculateTotal();
   }
 
   private getMembers() {
     this.membersService.get().subscribe(members => {
       this.members = members;
-      this.transformedMembers = this.membersService.aggregate(members);
+      this.transformedMembers = normalize(members);
     });
   }
   private getPayments() {
     this.paymentsService.getPayments().subscribe(
       payments => {
         this.payments = payments;
-        console.log('getPayments', this.payments);
       },
       error => {
         console.log(error);
       }
     );
   }
-  public getData(payment) {
-    return {
-      payment,
-      member: this.transformedMembers[payment.memberId]
-    };
-  }
+
   private getPaymentSubjects() {
-    this.paymentSubjectsService.get().subscribe(subjects => {
-      this.paymentSubjects = this.paymentSubjectsService.aggregate(subjects);
+    this.paymentSubjectsService.getSubjects().subscribe(subjects => {
+      this.paymentSubjects = subjects;
     });
   }
+
   public convertColorSchemeToClasses(colorScheme: string): string {
     return `background-color-${colorScheme}`;
   }
+
   public getPaymentClasses(payment: Payment) {
     return this.convertColorSchemeToClasses(
       this.transformedMembers[payment.memberId].colorScheme
@@ -82,7 +79,9 @@ export class PaymentsTimelineComponent implements OnInit {
       this.payments,
       this.members.map(member => member._id)
     );
-    this.paymentAmounts.sum = getTotal(this.payments);
+    this.paymentAmounts.sum = getTotalPaymentAmount(
+      unnormalizeArray(this.payments)
+    );
   }
   public calcDischargedTotal() {
     this.paymentAmounts = {};
@@ -90,32 +89,33 @@ export class PaymentsTimelineComponent implements OnInit {
       this.payments,
       this.members.map(member => member._id)
     );
-    this.paymentAmounts.sum = getTotal(this.payments);
+    this.paymentAmounts.sum = getTotalPaymentAmount(
+      unnormalizeArray(this.payments)
+    );
   }
 
-  public editPayment(payment: Payment, i) {
+  public editPayment(payment: Payment) {
     console.log(payment);
-    this.openForm(payment, i);
+    this.openForm(payment);
   }
-  public openForm(payment: Payment = null, i): void {
+  public openForm(payment: Payment): void {
     const dialogRef = this.paymentForm.open(PaymentFormComponent, {
-      width: '300px',
+      width: "300px",
       restoreFocus: false,
       data: payment
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result, payment);
-      payment = null; // does not work
-      // this.payments[i] = result;
+      this.payments[payment._id] = result;
+      this.calculateTotal();
       console.log(this.payments);
     });
   }
-  public removePayment(i) {
-    const payment = this.payments[i];
+  public removePayment(payment: Payment) {
     this.paymentsService.removePayment(payment).subscribe(
       result => {
-        if (result.status === 'success') {
+        if (result.status === "success") {
           this.snackBar.open(
             `Payment for ₪ ${payment.amount} by ${
               payment.memberId
@@ -125,7 +125,7 @@ export class PaymentsTimelineComponent implements OnInit {
               duration: 2000
             }
           );
-          this.payments.splice(i, 1);
+          delete this.payments[payment._id];
           this.calculateTotal();
         } else {
           this.snackBar.open(result.msg, null, {

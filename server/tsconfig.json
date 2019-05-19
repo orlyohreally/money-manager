@@ -12,9 +12,10 @@
     "lib": ["es2017", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@shared/*": ["../shared/*"]
     },
-    "typeRoots": ["node_modules/@types", "./definitions"]
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": ["definitions/**/*.d.ts", "src/**/*", "__tests__/**/*"]
+  "include": ["src/**/*", "__tests__/**/*", "../shared/**/*"]
 }

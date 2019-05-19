@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Member } from '@shared/types/member';
+import { User as Member } from '@shared/types';
 
 @Component({
   selector: 'app-member-payment-timeline',

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Member } from "@shared/types/member";
+import { User } from "@shared/types";
 
 @Injectable({
   providedIn: "root"
@@ -7,7 +7,7 @@ import { Member } from "@shared/types/member";
 export class AuthenticationService {
   constructor() {}
 
-  public getMember(): Member {
+  public getUser(): User {
     return {
       _id: "2",
       firstName: "Orly",

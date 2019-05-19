@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Member } from '@shared/types/member';
+import { User as Member } from '@shared/types';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -28,12 +28,5 @@ export class MembersService {
         colorScheme: 'accent'
       }
     ]);
-  }
-
-  public aggregate(members: Member[]): { [id: string]: Member } {
-    const reducer = (accumulator, currentValue) => {
-      return Object.assign(accumulator, currentValue);
-    };
-    return members.map(member => ({ [member._id]: member })).reduce(reducer);
   }
 }

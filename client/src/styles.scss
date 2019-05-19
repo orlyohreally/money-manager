@@ -28,6 +28,10 @@ html {
   display: none !important;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 button.mat-raised-button {
   border-radius: 0;
 }

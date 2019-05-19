@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
-import { Payment } from '@shared/types/payment';
 
 @Component({
   selector: 'app-new-payment',

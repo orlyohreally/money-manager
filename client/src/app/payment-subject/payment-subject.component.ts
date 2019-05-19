@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PaymentSubject } from '@shared/types/payment-subject';
+import { PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'app-payment-subject',

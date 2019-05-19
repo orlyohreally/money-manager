@@ -1,55 +1,31 @@
-import { Payment } from '@shared/types/payment';
+import { Payment } from "@shared/types";
+import { normalizedArray, groupBy, unnormalizeArray } from "./array";
 
-export function getTotal(payments: Payment[]): number {
-  return payments.reduce((sum, p) => (sum += p.amount), 0);
-}
-export function groupByMember(payments: Payment[]) {
-  const reducer = (accumulator, currentValue) => {
-    accumulator[currentValue.memberId] = (
-      accumulator[currentValue.memberId] || []
-    ).concat(currentValue);
-    return accumulator;
-  };
-  return payments.reduce(reducer, {});
+export function getTotalPaymentAmount(payments: Payment[]): number {
+  return payments.reduce((sum, payment) => (sum += payment.amount), 0);
 }
 
 export function aggregateAmountsByMember(
-  payments: Payment[],
+  payments: normalizedArray<Payment>,
   membersIds: string[]
 ): { [memberId: string]: number } {
-  const groupedPayments = groupByMember(payments);
-  const getMemberTotalAmount = (memberId: string) => {
-    return {
-      [memberId]: (groupedPayments[memberId] || []).reduce(
-        (sum, payment) => sum + payment.amount,
-        0
-      )
-    };
-  };
-  return membersIds
-    .map(getMemberTotalAmount)
-    .reduce((accumulator, currentValue) =>
-      Object.assign(accumulator, currentValue)
-    );
+  const groupedPayments = groupBy(unnormalizeArray(payments), "memberId");
+  return membersIds.reduce((res, memberId) => {
+    res[memberId] = getTotalPaymentAmount(groupedPayments[memberId] || []);
+    return res;
+  }, {});
 }
 
 export function getDischargedTotal(
-  payments: Payment[],
+  payments: normalizedArray<Payment>,
   membersIds: string[]
 ): { [memberId: string]: number } {
   const aggregatedPayments = aggregateAmountsByMember(payments, membersIds);
-  const totalAmount = getTotal(payments);
-  console.log(aggregatedPayments, totalAmount);
-  return membersIds
-    .map(memberId => {
-      let amount = aggregatedPayments[memberId];
-      if (!amount) {
-        amount = 0;
-      }
-      aggregatedPayments[memberId] = totalAmount / membersIds.length - amount;
-      return aggregatedPayments;
-    })
-    .reduce((accumulator, currentValue) =>
-      Object.assign(accumulator, currentValue)
-    );
+  const totalAmount = getTotalPaymentAmount(unnormalizeArray(payments));
+
+  return membersIds.reduce((res, memberId) => {
+    res[memberId] =
+      aggregatedPayments[memberId] - totalAmount / membersIds.length;
+    return res;
+  }, {});
 }

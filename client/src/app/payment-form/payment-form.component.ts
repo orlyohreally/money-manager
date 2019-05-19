@@ -1,42 +1,35 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Payment } from '@shared/types/payment';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PaymentsService } from '../payments.service';
-import { AuthenticationService } from '../authentication.service';
-import { Member } from '@shared/types/member';
-import { PaymentSubject } from '@shared/types/payment-subject';
-import { PaymentSubjectsService } from '../payment-subjects.service';
+import { Component, OnInit, Inject } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
+import { PaymentsService } from "../payments.service";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { PaymentSubjectsService } from "../payment-subjects.service";
+import { AuthenticationService } from "../authentication.service";
+import { Payment, PaymentSubject, User as Member } from "@shared/types";
+import { PaymentSubjectFormComponent } from "../payment-subject-form/payment-subject-form.component";
+import { normalizedArray } from "@shared/utils";
 
 @Component({
-  selector: 'app-payment-form',
-  templateUrl: './payment-form.component.html',
-  styleUrls: ['./payment-form.component.scss']
+  selector: "app-payment-form",
+  templateUrl: "./payment-form.component.html",
+  styleUrls: ["./payment-form.component.scss"]
 })
 export class PaymentFormComponent implements OnInit {
   public paymentForm: FormGroup;
   public currentMember: Member;
-  public paymentSubjects: PaymentSubject[];
-  public otherSubject = false;
+  public paymentSubjects: normalizedArray<PaymentSubject>;
   constructor(
     public dialogRef: MatDialogRef<PaymentFormComponent>,
     private paymentsService: PaymentsService,
     private authenticationService: AuthenticationService,
     private paymentSubjectsService: PaymentSubjectsService,
+    private paymentSubjectForm: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Payment
   ) {}
 
   private getPaymentSubjects() {
-    this.paymentSubjectsService.get().subscribe(
+    this.paymentSubjectsService.getSubjects().subscribe(
       subjects => {
-        console.log(subjects);
         this.paymentSubjects = subjects;
-        this.paymentSubjects.push({
-          _id: '0',
-          icon: 'assets/payment-subjects-icons/new.png',
-          familyId: '1',
-          name: 'Other'
-        });
       },
       error => {
         console.log(error);
@@ -47,13 +40,13 @@ export class PaymentFormComponent implements OnInit {
     this.dialogRef.close();
   }
   ngOnInit() {
-    this.currentMember = this.authenticationService.getMember();
+    this.currentMember = this.authenticationService.getUser();
     this.getPaymentSubjects();
     if (!this.data) {
       this.initPaymentForm({
         _id: null,
         memberId: this.currentMember._id,
-        familyId: '1',
+        familyId: "1",
         paidAt: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -72,42 +65,43 @@ export class PaymentFormComponent implements OnInit {
       subjectId: new FormControl(payment.subjectId, [Validators.required]),
       amount: new FormControl(payment.amount, [
         Validators.required,
-        Validators.pattern('^[0-9]*')
+        Validators.pattern("^[0-9]*")
       ]),
-      newSubject: new FormControl('', []),
       receipt: new FormControl(payment.receipt, [])
-    });
-    this.paymentForm.get('subjectId').valueChanges.subscribe(value => {
-      this.otherSubject = value === '0';
-      if (this.otherSubject) {
-        this.paymentForm.controls.newSubject.setValidators([
-          Validators.required
-        ]);
-      } else {
-        this.paymentForm.controls.newSubject.setValidators([]);
-      }
-      this.paymentForm.controls.newSubject.updateValueAndValidity();
     });
   }
   get _id() {
-    return this.paymentForm.get('_id');
+    return this.paymentForm.get("_id");
   }
   get memberId() {
-    return this.paymentForm.get('memberId');
+    return this.paymentForm.get("memberId");
   }
 
   get paidAt() {
-    return this.paymentForm.get('paidAt');
+    return this.paymentForm.get("paidAt");
   }
 
   get subjectId() {
-    return this.paymentForm.get('subjectId');
+    return this.paymentForm.get("subjectId");
   }
-
-  get newSubject() {
-    return this.paymentForm.get('newSubject');
+  public newPaymentSubject(event) {
+    event.stopPropagation();
+    this.openPaymentSubjectForm();
   }
+  public openPaymentSubjectForm(): void {
+    const dialogRef = this.paymentSubjectForm.open(
+      PaymentSubjectFormComponent,
+      {
+        width: "400px",
+        restoreFocus: false
+      }
+    );
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.paymentForm.controls.subjectId.setValue(result._id);
+    });
+  }
   public savePayment() {
     if (this.paymentForm.valid) {
       if (!this.paymentForm.value._id) {

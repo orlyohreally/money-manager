@@ -2,6 +2,7 @@
 @import "timeline-variables";
 
 .payment-timeline-entry {
+  font-family: $main-font-family;
   position: relative;
   display: flex;
   flex-direction: column;

@@ -7,17 +7,30 @@
       <app-money-amount [amount]="payment.amount"></app-money-amount>
     </div>
     <div class="action-buttons">
-      <button mat-icon-button (click)="expandEntry()" *ngIf="!!payment.receipt">
-        <mat-icon class="detail-button" aria-label="Look at payment info">
+      <button
+        mat-icon-button
+        (click)="expandEntry()"
+        *ngIf="!!payment.receipt"
+        title="Look at payment receipt"
+      >
+        <mat-icon class="detail-button" aria-label="Look at payment receipt">
           {{ !expanded ? "speaker_notes" : "speaker_notes_off" }}
         </mat-icon>
       </button>
-      <button mat-icon-button (click)="onEditPayment()">
+      <button
+        mat-icon-button
+        (click)="onEditPayment()"
+        title="Edit payment info"
+      >
         <mat-icon class="edit-button" aria-label="Edit payment info">
           create
         </mat-icon>
       </button>
-      <button mat-icon-button (click)="onRemovePayment()">
+      <button
+        mat-icon-button
+        (click)="onRemovePayment()"
+        title="Remove payment"
+      >
         <mat-icon class="remove-button" aria-label="Remove payment">
           clear
         </mat-icon>
@@ -34,7 +47,7 @@
           ></app-member-payment-timeline
         ></span>
         <br />
-        <span> at {{ payment.paidAt | date: "HH:mm dd.MM.yyyy" }}</span>
+        <span> at {{ payment.paidAt | date: "dd.MM.yyyy" }}</span>
       </div>
       <div class="payment-receipt" *ngIf="!!payment.receipt && expanded">
         <img src="{{ payment.receipt }}" />

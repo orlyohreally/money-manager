@@ -17,19 +17,12 @@ $candy-app-theme: mat-light-theme(
 
 @import "variables";
 @import "colors-classes";
+@import "classes";
 
 body,
 html {
   margin: 0;
   font-family: $main-font-family;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.clickable {
-  cursor: pointer;
 }
 
 button.mat-raised-button {

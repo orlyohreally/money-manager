@@ -1,4 +1,13 @@
 <div class="registration-banner">
-  <h1>Plan your family money expenses</h1>
-  <app-new-user></app-new-user>
+  <div class="info-block">
+    <h1>Start planning your money expenses with Money Manager</h1>
+    <img class="banner-image" src="assets/icons/banner.jpg" />
+  </div>
+  <div class="action-block">
+    <app-button
+      (clickAction)="relocateToRegisterPage()"
+      label="Register"
+      classes="text-uppercase lg-button"
+    ></app-button>
+  </div>
 </div>

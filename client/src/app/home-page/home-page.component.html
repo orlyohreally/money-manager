@@ -6,4 +6,13 @@
   - track your money payments
   - footer
 -->
-<app-home-page-registration-banner></app-home-page-registration-banner>
+<div class="home-page">
+  <app-home-page-registration-banner></app-home-page-registration-banner>
+  <app-home-page-section
+    class="home-page-section"
+    *ngFor="let section of sections; let i = index"
+    [classes]="i % 2 === 1 ? 'reversed' : ''"
+    [section]="section"
+    (clickAction)="openForm($event)"
+  ></app-home-page-section>
+</div>

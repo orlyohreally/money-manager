@@ -1,0 +1,20 @@
+@import "variables";
+
+.registration-banner {
+  font-family: $secondary-font-family;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  .info-block {
+    .banner-image {
+      width: 90%;
+      height: auto;
+
+      @media (min-width: 426px) {
+        width: 50%;
+      }
+    }
+  }
+}

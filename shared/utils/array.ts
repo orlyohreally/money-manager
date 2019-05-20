@@ -26,3 +26,8 @@ export function groupBy<T extends { [key: string]: any }>(
     return objectsByKeyValue;
   }, {});
 }
+
+export function orderNormalizedArrayByKey<T>(key: string) {
+  return (a: { key: string; value: T }, b: { key: string; value: T }) =>
+    a.value[key] - b.value[key];
+}

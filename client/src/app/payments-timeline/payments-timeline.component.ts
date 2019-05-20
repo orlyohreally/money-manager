@@ -11,7 +11,8 @@ import {
   getTotalPaymentAmount,
   aggregateAmountsByMember,
   normalizedArray,
-  unnormalizeArray
+  unnormalizeArray,
+  orderNormalizedArrayByKey
 } from "@shared/utils";
 
 @Component({
@@ -107,7 +108,6 @@ export class PaymentsTimelineComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result, payment);
-      this.payments[payment._id] = result;
       this.calculateTotal();
       console.log(this.payments);
     });
@@ -125,7 +125,7 @@ export class PaymentsTimelineComponent implements OnInit {
               duration: 2000
             }
           );
-          delete this.payments[payment._id];
+
           this.calculateTotal();
         } else {
           this.snackBar.open(result.msg, null, {
@@ -137,5 +137,9 @@ export class PaymentsTimelineComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  public orderByKey(key) {
+    return orderNormalizedArrayByKey(key);
   }
 }

@@ -51,12 +51,18 @@ export class PaymentsService {
   }
   public updatePayment(payment: Payment) {
     console.log("updatePayment", payment);
-    return of(payment);
+    this.payments[payment._id] = payment;
+    return of({
+      status: "success",
+      msg: null
+    });
   }
 
-  public removePayment(payment: Payment): any {
+  public removePayment(payment: Payment) {
+    delete this.payments[payment._id];
     return of({
-      status: "success"
+      status: "success",
+      msg: null
     });
   }
 }

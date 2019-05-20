@@ -34,8 +34,9 @@ import { PageNotFoundComponent } from "./page-not-found/page-not-found.component
 import { MainMenuEntryComponent } from "./main-menu-entry/main-menu-entry.component";
 import { HomePageComponent } from "./home-page/home-page.component";
 import { HomePageRegistrationBannerComponent } from "./home-page-registration-banner/home-page-registration-banner.component";
-import { NewUserComponent } from "./new-user/new-user.component";
 import { PaymentSubjectFormComponent } from "./payment-subject-form/payment-subject-form.component";
+import { HomePageSectionComponent } from "./home-page-section/home-page-section.component";
+import { ButtonComponent } from "./button/button.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,8 +54,9 @@ import { PaymentSubjectFormComponent } from "./payment-subject-form/payment-subj
     MainMenuEntryComponent,
     HomePageComponent,
     HomePageRegistrationBannerComponent,
-    NewUserComponent,
-    PaymentSubjectFormComponent
+    PaymentSubjectFormComponent,
+    HomePageSectionComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,

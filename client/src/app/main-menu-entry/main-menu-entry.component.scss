@@ -1,3 +1,7 @@
-.mat-menu-content {
-  padding: 0;
+@import "variables";
+.main-menu-entry {
+  .menu-link {
+    font-family: $secondary-font-family;
+    text-transform: uppercase;
+  }
 }

@@ -23,30 +23,20 @@
         <mat-error *ngIf="familyId.invalid">{{ getErrorMessage() }}</mat-error>
       </mat-form-field>
 
-      <div class="subject-icon-field">
-        <label class="subject-label-icon">Icon</label>
-        <div class="subject-icons">
-          <img
-            class="subject-icon clickable"
-            [ngClass]="{ selected: subjectForm.value.icon === icon.path }"
-            src="{{ icon.path }}"
-            *ngFor="let icon of subjectIcons"
-            (click)="selectIcon(icon)"
-          />
-        </div>
-      </div>
+      <app-form-field class="subject-icon-field" label="Icon" [required]="true">
+        <app-html-element-select
+          class="subject-icon-select"
+          [elements]="subjectIcons"
+          (clickAction)="selectIcon($event)"
+        ></app-html-element-select>
+      </app-form-field>
     </form>
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button color="warn" (click)="cancel()">
       <mat-icon>clear</mat-icon>Cancel
     </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="saveSubject()"
-      cdkFocusInitial
-    >
+    <button mat-raised-button color="primary" (click)="saveSubject()">
       <mat-icon>done</mat-icon> Save
     </button>
   </div>

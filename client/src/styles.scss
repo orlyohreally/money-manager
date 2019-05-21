@@ -19,6 +19,12 @@ $candy-app-theme: mat-light-theme(
 @import "colors-classes";
 @import "classes";
 
+$custom-typography: mat-typography-config(
+  $font-family: $main-font-family
+);
+
+@include angular-material-typography($custom-typography);
+
 body,
 html {
   margin: 0;

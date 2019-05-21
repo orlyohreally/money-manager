@@ -1,0 +1,37 @@
+<div class="sign-in-form">
+  <h1>
+    Sign up
+  </h1>
+  <div class="form">
+    <a class="icon" href="https://www.freepik.com/free-photos-vectors/computer"
+      ><img src="/assets/icons/form.jpg"
+    /></a>
+    <form [formGroup]="signInForm" (ngSubmit)="register()">
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input required formControlName="firstName" matInput />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input required formControlName="lastName" matInput />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input required formControlName="password" type="password" matInput />
+      </mat-form-field>
+
+      <app-form-field [required]="true" label="Color scheme">
+        <app-html-element-select
+          class="color-schemes"
+          [elements]="colorSchemeRepresentations"
+          (clickAction)="selectColorScheme($event)"
+        ></app-html-element-select>
+      </app-form-field>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>done</mat-icon> Sign in
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

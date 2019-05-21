@@ -5,14 +5,22 @@ import { User } from "@shared/types";
   providedIn: "root"
 })
 export class AuthenticationService {
-  constructor() {}
-
-  public getUser(): User {
-    return {
-      _id: "2",
-      firstName: "Orly",
+  user: User;
+  constructor() {
+    this.user = {
+      _id: "1",
       lastName: "Knop",
+      firstName: "Orly",
       colorScheme: "accent"
     };
+  }
+
+  public getUser(): User {
+    return this.user;
+  }
+
+  public register(user: User) {
+    this.user = user;
+    console.log("new user", this.user);
   }
 }

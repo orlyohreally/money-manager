@@ -44,7 +44,7 @@ export class PaymentsTimelineComponent implements OnInit {
   }
 
   private getMembers() {
-    this.membersService.get().subscribe(members => {
+    this.membersService.getMembers().subscribe(members => {
       this.members = members;
       this.transformedMembers = normalize(members);
     });

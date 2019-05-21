@@ -98,25 +98,25 @@ export class PaymentFormComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.paymentForm.controls.subjectId.setValue(result._id);
+      if (result) {
+        this.paymentForm.controls.subjectId.setValue(result._id);
+      }
     });
   }
   public savePayment() {
-    if (this.paymentForm.valid) {
-      if (!this.paymentForm.value._id) {
-        this.paymentsService.createPayment(this.paymentForm.value);
-        this.dialogRef.close(this.paymentForm.value);
-      } else {
-        this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
-          result => {
-            this.dialogRef.close(result);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      }
+    console.log(this.paymentForm.valid);
+    if (!this.paymentForm.value._id) {
+      this.paymentsService.createPayment(this.paymentForm.value);
+      this.dialogRef.close(this.paymentForm.value);
+    } else {
+      this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
+        result => {
+          this.dialogRef.close(result);
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 

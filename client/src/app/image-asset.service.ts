@@ -27,6 +27,16 @@ export class ImageAssetService {
         _id: "4",
         category: "payment-subject",
         path: "assets/payment-subjects-icons/film-reel.png"
+      },
+      {
+        _id: "4",
+        category: "payment-subject",
+        path: "assets/payment-subjects-icons/water.png"
+      },
+      {
+        _id: "4",
+        category: "payment-subject",
+        path: "assets/payment-subjects-icons/pets.png"
       }
     ];
   }

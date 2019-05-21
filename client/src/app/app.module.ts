@@ -37,6 +37,10 @@ import { HomePageRegistrationBannerComponent } from "./home-page-registration-ba
 import { PaymentSubjectFormComponent } from "./payment-subject-form/payment-subject-form.component";
 import { HomePageSectionComponent } from "./home-page-section/home-page-section.component";
 import { ButtonComponent } from "./button/button.component";
+import { SignInFormComponent } from "./sign-in-form/sign-in-form.component";
+import { UserMenuComponent } from './user-menu/user-menu.component';
+import { HtmlElementSelectComponent } from './html-element-select/html-element-select.component';
+import { FormFieldComponent } from './form-field/form-field.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +60,11 @@ import { ButtonComponent } from "./button/button.component";
     HomePageRegistrationBannerComponent,
     PaymentSubjectFormComponent,
     HomePageSectionComponent,
-    ButtonComponent
+    ButtonComponent,
+    SignInFormComponent,
+    UserMenuComponent,
+    HtmlElementSelectComponent,
+    FormFieldComponent
   ],
   imports: [
     BrowserModule,

@@ -6,6 +6,7 @@ import { normalizedArray } from "@shared/utils";
 import { FamiliesService } from "../families.service";
 import { PaymentSubjectsService } from "../payment-subjects.service";
 import { ImageAssetService } from "../image-asset.service";
+import { HtmlElementRepresentation } from "../html-element";
 
 @Component({
   selector: "app-payment-subject-form",
@@ -22,16 +23,22 @@ export class PaymentSubjectFormComponent implements OnInit {
   ) {}
   subjectForm: FormGroup;
   families: normalizedArray<Family>;
-  subjectIcons: ImageAsset[];
+  subjectIcons: HtmlElementRepresentation[];
   ngOnInit() {
     this.getFamilies();
     this.getIcons();
     this.initForm(this.data);
   }
   private getIcons() {
-    this.subjectIcons = this.imageAssetService.getImageAssetsByCategory(
-      "payment-subject"
-    );
+    const generateElements = icon => ({
+      id: icon.path,
+      innerHTML: `<img src="${icon.path}"/>`,
+      classes: "subject-icon clickable"
+    });
+
+    this.subjectIcons = this.imageAssetService
+      .getImageAssetsByCategory("payment-subject")
+      .map(generateElements);
   }
   private initForm(subject: Partial<PaymentSubject>) {
     console.log(subject);
@@ -40,7 +47,7 @@ export class PaymentSubjectFormComponent implements OnInit {
         _id: null,
         name: null,
         familyId: null,
-        icon: this.subjectIcons[0].path
+        icon: null //this.subjectIcons[0].path
       };
     }
 

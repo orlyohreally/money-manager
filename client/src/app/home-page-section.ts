@@ -1,5 +1,3 @@
-import { EventEmitter } from "protractor";
-
 export class HomePageSection {
   name: string;
   title: string;

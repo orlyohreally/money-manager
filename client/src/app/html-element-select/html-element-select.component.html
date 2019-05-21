@@ -1,0 +1,8 @@
+<div
+  *ngFor="let el of elements"
+  class="element clickable"
+  [ngClass]="{ selected: selected.id === el.id }"
+  (click)="onClick(el)"
+>
+  <div [ngClass]="el.classes" [innerHTML]="el.innerHTML"></div>
+</div>

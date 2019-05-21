@@ -1,0 +1,8 @@
+.element {
+  &:hover {
+    background: #f0f0f0;
+  }
+  &.selected {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+}

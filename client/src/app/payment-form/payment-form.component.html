@@ -12,6 +12,7 @@
         <input
           formControlName="paidAt"
           matInput
+          required
           [matDatepicker]="picker"
           placeholder="Choose a date"
         />
@@ -28,7 +29,11 @@
             >add_circle_outline</mat-icon
           >
         </button>
-        <mat-select class="payment-subject-select" formControlName="subjectId">
+        <mat-select
+          required
+          class="payment-subject-select"
+          formControlName="subjectId"
+        >
           <mat-option
             *ngFor="let subject of paymentSubjects | keyvalue"
             [value]="subject.value._id"
@@ -41,7 +46,7 @@
       <mat-form-field>
         <mat-label>Amount</mat-label>
         <span matSuffix class="currency-icon">₪</span>
-        <input type="number" matInput formControlName="amount" />
+        <input type="number" required matInput formControlName="amount" />
       </mat-form-field>
       <!-- <div>
         <mat-label>Receipt</mat-label>
@@ -53,12 +58,7 @@
     <button mat-raised-button color="warn" (click)="cancel()">
       <mat-icon>clear</mat-icon>Cancel
     </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="savePayment()"
-      cdkFocusInitial
-    >
+    <button mat-raised-button color="primary" (click)="savePayment()">
       <mat-icon>done</mat-icon> Save
     </button>
   </div>

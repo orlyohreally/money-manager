@@ -14,9 +14,10 @@ export class FamiliesService {
 
   public async createFamily(userId: string, family: Partial<Family>) {
     const savedFamily = await this.dao.createFamily(family);
-    await this.dao.createFamilyMember({
-      _id: { familyId: savedFamily._id, userId },
-      roles: [Roles.Owner],
-    });
+    // await this.dao.createFamilyMember({
+    //   _id: { familyId: savedFamily._id, userId },
+    //   roles: [Roles.Owner],
+    // });
+    return savedFamily;
   }
 }

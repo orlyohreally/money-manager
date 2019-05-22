@@ -1,4 +1,7 @@
-import { FamiliesDao as Dao } from "./FamiliesDao";
-import { FamiliesService as Service } from "./FamiliesService";
+import { FamiliesDao } from "./FamiliesDao";
+import { FamiliesRouter } from "./FamiliesRouter";
+import { FamiliesService } from "./FamiliesService";
 
-export const FamiliesService = new Service({ dao: new Dao() });
+export const familiesService = new FamiliesService({ dao: new FamiliesDao() });
+export const familiesRouter = new FamiliesRouter({ service: familiesService })
+  .router;

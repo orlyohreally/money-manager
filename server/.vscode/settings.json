@@ -1,0 +1,17 @@
+{
+  "prettier.tslintIntegration": true,
+  "files.exclude": {
+    // include the defaults from VS Code
+    "**/.git": true,
+    "**/.DS_Store": true,
+
+    // exclude .js and .js.map files, when in a TypeScript project
+    "**/*.js": { "when": "$(basename).ts" },
+    "**/*.js.map": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true
+  }
+}

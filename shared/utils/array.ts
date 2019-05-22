@@ -1,33 +1,24 @@
-export type normalizedArray<IdHolder extends { _id: string }> = {
-  [_id: string]: IdHolder;
+export type IdHolder = { _id: string };
+
+export type normalizedArray<T extends IdHolder> = {
+  [_id: string]: T;
 };
 
-export function normalize<IdHolder extends { _id: string }>(
-  array: IdHolder[]
-): normalizedArray<IdHolder> {
-  return array.reduce((res, item) => {
+export function normalize<T extends IdHolder>(
+  array: T[]
+): normalizedArray<T> {
+  return array.reduce((res: normalizedArray<T>, item) => {
     res[item._id] = item;
     return res;
   }, {});
 }
-export function unnormalizeArray<IdHolder extends { _id: string }>(
-  object: normalizedArray<IdHolder>
-): IdHolder[] {
+export function unnormalizeArray<T extends IdHolder>(
+  object: normalizedArray<T>
+): T[] {
   return Object.keys(object).map(key => object[key]);
 }
 
-export function groupBy<T extends { [key: string]: any }>(
-  array: Array<T>,
-  key: string
-): { [key: string]: T[] } {
-  return array.reduce((objectsByKeyValue, obj) => {
-    const value = obj[key];
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-    return objectsByKeyValue;
-  }, {});
-}
-
-export function orderNormalizedArrayByKey<T>(key: string) {
+export function orderNormalizedArrayByKey<T extends { [i: string]: number }>(key: string) {
   return (a: { key: string; value: T }, b: { key: string; value: T }) =>
     a.value[key] - b.value[key];
 }

@@ -6,7 +6,7 @@
     ></app-member-payment-timeline>
   </h1>
   <div mat-dialog-content>
-    <form [formGroup]="paymentForm">
+    <form [formGroup]="paymentForm" (ngSubmit)="savePayment()">
       <mat-form-field>
         <mat-label>Date of payment</mat-label>
         <input
@@ -52,14 +52,11 @@
         <mat-label>Receipt</mat-label>
         <input type="file" (change)="onFileChange($event)" />
       </div> -->
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>done</mat-icon> Save
+        </button>
+      </div>
     </form>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-raised-button color="warn" (click)="cancel()">
-      <mat-icon>clear</mat-icon>Cancel
-    </button>
-    <button mat-raised-button color="primary" (click)="savePayment()">
-      <mat-icon>done</mat-icon> Save
-    </button>
   </div>
 </div>

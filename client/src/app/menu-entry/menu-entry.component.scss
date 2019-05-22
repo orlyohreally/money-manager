@@ -3,5 +3,9 @@
   .menu-link {
     font-family: $secondary-font-family;
     text-transform: uppercase;
+
+    .label {
+      padding: 5px;
+    }
   }
 }

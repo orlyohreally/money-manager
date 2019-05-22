@@ -48,6 +48,10 @@ export class PaymentsService {
   }
   public createPayment(payment: Payment) {
     this.payments[payment._id] = payment;
+    return of({
+      status: "success",
+      msg: null
+    });
   }
   public updatePayment(payment: Payment) {
     console.log("updatePayment", payment);

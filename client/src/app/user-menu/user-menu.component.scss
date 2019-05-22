@@ -1,0 +1,10 @@
+.user-menu {
+  ::ng-deep .menu {
+    .label {
+      display: none;
+      @media (min-width: 900px) {
+        display: inline-block;
+      }
+    }
+  }
+}

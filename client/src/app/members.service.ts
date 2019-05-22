@@ -33,4 +33,8 @@ export class MembersService {
   public getColorSchemes() {
     return ["primary", "accent", "purple"];
   }
+
+  public getMemberFullName(member: Member) {
+    return `${member.firstName} ${member.lastName}`;
+  }
 }

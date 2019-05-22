@@ -1,13 +1,11 @@
 .payment-form {
-  .mat-dialog-actions {
+  .action-buttons {
     display: flex;
     justify-content: center;
     align-content: center;
   }
 
   .mat-form-field {
-    width: 100%;
-
     .currency-icon {
       margin-left: 5px;
     }

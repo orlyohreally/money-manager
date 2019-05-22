@@ -66,8 +66,8 @@ export class PaymentFormComponent implements OnInit {
       amount: new FormControl(payment.amount, [
         Validators.required,
         Validators.pattern("^[0-9]*")
-      ]),
-      receipt: new FormControl(payment.receipt, [])
+      ])
+      //receipt: new FormControl(payment.receipt, [])
     });
   }
   get _id() {
@@ -105,21 +105,37 @@ export class PaymentFormComponent implements OnInit {
   }
   public savePayment() {
     console.log(this.paymentForm.valid);
-    if (!this.paymentForm.value._id) {
-      this.paymentsService.createPayment(this.paymentForm.value);
-      this.dialogRef.close(this.paymentForm.value);
+    if (this.paymentForm.valid) {
+      if (!this.paymentForm.value._id) {
+        this.createPayment();
+      } else {
+        this.updatePayment();
+      }
     } else {
-      this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
-        result => {
-          this.dialogRef.close(result);
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      this.paymentForm.markAsTouched();
     }
   }
+  private updatePayment() {
+    this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
+      result => {
+        this.dialogRef.close(result);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
 
+  private createPayment() {
+    this.paymentsService.createPayment(this.paymentForm.value).subscribe(
+      result => {
+        this.dialogRef.close(result);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   public onFileChange(event) {
     const reader = new FileReader();
 

@@ -1,6 +1,7 @@
 <div class="main-menu-entry">
   <button mat-button [matMenuTriggerFor]="menuEntry" class="menu-link">
-    {{ entry.label }}
+    <mat-icon *ngIf="entry.icon">{{ entry.icon }}</mat-icon>
+    <span class="label">{{ entry.label }}</span>
   </button>
   <mat-menu #menuEntry="matMenu">
     <a [routerLink]="item.link" mat-menu-item *ngFor="let item of entry.items">

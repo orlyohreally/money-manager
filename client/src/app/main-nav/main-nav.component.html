@@ -1,11 +1,15 @@
 <mat-toolbar class="main-nav" color="primary">
   <mat-toolbar-row>
-    <a class="home-link" [routerLink]="['/']">
-      <img class="logo" src="assets/icon3.png" />
-      <div>
-        Money Manager
+    <app-main-nav-logo></app-main-nav-logo>
+    <div class="main-menu" fxLayout fxLayoutAlign="end">
+      <div class="menu-toggle" fxHide.gt-xs>
+        <button mat-icon-button (click)="toggleNavbar()">
+          <mat-icon>menu</mat-icon>
+        </button>
       </div>
-    </a>
-    <app-main-menu></app-main-menu>
+      <app-menu [menuEntries]="mainMenuEntries"></app-menu>
+      <app-new-payment></app-new-payment>
+      <app-user-menu></app-user-menu>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>

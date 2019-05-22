@@ -3,6 +3,7 @@ import { HomePageSection } from "../home-page-section";
 import { PaymentFormComponent } from "../payment-form/payment-form.component";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
+import { FamilyFormComponent } from "../family-form/family-form.component";
 
 @Component({
   selector: "app-home-page",
@@ -16,7 +17,8 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() {
     this.componentForms = {
-      payments: { component: PaymentFormComponent, width: "300px" }
+      payments: { component: PaymentFormComponent, width: "300px" },
+      families: { component: FamilyFormComponent, width: "300px" }
     };
     this.sections = [
       {

@@ -1,0 +1,19 @@
+<div class="family-form">
+  <h1 mat-dialog-title>
+    Family
+  </h1>
+  <div mat-dialog-content>
+    <form [formGroup]="familyForm" (ngSubmit)="saveFamily()">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input type="text" required matInput formControlName="name" />
+      </mat-form-field>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>done</mat-icon> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

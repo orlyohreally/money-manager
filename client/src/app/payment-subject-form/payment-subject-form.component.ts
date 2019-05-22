@@ -108,7 +108,8 @@ export class PaymentSubjectFormComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public selectIcon(icon: ImageAsset) {
-    this.subjectForm.controls.icon.setValue(icon.path);
+  public selectIcon(icon: HtmlElementRepresentation) {
+    console.log(icon);
+    this.subjectForm.controls.icon.setValue(icon.id);
   }
 }

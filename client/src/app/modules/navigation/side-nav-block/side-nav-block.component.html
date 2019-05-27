@@ -1,0 +1,12 @@
+<div class="nav-block">
+  <div class="nav-block__toggle">
+    <button
+      mat-button
+      class="button button_stretch button_text-left"
+      (click)="toggleNavBlock()"
+    >
+      {{ blockLabel }}
+    </button>
+  </div>
+  <ng-content *ngIf="!collapsed"></ng-content>
+</div>

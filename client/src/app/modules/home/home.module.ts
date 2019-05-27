@@ -1,14 +1,14 @@
 import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+
+import { MatButtonModule, MatDialogModule } from "@angular/material";
 
 import { HomePageComponent } from "./home-page/home-page.component";
 import { RegistrationBannerComponent } from "./registration-banner/registration-banner.component";
 import { SectionComponent } from "./section/section.component";
-import { MatButtonModule, MatDialogModule } from "@angular/material";
-import { CommonModule } from "@angular/common";
-import { BrowserModule } from "@angular/platform-browser";
 import { FamilyModule } from "../families/family.module";
 import { FamilyFormComponent } from "../families/family-form/family-form.component";
-import { PaymentFormComponent } from "../payments/payment-form/payment-form.component";
+import { HomeRoutingModule } from "./home-routing.module";
 
 @NgModule({
   declarations: [
@@ -17,13 +17,13 @@ import { PaymentFormComponent } from "../payments/payment-form/payment-form.comp
     SectionComponent
   ],
   imports: [
-    BrowserModule,
     CommonModule,
+    FamilyModule,
+    HomeRoutingModule,
     MatButtonModule,
-    MatDialogModule,
-    FamilyModule
+    MatDialogModule
   ],
   exports: [HomePageComponent],
-  entryComponents: [FamilyFormComponent, PaymentFormComponent]
+  entryComponents: [FamilyFormComponent]
 })
-export class HomePageModule {}
+export class HomeModule {}

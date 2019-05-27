@@ -18,6 +18,7 @@ export class SignInFormComponent implements OnInit {
   public colorSchemeRepresentations: HtmlElementRepresentation[];
 
   ngOnInit() {
+    console.log("SignInFormComponent");
     this.getColorSchemes();
     this.initForm();
   }
@@ -32,9 +33,10 @@ export class SignInFormComponent implements OnInit {
   }
 
   private getColorSchemes() {
+    // FIXME: color schemes should be received from color scheme service
     const generateSchemeRepresentations = (color: string) => ({
       id: color,
-      classes: `color-scheme color-scheme_${color}`,
+      classes: `color-scheme background-color-${color}`,
       innerHTML: null
     });
     this.colorSchemeRepresentations = this.membersService

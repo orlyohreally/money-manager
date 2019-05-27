@@ -8,14 +8,12 @@ import {
   MatIconModule
 } from "@angular/material";
 import { CommonModule } from "@angular/common";
-import { BrowserModule } from "@angular/platform-browser";
 import { FamilyFormComponent } from "./family-form/family-form.component";
 import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [FamilyFormComponent],
   imports: [
-    BrowserModule,
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,

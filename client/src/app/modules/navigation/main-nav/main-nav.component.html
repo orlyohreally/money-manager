@@ -1,7 +1,7 @@
 <mat-toolbar class="main-nav" color="primary">
   <mat-toolbar-row>
     <navigation-main-nav-logo></navigation-main-nav-logo>
-    <div class="main-menu" fxLayout fxLayoutAlign="end">
+    <div class="main-menu" fxLayout fxLayoutAlign="end" *ngIf="showMenuMenu">
       <div class="menu-toggle" fxHide.gt-xs>
         <button mat-icon-button (click)="toggleNavbar()">
           <mat-icon>menu</mat-icon>
@@ -26,3 +26,4 @@
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
+<navigation-side-nav *ngIf="!showMenuMenu"></navigation-side-nav>

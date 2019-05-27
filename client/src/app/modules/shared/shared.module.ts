@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { BrowserModule } from "@angular/platform-browser";
 
 import {
   MatButtonModule,
@@ -15,7 +14,8 @@ import { HtmlElementSelectComponent } from "./components/html-element-select/htm
 import { FilterPipe } from "./pipes/filter.pipe";
 import { MenuComponent } from "./components/menu/menu.component";
 import { MenuEntryComponent } from "./components/menu/menu-entry/menu-entry.component";
-import { AppRoutingModule } from "src/app/app-routing.module";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -28,9 +28,9 @@ import { AppRoutingModule } from "src/app/app-routing.module";
     FilterPipe
   ],
   imports: [
-    BrowserModule,
     CommonModule,
-    AppRoutingModule,
+    HttpClientModule,
+    RouterModule,
 
     MatButtonModule,
     MatMenuModule,
@@ -43,6 +43,7 @@ import { AppRoutingModule } from "src/app/app-routing.module";
     MenuComponent,
 
     FilterPipe
-  ]
+  ],
+  providers: []
 })
 export class SharedModule {}

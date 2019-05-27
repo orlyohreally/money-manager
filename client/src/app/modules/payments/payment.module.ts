@@ -8,10 +8,11 @@ import {
   MatIconModule,
   MatDatepickerModule,
   MAT_DATE_LOCALE,
-  MatSelectModule
+  MatSelectModule,
+  MatSnackBarModule,
+  MatNativeDateModule
 } from "@angular/material";
 import { CommonModule } from "@angular/common";
-import { BrowserModule } from "@angular/platform-browser";
 import { ReactiveFormsModule } from "@angular/forms";
 import { PayerComponent } from "./payer/payer.component";
 import { NewPaymentComponent } from "./new-payment/new-payment.component";
@@ -22,6 +23,8 @@ import { PaymentSubjectFormComponent } from "./payment-subject-form/payment-subj
 import { PaymentComponent } from "./payment-list/payment/payment.component";
 import { MoneyAmountComponent } from "./money-amount/money-amount.component";
 import { TotalPaymentComponent } from "./payment-list/total-payment/total-payment.component";
+import { PaymentRoutingModule } from "./payment-routing.module";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -36,16 +39,22 @@ import { TotalPaymentComponent } from "./payment-list/total-payment/total-paymen
     TotalPaymentComponent
   ],
   imports: [
-    BrowserModule,
     CommonModule,
+    ReactiveFormsModule,
+
+    SharedModule,
+
+    MatSnackBarModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    ReactiveFormsModule
+
+    PaymentRoutingModule
   ],
   exports: [
     NewPaymentComponent,
@@ -62,6 +71,6 @@ import { TotalPaymentComponent } from "./payment-list/total-payment/total-paymen
     MatDatepickerModule,
     { provide: MAT_DATE_LOCALE, useValue: "ru-RU" }
   ],
-  entryComponents: [PaymentSubjectFormComponent]
+  entryComponents: [PaymentFormComponent, PaymentSubjectFormComponent]
 })
 export class PaymentModule {}

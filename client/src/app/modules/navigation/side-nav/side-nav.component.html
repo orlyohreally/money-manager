@@ -1,0 +1,31 @@
+<div class="side-nav">
+  <navigation-side-nav-block blockLabel="Payments">
+    <mat-list role="list" class="nav-block__list">
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="button button_stretch button_text-left"
+          routerLink="payments"
+        >
+          All payments
+        </a>
+      </mat-list-item>
+      <mat-list-item role="listitem" class="nav-item">
+        <payment-new-payment class="nav-item__link"></payment-new-payment>
+      </mat-list-item>
+    </mat-list>
+  </navigation-side-nav-block>
+  <navigation-side-nav-block blockLabel="Families">
+    <mat-list role="list" class="nav-block__list">
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="button button_stretch button_text-left"
+          routerLink="families"
+        >
+          My families
+        </a>
+      </mat-list-item>
+    </mat-list>
+  </navigation-side-nav-block>
+</div>

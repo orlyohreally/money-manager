@@ -1,0 +1,10 @@
+.mat-raised-button {
+  &.button {
+    border-radius: 0;
+  }
+
+  &.button_lg {
+    padding: 10px 30px;
+    font-size: 18px;
+  }
+}

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["../shared/*"],
+      "@shared-client/*": ["../client/src/app/modules/shared/*"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

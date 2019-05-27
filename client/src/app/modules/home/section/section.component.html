@@ -1,0 +1,18 @@
+<div class="section" [ngClass]="classes">
+  <div class="icon">
+    <a class="icon__link" href="{{ iconLink }}" target="_blank"
+      ><img class="icon__image" src="{{ iconImagePath }}"
+    /></a>
+  </div>
+  <div class="section__content">
+    <h2>{{ title }}</h2>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onClick()"
+      [ngClass]="buttonClasses"
+    >
+      {{ buttonLabel }}
+    </button>
+  </div>
+</div>

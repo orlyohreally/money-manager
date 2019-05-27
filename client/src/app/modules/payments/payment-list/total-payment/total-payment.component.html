@@ -1,0 +1,54 @@
+<div class="total-payment-entry">
+  <div class="total-payment-entry-header background-color-purple">
+    <div
+      class="total-payment-entry-header-info"
+      title="Total amount of spent money"
+    >
+      <img class="total-icon" src="assets/icons/total.png" />
+      <payment-money-amount
+        [amount]="paymentAmounts.sum"
+      ></payment-money-amount>
+    </div>
+    <div>
+      <div class="timeline-extra-info">
+        <div class="timeline-date"></div>
+        <div class="action-buttons">
+          <button
+            mat-icon-button
+            *ngIf="displayMode === 'total'"
+            title="Show discharged amount of money spent"
+          >
+            <mat-icon
+              class="discharge-button"
+              (click)="onShowDischargedAmounts()"
+            >
+              credit_card
+            </mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="displayMode === 'discharged'"
+            title="Show total amount of money spent"
+          >
+            <mat-icon class="discharge-button" (click)="onShowTotalAmounts()">
+              view_headline
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="total-payment-entry-content">
+    <div class="payer-total-payment-amount" *ngFor="let payer of payers">
+      <payment-payer [payer]="payer"></payment-payer>
+      <payment-money-amount
+        [colorize]="this.displayMode === 'discharged'"
+        [humanizeLook]="true"
+        [humanizeLookType]="
+          this.displayMode == 'discharged' ? 'negative' : 'positive'
+        "
+        [amount]="paymentAmounts[payer._id]"
+      ></payment-money-amount>
+    </div>
+  </div>
+</div>

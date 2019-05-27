@@ -15,5 +15,6 @@
     "**/node_modules/**": true,
     "**/tmp/**": true
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "prettier.eslintIntegration": true
 }

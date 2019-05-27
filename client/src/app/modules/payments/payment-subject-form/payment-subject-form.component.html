@@ -1,0 +1,47 @@
+<div class="subject-form">
+  <h1 mat-dialog-title>
+    Payment Subject
+  </h1>
+  <div mat-dialog-content>
+    <form [formGroup]="subjectForm">
+      <mat-form-field>
+        <mat-label>Subject name</mat-label>
+        <input required type="text" matInput formControlName="name" />
+        <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Family</mat-label>
+        <mat-select required formControlName="familyId">
+          <mat-option
+            *ngFor="let family of families | keyvalue"
+            [value]="family.value._id"
+          >
+            {{ family.value.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="familyId.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <!-- <shared-form-field
+        class="subject-icon-field"
+        label="Icon"
+        [required]="true"
+      >
+        <shared-html-element-select
+          class="subject-icon-select"
+          [elements]="subjectIcons"
+          (clickAction)="selectIcon($event)"
+        ></shared-html-element-select>
+      </shared-form-field> -->
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="cancel()">
+      <mat-icon>clear</mat-icon>Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="saveSubject()">
+      <mat-icon>done</mat-icon> Save
+    </button>
+  </div>
+</div>

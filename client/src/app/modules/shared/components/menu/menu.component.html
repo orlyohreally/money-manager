@@ -1,0 +1,6 @@
+<div class="menu" fxFlex fxLayout fxLayoutAlign="end center" fxHide.xs>
+  <shared-menu-entry
+    *ngFor="let entry of menuEntries | filter: toDisplay"
+    [entry]="entry"
+  ></shared-menu-entry>
+</div>

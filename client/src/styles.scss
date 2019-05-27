@@ -18,6 +18,7 @@ $candy-app-theme: mat-light-theme(
 @import "variables";
 @import "colors-classes";
 @import "classes";
+@import "buttons";
 
 $custom-typography: mat-typography-config(
   $font-family: $main-font-family
@@ -29,10 +30,6 @@ body,
 html {
   margin: 0;
   font-family: $main-font-family;
-}
-
-button.mat-raised-button {
-  border-radius: 0;
 }
 
 .mat-form-field {

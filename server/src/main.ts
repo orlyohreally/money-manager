@@ -22,10 +22,6 @@ const runServer = async () => {
   app.use(bodyParser.urlencoded({ extended: false }));
 
   app.use(apiPath, familiesRouter);
-
-  app.get("/", (req, res) => {
-    res.send("Hello World!");
-  });
 };
 
 runServer().catch(console.error);

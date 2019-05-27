@@ -1,0 +1,28 @@
+<mat-toolbar class="main-nav" color="primary">
+  <mat-toolbar-row>
+    <navigation-main-nav-logo></navigation-main-nav-logo>
+    <div class="main-menu" fxLayout fxLayoutAlign="end">
+      <div class="menu-toggle" fxHide.gt-xs>
+        <button mat-icon-button (click)="toggleNavbar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div class="main-menu" fxLayout fxShow fxHide.xs fxLayoutAlign="end">
+        <button mat-button [matMenuTriggerFor]="payments">Payments</button>
+        <button mat-button [matMenuTriggerFor]="families">Families</button>
+        <mat-menu #payments="matMenu">
+          <!-- TODO: mat-menu-item is bigger than new payment -->
+          <button mat-menu-item>
+            <payment-new-payment></payment-new-payment>
+          </button>
+          <a routerLink="payments" mat-menu-item>All payments</a>
+        </mat-menu>
+        <mat-menu #families="matMenu">
+          <button mat-menu-item>New family</button>
+          <button mat-menu-item>All my families</button>
+        </mat-menu>
+      </div>
+      <navigation-user-menu></navigation-user-menu>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -1,0 +1,21 @@
+<div class="payments-timeline">
+  <payment-payment
+    class="payment"
+    *ngFor="let payment of payments | keyvalue: orderByKey('paidAt')"
+    [payment]="payment.value"
+    [payer]="transformedMembers[payment.value.memberId]"
+    [paymentSubject]="paymentSubjects[payment.value.subjectId]"
+    (editPayment)="editPayment(payment.value)"
+    (removePayment)="removePayment(payment.value)"
+    [classes]="getPaymentClasses(payment.value)"
+  >
+  </payment-payment>
+  <payment-total-payment
+    class="total-payment-amount"
+    [paymentAmounts]="paymentAmounts"
+    [payers]="payers"
+    [date]="totalCalculatedAt"
+    (calcDischargedTotal)="calcDischargedTotal()"
+    (showTotalAmounts)="calculateTotal()"
+  ></payment-total-payment>
+</div>

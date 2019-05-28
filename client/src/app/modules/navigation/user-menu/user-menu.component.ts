@@ -19,35 +19,15 @@ export class UserMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authenticationService.getUser();
-    this.menuEntries = [
-      {
-        _id: "user",
-        label: this.getUserFullName(),
-        display: this.isLoggedIn(),
-        icon: "person",
-        items: [
-          { _id: "payments-list", label: "List of payments", link: "/payments" }
-        ]
-      },
-      {
-        _id: "user",
-        label: "Guest",
-        display: !this.isLoggedIn(),
-        icon: "person",
-        items: [
-          { _id: "payments-list", label: "List of payments", link: "/payments" }
-        ]
-      }
-    ];
   }
 
   isLoggedIn() {
     return this.authenticationService.isLoggedIn();
   }
 
-  private getUserFullName() {
+  public getUserFullName() {
     return this.isLoggedIn()
       ? this.membersService.getMemberFullName(this.user)
-      : null;
+      : "Guest";
   }
 }

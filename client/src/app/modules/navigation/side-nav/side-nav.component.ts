@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { OuterSubscriber } from "rxjs/internal/OuterSubscriber";
 
 @Component({
   selector: "navigation-side-nav",
@@ -6,7 +7,12 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./side-nav.component.scss"]
 })
 export class SideNavComponent implements OnInit {
+  @Output() hideSidebar = new EventEmitter();
   constructor() {}
 
   ngOnInit() {}
+
+  onLinkClick() {
+    this.hideSidebar.emit();
+  }
 }

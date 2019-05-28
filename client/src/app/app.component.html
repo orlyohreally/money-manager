@@ -1,11 +1,14 @@
 <mat-sidenav-container class="page-content">
   <mat-sidenav #sidenav role="navigation">
-    <navigation-main-nav [showMenuMenu]="false"></navigation-main-nav>
+    <navigation-main-nav
+      (hideNavbar)="sidenav.close()"
+      type="side-bar"
+    ></navigation-main-nav>
   </mat-sidenav>
   <mat-sidenav-content>
     <navigation-main-nav
-      [showMenuMenu]="true"
-      (showNavbar)="sidenav.toggle()"
+      type="menu-bar"
+      (toggleNavbar)="sidenav.toggle()"
     ></navigation-main-nav>
     <main>
       <router-outlet></router-outlet>

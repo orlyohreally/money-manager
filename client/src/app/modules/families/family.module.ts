@@ -10,9 +10,10 @@ import {
 import { CommonModule } from "@angular/common";
 import { FamilyFormComponent } from "./family-form/family-form.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { NewFamilyComponent } from "./new-family/new-family.component";
 
 @NgModule({
-  declarations: [FamilyFormComponent],
+  declarations: [FamilyFormComponent, NewFamilyComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -23,6 +24,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     MatButtonModule,
     MatDialogModule
   ],
-  exports: [FamilyFormComponent]
+  exports: [FamilyFormComponent, NewFamilyComponent],
+  entryComponents: [FamilyFormComponent]
 })
 export class FamilyModule {}

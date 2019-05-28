@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { MenuEntry } from "@shared-client/types/menu-entry";
 
 @Component({
   selector: "navigation-main-nav",
@@ -7,22 +6,19 @@ import { MenuEntry } from "@shared-client/types/menu-entry";
   styleUrls: ["./main-nav.component.scss"]
 })
 export class MainNavComponent implements OnInit {
-  @Input() showMenuMenu: boolean;
-  @Output() showNavbar = new EventEmitter();
+  @Input() type: string;
+  @Output() toggleNavbar = new EventEmitter();
+  @Output() hideNavbar = new EventEmitter();
   constructor() {}
 
-  ngOnInit() {
-    this.showMenuMenu =
-      typeof this.showMenuMenu === undefined || this.showMenuMenu;
-    console.log(
-      "showmenu",
-      this.showMenuMenu,
-      this.showMenuMenu === undefined,
-      this.showMenuMenu === undefined || this.showMenuMenu
-    );
+  ngOnInit() {}
+
+  public toggleSidenav() {
+    // TODO: remove highlight from menu button
+    this.toggleNavbar.emit();
   }
 
-  public toggleNavbar() {
-    this.showNavbar.emit();
+  public hideSidenav() {
+    this.hideNavbar.emit();
   }
 }

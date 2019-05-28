@@ -7,7 +7,7 @@ import { User as Member } from "@shared/types";
   styleUrls: ["./total-payment.component.scss"]
 })
 export class TotalPaymentComponent implements OnInit {
-  @Input() paymentAmounts: { [memberId: string]: number };
+  @Input() paymentAmounts: { [memberId: string]: number; sum: number };
   @Input() payers: { [memberId: string]: Member };
   @Input() date: Date;
   @Output() showTotalAmounts = new EventEmitter();

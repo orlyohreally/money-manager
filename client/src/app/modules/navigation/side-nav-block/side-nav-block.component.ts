@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from "@angular/core";
 })
 export class SideNavBlockComponent implements OnInit {
   @Input() public blockLabel: string;
-  public collapsed = true;
+  public collapsed = false;
 
   constructor() {}
 

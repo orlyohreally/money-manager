@@ -1,29 +1,22 @@
 <mat-toolbar class="main-nav" color="primary">
   <mat-toolbar-row>
     <navigation-main-nav-logo></navigation-main-nav-logo>
-    <div class="main-menu" fxLayout fxLayoutAlign="end" *ngIf="showMenuMenu">
+    <div
+      class="main-menu"
+      fxLayoutAlign="end center"
+      *ngIf="type === 'menu-bar'"
+    >
       <div class="menu-toggle" fxHide.gt-xs>
-        <button mat-icon-button (click)="toggleNavbar()">
+        <button mat-icon-button (click)="toggleSidenav()">
           <mat-icon>menu</mat-icon>
         </button>
       </div>
-      <div class="main-menu" fxLayout fxShow fxHide.xs fxLayoutAlign="end">
-        <button mat-button [matMenuTriggerFor]="payments">Payments</button>
-        <button mat-button [matMenuTriggerFor]="families">Families</button>
-        <mat-menu #payments="matMenu">
-          <!-- TODO: mat-menu-item is bigger than new payment -->
-          <button mat-menu-item>
-            <payment-new-payment></payment-new-payment>
-          </button>
-          <a routerLink="payments" mat-menu-item>All payments</a>
-        </mat-menu>
-        <mat-menu #families="matMenu">
-          <button mat-menu-item>New family</button>
-          <button mat-menu-item>All my families</button>
-        </mat-menu>
-      </div>
-      <navigation-user-menu></navigation-user-menu>
+      <navigation-main-menu></navigation-main-menu>
+      <navigation-user-menu fxShow fxHide.xs></navigation-user-menu>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
-<navigation-side-nav *ngIf="!showMenuMenu"></navigation-side-nav>
+<navigation-side-nav
+  (hideSidebar)="hideSidenav()"
+  *ngIf="type === 'side-bar'"
+></navigation-side-nav>

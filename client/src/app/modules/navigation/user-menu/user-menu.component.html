@@ -1,1 +1,10 @@
-<shared-menu class="user-menu" [menuEntries]="menuEntries"></shared-menu>
+<button fxHide.gt-sm mat-icon-button [matMenuTriggerFor]="userMenu">
+  <mat-icon>person</mat-icon>
+</button>
+<button fxHide.sm mat-button [matMenuTriggerFor]="userMenu">
+  <mat-icon>person</mat-icon>{{ getUserFullName() }}
+</button>
+<mat-menu #userMenu="matMenu">
+  <a mat-menu-item routerLink="profile">My profile</a>
+  <a mat-menu-item routerLink="profile/settings">Settings</a>
+</mat-menu>

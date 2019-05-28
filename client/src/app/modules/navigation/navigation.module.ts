@@ -18,11 +18,13 @@ import { PaymentModule } from "../payments/payment.module";
 import { SideNavComponent } from "./side-nav/side-nav.component";
 import { SideNavBlockComponent } from "./side-nav-block/side-nav-block.component";
 import { FamilyModule } from "../families/family.module";
+import { MainMenuComponent } from "./main-menu/main-menu.component";
 
 @NgModule({
   declarations: [
     MainNavComponent,
     MainNavLogoComponent,
+    MainMenuComponent,
     UserMenuComponent,
     SideNavComponent,
     SideNavBlockComponent
@@ -42,6 +44,11 @@ import { FamilyModule } from "../families/family.module";
     FamilyModule,
     SharedModule
   ],
-  exports: [MainNavComponent, MainNavLogoComponent, UserMenuComponent]
+  exports: [
+    MainNavComponent,
+    MainNavLogoComponent,
+    MainMenuComponent,
+    UserMenuComponent
+  ]
 })
 export class NavigationModule {}

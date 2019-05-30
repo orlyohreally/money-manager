@@ -10,6 +10,7 @@ import { PaymentSubject, Family, ImageAsset } from "@shared/types";
 import { normalizedArray } from "@shared/utils";
 
 import { HtmlElementRepresentation } from "@shared-client/types/html-element";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "payment-payment-subject-form",
@@ -25,7 +26,7 @@ export class PaymentSubjectFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PaymentSubject
   ) {}
   subjectForm: FormGroup;
-  families: normalizedArray<Family>;
+  families: Observable<Family[]>;
   subjectIcons: HtmlElementRepresentation[];
   ngOnInit() {
     this.getFamilies();
@@ -44,7 +45,6 @@ export class PaymentSubjectFormComponent implements OnInit {
       .map(generateElements);
   }
   private initForm(subject: Partial<PaymentSubject>) {
-    console.log(subject);
     if (!subject) {
       subject = {
         _id: null,
@@ -80,15 +80,8 @@ export class PaymentSubjectFormComponent implements OnInit {
     return this.subjectForm.get("icon");
   }
 
-  private getFamilies() {
-    this.familiesService.getMemberFamilies().subscribe(
-      families => {
-        this.families = families;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+  private async getFamilies() {
+    this.families = this.familiesService.membersFamilies;
   }
 
   public async saveSubject() {

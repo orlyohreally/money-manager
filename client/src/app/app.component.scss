@@ -1,4 +1,9 @@
-.page-content {
-  height: 100%;
+@import "variables";
+
+.mat-sidenav-container {
   background-color: #ffffff;
+  height: 100%;
+}
+.mat-sidenav {
+  width: $sidenav-width;
 }

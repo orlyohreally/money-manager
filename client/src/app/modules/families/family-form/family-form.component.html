@@ -3,12 +3,15 @@
     Family
   </h1>
   <div mat-dialog-content>
-    <form [formGroup]="familyForm" (ngSubmit)="saveFamily()">
+    <form [formGroup]="familyForm" (ngSubmit)="updateData()">
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input type="text" required matInput formControlName="name" />
+        <mat-error *ngIf="name.invalid">{{
+          getErrorMessage("name")
+        }}</mat-error>
       </mat-form-field>
-
+      <mat-error *ngIf="error">{{ error.message }}</mat-error>
       <div class="action-buttons">
         <button mat-raised-button class="button" color="primary" type="submit">
           <mat-icon>done</mat-icon> Save

@@ -1,54 +1,47 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MainNavComponent } from "./main-nav/main-nav.component";
-import { SharedModule } from "../shared/shared.module";
+
 import {
   MatMenuModule,
   MatToolbarModule,
   MatButtonModule,
   MatIconModule,
-  MatListModule,
-  MatExpansionModule
+  MatListModule
 } from "@angular/material";
-import { MainNavLogoComponent } from "./main-nav-logo/main-nav-logo.component";
-import { UserMenuComponent } from "./user-menu/user-menu.component";
-import { AppRoutingModule } from "src/app/app-routing.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
+
+import { SharedModule } from "../shared/shared.module";
 import { PaymentModule } from "../payments/payment.module";
-import { SideNavComponent } from "./side-nav/side-nav.component";
-import { SideNavBlockComponent } from "./side-nav-block/side-nav-block.component";
 import { FamilyModule } from "../families/family.module";
-import { MainMenuComponent } from "./main-menu/main-menu.component";
+
+import { AppRoutingModule } from "src/app/app-routing.module";
+
+import { MainNavLogoComponent } from "./main-nav-logo/main-nav-logo.component";
+import { SideNavComponent } from "./side-nav/side-nav.component";
+import { MainToolbarComponent } from "./main-toolbar/main-toolbar.component";
+import { SideNavToolbarComponent } from "./side-nav-toolbar/side-nav-toolbar.component";
 
 @NgModule({
   declarations: [
-    MainNavComponent,
-    MainNavLogoComponent,
-    MainMenuComponent,
-    UserMenuComponent,
+    MainToolbarComponent,
     SideNavComponent,
-    SideNavBlockComponent
+    MainNavLogoComponent,
+    SideNavToolbarComponent
   ],
   imports: [
     CommonModule,
-    AppRoutingModule,
     FlexLayoutModule,
     MatMenuModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    MatExpansionModule,
 
+    AppRoutingModule,
     PaymentModule,
     FamilyModule,
     SharedModule
   ],
-  exports: [
-    MainNavComponent,
-    MainNavLogoComponent,
-    MainMenuComponent,
-    UserMenuComponent
-  ]
+  exports: [MainToolbarComponent, SideNavComponent, SideNavToolbarComponent]
 })
 export class NavigationModule {}

@@ -1,0 +1,34 @@
+<shared-accordion
+  *ngFor="let family of families | async"
+  [toggleLabel]="family.name"
+>
+  <mat-list role="list" class="nav-block__list">
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched"
+        routerLink="/families/{{ family.name }}/members"
+      >
+        Family members
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched"
+        routerLink="/families/{{ family.name }}/payments"
+      >
+        Family payments
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched"
+        routerLink="/families/{{ family.name }}/reports"
+      >
+        Family reports
+      </a>
+    </mat-list-item>
+  </mat-list>
+</shared-accordion>

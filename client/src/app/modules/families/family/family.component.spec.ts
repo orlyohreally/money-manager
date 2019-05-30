@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SideNavBlockComponent } from './side-nav-block.component';
+import { FamilyComponent } from './family.component';
 
-describe('SideNavBlockComponent', () => {
-  let component: SideNavBlockComponent;
-  let fixture: ComponentFixture<SideNavBlockComponent>;
+describe('FamilyComponent', () => {
+  let component: FamilyComponent;
+  let fixture: ComponentFixture<FamilyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideNavBlockComponent ]
+      declarations: [ FamilyComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SideNavBlockComponent);
+    fixture = TestBed.createComponent(FamilyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

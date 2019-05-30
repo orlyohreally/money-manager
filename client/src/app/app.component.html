@@ -1,17 +1,12 @@
-<mat-sidenav-container class="page-content">
-  <mat-sidenav #sidenav role="navigation">
-    <navigation-main-nav
-      (hideNavbar)="sidenav.close()"
-      type="side-bar"
-    ></navigation-main-nav>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation" opened mode="side">
+    <navigation-side-nav-toolbar></navigation-side-nav-toolbar>
+    <navigation-side-nav></navigation-side-nav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <navigation-main-nav
-      type="menu-bar"
+    <navigation-main-toolbar
       (toggleNavbar)="sidenav.toggle()"
-    ></navigation-main-nav>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
+    ></navigation-main-toolbar>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -54,7 +54,6 @@ export class PaymentsService {
     });
   }
   public updatePayment(payment: Payment) {
-    console.log("updatePayment", payment);
     this.payments[payment._id] = payment;
     return of({
       status: "success",

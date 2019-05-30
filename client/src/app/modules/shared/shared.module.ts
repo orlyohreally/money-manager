@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
 
 import {
   MatButtonModule,
@@ -7,15 +9,14 @@ import {
   MatIconModule
 } from "@angular/material";
 
+import { FilterPipe } from "./pipes/filter.pipe";
+
 import { ButtonComponent } from "./components/button/button.component";
 import { FormFieldComponent } from "./components/form-field/form-field.component";
 import { HtmlElementSelectComponent } from "./components/html-element-select/html-element-select.component";
-
-import { FilterPipe } from "./pipes/filter.pipe";
+import { AccordionComponent } from "../shared/components/accordion/accordion.component";
 import { MenuComponent } from "./components/menu/menu.component";
 import { MenuEntryComponent } from "./components/menu/menu-entry/menu-entry.component";
-import { HttpClientModule } from "@angular/common/http";
-import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RouterModule } from "@angular/router";
     ButtonComponent,
     MenuEntryComponent,
     MenuComponent,
+    AccordionComponent,
 
     FilterPipe
   ],
@@ -41,7 +43,7 @@ import { RouterModule } from "@angular/router";
     ButtonComponent,
     HtmlElementSelectComponent,
     MenuComponent,
-
+    AccordionComponent,
     FilterPipe
   ],
   providers: []

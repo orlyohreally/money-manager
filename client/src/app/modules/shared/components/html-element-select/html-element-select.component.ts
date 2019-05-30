@@ -14,7 +14,6 @@ export class HtmlElementSelectComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    console.log(this.elements);
     this.selected = this.elements[0];
   }
 

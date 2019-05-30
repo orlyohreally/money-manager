@@ -10,7 +10,5 @@ export class FormFieldComponent implements OnInit {
   @Input() public required: boolean;
   constructor() {}
 
-  ngOnInit() {
-    console.log("required", this.required);
-  }
+  ngOnInit() {}
 }

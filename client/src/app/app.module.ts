@@ -7,6 +7,7 @@ import { AppComponent } from "./app.component";
 import { MatSidenavModule } from "@angular/material";
 
 import { NavigationModule } from "./modules/navigation/navigation.module";
+import { FamilyModule } from "./modules/families/family.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,10 +18,10 @@ import { NavigationModule } from "./modules/navigation/navigation.module";
 
     MatSidenavModule,
 
-    NavigationModule
+    NavigationModule,
+    FamilyModule
   ],
   providers: [],
-  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

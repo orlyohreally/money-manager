@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainNavComponent } from './main-nav.component';
+import { SideNavToolbarComponent } from './side-nav-toolbar.component';
 
-describe('MainNavComponent', () => {
-  let component: MainNavComponent;
-  let fixture: ComponentFixture<MainNavComponent>;
+describe('SideNavToolbarComponent', () => {
+  let component: SideNavToolbarComponent;
+  let fixture: ComponentFixture<SideNavToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainNavComponent ]
+      declarations: [ SideNavToolbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainNavComponent);
+    fixture = TestBed.createComponent(SideNavToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

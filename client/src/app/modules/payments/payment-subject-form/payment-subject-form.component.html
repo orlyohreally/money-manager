@@ -14,10 +14,10 @@
         <mat-label>Family</mat-label>
         <mat-select required formControlName="familyId">
           <mat-option
-            *ngFor="let family of families | keyvalue"
-            [value]="family.value._id"
+            *ngFor="let family of families | async"
+            [value]="family._id"
           >
-            {{ family.value.name }}
+            {{ family.name }}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="familyId.invalid">{{ getErrorMessage() }}</mat-error>

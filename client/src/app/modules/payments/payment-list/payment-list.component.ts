@@ -27,7 +27,6 @@ export class PaymentListComponent implements OnInit {
   transformedMembers: { [id: string]: Payer };
   paymentSubjects: { [id: string]: PaymentSubject };
   totalCalculatedAt: Date = new Date();
-
   constructor(
     private snackBar: MatSnackBar,
     private paymentsService: PaymentsService,
@@ -96,7 +95,6 @@ export class PaymentListComponent implements OnInit {
   }
 
   public editPayment(payment: Payment) {
-    console.log(payment);
     this.openForm(payment);
   }
   public openForm(payment: Payment): void {

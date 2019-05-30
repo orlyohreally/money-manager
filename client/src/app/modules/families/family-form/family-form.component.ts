@@ -11,6 +11,7 @@ import { FamiliesService } from "@shared-client/services/families/families.servi
 })
 export class FamilyFormComponent implements OnInit {
   public familyForm: FormGroup;
+  public error; //TODO: type
   constructor(
     public dialogRef: MatDialogRef<FamilyFormComponent>,
     private familiesService: FamiliesService,
@@ -34,15 +35,17 @@ export class FamilyFormComponent implements OnInit {
     }
   }
 
-  get _id() {
-    return this.familyForm.get("_id");
-  }
-
   get name() {
     return this.familyForm.get("name");
   }
 
-  public saveFamily() {
+  getErrorMessage(control: string) {
+    return this.familyForm.controls[control].hasError("required")
+      ? "Value is required"
+      : null;
+  }
+
+  public updateData(): void {
     if (!this.familyForm.valid) {
       this.familyForm.markAsTouched();
       return;
@@ -53,28 +56,29 @@ export class FamilyFormComponent implements OnInit {
     }
     this.updateFamily();
   }
+
   private updateFamily() {
     console.log("update", this.familyForm.value);
-    this.familiesService.update(this.familyForm.value).subscribe(
-      result => {
-        this.dialogRef.close(result);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    // this.familiesService.update(this.familyForm.value).subscribe(
+    //   result => {
+    //     this.dialogRef.close(result);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
   }
 
   private createFamily() {
-    console.log("create", this.familyForm.value);
-
-    this.familiesService.create(this.familyForm.value).subscribe(
-      result => {
-        this.dialogRef.close(result);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.familiesService
+      .create(this.familyForm.value)
+      .then(res => {
+        console.log(res);
+        this.dialogRef.close(res);
+      })
+      .catch(err => {
+        console.log(err);
+        this.error = err;
+      });
   }
 }

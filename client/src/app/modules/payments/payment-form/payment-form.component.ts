@@ -104,7 +104,6 @@ export class PaymentFormComponent implements OnInit {
     });
   }
   public savePayment() {
-    console.log(this.paymentForm.valid);
     if (this.paymentForm.valid) {
       if (!this.paymentForm.value._id) {
         this.createPayment();

@@ -10,4 +10,6 @@ export interface FamilyMember<Id = string> {
     userId: Id;
   };
   roles: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }

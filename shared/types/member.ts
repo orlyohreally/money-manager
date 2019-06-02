@@ -3,4 +3,6 @@ export interface User<Id = string> {
   firstName: string;
   lastName: string;
   colorScheme: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

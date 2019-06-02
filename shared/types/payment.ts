@@ -7,7 +7,7 @@ export interface Payment<Id = string> {
   memberId: Id;
   receipt?: string;
   subjectId: Id;
-  updatedAt?: Date;
+  updatedAt: Date;
 }
 
 // /families/:id

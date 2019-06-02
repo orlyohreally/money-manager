@@ -5,7 +5,8 @@ import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as mongoose from "mongoose";
 
-import { familiesRouter } from "./services";
+import { familiesRouter } from "./services/families";
+import { usersRouter } from "./services/users";
 
 const runServer = async () => {
   await mongoose.connect("mongodb://localhost:27017/money-manager");
@@ -22,6 +23,7 @@ const runServer = async () => {
   app.use(bodyParser.urlencoded({ extended: false }));
 
   app.use(apiPath, familiesRouter);
+  app.use(apiPath, usersRouter);
 };
 
 runServer().catch(console.error);

@@ -81,7 +81,7 @@ export class PaymentSubjectFormComponent implements OnInit {
   }
 
   private async getFamilies() {
-    this.families = this.familiesService.membersFamilies;
+    this.families = null; //this.familiesService.membersFamilies;
   }
 
   public async saveSubject() {

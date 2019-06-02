@@ -19,6 +19,7 @@ import { PaymentModule } from "../payments/payment.module";
 import { FamilyComponent } from "./family/family.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { FamiliesComponent } from "./families.component";
+import { FamilyMembersComponent } from './family-members/family-members.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FamiliesComponent } from "./families.component";
     FamilyManagerComponent,
     FamilyComponent,
     DashboardComponent,
-    FamiliesComponent
+    FamiliesComponent,
+    FamilyMembersComponent
   ],
   imports: [
     CommonModule,

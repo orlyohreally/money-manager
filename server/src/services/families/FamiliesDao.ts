@@ -2,7 +2,6 @@ import { Family, FamilyMember } from "@shared/types";
 import { modelTransformer } from "@src/utils";
 
 import { ObjectId } from "mongodb";
-import { userInfo } from "os";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel } from "./models";
 import { FamilyMemberModel } from "./models/FamilyMember";
@@ -16,25 +15,36 @@ export class FamiliesDao implements IFamiliesDao {
 
   public async getFamily(
     familyId: string,
-  ): Promise<{ name: string; membersCount: number }[]> {
-    return FamilyModel.aggregate([
-      { $match: { _id: new ObjectId(familyId) } },
-      {
-        $lookup: {
-          from: "familymembermodels",
-          localField: "_id",
-          foreignField: "_id.familyId",
-          as: "members",
+  ): Promise<{ name: string; membersCount: number }> {
+    return new Promise((resolve, reject) => {
+      FamilyModel.aggregate([
+        { $match: { _id: new ObjectId(familyId) } },
+        {
+          $lookup: {
+            from: "familymembermodels",
+            localField: "_id",
+            foreignField: "_id.familyId",
+            as: "members",
+          },
         },
-      },
-      {
-        $project: {
-          name: true,
-          _id: false,
-          members: { $size: "$members" },
+        {
+          $project: {
+            name: true,
+            icon: true,
+            _id: false,
+            membersCount: { $size: "$members" },
+          },
         },
-      },
-    ]);
+      ]).exec(
+        (err: Error, families: { name: string; membersCount: number }[]) => {
+          if (families) {
+            resolve(families[0]);
+          } else {
+            reject(err);
+          }
+        },
+      );
+    });
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
@@ -58,6 +68,7 @@ export class FamiliesDao implements IFamiliesDao {
     }[]
   > {
     return FamilyMemberModel.aggregate([
+      { $match: { "_id.familyId": new ObjectId(familyId) } },
       {
         $lookup: {
           from: "usermodels",
@@ -103,7 +114,17 @@ export class FamiliesDao implements IFamiliesDao {
           as: "family",
         },
       },
-      { $project: { _id: false } },
+      { $unwind: "$family" },
+      {
+        $project: {
+          _id: "$family._id",
+          name: "$family.name",
+          createdAt: "$family.createdAt",
+          updatedAt: "$family.updatedAt",
+          icon: "$family.icon",
+          userRoles: "$roles",
+        },
+      },
     ]);
   }
 

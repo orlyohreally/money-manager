@@ -7,12 +7,7 @@ import { User } from "@shared/types";
 export class AuthenticationService {
   user: User;
   constructor() {
-    this.user = {
-      _id: "2",
-      lastName: "Knop",
-      firstName: "Orly",
-      colorScheme: "accent"
-    };
+    
   }
 
   public getUser(): User {

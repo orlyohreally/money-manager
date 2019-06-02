@@ -6,8 +6,19 @@
     <mat-list-item role="listitem">
       <a
         mat-button
-        class="mat-button_stretched"
-        routerLink="/families/{{ family.name }}/members"
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/families/{{ family._id }}/dashboard"
+      >
+        Dashboard
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/families/{{ family._id }}/members"
       >
         Family members
       </a>
@@ -15,8 +26,9 @@
     <mat-list-item role="listitem">
       <a
         mat-button
-        class="mat-button_stretched"
-        routerLink="/families/{{ family.name }}/payments"
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/families/{{ family._id }}/payments"
       >
         Family payments
       </a>
@@ -24,8 +36,9 @@
     <mat-list-item role="listitem">
       <a
         mat-button
-        class="mat-button_stretched"
-        routerLink="/families/{{ family.name }}/reports"
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/families/{{ family._id }}/reports"
       >
         Family reports
       </a>

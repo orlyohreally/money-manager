@@ -8,26 +8,7 @@ import { Observable, of } from "rxjs";
 export class MembersService {
   constructor() {}
   public getMembers(): Observable<Member[]> {
-    return of([
-      {
-        _id: "1",
-        firstName: "Alex",
-        lastName: "Zinkevich",
-        colorScheme: "primary"
-      },
-      {
-        _id: "2",
-        firstName: "Orly",
-        lastName: "Knop",
-        colorScheme: "accent"
-      },
-      {
-        _id: "5",
-        firstName: "anonymous",
-        lastName: "anonymous",
-        colorScheme: "accent"
-      }
-    ]);
+    return of([]);
   }
 
   public getColorSchemes() {

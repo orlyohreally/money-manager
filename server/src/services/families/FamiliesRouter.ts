@@ -55,7 +55,7 @@ export class FamiliesRouter {
   private postFamily = async (req: Request, res: Response) => {
     try {
       const family = await this.service.createFamily(
-        req.body.userId,
+        this.defaultTestingUser,
         req.body.family,
       );
       res.status(200).json(family);

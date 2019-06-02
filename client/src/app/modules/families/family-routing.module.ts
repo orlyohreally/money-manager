@@ -5,17 +5,22 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ErrorModule } from "../errors/error.module";
 import { PaymentListComponent } from "../payments/payment-list/payment-list.component";
 import { FamiliesComponent } from "./families.component";
+import { FamilyMembersComponent } from "./family-members/family-members.component";
 
 const routes: Routes = [
   { path: "families", component: FamiliesComponent },
   {
-    path: "families/:familyName",
+    path: "families/:familyId",
     component: FamilyComponent,
     children: [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
       {
         path: "dashboard",
         component: DashboardComponent
+      },
+      {
+        path: "members",
+        component: FamilyMembersComponent
       },
       {
         path: "payments",

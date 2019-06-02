@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Family } from "@shared/types";
-import { FamiliesService } from "../../shared/services/families/families.service";
+import { ActivatedRoute } from "@angular/router";
+import {
+  FamiliesService,
+  memberFamily
+} from "../../shared/services/families/families.service";
 
 @Component({
   selector: "family-family-manager",
@@ -9,7 +12,7 @@ import { FamiliesService } from "../../shared/services/families/families.service
   styleUrls: ["./family-manager.component.scss"]
 })
 export class FamilyManagerComponent implements OnInit {
-  public families: Observable<Family[]>;
+  public families: Observable<memberFamily[]>;
   constructor(private familiesService: FamiliesService) {}
 
   ngOnInit() {

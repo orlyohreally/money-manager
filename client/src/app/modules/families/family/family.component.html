@@ -1,2 +1,7 @@
-Family component for {{ familyName }}
+<div *ngIf="!!family">
+  Family component for {{ family.name }}
+  <br />
+  members:
+  {{ family.membersCount }}
+</div>
 <router-outlet></router-outlet>

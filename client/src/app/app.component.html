@@ -1,9 +1,15 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation" opened mode="side">
+  <mat-sidenav
+    #sidenav
+    role="navigation"
+    opened
+    mode="side"
+    class="block__child_scrollable"
+  >
     <navigation-side-nav-toolbar></navigation-side-nav-toolbar>
     <navigation-side-nav></navigation-side-nav>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content class="block_scrollable">
     <navigation-main-toolbar
       (toggleNavbar)="sidenav.toggle()"
     ></navigation-main-toolbar>

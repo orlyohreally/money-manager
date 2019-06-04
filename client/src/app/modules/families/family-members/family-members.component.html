@@ -1,3 +1,7 @@
-<p>
-  family-members works!
-</p>
+<div class="card-list">
+  <family-member-card
+    *ngFor="let member of members | async"
+    class="card-list__card"
+    [member]="member"
+  ></family-member-card>
+</div>

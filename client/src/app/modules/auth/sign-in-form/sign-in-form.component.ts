@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MembersService } from "@shared-client/services/members/members.service";
+import { MembersService } from "src/app/modules/families/services/members/members.service";
 import { HtmlElementRepresentation } from "@shared-client/types/html-element";
 import { AuthenticationService } from "@shared-client/services/authentication/authentication.service";
 
@@ -39,10 +39,10 @@ export class SignInFormComponent implements OnInit {
       classes: `color-scheme background-color-${color}`,
       innerHTML: null
     });
-    this.colorSchemeRepresentations = this.membersService
-      .getColorSchemes()
-      .map(generateSchemeRepresentations);
-    console.log(this.colorSchemeRepresentations);
+    // this.colorSchemeRepresentations = this.membersService
+    //   .getColorSchemes()
+    //   .map(generateSchemeRepresentations);
+    // console.log(this.colorSchemeRepresentations);
   }
   public selectColorScheme(colorScheme: HtmlElementRepresentation) {
     console.log(colorScheme);

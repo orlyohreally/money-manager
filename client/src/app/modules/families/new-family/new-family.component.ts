@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { FamilyFormComponent } from "../family-form/family-form.component";
+import { Family } from "@shared/types";
 
 @Component({
   selector: "family-new-family",
@@ -8,6 +9,7 @@ import { FamilyFormComponent } from "../family-form/family-form.component";
   styleUrls: ["./new-family.component.scss"]
 })
 export class NewFamilyComponent implements OnInit {
+  @Input() family: Family;
   constructor(private familyForm: MatDialog) {}
 
   ngOnInit() {}
@@ -17,7 +19,8 @@ export class NewFamilyComponent implements OnInit {
   public openForm(): void {
     const dialogRef = this.familyForm.open(FamilyFormComponent, {
       width: "300px",
-      restoreFocus: false
+      restoreFocus: false,
+      data: this.family
     });
 
     dialogRef.afterClosed().subscribe(result => {

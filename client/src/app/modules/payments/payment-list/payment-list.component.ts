@@ -1,12 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar, MatDialog } from "@angular/material";
 import { PaymentFormComponent } from "../payment-form/payment-form.component";
-import { MembersService } from "@shared-client/services/members/members.service";
 import { PaymentsService } from "@shared-client/services/payments/payments.service";
 import { PaymentSubjectsService } from "@shared-client/services/payment-subject/payment-subjects.service";
 import { PaymentSubject, Payment, User as Payer } from "@shared/types";
 import {
-  normalize,
   getDischargedTotal,
   getTotalPaymentAmount,
   aggregateAmountsByMember,
@@ -30,7 +28,6 @@ export class PaymentListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private paymentsService: PaymentsService,
-    private membersService: MembersService,
     private paymentSubjectsService: PaymentSubjectsService,
     private paymentForm: MatDialog
   ) {}
@@ -38,15 +35,14 @@ export class PaymentListComponent implements OnInit {
   ngOnInit() {
     this.getPayments();
     this.getPaymentSubjects();
-    this.getMembers();
     this.calculateTotal();
   }
 
-  private getMembers() {
-    this.membersService.getMembers().subscribe(members => {
-      this.payers = members;
-      this.transformedMembers = normalize(members);
-    });
+  private getMembers(familyId: string) {
+    // this.payers = this.membersService.getMembers(familyId).subscribe(members => {
+    //    = members;
+    //   this.transformedMembers = normalize(members);
+    // });
   }
   private getPayments() {
     this.paymentsService.getPayments().subscribe(

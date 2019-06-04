@@ -1,7 +1,29 @@
-<div *ngIf="!!family">
-  Family component for {{ family.name }}
-  <br />
-  members:
-  {{ family.membersCount }}
+<div *ngIf="!!family" class="family">
+  <div class="family-card">
+    <div class="family-avatar" *ngIf="family.icon">
+      <img class="family-avatar__image" [ngStyle]="getAvatarStyles()" />
+    </div>
+    <div class="family-info">
+      <div class="family-info__name">Family {{ family.name }}</div>
+      <div class="family-info__members-count">{{ getMembersCountText() }}</div>
+    </div>
+    <div class="family-card__actions">
+      <button mat-icon-button class="mat-icon-button_dimmed" title="Add member">
+        <mat-icon>person_add</mat-icon>
+      </button>
+      <family-new-family [family]="family" title="Edit family information">
+        <button mat-icon-button class="mat-icon-button_dimmed">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </family-new-family>
+      <button
+        mat-icon-button
+        class="mat-icon-button_dimmed"
+        title="Delete family"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </div>
 </div>
 <router-outlet></router-outlet>

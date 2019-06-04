@@ -1,18 +1,22 @@
-.home-link {
+.nav-logo {
   text-decoration: none;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   margin-right: 10px;
+}
+.nav-logo__image {
+  height: 40px;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  transform: rotate(-15deg);
+  transform-origin: 50% 50%;
+}
 
-  .logo {
-    height: 40px;
-    display: block;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    transform: rotate(-15deg);
-    transform-origin: 50% 50%;
-  }
+.nav-logo__title {
+  font-family: "Caveat", cursive;
+  font-size: 25px;
 }

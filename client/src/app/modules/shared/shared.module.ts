@@ -17,6 +17,7 @@ import { HtmlElementSelectComponent } from "./components/html-element-select/htm
 import { AccordionComponent } from "../shared/components/accordion/accordion.component";
 import { MenuComponent } from "./components/menu/menu.component";
 import { MenuEntryComponent } from "./components/menu/menu-entry/menu-entry.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MenuEntryComponent } from "./components/menu/menu-entry/menu-entry.comp
     HttpClientModule,
     RouterModule,
 
+    FlexLayoutModule,
     MatButtonModule,
     MatMenuModule,
     MatIconModule

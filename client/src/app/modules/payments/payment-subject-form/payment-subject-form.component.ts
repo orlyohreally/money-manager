@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import { FamiliesService } from "@shared-client/services/families/families.service";
+import { FamiliesService } from "src/app/modules/families/services/families/families.service";
 import { PaymentSubjectsService } from "@shared-client/services/payment-subject/payment-subjects.service";
 import { ImageAssetService } from "@shared-client/services/image-asset/image-asset.service";
 

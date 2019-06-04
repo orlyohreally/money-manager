@@ -31,7 +31,7 @@ export class FamiliesDao implements IFamiliesDao {
           $project: {
             name: true,
             icon: true,
-            _id: false,
+            _id: true,
             membersCount: { $size: "$members" },
           },
         },

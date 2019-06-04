@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { Family } from "@shared/types";
-import { FamiliesService } from "@shared-client/services/families/families.service";
+import { FamiliesService } from "src/app/modules/families/services/families/families.service";
 
 @Component({
   selector: "family-family-form",
@@ -23,16 +23,9 @@ export class FamilyFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.family) {
-      this.familyForm = new FormGroup({
-        name: new FormControl("", [Validators.required])
-      });
-    } else {
-      this.familyForm = new FormGroup({
-        _id: new FormControl(this.family._id),
-        name: new FormControl(this.family.name, [Validators.required])
-      });
-    }
+    this.familyForm = new FormGroup({
+      name: new FormControl(this.family.name || "", [Validators.required])
+    });
   }
 
   get name() {
@@ -46,12 +39,19 @@ export class FamilyFormComponent implements OnInit {
   }
 
   public updateData(): void {
+    console.log(
+      "updateData",
+      !this.family,
+      this.family && !this.family._id,
+      !this.family._id
+    );
     if (!this.familyForm.valid) {
       this.familyForm.markAsTouched();
       return;
     }
-    if (!this.familyForm.value._id) {
-      this.createFamily();
+    if (!this.family || (this.family && !this.family._id)) {
+      console.log("creating family");
+      // this.createFamily();
       return;
     }
     this.updateFamily();

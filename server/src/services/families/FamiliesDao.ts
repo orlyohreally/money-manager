@@ -14,7 +14,7 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getFamily(
-    familyId: string,
+    familyId: string
   ): Promise<{ name: string; membersCount: number }> {
     return new Promise((resolve, reject) => {
       FamilyModel.aggregate([
@@ -24,17 +24,17 @@ export class FamiliesDao implements IFamiliesDao {
             from: "familymembermodels",
             localField: "_id",
             foreignField: "_id.familyId",
-            as: "members",
-          },
+            as: "members"
+          }
         },
         {
           $project: {
             name: true,
             icon: true,
             _id: true,
-            membersCount: { $size: "$members" },
-          },
-        },
+            membersCount: { $size: "$members" }
+          }
+        }
       ]).exec(
         (err: Error, families: { name: string; membersCount: number }[]) => {
           if (families) {
@@ -42,7 +42,7 @@ export class FamiliesDao implements IFamiliesDao {
           } else {
             reject(err);
           }
-        },
+        }
       );
     });
   }
@@ -57,7 +57,7 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getFamilyMembers(
-    familyId: string,
+    familyId: string
   ): Promise<
     {
       _id: string;
@@ -74,11 +74,11 @@ export class FamiliesDao implements IFamiliesDao {
           from: "usermodels",
           localField: "_id.userId",
           foreignField: "_id",
-          as: "user",
-        },
+          as: "user"
+        }
       },
       {
-        $unwind: "$user",
+        $unwind: "$user"
       },
       {
         $project: {
@@ -86,15 +86,15 @@ export class FamiliesDao implements IFamiliesDao {
           "member.firstName": "$user.firstName",
           "member.lastName": "$user.lastName",
           "member.roles": "$roles",
-          "member.createdAt": "$_id.createAt",
-        },
+          "member.createdAt": "$_id.createAt"
+        }
       },
-      { $replaceRoot: { newRoot: "$member" } },
+      { $replaceRoot: { newRoot: "$member" } }
     ]);
   }
 
   public async createFamilyMember(
-    familyMember: FamilyMember,
+    familyMember: FamilyMember
   ): Promise<FamilyMember> {
     const newFamilyMember = new FamilyMemberModel(familyMember);
     await newFamilyMember.save();
@@ -102,7 +102,7 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getMemberFamilies(
-    userId: string,
+    userId: string
   ): Promise<{ family: Family; roles: string[] }[]> {
     return FamilyMemberModel.aggregate([
       { $match: { "_id.userId": new ObjectId(userId) } },
@@ -111,8 +111,8 @@ export class FamiliesDao implements IFamiliesDao {
           from: "familymodels",
           localField: "_id.familyId",
           foreignField: "_id",
-          as: "family",
-        },
+          as: "family"
+        }
       },
       { $unwind: "$family" },
       {
@@ -122,19 +122,19 @@ export class FamiliesDao implements IFamiliesDao {
           createdAt: "$family.createdAt",
           updatedAt: "$family.updatedAt",
           icon: "$family.icon",
-          userRoles: "$roles",
-        },
-      },
+          userRoles: "$roles"
+        }
+      }
     ]);
   }
 
   public async getFamilyMember(
     userId: string,
-    familyId: string,
+    familyId: string
   ): Promise<FamilyMember> {
     return FamilyMemberModel.findOne({
       "_id.familyId": familyId,
-      "_id.userId": userId,
+      "_id.userId": userId
     })
       .lean()
       .exec();

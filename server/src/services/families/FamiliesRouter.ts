@@ -22,11 +22,11 @@ export class FamiliesRouter {
 
     this.router.post(
       "/families/:familyId/members",
-      asyncWrap(this.postFamilyMember),
+      asyncWrap(this.postFamilyMember)
     );
     this.router.get(
       "/families/:familyId/members",
-      asyncWrap(this.getFamilyMembers),
+      asyncWrap(this.getFamilyMembers)
     );
   }
   private getFamily = async (req: Request, res: Response) => {
@@ -35,7 +35,7 @@ export class FamiliesRouter {
       const userId = this.defaultTestingUser;
       const isMember = await this.service.isFamilyMember(
         userId,
-        req.params.familyId,
+        req.params.familyId
       );
       if (isMember) {
         const family = await this.service.getFamily(req.params.familyId);
@@ -56,7 +56,7 @@ export class FamiliesRouter {
     try {
       const family = await this.service.createFamily(
         this.defaultTestingUser,
-        req.body.family,
+        req.body.family
       );
       res.status(200).json(family);
     } catch (err) {
@@ -73,12 +73,12 @@ export class FamiliesRouter {
       const userId = this.defaultTestingUser;
       const updateAllowed = await this.service.userCanUpdateFamily(
         userId,
-        req.params.familyId,
+        req.params.familyId
       );
       if (updateAllowed) {
         await this.service.updateFamily(req.params.familyId, req.body.family);
         res.status(200).json({
-          message: `Family was updated successfully`,
+          message: `Family was updated successfully`
         });
       } else {
         res.status(403).json({ message: "Unathorized access" });
@@ -114,10 +114,9 @@ export class FamiliesRouter {
 
   private postFamilyMember = async (req: Request, res: Response) => {
     try {
-      console.log(req.body);
       const member = await this.service.createFamilyMember(
         req.body.userId,
-        req.params.familyId,
+        req.params.familyId
       );
       res.status(200).json(member);
     } catch (err) {

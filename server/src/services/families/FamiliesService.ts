@@ -1,6 +1,5 @@
-import { Family, FamilyMember, Roles } from '@shared/types';
-// import * as cloudinary from 'cloudinary';
-const cloudinary = require('cloudinary');
+import { Family, FamilyMember, Roles } from "@shared/types";
+import { ImageManagerService } from "../image-manager/ImageManagerService";
 
 export interface IFamiliesDao {
   createFamily(family: Partial<Family>): Promise<Family>;
@@ -28,20 +27,41 @@ export interface IFamiliesDao {
 
 export class FamiliesService {
   private dao: IFamiliesDao;
+  private imageLoaderService: ImageManagerService;
 
-  constructor({ dao }: { dao: IFamiliesDao }) {
+  constructor({
+    dao,
+    imageLoaderService
+  }: {
+    dao: IFamiliesDao;
+    imageLoaderService: ImageManagerService;
+  }) {
     this.dao = dao;
+    this.imageLoaderService = imageLoaderService;
   }
 
   public async createFamily(
     userId: string,
     family: Partial<Family>
   ): Promise<Family> {
-    const savedFamily = await this.dao.createFamily(family);
+    const familyIcon: string =
+      family.icon && family.icon.search(/^http/) === -1 ? family.icon : "";
+    if (familyIcon) {
+      family.icon = "";
+    }
+    let savedFamily = await this.dao.createFamily(family);
     await this.dao.createFamilyMember({
       _id: { familyId: savedFamily._id, userId },
       roles: [Roles.Owner]
     });
+    if (familyIcon) {
+      const newIcon = await this.imageLoaderService.loadImage(
+        familyIcon,
+        `families/${savedFamily._id}`
+      );
+      family.icon = newIcon;
+      savedFamily = await this.dao.updateFamily(savedFamily._id, savedFamily);
+    }
     return savedFamily;
   }
 
@@ -97,34 +117,20 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    if (familyMember && familyMember.roles.indexOf('Owner') > -1) {
+    if (familyMember && familyMember.roles.indexOf("Owner") > -1) {
       return true;
     }
     return false;
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
-    if (family.icon.search(/^http/) === -1) {
-      const newAvatar = await this.loadImage(family.icon);
-      family.icon = newAvatar;
+    if (family.icon && family.icon.search(/^http/) === -1) {
+      const newIcon = await this.imageLoaderService.loadImage(
+        family.icon,
+        `families/${family._id}`
+      );
+      family.icon = newIcon;
     }
     return this.dao.updateFamily(familyId, family);
-  }
-
-  private async loadImage(image: string): Promise<string> {
-    console.log('loading to cloudinary');
-    cloudinary.v2.config({}); // TODO: shoul be environment variable
-    return new Promise((resolve, reject) => {
-      cloudinary.v2.uploader.upload(
-        image,
-        (error: Error, result: { secure_url: string; url: string }) => {
-          console.log(result, error);
-          if (error) {
-            reject(error);
-          }
-          resolve(result.secure_url || result.url);
-        }
-      );
-    });
   }
 }

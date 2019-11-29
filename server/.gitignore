@@ -5,3 +5,4 @@ src/**/*.js.map
 __tests__/**/*.js
 __tests__/**/*.js.map
 coverage
+.env

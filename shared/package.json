@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/orlyohreally/money-manager#readme",
   "dependencies": {
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.13"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.130"

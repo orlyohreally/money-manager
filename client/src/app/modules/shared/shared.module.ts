@@ -1,34 +1,46 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
-import { HttpClientModule } from "@angular/common/http";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
+import { ImageCropperModule } from 'ngx-image-cropper';
 import {
   MatButtonModule,
   MatMenuModule,
-  MatIconModule
-} from "@angular/material";
+  MatIconModule,
+  MatProgressSpinnerModule
+} from '@angular/material';
 
-import { FilterPipe } from "./pipes/filter.pipe";
+import { FilterPipe } from './pipes/filter.pipe';
 
-import { ButtonComponent } from "./components/button/button.component";
-import { FormFieldComponent } from "./components/form-field/form-field.component";
-import { HtmlElementSelectComponent } from "./components/html-element-select/html-element-select.component";
-import { AccordionComponent } from "../shared/components/accordion/accordion.component";
-import { MenuComponent } from "./components/menu/menu.component";
-import { MenuEntryComponent } from "./components/menu/menu-entry/menu-entry.component";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { ButtonComponent } from './components/button/button.component';
+import { FormFieldComponent } from './components/form-field/form-field.component';
+import { HtmlElementSelectComponent } from './components/html-element-select/html-element-select.component';
+import { AccordionComponent } from '../shared/components/accordion/accordion.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { MenuEntryComponent } from './components/menu/menu-entry/menu-entry.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ImageComponent } from './components/image/image.component';
+import { ImageManagerComponent } from './components/image-manager/image-manager.component';
+import { ImagePreviewComponent } from './components/image-preview/image-preview.component';
+import { ImageWithPreviewComponent } from './components/image-with-preview/image-with-preview.component';
+import { BadgeDirective } from './directives/badge.directive';
 
 @NgModule({
   declarations: [
+    FilterPipe,
+
     HtmlElementSelectComponent,
     FormFieldComponent,
     ButtonComponent,
     MenuEntryComponent,
     MenuComponent,
     AccordionComponent,
-
-    FilterPipe
+    ImageComponent,
+    ImageManagerComponent,
+    ImagePreviewComponent,
+    ImageWithPreviewComponent,
+    BadgeDirective
   ],
   imports: [
     CommonModule,
@@ -36,18 +48,26 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     RouterModule,
 
     FlexLayoutModule,
+    MatProgressSpinnerModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    ImageCropperModule
   ],
   exports: [
+    FilterPipe,
+
     FormFieldComponent,
     ButtonComponent,
     HtmlElementSelectComponent,
     MenuComponent,
     AccordionComponent,
-    FilterPipe
+    ImageComponent,
+    ImageManagerComponent,
+    ImageWithPreviewComponent,
+    BadgeDirective
   ],
-  providers: []
+  providers: [],
+  entryComponents: [ImageManagerComponent, ImagePreviewComponent]
 })
 export class SharedModule {}

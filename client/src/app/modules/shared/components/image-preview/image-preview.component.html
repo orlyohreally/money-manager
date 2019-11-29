@@ -1,0 +1,9 @@
+<div class="image-preview">
+  <img
+    [hidden]="!imageLoaded"
+    (load)="onPreviewLoaded($event)"
+    class="image-preview__image"
+    src="{{ imageUrl }}"
+  />
+  <mat-spinner *ngIf="!imageLoaded"></mat-spinner>
+</div>

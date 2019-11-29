@@ -8,14 +8,29 @@
 -->
 <div class="home-page">
   <app-home-page-registration-banner></app-home-page-registration-banner>
-  <app-home-page-section
-    iconLink="https://www.freepik.com/free-photos-vectors/people"
-    iconImagePath="assets/images/family.jpg"
-    title="Create family and add all your family members"
-    buttonLabel="Create family"
-    buttonClasses="button button_lg text-uppercase"
-    (clickAction)="createFamily()"
-  ></app-home-page-section>
+  <div class="section">
+    <div class="icon">
+      <a
+        class="icon__link"
+        href="https://www.freepik.com/free-photos-vectors/people"
+        target="_blank"
+        ><img class="icon__image" src="assets/images/family.jpg"
+      /></a>
+    </div>
+    <div class="section__content">
+      <h2>Create family and add all your family members</h2>
+      <family-family-editor>
+        <button
+          mat-raised-button
+          class="button button_lg text-uppercase"
+          color="primary"
+        >
+          New family
+        </button>
+      </family-family-editor>
+    </div>
+  </div>
+
   <app-home-page-section
     iconLink="https://www.freepik.com/free-photos-vectors/banner"
     iconImagePath="assets/images/payment.jpg"

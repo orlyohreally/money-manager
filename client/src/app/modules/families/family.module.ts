@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
 import {
   MatButtonModule,
@@ -7,28 +7,30 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatListModule,
-  MatCardModule
-} from "@angular/material";
-import { CommonModule } from "@angular/common";
-import { FamilyFormComponent } from "./family-form/family-form.component";
-import { ReactiveFormsModule } from "@angular/forms";
-import { NewFamilyComponent } from "./new-family/new-family.component";
-import { FamilyManagerComponent } from "./family-manager/family-manager.component";
-import { SharedModule } from "../shared/shared.module";
-import { FamilyRoutingModule } from "./family-routing.module";
-import { PaymentModule } from "../payments/payment.module";
-import { FamilyComponent } from "./family/family.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { FamiliesComponent } from "./families.component";
-import { FamilyMembersComponent } from "./family-members/family-members.component";
-import { FamiliesService } from "./services/families/families.service";
-import { MembersService } from "./services/members/members.service";
-import { FamilyMemberCardComponent } from "./family-member-card/family-member-card.component";
+  MatCardModule,
+  MatMenuModule
+} from '@angular/material';
+import { CommonModule } from '@angular/common';
+import { FamilyFormComponent } from './family-form/family-form.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FamilyEditorComponent } from './new-family/family-editor.component';
+import { FamilyManagerComponent } from './family-manager/family-manager.component';
+import { SharedModule } from '../shared/shared.module';
+import { FamilyRoutingModule } from './family-routing.module';
+import { PaymentModule } from '../payments/payment.module';
+import { FamilyComponent } from './family/family.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FamiliesComponent } from './families.component';
+import { FamilyMembersComponent } from './family-members/family-members.component';
+import { FamiliesService } from './services/families/families.service';
+import { MembersService } from './services/members/members.service';
+import { FamilyMemberCardComponent } from './family-member-card/family-member-card.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
     FamilyFormComponent,
-    NewFamilyComponent,
+    FamilyEditorComponent,
     FamilyManagerComponent,
     FamilyComponent,
     DashboardComponent,
@@ -39,13 +41,16 @@ import { FamilyMemberCardComponent } from "./family-member-card/family-member-ca
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     FamilyRoutingModule,
 
+    FlexLayoutModule,
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,
     MatButtonModule,
+    MatMenuModule,
     MatDialogModule,
     MatListModule,
     MatCardModule,
@@ -56,7 +61,7 @@ import { FamilyMemberCardComponent } from "./family-member-card/family-member-ca
   providers: [FamiliesService, MembersService],
   exports: [
     FamilyFormComponent,
-    NewFamilyComponent,
+    FamilyEditorComponent,
     FamilyManagerComponent,
     FamilyMemberCardComponent
   ],

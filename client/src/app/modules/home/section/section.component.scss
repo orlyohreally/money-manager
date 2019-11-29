@@ -1,7 +1,7 @@
-@import "variables";
+@import 'variables';
 @mixin create-key-frame-move-in($direction) {
   $transform-percentage: 0;
-  @if ($direction == "left") {
+  @if ($direction == 'left') {
     $transform-percentage: -100%;
   } @else {
     $transform-percentage: 100%;
@@ -15,8 +15,8 @@
     }
   }
 }
-@include create-key-frame-move-in("left");
-@include create-key-frame-move-in("right");
+@include create-key-frame-move-in('left');
+@include create-key-frame-move-in('right');
 
 @mixin add-animation($left, $keyframe) {
   &.animated {
@@ -58,7 +58,7 @@
     @include add-animation(-100%, move-in-right);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 900px) {
     flex-direction: row;
 
     .icon {

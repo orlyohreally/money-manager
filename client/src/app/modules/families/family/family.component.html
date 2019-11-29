@@ -1,28 +1,71 @@
 <div *ngIf="!!family" class="family">
   <div class="family-card">
-    <div class="family-avatar" *ngIf="family.icon">
-      <img class="family-avatar__image" [ngStyle]="getAvatarStyles()" />
-    </div>
+    <shared-image-with-preview
+      [imageUrl]="family.icon"
+      (selectedImage)="familyIconLoaded($event)"
+    ></shared-image-with-preview>
     <div class="family-info">
-      <div class="family-info__name">Family {{ family.name }}</div>
+      <div class="family-info__name" fxLayoutAlign="start center">
+        <span class="text text_ellipsis" *ngIf="!toChangeName"
+          >Family {{ family.name }}</span
+        >
+        <button
+          *ngIf="!toChangeName"
+          mat-icon-button
+          class="mat-icon-button_dimmed"
+          (click)="showNameEditor()"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <form
+          class="name-editor"
+          fxLayoutAlign="start center"
+          [formGroup]="familyForm"
+          (ngSubmit)="updatedFamilyName()"
+          *ngIf="toChangeName"
+        >
+          <mat-form-field>
+            <input matInput required type="text" formControlName="name" />
+          </mat-form-field>
+          <button
+            *ngIf="toChangeName"
+            mat-icon-button
+            class="mat-icon-button_dimmed"
+            type="submit"
+          >
+            <mat-icon>check</mat-icon>
+          </button>
+        </form>
+      </div>
       <div class="family-info__members-count">{{ getMembersCountText() }}</div>
     </div>
     <div class="family-card__actions">
-      <button mat-icon-button class="mat-icon-button_dimmed" title="Add member">
-        <mat-icon>person_add</mat-icon>
-      </button>
-      <family-new-family [family]="family" title="Edit family information">
-        <button mat-icon-button class="mat-icon-button_dimmed">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </family-new-family>
       <button
         mat-icon-button
-        class="mat-icon-button_dimmed"
-        title="Delete family"
+        [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu"
       >
-        <mat-icon>clear</mat-icon>
+        <mat-icon>more_vert</mat-icon>
       </button>
+      <mat-menu #menu="matMenu">
+        <div mat-menu-item>
+          <family-family-editor
+            [family]="family"
+            title="Edit family information"
+          >
+            <mat-icon>edit</mat-icon>
+            <span>Edit family</span>
+          </family-family-editor>
+        </div>
+        <button mat-menu-item>
+          <mat-icon>person_add</mat-icon>
+          <span>Add member</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>clear</mat-icon>
+          <span>Delete family</span>
+        </button>
+      </mat-menu>
     </div>
   </div>
 </div>

@@ -2,8 +2,8 @@
   <mat-sidenav
     #sidenav
     role="navigation"
-    opened
-    mode="side"
+    [opened]="isOpened()"
+    [mode]="getMode()"
     class="block__child_scrollable"
   >
     <navigation-side-nav-toolbar></navigation-side-nav-toolbar>

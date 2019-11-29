@@ -1,20 +1,18 @@
 @import "variables";
+$config: mat-typography-config();
 .form-field {
   //font-family: $main-font-family;
+  padding: 16px 0;
+}
 
-  &.form-field-invalid {
-    .subject-label-icon {
-      color: #f44336;
-    }
-  }
-
-  label {
-    font-weight: 400;
-    line-height: 1.125;
-    color: rgba(0, 0, 0, 0.54);
-    display: block;
-    width: 100%;
-    transform-origin: 0;
-    transform: scale(0.75);
-  }
+.form-field__label {
+  font-family: mat-font-family($config);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.125;
+  color: rgba(0, 0, 0, 0.54);
+  display: block;
+  width: 100%;
+  transform-origin: 0;
+  transform: scale(0.75);
 }

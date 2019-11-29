@@ -1,0 +1,33 @@
+<div class="image-manager" fxLayoutAlign="center center" fxLayout="column">
+  <shared-image-preview [imageUrl]="config.imageUrl"></shared-image-preview>
+  <div class="file-loader" *ngIf="config.toLoadImage">
+    <input
+      class="file-loader__input"
+      type="file"
+      (change)="onFileChange($event)"
+      #file
+    />
+    <button mat-raised-button color="primary" (click)="file.click()">
+      Select image
+    </button>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="saveChanges()">
+    Save
+  </button>
+</div>
+
+<image-cropper
+  [imageChangedEvent]="imageChangedEvent"
+  [maintainAspectRatio]="true"
+  [aspectRatio]="4 / 3"
+  [resizeToWidth]="500"
+  [onlyScaleDown]="true"
+  format="png"
+  (imageCropped)="imageCropped($event)"
+  (imageLoaded)="croppingLoaded()"
+  (cropperReady)="cropperReady()"
+  (loadImageFailed)="loadImageFailed()"
+></image-cropper>
+
+<img [src]="croppedImage" />

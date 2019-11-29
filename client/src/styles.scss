@@ -1,14 +1,14 @@
-@import "theme";
-@import "variables";
-@import "colors-classes";
-@import "classes";
-@import "buttons";
-@import "cards";
+@import 'theme';
+@import 'variables';
+@import 'colors-classes';
+@import 'classes';
+@import 'buttons';
+@import 'cards';
+@import 'mm-badge';
 
 body,
 html {
   margin: 0;
-  //font-family: $main-font-family;
   height: 100%;
 }
 

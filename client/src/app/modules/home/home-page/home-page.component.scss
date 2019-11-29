@@ -1,2 +1,89 @@
+@import 'variables';
+@mixin create-key-frame-move-in($direction) {
+  $transform-percentage: 0;
+  @if ($direction == 'left') {
+    $transform-percentage: -100%;
+  } @else {
+    $transform-percentage: 100%;
+  }
+  @keyframes move-in-#{$direction} {
+    from {
+      transform: translateX(#{$transform-percentage});
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+@include create-key-frame-move-in('left');
+@include create-key-frame-move-in('right');
+
+@mixin add-animation($left, $keyframe) {
+  &.animated {
+    visibility: visible;
+    animation-name: $keyframe;
+    animation-duration: 0.5s;
+  }
+}
+
+.section {
+  $section-padding: 20px;
+  // font-family: $secondary-font-family;
+  padding: $section-padding;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+
+  .icon {
+    flex-basis: 100%;
+    // visibility: hidden;
+    @include add-animation(-100%, move-in-left);
+  }
+
+  .icon__link {
+    display: block;
+    height: 160px;
+  }
+
+  .icon__image {
+    height: 100%;
+    width: auto;
+  }
+
+  .section__content {
+    flex-basis: 100%;
+    @include add-animation(-100%, move-in-right);
+  }
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+
+    .icon {
+      flex-basis: 40%;
+    }
+    .icon__link {
+      width: 100%;
+    }
+
+    .section__content {
+      flex-basis: 60%;
+    }
+
+    &.reversed {
+      flex-direction: row-reverse;
+      .icon {
+        @include add-animation(100%, move-in-right);
+      }
+      .section__content {
+        @include add-animation(100%, move-in-left);
+      }
+    }
+  }
+}
+
 .home-page {
+  background: #ffffff;
 }

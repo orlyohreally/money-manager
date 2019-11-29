@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { NewPaymentComponent } from "./new-family.component";
+import { ImageManagerComponent } from "./image-manager.component";
 
-describe("NewPaymentComponent", () => {
-  let component: NewPaymentComponent;
-  let fixture: ComponentFixture<NewPaymentComponent>;
+describe("ImageManagerComponent", () => {
+  let component: ImageManagerComponent;
+  let fixture: ComponentFixture<ImageManagerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NewPaymentComponent]
+      declarations: [ImageManagerComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewPaymentComponent);
+    fixture = TestBed.createComponent(ImageManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

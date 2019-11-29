@@ -28,7 +28,7 @@ The project will be available at http://localhost:4200.
 
 ## Built with
 
-- [Angular 6](https://angular.io/) - front-end web app framework
+- [Angular 7](https://angular.io/) - front-end web app framework
 - [Angular Material](https://material.angular.io) - Material Design components for Angular
 
 ## Authors

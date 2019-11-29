@@ -6,7 +6,8 @@ import {
   MatToolbarModule,
   MatButtonModule,
   MatIconModule,
-  MatListModule
+  MatListModule,
+  MatDialogModule
 } from "@angular/material";
 import { FlexLayoutModule } from "@angular/flex-layout";
 
@@ -32,6 +33,7 @@ import { SideNavToolbarComponent } from "./side-nav-toolbar/side-nav-toolbar.com
     CommonModule,
     FlexLayoutModule,
     MatMenuModule,
+    MatDialogModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,

@@ -11,4 +11,8 @@ export class FamilyMemberCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  public getRoleButtonTitle(role: string): string {
+    return `What is ${role}?`;
+  }
 }

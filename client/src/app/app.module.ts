@@ -8,6 +8,7 @@ import { MatSidenavModule } from "@angular/material";
 
 import { NavigationModule } from "./modules/navigation/navigation.module";
 import { FamilyModule } from "./modules/families/family.module";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,7 +16,7 @@ import { FamilyModule } from "./modules/families/family.module";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-
+    FlexLayoutModule,
     MatSidenavModule,
 
     NavigationModule,

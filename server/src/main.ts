@@ -19,8 +19,8 @@ const runServer = async () => {
     console.log("Example app listening on port 3000!");
   });
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json({ limit: "10mb" }));
+  app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
   app.use(apiPath, familiesRouter);
   app.use(apiPath, usersRouter);

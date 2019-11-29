@@ -5,24 +5,48 @@
         class="card__avatar"
         src="https://material.angular.io/assets/img/examples/shiba2.jpg"
       />
+
+      <!-- <shared-image-with-preview
+        imageUrl="https://material.angular.io/assets/img/examples/shiba2.jpg"
+      ></shared-image-with-preview> -->
     </div>
     <div class="member-actions">
-      <button mat-icon-button class="mat-icon-button_dimmed">
-        <mat-icon>edit</mat-icon>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu"
+      >
+        <mat-icon>more_vert</mat-icon>
       </button>
-      <button mat-icon-button class="mat-icon-button_dimmed">
-        <mat-icon>link</mat-icon>
-      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>edit</mat-icon>
+          <span>Edit member</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>link</mat-icon>
+          <span>Go to profile</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>clear</mat-icon>
+          <span>Delete member</span>
+        </button>
+      </mat-menu>
     </div>
   </mat-card-header>
   <mat-card-content class="card__content">
-    <div class="card__title">{{ member.lastName }} {{ member.firstName }}</div>
+    <div class="card__title">
+      <span class="text text_ellipsis"
+        >{{ member.lastName }} {{ member.firstName }}</span
+      >
+    </div>
     <div>
       <button
         mat-raised-button
         color="primary"
         class="button_rounded button_sm"
         *ngFor="let role of member.roles"
+        [title]="getRoleButtonTitle(role)"
       >
         {{ role }}
       </button>
@@ -31,11 +55,11 @@
     <div class="payment-statistics">
       <div class="payment-statistics__item">
         <div class="payment-statistics__title">Spent</div>
-        <div class="payment-statistics_value">₪300</div>
+        <div class="payment-statistics_value">₪300000</div>
       </div>
       <div class="payment-statistics__item">
-        <div class="payment-statistics__title">Indebted</div>
-        <div class="payment-statistics_value">₪300</div>
+        <div class="payment-statistics__title">Debt</div>
+        <div class="payment-statistics_value">₪300000</div>
       </div>
     </div>
   </mat-card-content>

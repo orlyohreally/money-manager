@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Family } from '@shared/types';
-import { FamiliesService } from 'src/app/modules/families/services/families/families.service';
 
 @Component({
   selector: 'family-family-form',
@@ -26,27 +25,15 @@ export class FamilyFormComponent implements OnInit {
     });
   }
 
-  closeForm() {
-    console.log(this.familyForm.valid);
+  familyIconLoaded(icon: string) {
+    this.familyForm.get('icon').setValue(icon);
+  }
+
+  submitForm() {
     if (!this.familyForm.valid) {
       this.familyForm.markAsTouched();
       return;
     }
     this.dialogRef.close(this.familyForm.value);
-  }
-
-  onImageChange(event) {
-    const reader = new FileReader();
-
-    if (event.target.files && event.target.files.length) {
-      const file = event.target.files[0];
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        this.familyForm.patchValue({
-          icon: reader.result
-        });
-      };
-    }
   }
 }

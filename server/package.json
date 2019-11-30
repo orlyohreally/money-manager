@@ -18,6 +18,7 @@
     "start": "node src/main.js",
     "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "commit": "commit-prompt --no-verify",
+    "precommit": "lint-staged && npm run lint",
     "test": "jest --detectOpenHandles",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
     "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\"",

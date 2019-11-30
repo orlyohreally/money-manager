@@ -1,21 +1,21 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { FamiliesService } from "src/app/modules/families/services/families/families.service";
-import { PaymentSubjectsService } from "@shared-client/services/payment-subject/payment-subjects.service";
-import { ImageAssetService } from "@shared-client/services/image-asset/image-asset.service";
+import { FamiliesService } from 'src/app/modules/families/services/families/families.service';
+import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
+import { ImageAssetService } from 'src/app/core/image-asset/image-asset.service';
 
-import { PaymentSubject, Family, ImageAsset } from "@shared/types";
-import { normalizedArray } from "@shared/utils";
+import { PaymentSubject, Family, ImageAsset } from '@shared/types';
+import { normalizedArray } from '@shared/utils';
 
-import { HtmlElementRepresentation } from "@shared-client/types/html-element";
-import { Observable } from "rxjs";
+import { HtmlElementRepresentation } from '@shared-client/types/html-element';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: "payment-payment-subject-form",
-  templateUrl: "./payment-subject-form.component.html",
-  styleUrls: ["./payment-subject-form.component.scss"]
+  selector: 'payment-payment-subject-form',
+  templateUrl: './payment-subject-form.component.html',
+  styleUrls: ['./payment-subject-form.component.scss']
 })
 export class PaymentSubjectFormComponent implements OnInit {
   constructor(
@@ -37,11 +37,11 @@ export class PaymentSubjectFormComponent implements OnInit {
     const generateElements = (icon: ImageAsset) => ({
       id: icon.path,
       innerHTML: `<img src="${icon.path}"/>`,
-      classes: "subject-icon clickable"
+      classes: 'subject-icon clickable'
     });
 
     this.subjectIcons = this.imageAssetService
-      .getImageAssetsByCategory("payment-subject")
+      .getImageAssetsByCategory('payment-subject')
       .map(generateElements);
   }
   private initForm(subject: Partial<PaymentSubject>) {
@@ -62,22 +62,22 @@ export class PaymentSubjectFormComponent implements OnInit {
     });
   }
   public getErrorMessage() {
-    return "You must enter a value";
+    return 'You must enter a value';
   }
   get _id() {
-    return this.subjectForm.get("_id");
+    return this.subjectForm.get('_id');
   }
 
   get name() {
-    return this.subjectForm.get("name");
+    return this.subjectForm.get('name');
   }
 
   get familyId() {
-    return this.subjectForm.get("familyId");
+    return this.subjectForm.get('familyId');
   }
 
   get icon() {
-    return this.subjectForm.get("icon");
+    return this.subjectForm.get('icon');
   }
 
   private async getFamilies() {

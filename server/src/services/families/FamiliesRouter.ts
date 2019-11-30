@@ -3,6 +3,7 @@ import { IRouter } from "express-serve-static-core";
 
 import { asyncWrap } from "@src/utils";
 
+import { Family } from "@shared/types";
 import { FamiliesService } from "./FamiliesService";
 
 export class FamiliesRouter {
@@ -19,6 +20,7 @@ export class FamiliesRouter {
     this.router.post("/families", asyncWrap(this.postFamily));
     this.router.put("/families/:familyId", asyncWrap(this.putFamily));
     this.router.get("/families/:familyId", asyncWrap(this.getFamily));
+    this.router.delete("/families/:familyId", asyncWrap(this.deleteFamily));
 
     this.router.post(
       "/families/:familyId/members",
@@ -33,12 +35,10 @@ export class FamiliesRouter {
     try {
       // FIXME: userId should be retrieved from JWT
       const userId = this.defaultTestingUser;
-      const isMember = await this.service.isFamilyMember(
-        userId,
-        req.params.familyId
-      );
+      const familyId = (req.params as { familyId: string }).familyId;
+      const isMember = await this.service.isFamilyMember(userId, familyId);
       if (isMember) {
-        const family = await this.service.getFamily(req.params.familyId);
+        const family = await this.service.getFamily(familyId);
         if (family) {
           res.status(200).json(family);
         } else {
@@ -56,7 +56,7 @@ export class FamiliesRouter {
     try {
       const family = await this.service.createFamily(
         this.defaultTestingUser,
-        req.body.family
+        (req.body as { family: Family }).family
       );
       res.status(200).json(family);
     } catch (err) {
@@ -66,19 +66,44 @@ export class FamiliesRouter {
 
   private putFamily = async (req: Request, res: Response) => {
     try {
-      if (!req.body.family) {
+      const family = (req.body as { family: Family }).family;
+      const familyId = (req.params as { familyId: string }).familyId;
+      if (!family) {
         res.status(404).json({ message: "New values are missing" });
         return;
       }
       const userId = this.defaultTestingUser;
       const updateAllowed = await this.service.userCanUpdateFamily(
         userId,
-        req.params.familyId
+        familyId
       );
       if (updateAllowed) {
-        await this.service.updateFamily(req.params.familyId, req.body.family);
+        const updatedFamily = await this.service.updateFamily(familyId, family);
+        res.status(200).json(updatedFamily);
+      } else {
+        res.status(403).json({ message: "Unathorized access" });
+      }
+    } catch (err) {
+      res.status(404).json(err);
+    }
+  };
+
+  private deleteFamily = async (req: Request, res: Response) => {
+    try {
+      const familyId = (req.params as { familyId: string }).familyId;
+      if (!familyId) {
+        res.status(404).json({ message: "Values are missing" });
+        return;
+      }
+      const userId = this.defaultTestingUser;
+      const updateAllowed = await this.service.userCanUpdateFamily(
+        userId,
+        familyId
+      );
+      if (updateAllowed) {
+        await this.service.removeFamily(familyId);
         res.status(200).json({
-          message: `Family was updated successfully`
+          message: `Family was removed successfully`
         });
       } else {
         res.status(403).json({ message: "Unathorized access" });
@@ -101,7 +126,9 @@ export class FamiliesRouter {
 
   private getFamilyMembers = async (req: Request, res: Response) => {
     try {
-      const members = await this.service.getFamilyMembers(req.params.familyId);
+      const familyId = (req.params as { familyId: string }).familyId;
+
+      const members = await this.service.getFamilyMembers(familyId);
       if (members.length) {
         res.status(200).json(members);
       } else {
@@ -114,10 +141,9 @@ export class FamiliesRouter {
 
   private postFamilyMember = async (req: Request, res: Response) => {
     try {
-      const member = await this.service.createFamilyMember(
-        req.body.userId,
-        req.params.familyId
-      );
+      const userId = (req.body as { userId: string }).userId;
+      const familyId = (req.params as { familyId: string }).familyId;
+      const member = await this.service.createFamilyMember(userId, familyId);
       res.status(200).json(member);
     } catch (err) {
       res.status(400).json(err);

@@ -31,8 +31,8 @@ export class ImageManagerComponent implements OnInit {
   }
 
   public saveChanges() {
-    console.log(this.loadedImage);
-    this.dialogRef.close({ imageUrl: this.loadedImage });
+    console.log('loadedImage', this.loadedImage, this.croppedImage);
+    this.dialogRef.close(this.croppedImage);
   }
 
   public onFileChange(event) {
@@ -45,6 +45,7 @@ export class ImageManagerComponent implements OnInit {
   fileChangeEvent(event: any): void {}
 
   imageCropped(event: ImageCroppedEvent) {
+    console.log('event.file', event.file);
     this.croppedImage = event.base64;
   }
 

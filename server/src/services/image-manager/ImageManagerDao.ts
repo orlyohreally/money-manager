@@ -3,9 +3,11 @@ import * as dotenv from "dotenv";
 import { IImageLoaderDao } from "./ImageManagerService";
 
 export class ImageManagerDao implements IImageLoaderDao {
-  public loadImage(image: string, path: string): Promise<string> {
-    dotenv.config();
+  constructor() {
     this.configCloudinary();
+  }
+
+  public loadImage(image: string, path: string): Promise<string> {
     return new Promise((resolve, reject) => {
       cloudinary.v2.uploader.upload(
         image,
@@ -32,6 +34,7 @@ export class ImageManagerDao implements IImageLoaderDao {
   }
 
   private configCloudinary() {
+    dotenv.config();
     cloudinary.v2.config({
       cloud_name: process.env.cloud_name,
       api_key: process.env.api_key,

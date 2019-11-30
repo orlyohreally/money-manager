@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ImageManagerComponent } from '../image-manager/image-manager.component';
 import { MatDialog } from '@angular/material';
-import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 
 @Component({
   selector: 'shared-image-with-preview',

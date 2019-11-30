@@ -51,7 +51,15 @@ export class FamiliesDao implements IFamiliesDao {
     if (family._id) {
       delete family._id;
     }
-    return FamilyModel.updateOne({ _id: familyId }, family, { new: true })
+    return FamilyModel.findOneAndUpdate({ _id: familyId }, family, {
+      new: true
+    })
+      .lean()
+      .exec();
+  }
+
+  public async removeFamily(familyId: string): Promise<void> {
+    return FamilyModel.deleteOne({ _id: familyId })
       .lean()
       .exec();
   }

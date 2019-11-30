@@ -1,3 +1,4 @@
+import { User } from "@shared/types";
 import { asyncWrap } from "@src/utils";
 import { Request, Router } from "express";
 import { IRouter, Response } from "express-serve-static-core";
@@ -16,7 +17,8 @@ export class UsersRouter {
   }
   private postUser = async (req: Request, res: Response) => {
     try {
-      const newUser = await this.service.createUser(req.body.user);
+      const user = (req.body as { user: User }).user;
+      const newUser = await this.service.createUser(user);
       res.status(200).json(newUser);
     } catch (err) {
       res.status(400).json(err);

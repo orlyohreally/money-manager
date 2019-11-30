@@ -4,7 +4,8 @@
     "baseUrl": "./",
     "paths": {
       "@shared/*": ["../shared/*"],
-      "@shared-client/*": ["../client/src/app/modules/shared/*"]
+      "@shared-client/*": ["../client/src/app/modules/shared/*"],
+      "@core-client/*": ["../client/src/app/core/*"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

@@ -1,5 +1,6 @@
 import { Family, FamilyMember, Roles } from "@shared/types";
-import { ImageManagerService } from "../image-manager/ImageManagerService";
+// tslint:disable-next-line: max-line-length
+import { ImageManagerService } from "src/services/image-manager/ImageManagerService";
 
 export interface IFamiliesDao {
   createFamily(family: Partial<Family>): Promise<Family>;
@@ -23,6 +24,7 @@ export interface IFamiliesDao {
   getFamily(familyId: string): Promise<{ name: string; membersCount: number }>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
+  removeFamily(familyId: string): Promise<void>;
 }
 
 export class FamiliesService {
@@ -49,7 +51,7 @@ export class FamiliesService {
     if (familyIcon) {
       family.icon = "";
     }
-    let savedFamily = await this.dao.createFamily(family);
+    let savedFamily: Family = await this.dao.createFamily(family);
     await this.dao.createFamilyMember({
       _id: { familyId: savedFamily._id, userId },
       roles: [Roles.Owner]
@@ -59,10 +61,21 @@ export class FamiliesService {
         familyIcon,
         `families/${savedFamily._id}`
       );
-      family.icon = newIcon;
+      savedFamily.icon = newIcon;
       savedFamily = await this.dao.updateFamily(savedFamily._id, savedFamily);
     }
     return savedFamily;
+  }
+
+  public async updateFamily(familyId: string, family: Family): Promise<Family> {
+    if (family.icon && family.icon.search(/^http/) === -1) {
+      const newIcon = await this.imageLoaderService.loadImage(
+        family.icon,
+        `families/${family._id}`
+      );
+      family.icon = newIcon;
+    }
+    return this.dao.updateFamily(familyId, family);
   }
 
   public async getFamily(
@@ -123,14 +136,9 @@ export class FamiliesService {
     return false;
   }
 
-  public async updateFamily(familyId: string, family: Family): Promise<Family> {
-    if (family.icon && family.icon.search(/^http/) === -1) {
-      const newIcon = await this.imageLoaderService.loadImage(
-        family.icon,
-        `families/${family._id}`
-      );
-      family.icon = newIcon;
-    }
-    return this.dao.updateFamily(familyId, family);
+  public async removeFamily(familyId: string): Promise<void> {
+    // const family = await this.getFamily(familyId);
+    await this.imageLoaderService.deleteImage(`families/${familyId}`);
+    return this.dao.removeFamily(familyId);
   }
 }

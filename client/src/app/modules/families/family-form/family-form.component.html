@@ -3,7 +3,7 @@
     Family
   </h1>
   <div mat-dialog-content>
-    <form [formGroup]="familyForm" (ngSubmit)="closeForm()">
+    <form [formGroup]="familyForm" (ngSubmit)="submitForm()">
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input type="text" required matInput formControlName="name" />
@@ -12,12 +12,10 @@
         >
       </mat-form-field>
       <shared-form-field label="Avatar" required="true">
-        <shared-image
-          class="family-form__avatar-preview"
-          [imageUrl]="family?.icon"
-          *ngIf="family?.icon"
-        ></shared-image>
-        <input type="file" required (change)="onImageChange($event)" />
+        <shared-image-with-preview
+          [imageUrl]="familyForm.get('icon').value"
+          (selectedImage)="familyIconLoaded($event)"
+        ></shared-image-with-preview>
       </shared-form-field>
       <div class="action-buttons">
         <button mat-raised-button class="button" color="primary" type="submit">

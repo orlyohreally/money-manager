@@ -3,53 +3,69 @@ import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
 import { Family } from '@shared/types';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, catchError } from 'rxjs/operators';
-
-export type MemberFamily = Family & { roles: string[] };
+import { MemberFamily } from 'src/app/modules/shared/types/member-family';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FamiliesService {
-  private families: BehaviorSubject<MemberFamily[]>;
-  private dataStore: {
+  private familyStore = new BehaviorSubject<{
     families: MemberFamily[];
-  };
-
+    currentFamily: MemberFamily;
+  }>({ families: [], currentFamily: null });
   private familyAPIRouter = '/api/v1/families/';
+
   constructor(private http: HttpClient) {
-    this.families = <BehaviorSubject<MemberFamily[]>>new BehaviorSubject([]);
-    this.dataStore = { families: null };
-    this.loadFamilies();
+    // this.loadFamilies();
   }
 
-  public loadFamilies(): void {
-    this.http.get(this.familyAPIRouter).subscribe(
-      (families: MemberFamily[]) => {
-        this.dataStore.families = families;
-        this.families.next(Object.assign({}, this.dataStore).families);
-      },
-      error => {
-        console.log(error);
-      }
+  public loadFamilies(): Observable<void> {
+    return this.http.get(this.familyAPIRouter).pipe(
+      switchMap(
+        (families: MemberFamily[]) => {
+          this.familyStore.next({ families, currentFamily: families[0] });
+          return of(undefined);
+        },
+        error => {
+          console.log(error);
+          throwError(error);
+        }
+      )
     );
   }
 
-  get membersFamilies(): Observable<MemberFamily[]> {
-    return this.families.asObservable();
+  get familiesInfo(): Observable<{
+    families: MemberFamily[];
+    currentFamily: MemberFamily;
+  }> {
+    return this.familyStore.asObservable();
   }
 
-  public createFamily(family: Partial<Family>): Observable<void> {
+  setCurrentFamily(familyId: string) {
+    const selectedFamily = this.familyStore
+      .getValue()
+      .families.filter((family: MemberFamily) => family._id === familyId)[0];
+    if (selectedFamily) {
+      this.familyStore.next({
+        families: this.familyStore.getValue().families,
+        currentFamily: selectedFamily
+      });
+    }
+  }
+
+  public createFamily(family: Partial<Family>): Observable<MemberFamily> {
     return this.http
       .post<Family>('/api/v1/families/', {
         family
       })
       .pipe(
-        switchMap(newFamily => {
-          this.dataStore.families.push(
-            Object.assign(newFamily, { roles: ['Owner'] })
-          );
-          this.families.next(Object.assign({}, this.dataStore).families);
-          return of(undefined);
+        switchMap((newFamily: MemberFamily) => {
+          const families = this.familyStore.getValue().families;
+          this.familyStore.next({
+            families: [...families, newFamily],
+            currentFamily: this.familyStore.getValue().currentFamily
+          });
+          return of(newFamily);
         }),
         catchError(error => {
           console.log('Could not create family.', error);
@@ -58,25 +74,50 @@ export class FamiliesService {
       );
   }
 
-  public updateFamily(family: MemberFamily): Observable<void> {
+  public updateFamily(family: Partial<Family>): Observable<MemberFamily> {
     return this.http
       .put<Family>(`/api/v1/families/${family._id}`, { family })
       .pipe(
-        switchMap(() => {
-          this.dataStore.families.forEach((f, i) => {
-            console.log(f, i, f._id, family._id);
-            if (f._id === family._id) {
-              this.dataStore.families[i] = family;
-            }
+        switchMap((updatedFamily: MemberFamily) => {
+          const families = this.familyStore.getValue().families;
+          let oldFamilyValue = families.filter(
+            (currentFamily: MemberFamily) =>
+              currentFamily._id === updatedFamily._id
+          )[0];
+          oldFamilyValue = Object.assign(oldFamilyValue, updatedFamily);
+          this.familyStore.next({
+            families,
+            currentFamily: this.familyStore.getValue().currentFamily
           });
-          this.families.next(Object.assign({}, this.dataStore).families);
-          return of(undefined);
+          return of(updatedFamily);
         }),
         catchError(error => {
-          console.log(error);
+          console.log('error', error);
           return throwError(error);
         })
       );
+  }
+
+  public removeFamily(family: Partial<Family>): Observable<void> {
+    return this.http.delete(`/api/v1/families/${family._id}`).pipe(
+      switchMap(() => {
+        const families = this.familyStore.getValue().families;
+        const index = families.findIndex(
+          (familyIterator: MemberFamily) => familyIterator._id === family._id
+        );
+        families.splice(index, 1);
+
+        this.familyStore.next({
+          families,
+          currentFamily: this.familyStore.getValue().currentFamily
+        });
+        return of(undefined);
+      }),
+      catchError(error => {
+        console.log('Could not remove family.', error);
+        return throwError(error);
+      })
+    );
   }
 
   public getFamily(

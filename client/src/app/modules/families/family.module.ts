@@ -13,7 +13,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FamilyFormComponent } from './family-form/family-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { FamilyEditorComponent } from './new-family/family-editor.component';
+import { FamilyEditorComponent } from './family-editor/family-editor.component';
 import { FamilyManagerComponent } from './family-manager/family-manager.component';
 import { SharedModule } from '../shared/shared.module';
 import { FamilyRoutingModule } from './family-routing.module';
@@ -58,7 +58,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PaymentModule,
     SharedModule
   ],
-  providers: [FamiliesService, MembersService],
+  providers: [],
   exports: [
     FamilyFormComponent,
     FamilyEditorComponent,

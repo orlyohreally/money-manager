@@ -6,38 +6,36 @@
     ></shared-image-with-preview>
     <div class="family-info">
       <div class="family-info__name" fxLayoutAlign="start center">
-        <span class="text text_ellipsis" *ngIf="!toChangeName"
-          >Family {{ family.name }}</span
+        <div
+          fxLayoutAlign="start center"
+          *ngIf="!displayNameEditor"
+          (click)="toggleNameEditor()"
         >
+          <span class="text text_ellipsis text_clickable">
+            Family {{ family.name }}
+          </span>
+          <button mat-icon-button class="mat-icon-button_dimmed">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <shared-value-editor
+          *ngIf="displayNameEditor"
+          [value]="family.name"
+          (valueSubmitted)="updatedFamilyName($event)"
+        ></shared-value-editor>
         <button
-          *ngIf="!toChangeName"
+          *ngIf="displayNameEditor"
           mat-icon-button
           class="mat-icon-button_dimmed"
-          (click)="showNameEditor()"
+          (click)="toggleNameEditor()"
         >
-          <mat-icon>edit</mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
-        <form
-          class="name-editor"
-          fxLayoutAlign="start center"
-          [formGroup]="familyForm"
-          (ngSubmit)="updatedFamilyName()"
-          *ngIf="toChangeName"
-        >
-          <mat-form-field>
-            <input matInput required type="text" formControlName="name" />
-          </mat-form-field>
-          <button
-            *ngIf="toChangeName"
-            mat-icon-button
-            class="mat-icon-button_dimmed"
-            type="submit"
-          >
-            <mat-icon>check</mat-icon>
-          </button>
-        </form>
       </div>
-      <div class="family-info__members-count">{{ getMembersCountText() }}</div>
+      <div class="family-info__members-count">
+        {{ family.membersCount }}
+        {{ family.membersCount === 1 ? 'member' : 'members' }}
+      </div>
     </div>
     <div class="family-card__actions">
       <button
@@ -61,7 +59,7 @@
           <mat-icon>person_add</mat-icon>
           <span>Add member</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="removeFamily()">
           <mat-icon>clear</mat-icon>
           <span>Delete family</span>
         </button>

@@ -1,17 +1,17 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
-import { PaymentsService } from "@shared-client/services/payments/payments.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { PaymentSubjectsService } from "@shared-client/services/payment-subject/payment-subjects.service";
-import { AuthenticationService } from "@shared-client/services/authentication/authentication.service";
-import { Payment, PaymentSubject, User as Member } from "@shared/types";
-import { PaymentSubjectFormComponent } from "../payment-subject-form/payment-subject-form.component";
-import { normalizedArray } from "@shared/utils";
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { PaymentsService } from 'src/app/core/payments/payments.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
+import { AuthenticationService } from 'src/app/core/authentication/authentication.service';
+import { Payment, PaymentSubject, User as Member } from '@shared/types';
+import { PaymentSubjectFormComponent } from '../payment-subject-form/payment-subject-form.component';
+import { normalizedArray } from '@shared/utils';
 
 @Component({
-  selector: "payment-payment-form",
-  templateUrl: "./payment-form.component.html",
-  styleUrls: ["./payment-form.component.scss"]
+  selector: 'payment-payment-form',
+  templateUrl: './payment-form.component.html',
+  styleUrls: ['./payment-form.component.scss']
 })
 export class PaymentFormComponent implements OnInit {
   public paymentForm: FormGroup;
@@ -46,7 +46,7 @@ export class PaymentFormComponent implements OnInit {
       this.initPaymentForm({
         _id: null,
         memberId: this.currentMember._id,
-        familyId: "1",
+        familyId: '1',
         paidAt: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -65,24 +65,24 @@ export class PaymentFormComponent implements OnInit {
       subjectId: new FormControl(payment.subjectId, [Validators.required]),
       amount: new FormControl(payment.amount, [
         Validators.required,
-        Validators.pattern("^[0-9]*")
+        Validators.pattern('^[0-9]*')
       ])
       //receipt: new FormControl(payment.receipt, [])
     });
   }
   get _id() {
-    return this.paymentForm.get("_id");
+    return this.paymentForm.get('_id');
   }
   get memberId() {
-    return this.paymentForm.get("memberId");
+    return this.paymentForm.get('memberId');
   }
 
   get paidAt() {
-    return this.paymentForm.get("paidAt");
+    return this.paymentForm.get('paidAt');
   }
 
   get subjectId() {
-    return this.paymentForm.get("subjectId");
+    return this.paymentForm.get('subjectId');
   }
   public newPaymentSubject(event) {
     event.stopPropagation();
@@ -92,7 +92,7 @@ export class PaymentFormComponent implements OnInit {
     const dialogRef = this.paymentSubjectForm.open(
       PaymentSubjectFormComponent,
       {
-        width: "400px",
+        width: '400px',
         restoreFocus: false
       }
     );

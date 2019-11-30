@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { User } from "@shared/types";
-import { AuthenticationService } from "@shared-client/services/authentication/authentication.service";
-import { MenuEntry } from "@shared-client/types/menu-entry";
+import { Component, OnInit } from '@angular/core';
+import { User } from '@shared/types';
+import { MenuEntry } from '@shared-client/types/menu-entry';
+import { AuthenticationService } from '@core-client/authentication/authentication.service';
 
 @Component({
-  selector: "navigation-user-menu",
-  templateUrl: "./user-menu.component.html",
-  styleUrls: ["./user-menu.component.scss"]
+  selector: 'navigation-user-menu',
+  templateUrl: './user-menu.component.html',
+  styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent implements OnInit {
   public menuEntries: MenuEntry[];
@@ -19,6 +19,6 @@ export class UserMenuComponent implements OnInit {
   }
 
   public getUserFullName(): string {
-    return "not implemented";
+    return 'not implemented';
   }
 }

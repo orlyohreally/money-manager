@@ -1,50 +1,56 @@
-<shared-accordion
-  *ngFor="let family of families | async"
-  [toggleLabel]="family.name"
->
-  <mat-list role="list" class="nav-block__list">
-    <mat-list-item role="listitem">
-      <a
-        mat-button
-        class="mat-button_stretched mat-button_text-white nav-block__link"
-        routerLinkActive="nav-block__link_active"
-        routerLink="/families/{{ family._id }}/dashboard"
-        sharedBadge="Coming soon"
-      >
-        Dashboard
-      </a>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <a
-        mat-button
-        class="mat-button_stretched mat-button_text-white nav-block__link"
-        routerLinkActive="nav-block__link_active"
-        routerLink="/families/{{ family._id }}/members"
-      >
-        Family members
-      </a>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <a
-        mat-button
-        class="mat-button_stretched mat-button_text-white nav-block__link"
-        routerLinkActive="nav-block__link_active"
-        routerLink="/families/{{ family._id }}/payments"
-        sharedBadge="Coming soon"
-      >
-        Family payments
-      </a>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <a
-        mat-button
-        class="mat-button_stretched mat-button_text-white nav-block__link"
-        routerLinkActive="nav-block__link_active"
-        routerLink="/families/{{ family._id }}/reports"
-        sharedBadge="Coming soon"
-      >
-        Family reports
-      </a>
-    </mat-list-item>
-  </mat-list>
-</shared-accordion>
+<ng-container *ngIf="familiesInfo | async as familiesData; else loading">
+  <shared-accordion
+    *ngFor="let family of familiesData.families"
+    [toggleLabel]="family.name"
+    [collapsed]="familiesData.currentFamily !== family"
+  >
+    <mat-list role="list" class="nav-block__list">
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="mat-button_stretched mat-button_text-white nav-block__link"
+          routerLinkActive="nav-block__link_active"
+          routerLink="/families/{{ family._id }}/dashboard"
+          sharedBadge="Coming soon"
+        >
+          Dashboard
+        </a>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="mat-button_stretched mat-button_text-white nav-block__link"
+          routerLinkActive="nav-block__link_active"
+          routerLink="/families/{{ family._id }}/members"
+        >
+          Family members
+        </a>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="mat-button_stretched mat-button_text-white nav-block__link"
+          routerLinkActive="nav-block__link_active"
+          routerLink="/families/{{ family._id }}/payments"
+          sharedBadge="Coming soon"
+        >
+          Family payments
+        </a>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <a
+          mat-button
+          class="mat-button_stretched mat-button_text-white nav-block__link"
+          routerLinkActive="nav-block__link_active"
+          routerLink="/families/{{ family._id }}/reports"
+          sharedBadge="Coming soon"
+        >
+          Family reports
+        </a>
+      </mat-list-item>
+    </mat-list>
+  </shared-accordion>
+</ng-container>
+<ng-template #loading>
+  loading
+</ng-template>

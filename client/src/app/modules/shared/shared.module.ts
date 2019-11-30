@@ -8,7 +8,10 @@ import {
   MatButtonModule,
   MatMenuModule,
   MatIconModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatDialogModule
 } from '@angular/material';
 
 import { FilterPipe } from './pipes/filter.pipe';
@@ -25,6 +28,9 @@ import { ImageManagerComponent } from './components/image-manager/image-manager.
 import { ImagePreviewComponent } from './components/image-preview/image-preview.component';
 import { ImageWithPreviewComponent } from './components/image-with-preview/image-with-preview.component';
 import { BadgeDirective } from './directives/badge.directive';
+import { ValueEditorComponent } from './components/value-editor/value-editor.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +46,9 @@ import { BadgeDirective } from './directives/badge.directive';
     ImageManagerComponent,
     ImagePreviewComponent,
     ImageWithPreviewComponent,
-    BadgeDirective
+    BadgeDirective,
+    ValueEditorComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +58,12 @@ import { BadgeDirective } from './directives/badge.directive';
     FlexLayoutModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    FormsModule,
     MatMenuModule,
+    MatDialogModule,
     MatIconModule,
     ImageCropperModule
   ],
@@ -65,9 +78,15 @@ import { BadgeDirective } from './directives/badge.directive';
     ImageComponent,
     ImageManagerComponent,
     ImageWithPreviewComponent,
-    BadgeDirective
+    BadgeDirective,
+    ValueEditorComponent,
+    ConfirmationDialogComponent
   ],
   providers: [],
-  entryComponents: [ImageManagerComponent, ImagePreviewComponent]
+  entryComponents: [
+    ImageManagerComponent,
+    ImagePreviewComponent,
+    ConfirmationDialogComponent
+  ]
 })
 export class SharedModule {}

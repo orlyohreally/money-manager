@@ -26,6 +26,10 @@
   overflow: hidden;
 }
 
+.text_clickable {
+  cursor: pointer;
+}
+
 .block_scrollable,
 .block__child_scrollable div {
   &::-webkit-scrollbar {

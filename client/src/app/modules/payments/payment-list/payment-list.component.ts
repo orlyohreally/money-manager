@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { MatSnackBar, MatDialog } from "@angular/material";
-import { PaymentFormComponent } from "../payment-form/payment-form.component";
-import { PaymentsService } from "@shared-client/services/payments/payments.service";
-import { PaymentSubjectsService } from "@shared-client/services/payment-subject/payment-subjects.service";
-import { PaymentSubject, Payment, User as Payer } from "@shared/types";
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { PaymentFormComponent } from '../payment-form/payment-form.component';
+import { PaymentsService } from 'src/app/core/payments/payments.service';
+import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
+import { PaymentSubject, Payment, User as Payer } from '@shared/types';
 import {
   getDischargedTotal,
   getTotalPaymentAmount,
@@ -11,12 +11,12 @@ import {
   normalizedArray,
   unnormalizeArray,
   orderNormalizedArrayByKey
-} from "@shared/utils";
+} from '@shared/utils';
 
 @Component({
-  selector: "payment-payment-list",
-  templateUrl: "./payment-list.component.html",
-  styleUrls: ["./payment-list.component.scss"]
+  selector: 'payment-payment-list',
+  templateUrl: './payment-list.component.html',
+  styleUrls: ['./payment-list.component.scss']
 })
 export class PaymentListComponent implements OnInit {
   payments: normalizedArray<Payment>;
@@ -95,7 +95,7 @@ export class PaymentListComponent implements OnInit {
   }
   public openForm(payment: Payment): void {
     const dialogRef = this.paymentForm.open(PaymentFormComponent, {
-      width: "300px",
+      width: '300px',
       restoreFocus: false,
       data: payment
     });
@@ -109,11 +109,9 @@ export class PaymentListComponent implements OnInit {
   public removePayment(payment: Payment) {
     this.paymentsService.removePayment(payment).subscribe(
       result => {
-        if (result.status === "success") {
+        if (result.status === 'success') {
           this.snackBar.open(
-            `Payment for ₪ ${payment.amount} by ${
-              payment.memberId
-            } was deleted`,
+            `Payment for ₪ ${payment.amount} by ${payment.memberId} was deleted`,
             null,
             {
               duration: 2000

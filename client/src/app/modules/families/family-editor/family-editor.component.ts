@@ -2,10 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { FamilyFormComponent } from '../family-form/family-form.component';
 import { Family } from '@shared/types';
-import {
-  FamiliesService,
-  MemberFamily
-} from '../services/families/families.service';
+import { FamiliesService } from '../services/families/families.service';
+import { Router } from '@angular/router';
+import { MemberFamily } from '../../shared/types/member-family';
 
 @Component({
   selector: 'family-family-editor',
@@ -16,7 +15,8 @@ export class FamilyEditorComponent implements OnInit {
   @Input() family: Family;
   constructor(
     private familyForm: MatDialog,
-    private familiesService: FamiliesService
+    private familiesService: FamiliesService,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -56,8 +56,9 @@ export class FamilyEditorComponent implements OnInit {
 
   private createFamily(family: MemberFamily) {
     this.familiesService.createFamily(family).subscribe(
-      response => {
+      (response: MemberFamily) => {
         console.log(response);
+        this.router.navigate([`/families/${response._id}/dashboard`]);
       },
       error => {
         console.log(error);

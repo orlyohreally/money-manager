@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MembersService } from "src/app/modules/families/services/members/members.service";
-import { HtmlElementRepresentation } from "@shared-client/types/html-element";
-import { AuthenticationService } from "@shared-client/services/authentication/authentication.service";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MembersService } from 'src/app/modules/families/services/members/members.service';
+import { HtmlElementRepresentation } from '@shared-client/types/html-element';
+import { AuthenticationService } from 'src/app/core/authentication/authentication.service';
 
 @Component({
-  selector: "auth-sign-in-form",
-  templateUrl: "./sign-in-form.component.html",
-  styleUrls: ["./sign-in-form.component.scss"]
+  selector: 'auth-sign-in-form',
+  templateUrl: './sign-in-form.component.html',
+  styleUrls: ['./sign-in-form.component.scss']
 })
 export class SignInFormComponent implements OnInit {
   constructor(
@@ -18,17 +18,17 @@ export class SignInFormComponent implements OnInit {
   public colorSchemeRepresentations: HtmlElementRepresentation[];
 
   ngOnInit() {
-    console.log("SignInFormComponent");
+    console.log('SignInFormComponent');
     this.getColorSchemes();
     this.initForm();
   }
 
   private initForm() {
     this.signInForm = new FormGroup({
-      firstName: new FormControl("", [Validators.required]),
-      lastName: new FormControl("", [Validators.required]),
-      colorScheme: new FormControl("primary"),
-      password: new FormControl("", [Validators.required])
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      colorScheme: new FormControl('primary'),
+      password: new FormControl('', [Validators.required])
     });
   }
 

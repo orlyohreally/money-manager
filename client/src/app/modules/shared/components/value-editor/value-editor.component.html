@@ -1,0 +1,12 @@
+<form
+  class="name-editor"
+  fxLayoutAlign="start center"
+  (ngSubmit)="submitValue()"
+>
+  <mat-form-field>
+    <input matInput autofocus required type="text" [formControl]="valueForm" />
+  </mat-form-field>
+  <button mat-icon-button class="mat-icon-button_dimmed" type="submit">
+    <mat-icon>check</mat-icon>
+  </button>
+</form>

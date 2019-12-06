@@ -8,12 +8,25 @@ const UserSchema = new Schema<User>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      minlength: 5,
+      maxlength: 255,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 255
+    },
     colorScheme: { type: String, required: true, default: "primary" },
     icon: String,
     createdAt: Date,
-    updatedAt: Date,
+    updatedAt: Date
   },
-  { versionKey: false },
+  { versionKey: false }
 );
 
 UserSchema.pre<UserDocument>("save", function(next) {

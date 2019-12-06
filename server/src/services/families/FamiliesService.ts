@@ -1,6 +1,6 @@
 import { Family, FamilyMember, Roles } from "@shared/types";
 // tslint:disable-next-line: max-line-length
-import { ImageManagerService } from "src/services/image-manager/ImageManagerService";
+import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
 
 export interface IFamiliesDao {
   createFamily(family: Partial<Family>): Promise<Family>;
@@ -46,12 +46,15 @@ export class FamiliesService {
     userId: string,
     family: Partial<Family>
   ): Promise<Family> {
+    console.log("userId and family", userId, family);
     const familyIcon: string =
       family.icon && family.icon.search(/^http/) === -1 ? family.icon : "";
     if (familyIcon) {
       family.icon = "";
     }
+    console.log("icon", familyIcon);
     let savedFamily: Family = await this.dao.createFamily(family);
+    console.log(savedFamily);
     await this.dao.createFamilyMember({
       _id: { familyId: savedFamily._id, userId },
       roles: [Roles.Owner]
@@ -64,6 +67,7 @@ export class FamiliesService {
       savedFamily.icon = newIcon;
       savedFamily = await this.dao.updateFamily(savedFamily._id, savedFamily);
     }
+    console.log("result", savedFamily);
     return savedFamily;
   }
 

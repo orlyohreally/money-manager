@@ -1,0 +1,20 @@
+<shared-accordion toggleLabel="User">
+  <mat-list class="nav-block__list">
+    <mat-list-item class="nav-item">
+      <family-family-editor class="nav-item__link">
+        <button mat-button class="mat-button_stretched mat-button_text-white">
+          New family
+        </button>
+      </family-family-editor>
+    </mat-list-item>
+    <mat-list-item class="nav-item">
+      <a
+        mat-button
+        class="mat-button_stretched mat-button_text-white"
+        [routerLink]="['/auth/logout']"
+        >Log out</a
+      >
+    </mat-list-item>
+  </mat-list>
+</shared-accordion>
+<family-family-manager></family-family-manager>

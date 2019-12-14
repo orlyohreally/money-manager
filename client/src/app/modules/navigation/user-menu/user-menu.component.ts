@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '@shared/types';
 import { MenuEntry } from '@shared-client/types/menu-entry';
-import { AuthenticationService } from '@core-client/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
-  selector: 'navigation-user-menu',
+  selector: 'nav-user-menu',
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss']
 })
@@ -15,7 +15,7 @@ export class UserMenuComponent implements OnInit {
   ngOnInit() {}
 
   isLoggedIn() {
-    return this.authenticationService.isLoggedIn();
+    return this.authenticationService.isAuthenticated();
   }
 
   public getUserFullName(): string {

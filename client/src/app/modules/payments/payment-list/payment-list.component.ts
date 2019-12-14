@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
-import { PaymentsService } from 'src/app/core/payments/payments.service';
-import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
+import { PaymentsService } from 'src/app/core/services/payments/payments.service';
+import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
 import { PaymentSubject, Payment, User as Payer } from '@shared/types';
 import {
   getDischargedTotal,

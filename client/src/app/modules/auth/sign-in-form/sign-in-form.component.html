@@ -1,35 +1,153 @@
-<div class="sign-in-form">
-  <h1>
+<div class="sign-in-form" fxLayout="column" fxLayoutAlign="center center">
+  <div class="mat-h1">
     Sign up
-  </h1>
-  <div class="form">
-    <a class="icon" href="https://www.freepik.com/free-photos-vectors/computer"
-      ><img src="/assets/images/form.jpg"
-    /></a>
-    <form [formGroup]="signInForm" (ngSubmit)="register()">
-      <mat-form-field>
+  </div>
+  <div
+    class="form"
+    fxLayout="column"
+    fxLayout.lt-sm="column"
+    fxLayoutAlign="center center"
+  >
+    <a href="https://www.freepik.com/free-photos-vectors/computer">
+      <img class="icon" src="/assets/images/form.jpg" />
+    </a>
+    {{ signInForm.errors | json }}
+    <div class="account-note">
+      <span class="account-note__text">
+        Already have a Money Manager account?
+      </span>
+      <a class="account-note__link" [routerLink]="['/auth/login']">Log in</a>
+    </div>
+    <form [formGroup]="signInForm" (ngSubmit)="register($event)">
+      <shared-error-message
+        *ngIf="serverError"
+        [errorMessage]="serverError"
+      ></shared-error-message>
+      <mat-form-field appearance="outline">
         <mat-label>First Name</mat-label>
         <input required formControlName="firstName" matInput />
+        <mat-error *ngIf="signInForm.get('firstName').invalid">
+          Invalid value
+        </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Last Name</mat-label>
         <input required formControlName="lastName" matInput />
+        <mat-error *ngIf="signInForm.get('lastName').invalid">
+          Invalid value
+        </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input required formControlName="email" matInput />
+        <mat-error *ngIf="signInForm.get('email').hasError('pattern')">
+          Invalid email
+        </mat-error>
+        <mat-error *ngIf="signInForm.get('email').hasError('required')">
+          Email is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="showPassword = !showPassword"
+          attr.aria-label="Hide password"
+          attr.aria-pressed="hide"
+        >
+          <mat-icon>
+            {{ showPassword ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
         <mat-label>Password</mat-label>
-        <input required formControlName="password" type="password" matInput />
+        <input
+          required
+          formControlName="password"
+          [type]="showPassword ? 'text' : 'password'"
+          matInput
+        />
       </mat-form-field>
-
-      <shared-form-field [required]="true" label="Color scheme">
-        <shared-html-element-select
-          class="color-schemes"
-          [elements]="colorSchemeRepresentations"
-          (clickAction)="selectColorScheme($event)"
-        ></shared-html-element-select>
-      </shared-form-field>
+      <mat-form-field appearance="outline">
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="showPassword = !showPassword"
+          attr.aria-label="Hide password"
+          attr.aria-pressed="hide"
+        >
+          <mat-icon>
+            {{ showPassword ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
+        <mat-label>Password again</mat-label>
+        <input
+          required
+          formControlName="passwordVerification"
+          [type]="showPassword ? 'text' : 'password'"
+          matInput
+        />
+        <mat-error *ngIf="passwordVerification.hasError('verification-error')">
+          Passwords do not match
+        </mat-error>
+      </mat-form-field>
+      <div class="password-hints">
+        <div
+          class="password-hint"
+          [ngClass]="{
+            'password-hint_shadowed': !password.hasError('no-lower-letter')
+          }"
+        >
+          One lowercase character
+        </div>
+        <div
+          class="password-hint"
+          [ngClass]="{
+            'password-hint_shadowed': !password.hasError('no-capital-letter')
+          }"
+        >
+          One uppercase character
+        </div>
+        <div
+          class="password-hint"
+          [ngClass]="{
+            'password-hint_shadowed': !password.hasError('no-digit-character')
+          }"
+        >
+          One number
+        </div>
+        <div
+          class="password-hint"
+          [ngClass]="{
+            'password-hint_shadowed': !password.hasError('no-special-character')
+          }"
+        >
+          One special character
+        </div>
+        <div
+          class="password-hint"
+          [ngClass]="{
+            'password-hint_shadowed':
+              !password.hasError('minlength') && !password.hasError('required')
+          }"
+        >
+          8 characters minimum
+        </div>
+      </div>
       <div class="action-buttons">
-        <button mat-raised-button class="button" color="primary" type="submit">
-          <mat-icon>done</mat-icon> Sign in
+        <div class="privacy-policy-note">
+          By clicking "Sign in" button you agree to Money Manager Terms of
+          Service and Privacy Policy
+        </div>
+        <button
+          mat-raised-button
+          class="button"
+          color="primary"
+          [disabled]="signInForm.invalid"
+          type="submit"
+        >
+          Sign in
         </button>
       </div>
     </form>

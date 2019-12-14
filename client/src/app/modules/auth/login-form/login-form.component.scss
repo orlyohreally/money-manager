@@ -1,0 +1,30 @@
+@import '../../../../styles/theme';
+
+.icon {
+  height: 200px;
+  width: auto;
+}
+
+.log-in-form {
+  padding: 20px;
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.account-note {
+  margin: 5px 0 15px 0;
+}
+
+.account-note__link {
+  margin: 0 5px;
+}

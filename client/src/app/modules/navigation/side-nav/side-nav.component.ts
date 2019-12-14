@@ -1,11 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: "navigation-side-nav",
-  templateUrl: "./side-nav.component.html",
-  styleUrls: ["./side-nav.component.scss"]
+  selector: 'nav-side-nav',
+  templateUrl: './side-nav.component.html',
+  styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnInit {
-  constructor() {}
-  ngOnInit() {}
+  isAuthenticated: Observable<boolean>;
+
+  constructor(private authService: AuthenticationService) {}
+
+  ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
 }

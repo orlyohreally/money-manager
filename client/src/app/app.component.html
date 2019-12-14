@@ -6,13 +6,13 @@
     [mode]="getMode()"
     class="block__child_scrollable"
   >
-    <navigation-side-nav-toolbar></navigation-side-nav-toolbar>
-    <navigation-side-nav></navigation-side-nav>
+    <nav-side-nav-toolbar></nav-side-nav-toolbar>
+    <nav-side-nav></nav-side-nav>
   </mat-sidenav>
   <mat-sidenav-content class="block_scrollable">
-    <navigation-main-toolbar
-      (toggleNavbar)="sidenav.toggle()"
-    ></navigation-main-toolbar>
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="pageIsLoading">
+    </mat-progress-bar>
+    <nav-main-toolbar (toggleNavbar)="sidenav.toggle()"></nav-main-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

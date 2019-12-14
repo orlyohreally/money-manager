@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { FamiliesService } from '../services/families/families.service';
 import { MemberFamily } from '../../shared/types/member-family';
+import { switchMap } from 'rxjs/operators';
+import { Family } from '@shared/types';
 
 @Component({
   selector: 'family-family-manager',
@@ -18,8 +20,11 @@ export class FamilyManagerComponent implements OnInit {
   constructor(private familiesService: FamiliesService) {}
 
   ngOnInit() {
-    this.familiesService.loadFamilies().subscribe(() => {
-      this.familiesInfo = this.familiesService.familiesInfo;
-    });
+    console.log('loading');
+    this.familiesInfo = this.familiesService.loadFamilies().pipe(
+      switchMap(() => {
+        return this.familiesService.familiesInfo;
+      })
+    );
   }
 }

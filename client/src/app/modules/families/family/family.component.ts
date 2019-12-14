@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FamiliesService } from '../services/families/families.service';
-import { NotificationsService } from '@core-client/notifications/notifications.service';
+import { NotificationsService } from 'src/app/core/services/notifications/notifications.service';
 import { FormGroup } from '@angular/forms';
 import { MemberFamily } from '../../shared/types/member-family';
 import { MatDialog } from '@angular/material';

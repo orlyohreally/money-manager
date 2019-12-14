@@ -1,0 +1,72 @@
+<div class="log-in-form" fxLayout="column" fxLayoutAlign="center center">
+  <div class="mat-h1">
+    Log In
+  </div>
+  <div
+    class="form"
+    fxLayout="column"
+    fxLayout.lt-sm="column"
+    fxLayoutAlign="center center"
+  >
+    <a href="https://www.freepik.com/free-photos-vectors/computer">
+      <img class="icon" src="/assets/images/form.jpg" />
+    </a>
+    <div class="account-note">
+      <span class="account-note__text">Need a Money Manager account?</span>
+      <a class="account-note__link" [routerLink]="['/auth/register']">
+        Create an account
+      </a>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="login($event)">
+      <shared-error-message
+        *ngIf="serverError"
+        [errorMessage]="serverError"
+      ></shared-error-message>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input required formControlName="email" matInput />
+        <mat-error *ngIf="loginForm.get('email').hasError('pattern')">
+          Invalid email
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('email').hasError('required')">
+          Email is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="showPassword = !showPassword"
+          attr.aria-label="Hide password"
+          attr.aria-pressed="hide"
+        >
+          <mat-icon>
+            {{ showPassword ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
+        <mat-label>Password</mat-label>
+        <input
+          required
+          formControlName="password"
+          [type]="showPassword ? 'text' : 'password'"
+          matInput
+        />
+        <mat-error *ngIf="password.hasError('required')">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+      <div class="action-buttons">
+        <button
+          mat-raised-button
+          class="button"
+          color="primary"
+          type="submit"
+          [disabled]="loginForm.invalid"
+        >
+          Log In
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

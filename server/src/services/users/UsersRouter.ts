@@ -13,12 +13,13 @@ export class UsersRouter {
     this.service = service;
     this.service.testHashSetUp();
 
-    this.router.get("/users", asyncWrap(this.getUser));
-    this.router.post("/users", asyncWrap(this.postUser));
+    this.router.post("/users/login", asyncWrap(this.loginUser));
+    this.router.post("/users/signin", asyncWrap(this.registerUser));
   }
 
-  private getUser = async (req: Request, res: Response) => {
+  private loginUser = async (req: Request, res: Response) => {
     try {
+      console.log(req.body);
       const user = req.body as User;
       if (!user.password || !user.email) {
         return res.status(400).send("Email and password are required");
@@ -27,7 +28,7 @@ export class UsersRouter {
         const registeredUser = await this.service.authUser(user);
         const token = this.service.generateAuthToken(registeredUser);
         return res
-          .header("x-auth-token", token)
+          .header("Authorization", token)
           .status(200)
           .json({
             _id: registeredUser._id,
@@ -36,28 +37,31 @@ export class UsersRouter {
             email: registeredUser.email
           });
       } catch (er) {
-        return res.status(503).json("Wrong email or password.");
+        return res.status(401).json("Wrong email or password.");
       }
     } catch (err) {
       return res.status(400).json(err);
     }
   };
 
-  private postUser = async (req: Request, res: Response) => {
+  private registerUser = async (req: Request, res: Response) => {
     try {
+      console.log("postUser", req.body);
       const user = req.body as User;
       const { error } = this.service.validateUser(user);
       if (error) {
+        console.log(error);
         return res.status(400).send(error.details[0]);
       }
       const registeredUser = await this.service.getUser(user.email);
+      console.log(registeredUser);
       if (registeredUser) {
         return res.status(400).send("User already registered.");
       }
       const newUser = await this.service.registerUser(user);
       const token = this.service.generateAuthToken(newUser);
       return res
-        .header("x-auth-token", token)
+        .header("Authorization", token)
         .status(200)
         .json({
           _id: newUser._id,

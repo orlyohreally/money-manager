@@ -31,6 +31,7 @@ import { BadgeDirective } from './directives/badge.directive';
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { ErrorMessageComponent } from './components/error-message/error-message.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     ImageWithPreviewComponent,
     BadgeDirective,
     ValueEditorComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ErrorMessageComponent
   ],
   imports: [
     CommonModule,
@@ -80,7 +82,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     ImageWithPreviewComponent,
     BadgeDirective,
     ValueEditorComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ErrorMessageComponent
   ],
   providers: [],
   entryComponents: [

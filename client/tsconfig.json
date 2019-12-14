@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@src/*": ["./src/*"],
       "@shared/*": ["../shared/*"],
       "@shared-client/*": ["../client/src/app/modules/shared/*"],
       "@core-client/*": ["../client/src/app/core/*"]

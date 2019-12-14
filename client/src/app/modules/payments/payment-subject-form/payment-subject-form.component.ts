@@ -3,8 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { FamiliesService } from 'src/app/modules/families/services/families/families.service';
-import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
-import { ImageAssetService } from 'src/app/core/image-asset/image-asset.service';
+import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
+import { ImageAssetService } from 'src/app/core/services/image-asset/image-asset.service';
 
 import { PaymentSubject, Family, ImageAsset } from '@shared/types';
 import { normalizedArray } from '@shared/utils';

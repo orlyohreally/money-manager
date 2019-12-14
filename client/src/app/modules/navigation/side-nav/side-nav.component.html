@@ -8,16 +8,11 @@
     - reports (total payment amount per selected period)
  -->
 <div class="side-nav">
-  <shared-accordion toggleLabel="User">
-    <mat-list role="list" class="nav-block__list">
-      <mat-list-item role="listitem" class="nav-item">
-        <family-family-editor class="nav-item__link">
-          <button mat-button class="mat-button_stretched mat-button_text-white">
-            New family
-          </button>
-        </family-family-editor>
-      </mat-list-item>
-    </mat-list>
-  </shared-accordion>
-  <family-family-manager></family-family-manager>
+  <ng-container *ngIf="isAuthenticated | async; else unauthenticatedUserMenu">
+    <nav-side-nav-authenticated-user></nav-side-nav-authenticated-user>
+  </ng-container>
 </div>
+
+<ng-template #unauthenticatedUserMenu>
+  <nav-side-nav-unauthenticated-user></nav-side-nav-unauthenticated-user>
+</ng-template>

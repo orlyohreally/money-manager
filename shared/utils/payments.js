@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = require("lodash");
 const array_1 = require("./array");
 function getTotalPaymentAmount(payments) {
-    return payments.reduce((sum, payment) => (sum += payment.amount), 0);
+    return payments.reduce((sum, payment) => sum + payment.amount, 0);
 }
 exports.getTotalPaymentAmount = getTotalPaymentAmount;
 function aggregateAmountsByMember(payments, membersIds) {

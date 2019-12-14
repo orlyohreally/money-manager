@@ -53,11 +53,7 @@ export class UsersService {
     res: Response,
     next: NextFunction
   ) {
-    console.log(this);
-    const token =
-      (req.headers["x-access-token"] as string) ||
-      (req.headers.authorization as string);
-    console.log(token);
+    const token = (req.headers.authorization as string).split("Bearer ")[1];
     if (!token) {
       return res.status(401).send("Access denied. No token provided.");
     }

@@ -30,6 +30,10 @@
   cursor: pointer;
 }
 
+.nav-block__link_active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .block_scrollable,
 .block__child_scrollable div {
   &::-webkit-scrollbar {

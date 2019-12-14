@@ -1,31 +1,30 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { ErrorModule } from "./modules/errors/error.module";
-import { DashboardComponent } from "./modules/families/dashboard/dashboard.component";
-import { FamilyComponent } from "./modules/families/family/family.component";
-import { PaymentListComponent } from "./modules/payments/payment-list/payment-list.component";
-import { FamiliesComponent } from "./modules/families/families.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { ErrorModule } from './modules/errors/error.module';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: "",
-    loadChildren: "./modules/home/home.module#HomeModule"
+    path: '',
+    loadChildren: './modules/home/home.module#HomeModule',
+    canActivate: [AuthGuard]
   },
   {
-    path: "",
-    loadChildren: "./modules/families/family.module#FamilyModule"
+    path: '',
+    loadChildren: './modules/families/family.module#FamilyModule',
+    canActivate: [AuthGuard]
   },
   {
-    path: "auth",
-    loadChildren: "./modules/auth/auth.module#AuthModule"
+    path: 'auth',
+    loadChildren: './modules/auth/auth.module#AuthModule'
   },
   {
-    path: "not-found",
+    path: 'not-found',
     loadChildren: () => ErrorModule
   },
   {
-    path: "**",
-    redirectTo: "not-found"
+    path: '**',
+    redirectTo: 'not-found'
   }
 ];
 

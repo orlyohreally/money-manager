@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { PaymentsService } from 'src/app/core/payments/payments.service';
+import { PaymentsService } from 'src/app/core/services/payments/payments.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PaymentSubjectsService } from 'src/app/core/payment-subject/payment-subjects.service';
-import { AuthenticationService } from 'src/app/core/authentication/authentication.service';
+import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { Payment, PaymentSubject, User as Member } from '@shared/types';
 import { PaymentSubjectFormComponent } from '../payment-subject-form/payment-subject-form.component';
 import { normalizedArray } from '@shared/utils';

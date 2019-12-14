@@ -30,9 +30,10 @@ export class UsersDao implements IUsersDao {
         .required()
         .email(),
       password: Joi.string()
-        .min(3)
-        .max(255)
         .required()
+        .pattern(
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        )
     });
     return schema.validate(user);
   }
@@ -59,9 +60,6 @@ export class UsersDao implements IUsersDao {
 
   public async authUser(user: User): Promise<User> {
     const registeredUser: User = await this.getUser(user.email);
-    console.log("user", user, "registeredUser", registeredUser);
-    const hashedPassword = this.hashPassword(user.password);
-    console.log("hashedPassword", hashedPassword);
     const correctPassword = await this.comparePasswords(
       user.password,
       registeredUser.password
@@ -75,7 +73,8 @@ export class UsersDao implements IUsersDao {
   public generateAuthToken(user: User): string {
     const token = jwt.sign(
       { _id: user._id },
-      config.get("JWTToken.hash") // process.env.hash_secret as string
+      config.get("JWTToken.hash"), // process.env.hash_secret as string,
+      { expiresIn: 120 }
     );
     console.log(token);
     return token;

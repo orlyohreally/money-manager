@@ -54,7 +54,6 @@ export class UsersDao implements IUsersDao {
       email: user.email
     });
     newUser.password = this.hashPassword(user.password);
-    console.log("rgister", user.password, newUser.password);
     return newUser.save();
   }
 
@@ -71,12 +70,18 @@ export class UsersDao implements IUsersDao {
   }
 
   public generateAuthToken(user: User): string {
+    const token = jwt.sign({ _id: user._id }, config.get("JWTToken.hash"), {
+      expiresIn: 15 * 60 * 1000 * 60
+    });
+    return token;
+  }
+
+  public generateRefreshToken(user: User): string {
     const token = jwt.sign(
       { _id: user._id },
-      config.get("JWTToken.hash"), // process.env.hash_secret as string,
-      { expiresIn: 120 }
+      config.get("JWTToken.refreshHash"),
+      { expiresIn: 4 * 60 * 60 * 60 * 1000 }
     );
-    console.log(token);
     return token;
   }
 
@@ -93,7 +98,6 @@ export class UsersDao implements IUsersDao {
   }
 
   private hashPassword(password: string): string {
-    console.log("hashPassword", password);
     const saltRounds: number = config.get("saltRounds");
     const salt = bcrypt.genSaltSync(saltRounds);
     return bcrypt.hashSync(password, salt);

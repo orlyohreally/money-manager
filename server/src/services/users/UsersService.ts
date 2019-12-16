@@ -9,6 +9,7 @@ export interface IUsersDao {
   registerUser(user: User): Promise<User>;
   authUser(user: User): Promise<User>;
   generateAuthToken(user: User): string;
+  generateRefreshToken(user: User): string;
   testHashSetUp(): void;
   getUserFromToken(token: string): User;
 }
@@ -44,6 +45,10 @@ export class UsersService {
     return this.dao.generateAuthToken(user);
   }
 
+  public generateRefreshToken(user: User): string {
+    return this.dao.generateRefreshToken(user);
+  }
+
   public testHashSetUp() {
     this.dao.testHashSetUp();
   }
@@ -53,18 +58,18 @@ export class UsersService {
     res: Response,
     next: NextFunction
   ) {
-    const token = (req.headers.authorization as string).split("Bearer ")[1];
+    const token = ((req.headers.authorization as string) || "").split(
+      "Bearer "
+    )[1];
     if (!token) {
       return res.status(401).send("Access denied. No token provided.");
     }
     try {
       const decoded = this.dao.getUserFromToken(token);
-      console.log(decoded);
       (req.body as { user: User }).user = decoded;
       next();
       return;
     } catch (error) {
-      console.log(error);
       return res.status(400).send("Invalid token.");
     }
   }

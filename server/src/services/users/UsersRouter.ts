@@ -118,7 +118,7 @@ export class UsersRouter {
           .header("Authorization", newToken)
           .status(200)
           .json({
-            newRefreshToken
+            refreshToken: newRefreshToken
           });
       }
       return res.status(400).send("Invalid refresh or authentication token");

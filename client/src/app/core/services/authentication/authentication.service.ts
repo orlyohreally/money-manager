@@ -3,7 +3,7 @@ import { User } from '@shared/types';
 import { DataService } from '../data.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 import { LocalStorageService } from 'ngx-localstorage';
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
@@ -13,6 +13,7 @@ import { GlobalVariablesService } from '../global-variables/global-variables.ser
 export class AuthenticationService extends DataService {
   user: User;
   token: string;
+  refreshToken: string;
 
   private authenticated = new BehaviorSubject<boolean>(false);
 
@@ -37,8 +38,8 @@ export class AuthenticationService extends DataService {
 
   register(user: User): Observable<User> {
     return this.post('users/signin', user, { observe: 'response' }).pipe(
-      switchMap((response: HttpResponse<User>) => {
-        this.updateToken(response);
+      switchMap((response: HttpResponse<User & { refreshToken: string }>) => {
+        this.updateTokens(response);
         return of(response.body);
       })
     );
@@ -46,8 +47,8 @@ export class AuthenticationService extends DataService {
 
   login(user: { email: string; password: string }): Observable<User> {
     return this.post('users/login', user, { observe: 'response' }).pipe(
-      switchMap((response: HttpResponse<User>) => {
-        this.updateToken(response);
+      switchMap((response: HttpResponse<User & { refreshToken: string }>) => {
+        this.updateTokens(response);
         return of(response.body);
       })
     );
@@ -58,11 +59,28 @@ export class AuthenticationService extends DataService {
     this.authenticated.next(false);
   }
 
-  private updateToken(response: HttpResponse<User>) {
+  private updateTokens(response: HttpResponse<{ refreshToken: string }>) {
     this.token = response.headers.get('Authorization');
     if (this.token) {
       this.storageService.set('user_token', this.token, 'money-manager');
       this.authenticated.next(true);
     }
+    this.refreshToken = response.body.refreshToken;
+  }
+
+  requestRefreshToken(): Observable<boolean> {
+    return this.post(
+      'users/refresh-token',
+      { refreshToken: this.refreshToken },
+      { observe: 'response' }
+    ).pipe(
+      switchMap((response: HttpResponse<{ refreshToken: string }>) => {
+        this.updateTokens(response);
+        return of(true);
+      }),
+      catchError(() => {
+        return of(false);
+      })
+    );
   }
 }

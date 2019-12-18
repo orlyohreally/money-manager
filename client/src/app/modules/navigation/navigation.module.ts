@@ -23,6 +23,7 @@ import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 import { SideNavToolbarComponent } from './side-nav-toolbar/side-nav-toolbar.component';
 import { SideNavAuthenticatedUserComponent } from './side-nav-authenticated-user/side-nav-authenticated-user.component';
 import { SideNavUnauthenticatedUserComponent } from './side-nav-unauthenticated-user/side-nav-unauthenticated-user.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SideNavUnauthenticatedUserComponent } from './side-nav-unauthenticated-
     MainNavLogoComponent,
     SideNavToolbarComponent,
     SideNavAuthenticatedUserComponent,
-    SideNavUnauthenticatedUserComponent
+    SideNavUnauthenticatedUserComponent,
+    UserMenuComponent
   ],
   imports: [
     CommonModule,

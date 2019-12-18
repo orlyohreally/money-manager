@@ -1,20 +1,6 @@
 .mat-raised-button {
-  min-width: 150px !important;
-
-  &.button_lg {
-    padding: 10px 30px;
-    font-size: 18px;
-  }
-
-  &.button_rounded {
-    border-radius: 36px;
-    padding: 4px;
-  }
-
-  &.button_sm {
-    font-size: 80%;
-    line-height: 20px;
-  }
+  border-radius: 10px;
+  min-width: 200px !important;
 }
 
 .mat-button {

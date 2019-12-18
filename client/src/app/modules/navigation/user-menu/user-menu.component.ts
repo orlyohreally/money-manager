@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Sanitizer } from '@angular/core';
 import { User } from '@shared/types';
-import { MenuEntry } from '@shared-client/types/menu-entry';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'nav-user-menu',
@@ -9,16 +8,21 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
   styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent implements OnInit {
-  public menuEntries: MenuEntry[];
-  constructor(private authenticationService: AuthenticationService) {}
+  backgroundImg: SafeStyle;
 
-  ngOnInit() {}
+  private user: User;
 
-  isLoggedIn() {
-    return this.authenticationService.isAuthenticated();
+  constructor(private sanitizer: DomSanitizer) {}
+
+  ngOnInit() {
+    this.backgroundImg = this.sanitizer.bypassSecurityTrustStyle(
+      `url(${
+        this.user && this.user.icon ? this.user.icon : '/assets/images/cat.jpg'
+      })`
+    );
   }
 
-  public getUserFullName(): string {
-    return 'not implemented';
+  getUserFullName(): string {
+    return 'Ivanov Peter';
   }
 }

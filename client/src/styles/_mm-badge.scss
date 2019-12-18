@@ -1,11 +1,13 @@
+@import './theme';
+
 .mm-badge {
   position: absolute;
   top: 0;
   right: -10px;
   transform: translateY(-50%);
-  border-radius: 20px;
-  background: #f869d3;
+  border-radius: 10px;
+  background: mat-color($angular-material-warn, lighter);
   font-size: 10px;
   line-height: normal;
-  padding: 4px;
+  padding: 6px;
 }

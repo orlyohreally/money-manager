@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'nav-main-toolbar',
@@ -6,10 +8,15 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
   styleUrls: ['./main-toolbar.component.scss']
 })
 export class MainToolbarComponent implements OnInit {
-  @Output() toggleNavbar = new EventEmitter();
-  constructor() {}
+  isAuthenticated: Observable<boolean>;
 
-  ngOnInit() {}
+  @Output() toggleNavbar = new EventEmitter();
+
+  constructor(private authenticationService: AuthenticationService) {}
+
+  ngOnInit() {
+    this.isAuthenticated = this.authenticationService.isAuthenticated();
+  }
 
   public onMenuIconClick() {
     this.toggleNavbar.emit();

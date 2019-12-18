@@ -14,6 +14,7 @@ html {
 
 .mat-form-field {
   width: 100%;
+  margin-bottom: 16px;
 }
 
 .mat-checkbox-layout {
@@ -24,7 +25,25 @@ a {
   color: #1a18ca;
 }
 
-a:hover {
-  color: #385cc2;
-  display: inline-block;
+.mat-menu-panel {
+  border-radius: 10px !important;
+  min-width: 200px !important;
+}
+
+.mat-menu-content {
+  padding: 0 !important;
+}
+
+.mat-menu-item {
+  font-weight: bold !important;
+  padding: 0 16px !important;
+  border-bottom: 1px solid rgba(mat-color($angular-material-primary, 100), 0.3) !important;
+}
+
+.mat-menu-item:last-child {
+  border-bottom: none !important;
+}
+
+.mat-menu-item .mat-icon {
+  margin-right: 8px !important;
 }

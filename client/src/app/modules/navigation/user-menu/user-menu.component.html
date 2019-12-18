@@ -1,10 +1,26 @@
-<button fxHide.gt-sm mat-icon-button [matMenuTriggerFor]="userMenu">
-  <mat-icon>person</mat-icon>
-</button>
-<button fxHide.sm mat-button [matMenuTriggerFor]="userMenu">
-  <mat-icon>person</mat-icon>{{ getUserFullName() }}
-</button>
+<div
+  class="user-menu"
+  [matMenuTriggerFor]="userMenu"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+>
+  <div class="user-avatar" [style.background-image]="backgroundImg"></div>
+  <div class="user-name">{{ getUserFullName() }}</div>
+  <div class="arrow-icon">
+    <mat-icon class="arrow-icon__icon">keyboard_arrow_down</mat-icon>
+  </div>
+</div>
 <mat-menu #userMenu="matMenu">
-  <a mat-menu-item routerLink="profile">My profile</a>
-  <a mat-menu-item routerLink="profile/settings">Settings</a>
+  <a mat-menu-item routerLink="profile">
+    <mat-icon>person</mat-icon>
+    Manage account
+  </a>
+  <a mat-menu-item routerLink="profile/settings">
+    <mat-icon>build</mat-icon>
+    Settings
+  </a>
+  <a mat-menu-item routerLink="auth/logout">
+    <mat-icon>exit_to_app</mat-icon>
+    Log out
+  </a>
 </mat-menu>

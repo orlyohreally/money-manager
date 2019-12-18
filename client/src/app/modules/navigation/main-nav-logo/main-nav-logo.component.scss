@@ -1,3 +1,5 @@
+@import 'theme';
+
 .nav-logo {
   text-decoration: none;
   display: flex;
@@ -6,6 +8,7 @@
   color: white;
   margin-right: 10px;
 }
+
 .nav-logo__image {
   height: 40px;
   display: block;
@@ -17,6 +20,13 @@
 }
 
 .nav-logo__title {
-  font-family: "Caveat", cursive;
   font-size: 25px;
+}
+
+.nav-logo__title_primary {
+  color: mat-color($angular-material-primary);
+}
+
+.nav-logo__title_accent {
+  color: mat-color($angular-material-accent);
 }

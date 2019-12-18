@@ -4,6 +4,7 @@ export interface User<Id = string> {
   lastName: string;
   email: string;
   password: string;
+  icon: string;
   colorScheme: string;
   createdAt: Date;
   updatedAt: Date;

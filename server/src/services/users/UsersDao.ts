@@ -1,13 +1,23 @@
 import * as Joi from "@hapi/joi";
 import { User } from "@shared/types";
+// tslint:disable-next-line: no-require-imports
+import atob = require("atob");
 import * as bcrypt from "bcrypt";
-import * as config from "config";
-import * as dotenv from "dotenv";
 import * as jwt from "jsonwebtoken";
 import { UserModel } from "./models";
 import { IUsersDao } from "./UsersService";
 
 export class UsersDao implements IUsersDao {
+  private tokenHash: string;
+  private refreshTokenHash: string;
+  constructor() {
+    this.tokenHash = process.env.JWT_hash as string;
+    this.refreshTokenHash = process.env.JWT_refresh_hash as string;
+    if (!this.tokenHash || !this.refreshTokenHash) {
+      process.exit(1);
+    }
+  }
+
   public async createUser(user: User): Promise<User> {
     const newUser = new UserModel(user);
     await newUser.save();
@@ -38,9 +48,9 @@ export class UsersDao implements IUsersDao {
     return schema.validate(user);
   }
 
-  public async getUser(email: string): Promise<User> {
+  public async getUser(key: string, value: string): Promise<User> {
     return UserModel.findOne({
-      email: email
+      [key]: value
     })
       .lean()
       .exec();
@@ -58,7 +68,7 @@ export class UsersDao implements IUsersDao {
   }
 
   public async authUser(user: User): Promise<User> {
-    const registeredUser: User = await this.getUser(user.email);
+    const registeredUser: User = await this.getUser("email", user.email);
     const correctPassword = await this.comparePasswords(
       user.password,
       registeredUser.password
@@ -70,35 +80,59 @@ export class UsersDao implements IUsersDao {
   }
 
   public generateAuthToken(user: User): string {
-    const token = jwt.sign({ _id: user._id }, config.get("JWTToken.hash"), {
-      expiresIn: 15 * 60 * 1000 * 60
+    const token = jwt.sign({ _id: user._id }, this.tokenHash, {
+      expiresIn: 15 * 60
     });
     return token;
   }
 
   public generateRefreshToken(user: User): string {
-    const token = jwt.sign(
-      { _id: user._id },
-      config.get("JWTToken.refreshHash"),
-      { expiresIn: 4 * 60 * 60 * 60 * 1000 }
-    );
+    const token = jwt.sign({ _id: user._id }, this.refreshTokenHash, {
+      expiresIn: "4h"
+    });
     return token;
   }
 
-  public testHashSetUp() {
-    dotenv.config();
-
-    if (!config.get("JWTToken.hash") || !config.get("saltRounds")) {
-      process.exit(1);
+  public getUserFromToken(
+    token: string,
+    tokenType: string
+  ): Promise<User | undefined> {
+    if (tokenType !== "auth" && tokenType !== "refresh") {
+      return Promise.resolve(undefined);
     }
+    const secret =
+      tokenType === "auth" ? this.tokenHash : this.refreshTokenHash;
+
+    const user = jwt.verify(token, secret) as {
+      _id: string;
+      iat: number;
+      exp: number;
+    };
+    return this.getUser("_id", user._id);
   }
 
-  public getUserFromToken(token: string): User {
-    return jwt.verify(token, config.get("JWTToken.hash")) as User;
+  public tokenExpired(token: string): boolean {
+    console.log(
+      "token expired date",
+      new Date(this.parseJwt(token).exp * 1000)
+    );
+    return this.parseJwt(token).exp < Date.now() / 1000;
+  }
+
+  public parseJwt(token: string): { _id: string; iat: number; exp: number } {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(c => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+        .join("")
+    );
+    return JSON.parse(jsonPayload) as { _id: string; iat: number; exp: number };
   }
 
   private hashPassword(password: string): string {
-    const saltRounds: number = config.get("saltRounds");
+    const saltRounds: number = parseInt(process.env.salt_rounds as string, 10);
     const salt = bcrypt.genSaltSync(saltRounds);
     return bcrypt.hashSync(password, salt);
   }

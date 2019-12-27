@@ -1,15 +1,9 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import {
-  HttpClient,
-  HttpResponse,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { GlobalVariablesService } from './global-variables/global-variables.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DataService {
   private readonly apiURL = this.globalVariablesService.apiURL;
 

@@ -1,28 +1,24 @@
-import { Component, OnInit, Sanitizer } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
+import { SafeStyle } from '@angular/platform-browser';
 import { User } from '@shared/types';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { UserManagerService } from '@src/app/core/services/user-manager/user-manager.service';
 
 @Component({
   selector: 'nav-user-menu',
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss']
 })
-export class UserMenuComponent implements OnInit {
+export class UserMenuComponent implements OnChanges {
+  @Input() user: User;
+
   backgroundImg: SafeStyle;
+  fullName: string;
 
-  private user: User;
+  constructor(private userManagerService: UserManagerService) {}
 
-  constructor(private sanitizer: DomSanitizer) {}
-
-  ngOnInit() {
-    this.backgroundImg = this.sanitizer.bypassSecurityTrustStyle(
-      `url(${
-        this.user && this.user.icon ? this.user.icon : '/assets/images/cat.jpg'
-      })`
-    );
-  }
-
-  getUserFullName(): string {
-    return 'Ivanov Peter';
+  ngOnChanges(): void {
+    const userIcon = this.userManagerService.getUserIcon(this.user);
+    this.backgroundImg = `url('${userIcon}')`;
+    this.fullName = this.userManagerService.getFullName(this.user);
   }
 }

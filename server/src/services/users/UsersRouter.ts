@@ -21,15 +21,14 @@ export class UsersRouter {
     this.service = service;
     this.redisService = redisService;
 
-    this.service.testHashSetUp();
-
+    this.router.get(
+      "/users/user",
+      this.service.validateToken.bind(this.service),
+      asyncWrap(this.getUser)
+    );
     this.router.post("/users/login", asyncWrap(this.loginUser));
     this.router.post("/users/signin", asyncWrap(this.registerUser));
-    this.router.post(
-      "/users/refresh-token",
-      this.service.validateToken.bind(this.service),
-      asyncWrap(this.refreshToken)
-    );
+    this.router.post("/users/refresh-token", asyncWrap(this.refreshToken));
   }
 
   private loginUser = async (req: Request, res: Response) => {
@@ -68,7 +67,7 @@ export class UsersRouter {
       if (error) {
         return res.status(400).send(error.details[0]);
       }
-      const registeredUser = await this.service.getUser(user.email);
+      const registeredUser = await this.service.getUser("email", user.email);
       if (registeredUser) {
         return res.status(400).send("User already registered.");
       }
@@ -94,7 +93,7 @@ export class UsersRouter {
 
   private refreshToken = async (req: Request, res: Response) => {
     try {
-      const reqBody = req.body as { refreshToken: string; user: User };
+      const reqBody = req.body as { refreshToken: string };
       const token = (req.headers.authorization as string).split("Bearer ")[1];
       const refreshToken = reqBody.refreshToken;
       if (!token || !refreshToken) {
@@ -102,12 +101,25 @@ export class UsersRouter {
           .status(400)
           .send("Authentication token or refresh token were not provided");
       }
+
+      if (this.service.tokenExpired(refreshToken)) {
+        return res.status(401).send("Access denied. Refresh token expired.");
+      }
+
       const savedRefreshToken = await this.redisService.get(
         `refreshTokens.${token}`
       );
+
       if (refreshToken === savedRefreshToken) {
-        const newToken = this.service.generateAuthToken(reqBody.user);
-        const newRefreshToken = this.service.generateRefreshToken(reqBody.user);
+        const user = await this.service.getUserFromToken(
+          refreshToken,
+          "refresh"
+        );
+        if (!user) {
+          throw new Error("Invalid refresh token");
+        }
+        const newToken = this.service.generateAuthToken(user);
+        const newRefreshToken = this.service.generateRefreshToken(user);
         await this.redisService.remove(`refreshTokens.${token}`);
         await this.redisService.set(
           `refreshTokens.${newToken}`,
@@ -122,6 +134,19 @@ export class UsersRouter {
           });
       }
       return res.status(400).send("Invalid refresh or authentication token");
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
+
+  private getUser = async (req: Request, res: Response) => {
+    try {
+      const user = (req.body as { user: User }).user;
+      const registeredUser = await this.service.getUser("_id", user._id);
+      if (registeredUser) {
+        return res.status(200).json(registeredUser);
+      }
+      return res.status(400).send("User is not found");
     } catch (err) {
       return res.status(400).json(err);
     }

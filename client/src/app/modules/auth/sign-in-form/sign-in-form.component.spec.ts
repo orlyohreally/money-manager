@@ -299,9 +299,9 @@ describe('SignInFormComponent', () => {
     it('should highlight "One lowercase character" when password does not match it and shadow it when does', () => {
       setField('password', 'l');
       fixture.detectChanges();
-      let hints = fixture.nativeElement.querySelectorAll('.password-hint');
+      const hints = fixture.nativeElement.querySelectorAll('.password-hint');
       expect(hints.length).toBe(5);
-      let hintsShadowed = fixture.nativeElement.querySelectorAll(
+      const hintsShadowed = fixture.nativeElement.querySelectorAll(
         '.password-hint_shadowed'
       );
       expect(hintsShadowed.length).toBe(1);
@@ -313,9 +313,9 @@ describe('SignInFormComponent', () => {
     it('should highlight "One number" when password does not match it and shadow it when does', () => {
       setField('password', '2');
       fixture.detectChanges();
-      let hints = fixture.nativeElement.querySelectorAll('.password-hint');
+      const hints = fixture.nativeElement.querySelectorAll('.password-hint');
       expect(hints.length).toBe(5);
-      let hintsShadowed = fixture.nativeElement.querySelectorAll(
+      const hintsShadowed = fixture.nativeElement.querySelectorAll(
         '.password-hint_shadowed'
       );
       expect(hintsShadowed.length).toBe(1);
@@ -325,9 +325,9 @@ describe('SignInFormComponent', () => {
     it('should highlight "One special character" when password does not match it and shadow it when does', () => {
       setField('password', '_');
       fixture.detectChanges();
-      let hints = fixture.nativeElement.querySelectorAll('.password-hint');
+      const hints = fixture.nativeElement.querySelectorAll('.password-hint');
       expect(hints.length).toBe(5);
-      let hintsShadowed = fixture.nativeElement.querySelectorAll(
+      const hintsShadowed = fixture.nativeElement.querySelectorAll(
         '.password-hint_shadowed'
       );
       expect(hintsShadowed.length).toBe(1);
@@ -337,9 +337,9 @@ describe('SignInFormComponent', () => {
     it('should highlight "8 characters minimum" when password does not match it and shadow it when does', () => {
       setField('password', 'abcdefgh');
       fixture.detectChanges();
-      let hints = fixture.nativeElement.querySelectorAll('.password-hint');
+      const hints = fixture.nativeElement.querySelectorAll('.password-hint');
       expect(hints.length).toBe(5);
-      let hintsShadowed = fixture.nativeElement.querySelectorAll(
+      const hintsShadowed = fixture.nativeElement.querySelectorAll(
         '.password-hint_shadowed'
       );
       expect(hintsShadowed.length).toBe(2);

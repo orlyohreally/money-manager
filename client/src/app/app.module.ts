@@ -12,6 +12,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ServerErrorInterceptor } from './core/interceptors/server-error.interceptor';
+import { AuthenticationService } from './core/services/authentication/authentication.service';
+import { DataService } from './core/services/data.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +30,8 @@ import { ServerErrorInterceptor } from './core/interceptors/server-error.interce
     FamilyModule
   ],
   providers: [
+    DataService,
+    AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,

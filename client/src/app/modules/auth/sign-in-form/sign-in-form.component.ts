@@ -1,16 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
+  AbstractControl,
   FormControl,
-  Validators,
-  AbstractControl
+  FormGroup,
+  Validators
 } from '@angular/forms';
-import { MembersService } from 'src/app/modules/families/services/members/members.service';
-import { HtmlElementRepresentation } from '@shared-client/types/html-element';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '@shared/types';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -54,9 +52,7 @@ export class SignInFormComponent implements OnInit {
   }
 
   register() {
-    console.log('register', this.signInForm.valid);
     this.serverError = null;
-    event.preventDefault();
     if (this.signInForm.valid) {
       this.authService
         .register({

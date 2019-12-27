@@ -2,21 +2,20 @@
 import "module-alias/register";
 
 import * as bodyParser from "body-parser";
-import * as config from "config";
 import * as express from "express";
 import * as mongoose from "mongoose";
 import { familiesRouter } from "./services/families";
 import { usersRouter } from "./services/users";
 
 const runServer = async () => {
-  if (!config.has("serverConfig.port")) {
+  const port = process.env.server_port;
+  if (!port) {
     process.exit(1);
   }
   await mongoose.connect("mongodb://localhost:27017/money-manager");
 
   const apiPath = "/api/v1";
   const app: express.Application = express();
-  const port = config.get("serverConfig.port");
 
   app.listen(port, () => {
     console.log("Example app listening on port 3000!");

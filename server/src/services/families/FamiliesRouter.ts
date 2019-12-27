@@ -86,14 +86,16 @@ export class FamiliesRouter {
   private postFamily = async (req: Request, res: Response) => {
     try {
       const body = req.body as { family: Family; user: User };
+      if (!body.family) {
+        return res.status(400).json("Values were not provided");
+      }
       const family = await this.service.createFamily(
         body.user._id,
         body.family
       );
-      console.log("result", family);
-      res.status(200).json(family);
+      return res.status(200).json(family);
     } catch (err) {
-      res.status(400).json(err);
+      return res.status(400).json(err);
     }
   };
 

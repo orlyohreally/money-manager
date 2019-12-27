@@ -5,9 +5,9 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../services/authentication/authentication.service';
-import { take, switchMap } from 'rxjs/operators';
+import { take, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -17,7 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = this.authService.token;
     return this.authService.isAuthenticated().pipe(
       take(1),
       switchMap((isAuthenticated: boolean) => {

@@ -9,7 +9,7 @@
       <div
         fxLayout="row"
         fxLayoutAlign="space-between center"
-        *ngIf="isAuthenticated | async"
+        *ngIf="(isAuthenticated | async) && (user | async) as loggedInUser"
       >
         <div>
           <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -21,7 +21,7 @@
           </mat-menu>
         </div>
         <div>
-          <nav-user-menu></nav-user-menu>
+          <nav-user-menu [user]="loggedInUser"></nav-user-menu>
         </div>
       </div>
     </div>

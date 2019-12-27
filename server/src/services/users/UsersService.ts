@@ -5,13 +5,14 @@ import { NextFunction, Request, Response } from "express";
 export interface IUsersDao {
   createUser(user: User): Promise<User>;
   validateUser(user: User): ValidationResult;
-  getUser(email: string): Promise<User>;
+  getUser(key: string, value: string): Promise<User>;
   registerUser(user: User): Promise<User>;
   authUser(user: User): Promise<User>;
   generateAuthToken(user: User): string;
   generateRefreshToken(user: User): string;
-  testHashSetUp(): void;
-  getUserFromToken(token: string): User;
+  getUserFromToken(token: string, tokenType: string): Promise<User | undefined>;
+  parseJwt(token: string): { _id: string; iat: number; exp: number };
+  tokenExpired(token: string): boolean;
 }
 
 export class UsersService {
@@ -29,8 +30,8 @@ export class UsersService {
     return this.dao.validateUser(user);
   }
 
-  public getUser(email: string): Promise<User> {
-    return this.dao.getUser(email);
+  public getUser(key: string, value: string): Promise<User> {
+    return this.dao.getUser(key, value);
   }
 
   public registerUser(user: User): Promise<User> {
@@ -49,11 +50,14 @@ export class UsersService {
     return this.dao.generateRefreshToken(user);
   }
 
-  public testHashSetUp() {
-    this.dao.testHashSetUp();
+  public getUserFromToken(
+    token: string,
+    tokenType: string
+  ): Promise<User | undefined> {
+    return this.dao.getUserFromToken(token, tokenType);
   }
 
-  public validateToken(
+  public async validateToken(
     req: Request & { user?: User },
     res: Response,
     next: NextFunction
@@ -65,12 +69,22 @@ export class UsersService {
       return res.status(401).send("Access denied. No token provided.");
     }
     try {
-      const decoded = this.dao.getUserFromToken(token);
+      if (this.dao.tokenExpired(token)) {
+        return res.status(401).send("Access denied. Token expired.");
+      }
+      const decoded = await this.getUserFromToken(token, "auth");
+      if (!decoded) {
+        throw new Error("Invalid token.");
+      }
       (req.body as { user: User }).user = decoded;
       next();
       return;
     } catch (error) {
       return res.status(400).send("Invalid token.");
     }
+  }
+
+  public tokenExpired(token: string): boolean {
+    return this.dao.tokenExpired(token);
   }
 }

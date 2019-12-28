@@ -1,14 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import {
-  FormGroup,
-  Validators,
-  FormControl,
-  AbstractControl,
-  ValidatorFn
-} from '@angular/forms';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 
 @Component({
   selector: 'auth-login-form',

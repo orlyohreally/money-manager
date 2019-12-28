@@ -1,10 +1,11 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '@shared/types';
-import { DataService } from '../data.service';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
 import { LocalStorageService } from 'ngx-localstorage';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { DataService } from '../data.service';
+// tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
 @Injectable({

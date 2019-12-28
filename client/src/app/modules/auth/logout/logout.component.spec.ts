@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LogoutComponent } from './logout.component';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
 import { Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { LogoutComponent } from './logout.component';
 
 describe('LogoutComponent', () => {
   let component: LogoutComponent;

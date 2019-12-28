@@ -1,37 +1,47 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { ImageCropperModule } from 'ngx-image-cropper';
 import {
   MatButtonModule,
-  MatMenuModule,
-  MatIconModule,
-  MatProgressSpinnerModule,
-  MatInputModule,
+  MatDialogModule,
   MatFormFieldModule,
-  MatDialogModule
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { FilterPipe } from './pipes/filter.pipe';
 
-import { ButtonComponent } from './components/button/button.component';
-import { FormFieldComponent } from './components/form-field/form-field.component';
-import { HtmlElementSelectComponent } from './components/html-element-select/html-element-select.component';
-import { AccordionComponent } from '../shared/components/accordion/accordion.component';
-import { MenuComponent } from './components/menu/menu.component';
-import { MenuEntryComponent } from './components/menu/menu-entry/menu-entry.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ImageComponent } from './components/image/image.component';
-import { ImageManagerComponent } from './components/image-manager/image-manager.component';
-import { ImagePreviewComponent } from './components/image-preview/image-preview.component';
-import { ImageWithPreviewComponent } from './components/image-with-preview/image-with-preview.component';
-import { BadgeDirective } from './directives/badge.directive';
-import { ValueEditorComponent } from './components/value-editor/value-editor.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// tslint:disable-next-line: max-line-length
+import { AccordionComponent } from '../shared/components/accordion/accordion.component';
+import { ButtonComponent } from './components/button/button.component';
+// tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+// tslint:disable-next-line: max-line-length
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
+// tslint:disable-next-line: max-line-length
+import { FormFieldComponent } from './components/form-field/form-field.component';
+// tslint:disable-next-line: max-line-length
+import { HtmlElementSelectComponent } from './components/html-element-select/html-element-select.component';
+// tslint:disable-next-line: max-line-length
+import { ImageManagerComponent } from './components/image-manager/image-manager.component';
+// tslint:disable-next-line: max-line-length
+import { ImagePreviewComponent } from './components/image-preview/image-preview.component';
+// tslint:disable-next-line: max-line-length
+import { ImageWithPreviewComponent } from './components/image-with-preview/image-with-preview.component';
+import { ImageComponent } from './components/image/image.component';
+// tslint:disable-next-line: max-line-length
+import { MenuEntryComponent } from './components/menu/menu-entry/menu-entry.component';
+import { MenuComponent } from './components/menu/menu.component';
+// tslint:disable-next-line: max-line-length
+import { ValueEditorComponent } from './components/value-editor/value-editor.component';
+import { BadgeDirective } from './directives/badge.directive';
 
 @NgModule({
   declarations: [

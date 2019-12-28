@@ -1,6 +1,6 @@
-import { Component, OnInit, Sanitizer } from '@angular/core';
-import { User } from '@shared/types';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { User } from '@shared/types';
 
 @Component({
   selector: 'nav-user-menu',

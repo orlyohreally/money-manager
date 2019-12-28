@@ -1,27 +1,29 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginFormComponent } from './login-form.component';
-import { AppRoutingModule } from '@src/app/app-routing.module';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  MatFormFieldModule,
-  MatInputModule,
-  MatError,
-  MatIconModule,
   MatCheckboxModule,
+  MatError,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
   MatSuffix
 } from '@angular/material';
-import { MockComponent, MockHelper } from 'ng-mocks';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { cold, getTestScheduler } from 'jasmine-marbles';
-import { User } from '@shared/types';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute, convertToParamMap } from '@angular/router';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ErrorMessageComponent } from '../../shared/components/error-message/error-message.component';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { ErrorMessageComponent } from '@shared-client/components/error-message/error-message.component';
+import { User } from '@shared/types';
+import { AppRoutingModule } from '@src/app/app-routing.module';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MockComponent } from 'ng-mocks';
+import { LoginFormComponent } from './login-form.component';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
@@ -124,61 +126,84 @@ describe('LoginFormComponent', () => {
       });
     });
 
-    it('login should not call authenticationService.login when email is invalid (email - invalidEmail.com)', () => {
-      setEmail('invalidEmail.com');
-      setPassword('ValidPassword1_');
-      submitForm();
-      expect(authServiceSpy.login).not.toHaveBeenCalled();
-    });
+    it(
+      'login should not call authenticationService.login' +
+        ' when email is invalid (email - invalidEmail.com)',
+      () => {
+        setEmail('invalidEmail.com');
+        setPassword('ValidPassword1_');
+        submitForm();
+        expect(authServiceSpy.login).not.toHaveBeenCalled();
+      }
+    );
 
-    it('login should not call authenticationService.login when email is invalid (email - invalid@Emailcom)', () => {
-      setEmail('invalid@Emailcom');
-      setPassword('ValidPassword1_');
-      submitForm();
-      expect(authServiceSpy.login).not.toHaveBeenCalled();
-    });
+    it(
+      'login should not call authenticationService.login' +
+        ' when email is invalid (email - invalid@Emailcom)',
+      () => {
+        setEmail('invalid@Emailcom');
+        setPassword('ValidPassword1_');
+        submitForm();
+        expect(authServiceSpy.login).not.toHaveBeenCalled();
+      }
+    );
 
-    it('login should not call authenticationService.login when email is invalid (email - invalidEmailcom)', () => {
-      setEmail('invalidEmailcom');
-      setPassword('ValidPassword1_');
-      submitForm();
-      expect(authServiceSpy.login).not.toHaveBeenCalled();
-    });
+    it(
+      'login should not call authenticationService.login' +
+        ' when email is invalid (email - invalidEmailcom)',
+      () => {
+        setEmail('invalidEmailcom');
+        setPassword('ValidPassword1_');
+        submitForm();
+        expect(authServiceSpy.login).not.toHaveBeenCalled();
+      }
+    );
 
-    it('login should not call authenticationService.login when password is not set', () => {
-      setEmail('validEmail@gmail.com');
-      submitForm();
-      expect(authServiceSpy.login).not.toHaveBeenCalled();
-    });
+    it(
+      'login should not call authenticationService.login' +
+        ' when password is not set',
+      () => {
+        setEmail('validEmail@gmail.com');
+        submitForm();
+        expect(authServiceSpy.login).not.toHaveBeenCalled();
+      }
+    );
 
-    it('should display error when authenticationService.login returns error', () => {
-      authServiceSpy.login.and.returnValue(
-        cold('--#', null, new HttpErrorResponse({ error: 'error message' }))
-      );
-      setEmail('valid-email@gmail.com');
-      setPassword('dbv38rhu*(dbchsHFSJ');
-      submitForm();
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      const errorEl: ErrorMessageComponent = fixture.debugElement.query(
-        By.directive(ErrorMessageComponent)
-      ).componentInstance;
-      expect(errorEl.errorMessage).toBe('error message');
-    });
+    it(
+      'should display error' +
+        ' when authenticationService.login returns error',
+      () => {
+        authServiceSpy.login.and.returnValue(
+          cold('--#', null, new HttpErrorResponse({ error: 'error message' }))
+        );
+        setEmail('valid-email@gmail.com');
+        setPassword('dbv38rhu*(dbchsHFSJ');
+        submitForm();
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        const errorEl: ErrorMessageComponent = fixture.debugElement.query(
+          By.directive(ErrorMessageComponent)
+        ).componentInstance;
+        expect(errorEl.errorMessage).toBe('error message');
+      }
+    );
 
-    it('should display button with icon to show password when it is hidden', () => {
-      const passwordEl = getPasswordInput();
-      expect(passwordEl.type).toBe('password');
-      const buttonEl: HTMLElement = fixture.debugElement.queryAll(
-        By.directive(MatSuffix)
-      )[0].nativeElement;
-      buttonEl.click();
-      fixture.detectChanges();
-      expect(passwordEl.type).toBe('text');
-      buttonEl.click();
-      fixture.detectChanges();
-      expect(passwordEl.type).toBe('password');
-    });
+    it(
+      'should display button with icon to show password' + ' when it is hidden',
+      () => {
+        const passwordEl = getPasswordInput();
+        expect(passwordEl.type).toBe('password');
+        const buttonEl: HTMLElement = fixture.debugElement.queryAll(
+          By.directive(MatSuffix)
+        )[0].nativeElement;
+        buttonEl.click();
+        fixture.detectChanges();
+        expect(passwordEl.type).toBe('text');
+        buttonEl.click();
+        fixture.detectChanges();
+        expect(passwordEl.type).toBe('password');
+      }
+    );
 
     it('should display error when email is not valid', () => {
       setEmail('invalid');
@@ -215,15 +240,19 @@ describe('LoginFormComponent', () => {
       expect(authServiceSpy.logout).toHaveBeenCalledTimes(1);
     });
 
-    it('should redirect to / when authenticationService.login returns response', () => {
-      setEmail('valid-email@gmail.com');
-      setPassword('dbv38rhu*(dbchsHFSJ');
-      submitForm();
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith(['/']);
-    });
+    it(
+      'should redirect to /' +
+        ' when authenticationService.login returns response',
+      () => {
+        setEmail('valid-email@gmail.com');
+        setPassword('dbv38rhu*(dbchsHFSJ');
+        submitForm();
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        expect(router.navigate).toHaveBeenCalledTimes(1);
+        expect(router.navigate).toHaveBeenCalledWith(['/']);
+      }
+    );
   });
 
   describe('returnUrl is set', () => {
@@ -238,15 +267,19 @@ describe('LoginFormComponent', () => {
       createComponent();
     });
 
-    it('should redirect to url from url query params when authenticationService.login returns response', () => {
-      setEmail('valid-email@gmail.com');
-      setPassword('dbv38rhu*(dbchsHFSJ');
-      submitForm();
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith(['returnUrlMock']);
-    });
+    it(
+      'should redirect to url from url query params' +
+        ' when authenticationService.login returns response',
+      () => {
+        setEmail('valid-email@gmail.com');
+        setPassword('dbv38rhu*(dbchsHFSJ');
+        submitForm();
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        expect(router.navigate).toHaveBeenCalledTimes(1);
+        expect(router.navigate).toHaveBeenCalledWith(['returnUrlMock']);
+      }
+    );
   });
 
   function createComponent() {

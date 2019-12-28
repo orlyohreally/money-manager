@@ -1,12 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { PaymentsService } from 'src/app/core/services/payments/payments.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { Payment, PaymentSubject, User as Member } from '@shared/types';
-import { PaymentSubjectFormComponent } from '../payment-subject-form/payment-subject-form.component';
 import { normalizedArray } from '@shared/utils';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectFormComponent } from '../payment-subject-form/payment-subject-form.component';
 
 @Component({
   selector: 'payment-payment-form',
@@ -20,7 +22,6 @@ export class PaymentFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PaymentFormComponent>,
     private paymentsService: PaymentsService,
-    private authenticationService: AuthenticationService,
     private paymentSubjectsService: PaymentSubjectsService,
     private paymentSubjectForm: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Payment
@@ -31,8 +32,9 @@ export class PaymentFormComponent implements OnInit {
       subjects => {
         this.paymentSubjects = subjects;
       },
-      error => {
-        console.log(error);
+      () => {
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }
@@ -40,7 +42,7 @@ export class PaymentFormComponent implements OnInit {
     this.dialogRef.close();
   }
   ngOnInit() {
-    this.currentMember = this.authenticationService.getUser();
+    // this.currentMember = this.authenticationService.getUser();
     this.getPaymentSubjects();
     if (!this.data) {
       this.initPaymentForm({
@@ -67,7 +69,7 @@ export class PaymentFormComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[0-9]*')
       ])
-      //receipt: new FormControl(payment.receipt, [])
+      // receipt: new FormControl(payment.receipt, [])
     });
   }
   get _id() {
@@ -119,8 +121,9 @@ export class PaymentFormComponent implements OnInit {
       result => {
         this.dialogRef.close(result);
       },
-      error => {
-        console.log(error);
+      () => {
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }
@@ -130,8 +133,9 @@ export class PaymentFormComponent implements OnInit {
       result => {
         this.dialogRef.close(result);
       },
-      error => {
-        console.log(error);
+      () => {
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }

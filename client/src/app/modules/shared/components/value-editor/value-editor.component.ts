@@ -1,11 +1,12 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
   Input,
-  SimpleChanges,
+  OnChanges,
+  OnInit,
   Output,
-  EventEmitter
+  SimpleChanges
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -15,7 +16,7 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./value-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ValueEditorComponent implements OnInit {
+export class ValueEditorComponent implements OnInit, OnChanges {
   @Input() value: string;
 
   @Output() valueSubmitted = new EventEmitter<string>();
@@ -27,7 +28,6 @@ export class ValueEditorComponent implements OnInit {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (this.valueForm) {
       this.valueForm.setValue(changes.value.currentValue);
       return;

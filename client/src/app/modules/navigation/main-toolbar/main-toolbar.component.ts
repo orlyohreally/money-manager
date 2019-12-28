@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
 
 @Component({
   selector: 'nav-main-toolbar',

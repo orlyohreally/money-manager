@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
+  CanActivate,
+  Router,
+  RouterStateSnapshot
 } from '@angular/router';
-import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'

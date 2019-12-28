@@ -1,13 +1,14 @@
-import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
-import { AuthenticationService } from './authentication.service';
-import { LocalStorageService } from 'ngx-localstorage';
+import { TestBed } from '@angular/core/testing';
 import { User } from '@shared/types';
-import { GlobalVariablesService } from '../global-variables/global-variables.service';
+import { LocalStorageService } from 'ngx-localstorage';
 import { take } from 'rxjs/operators';
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from '../global-variables/global-variables.service';
+import { AuthenticationService } from './authentication.service';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -43,218 +44,253 @@ describe('AuthenticationService', () => {
     );
   });
 
-  it('isAuthenticated should return true when token is set in local storage', done => {
-    localStorageServiceSpy.get.and.returnValue('savedToken');
-    createService();
-    service.isAuthenticated().subscribe(isAuthenticated => {
-      expect(isAuthenticated).toBe(true);
-      done();
-    });
-  });
+  it(
+    'isAuthenticated should return true' +
+      ' when token is set in local storage',
+    done => {
+      localStorageServiceSpy.get.and.returnValue('savedToken');
+      createService();
+      service.isAuthenticated().subscribe(isAuthenticated => {
+        expect(isAuthenticated).toBe(true);
+        done();
+      });
+    }
+  );
 
-  it('isAuthenticated should return false when token is not set in local storage', done => {
-    localStorageServiceSpy.get.and.returnValue('');
-    createService();
-    service.isAuthenticated().subscribe(isAuthenticated => {
-      expect(isAuthenticated).toBe(false);
-      done();
-    });
-  });
+  it(
+    'isAuthenticated should return false' +
+      ' when token is not set in local storage',
+    done => {
+      localStorageServiceSpy.get.and.returnValue('');
+      createService();
+      service.isAuthenticated().subscribe(isAuthenticated => {
+        expect(isAuthenticated).toBe(false);
+        done();
+      });
+    }
+  );
 
-  it('register should set token in local storage fetched from Authorization header of response from api/users/signin', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-    service.register(mockedUser).subscribe(() => {
-      expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
-      expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
-        'user_token',
-        'bearerToken',
-        'money-manager'
+  it(
+    'register should set token in local storage fetched' +
+      ' from Authorization header of response from api/users/signin',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
+      service.register(mockedUser).subscribe(() => {
+        expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
+        expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
+          'user_token',
+          'bearerToken',
+          'money-manager'
+        );
+        done();
+      });
+
+      const mockReq = httpController.expectOne('apiURL/users/signin');
+
+      expect(mockReq.request.method).toBe('POST');
+
+      mockReq.flush(
+        {},
+        {
+          headers: { Authorization: 'bearerToken' },
+          status: 200,
+          statusText: 'OK'
+        }
       );
-      done();
-    });
 
-    const mockReq = httpController.expectOne('apiURL/users/signin');
+      httpController.verify();
+    }
+  );
 
-    expect(mockReq.request.method).toBe('POST');
+  it(
+    'register should make isAuthenticated return true' +
+      ' when token was provided in header',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
 
-    mockReq.flush(
-      {},
-      {
-        headers: { Authorization: 'bearerToken' },
-        status: 200,
-        statusText: 'OK'
-      }
-    );
-
-    httpController.verify();
-  });
-
-  it('register should make isAuthenticated return true when token was provided in header', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-
-    service.register(mockedUser).subscribe(() => {
-      service
-        .isAuthenticated()
-        .pipe(take(1))
-        .subscribe(isAuthenticated => {
-          expect(isAuthenticated).toBe(true);
-          done();
-        });
-    });
-    const mockReq = httpController.expectOne('apiURL/users/signin');
-    mockReq.flush(
-      {},
-      {
-        headers: { Authorization: 'bearerToken' },
-        status: 200,
-        statusText: 'OK'
-      }
-    );
-    httpController.verify();
-  });
-
-  it('register should make isAuthenticated return false when token was not provided in header', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-
-    service.register(mockedUser).subscribe(() => {
-      service
-        .isAuthenticated()
-        .pipe(take(1))
-        .subscribe(isAuthenticated => {
-          expect(isAuthenticated).toBe(false);
-          done();
-        });
-    });
-
-    const mockReq = httpController.expectOne('apiURL/users/signin');
-    mockReq.flush({});
-    httpController.verify();
-  });
-
-  it('register should return Observable of response from api/users/signin', () => {
-    createService();
-    const mockedResponse = {
-      firstName: 'firstNameMock',
-      lastName: 'lastNameMock'
-    } as User;
-
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-
-    service.register(mockedUser).subscribe((user: User) => {
-      expect(user).toBe(mockedResponse);
-    });
-
-    const mockReq = httpController.expectOne('apiURL/users/signin');
-    mockReq.flush(mockedResponse);
-    httpController.verify();
-  });
-
-  it('login should set token in local storage fetched from Authorization header of response from api/users/login', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-    service.login(mockedUser).subscribe(() => {
-      expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
-      expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
-        'user_token',
-        'bearerToken',
-        'money-manager'
+      service.register(mockedUser).subscribe(() => {
+        service
+          .isAuthenticated()
+          .pipe(take(1))
+          .subscribe(isAuthenticated => {
+            expect(isAuthenticated).toBe(true);
+            done();
+          });
+      });
+      const mockReq = httpController.expectOne('apiURL/users/signin');
+      mockReq.flush(
+        {},
+        {
+          headers: { Authorization: 'bearerToken' },
+          status: 200,
+          statusText: 'OK'
+        }
       );
-      done();
-    });
+      httpController.verify();
+    }
+  );
 
-    const mockReq = httpController.expectOne('apiURL/users/login');
-    expect(mockReq.request.method).toBe('POST');
-    mockReq.flush(
-      {},
-      {
-        headers: { Authorization: 'bearerToken' },
-        status: 200,
-        statusText: 'OK'
-      }
-    );
-    httpController.verify();
-  });
+  it(
+    'register should make isAuthenticated return false' +
+      ' when token was not provided in header',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
 
-  it('login should make isAuthenticated return true when token was provided in header', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-    service.login(mockedUser).subscribe(() => {
-      service
-        .isAuthenticated()
-        .pipe(take(1))
-        .subscribe(isAuthenticated => {
-          expect(isAuthenticated).toBe(true);
-          done();
-        });
-    });
-    const mockReq = httpController.expectOne('apiURL/users/login');
-    mockReq.flush(
-      {},
-      {
-        headers: { Authorization: 'bearerToken' },
-        status: 200,
-        statusText: 'OK'
-      }
-    );
-    httpController.verify();
-  });
+      service.register(mockedUser).subscribe(() => {
+        service
+          .isAuthenticated()
+          .pipe(take(1))
+          .subscribe(isAuthenticated => {
+            expect(isAuthenticated).toBe(false);
+            done();
+          });
+      });
 
-  it('login should make isAuthenticated return false when token was not provided in header', done => {
-    createService();
-    const mockedUser = {
-      lastName: 'lastNameMock',
-      firstName: 'firstNameMock',
-      password: 'passwordMock',
-      email: 'emailMock'
-    } as User;
-    service.login(mockedUser).subscribe(() => {
-      service
-        .isAuthenticated()
-        .pipe(take(1))
-        .subscribe(isAuthenticated => {
-          expect(isAuthenticated).toBe(false);
-          done();
-        });
-    });
+      const mockReq = httpController.expectOne('apiURL/users/signin');
+      mockReq.flush({});
+      httpController.verify();
+    }
+  );
 
-    const mockReq = httpController.expectOne('apiURL/users/login');
-    expect(mockReq.cancelled).toBeFalsy();
-    mockReq.flush({});
-    httpController.verify();
-  });
+  it(
+    'register should return Observable of response' + ' from api/users/signin',
+    () => {
+      createService();
+      const mockedResponse = {
+        firstName: 'firstNameMock',
+        lastName: 'lastNameMock'
+      } as User;
+
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
+
+      service.register(mockedUser).subscribe((user: User) => {
+        expect(user).toBe(mockedResponse);
+      });
+
+      const mockReq = httpController.expectOne('apiURL/users/signin');
+      mockReq.flush(mockedResponse);
+      httpController.verify();
+    }
+  );
+
+  it(
+    'login should set token in local storage fetched' +
+      ' from Authorization header of response from api/users/login',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
+      service.login(mockedUser).subscribe(() => {
+        expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
+        expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
+          'user_token',
+          'bearerToken',
+          'money-manager'
+        );
+        done();
+      });
+
+      const mockReq = httpController.expectOne('apiURL/users/login');
+      expect(mockReq.request.method).toBe('POST');
+      mockReq.flush(
+        {},
+        {
+          headers: { Authorization: 'bearerToken' },
+          status: 200,
+          statusText: 'OK'
+        }
+      );
+      httpController.verify();
+    }
+  );
+
+  it(
+    'login should make isAuthenticated return true' +
+      ' when token was provided in header',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
+      service.login(mockedUser).subscribe(() => {
+        service
+          .isAuthenticated()
+          .pipe(take(1))
+          .subscribe(isAuthenticated => {
+            expect(isAuthenticated).toBe(true);
+            done();
+          });
+      });
+      const mockReq = httpController.expectOne('apiURL/users/login');
+      mockReq.flush(
+        {},
+        {
+          headers: { Authorization: 'bearerToken' },
+          status: 200,
+          statusText: 'OK'
+        }
+      );
+      httpController.verify();
+    }
+  );
+
+  it(
+    'login should make isAuthenticated return false' +
+      ' when token was not provided in header',
+    done => {
+      createService();
+      const mockedUser = {
+        lastName: 'lastNameMock',
+        firstName: 'firstNameMock',
+        password: 'passwordMock',
+        email: 'emailMock'
+      } as User;
+      service.login(mockedUser).subscribe(() => {
+        service
+          .isAuthenticated()
+          .pipe(take(1))
+          .subscribe(isAuthenticated => {
+            expect(isAuthenticated).toBe(false);
+            done();
+          });
+      });
+
+      const mockReq = httpController.expectOne('apiURL/users/login');
+      expect(mockReq.cancelled).toBeFalsy();
+      mockReq.flush({});
+      httpController.verify();
+    }
+  );
 
   it('login should return Observable of response from api/users/login', () => {
     createService();

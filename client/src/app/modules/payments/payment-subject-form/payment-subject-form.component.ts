@@ -1,13 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { FamiliesService } from 'src/app/modules/families/services/families/families.service';
-import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
-import { ImageAssetService } from 'src/app/core/services/image-asset/image-asset.service';
+// tslint:disable-next-line: max-line-length
+import { ImageAssetService } from '@core-client/services/image-asset/image-asset.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
 
-import { PaymentSubject, Family, ImageAsset } from '@shared/types';
-import { normalizedArray } from '@shared/utils';
+import { Family, ImageAsset, PaymentSubject } from '@shared/types';
 
 import { HtmlElementRepresentation } from '@shared-client/types/html-element';
 import { Observable } from 'rxjs';
@@ -19,7 +19,6 @@ import { Observable } from 'rxjs';
 })
 export class PaymentSubjectFormComponent implements OnInit {
   constructor(
-    private familiesService: FamiliesService,
     public dialogRef: MatDialogRef<PaymentSubjectFormComponent>,
     private imageAssetService: ImageAssetService,
     private paymentSubjectsService: PaymentSubjectsService,
@@ -50,7 +49,7 @@ export class PaymentSubjectFormComponent implements OnInit {
         _id: null,
         name: null,
         familyId: null,
-        icon: null //this.subjectIcons[0].path
+        icon: null // this.subjectIcons[0].path
       };
     }
 
@@ -81,12 +80,13 @@ export class PaymentSubjectFormComponent implements OnInit {
   }
 
   private async getFamilies() {
-    this.families = null; //this.familiesService.membersFamilies;
+    this.families = null; // this.familiesService.membersFamilies;
   }
 
   public async saveSubject() {
     if (!this.subjectForm.valid) {
-      for (let control in this.subjectForm.controls) {
+      // tslint:disable-next-line: forin
+      for (const control in this.subjectForm.controls) {
         this.subjectForm.controls[control].markAsTouched({ onlySelf: true });
       }
     } else {
@@ -105,7 +105,6 @@ export class PaymentSubjectFormComponent implements OnInit {
   }
 
   public selectIcon(icon: HtmlElementRepresentation) {
-    console.log(icon);
     this.subjectForm.controls.icon.setValue(icon.id);
   }
 }

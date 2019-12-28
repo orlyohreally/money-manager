@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FamiliesService } from '../services/families/families.service';
-import { NotificationsService } from 'src/app/core/services/notifications/notifications.service';
-import { FormGroup } from '@angular/forms';
-import { MemberFamily } from '../../shared/types/member-family';
 import { MatDialog } from '@angular/material';
-import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import { ConfirmationDialogData } from '../../shared/types/confirmation-dialog-data';
+// tslint:disable-next-line: max-line-length
+import { NotificationsService } from '@core-client/services/notifications/notifications.service';
+// tslint:disable-next-line: max-line-length
+import { ConfirmationDialogComponent } from '@shared-client/components/confirmation-dialog/confirmation-dialog.component';
+// tslint:disable-next-line: max-line-length
+import { ConfirmationDialogData } from '@shared-client/types/confirmation-dialog-data';
+import { throwError } from 'rxjs';
+import { MemberFamily } from '../../shared/types/member-family';
+import { FamiliesService } from '../services/families/families.service';
 
 @Component({
-  selector: 'app-family',
+  selector: 'family-family',
   templateUrl: './family.component.html',
   styleUrls: ['./family.component.scss']
 })
@@ -23,7 +26,7 @@ export class FamilyComponent implements OnInit {
     private dialog: MatDialog
   ) {}
   family: { name: string; icon: string; membersCount: number };
-  displayNameEditor: boolean = false;
+  displayNameEditor = false;
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -37,12 +40,12 @@ export class FamilyComponent implements OnInit {
       .updateFamily({ ...this.family, icon: iconUrl })
       .subscribe(
         (family: MemberFamily) => {
-          console.log(family);
           this.family.icon = family.icon;
           this.notificationsService.showNotification('Icon has been updated');
         },
         error => {
-          console.log(error);
+          // TODO: make s notification or handle in a way
+          throwError(error);
         }
       );
   }
@@ -63,7 +66,8 @@ export class FamilyComponent implements OnInit {
           );
         },
         error => {
-          console.log(error);
+          // TODO: add handling
+          // console.log(error);
         }
       );
   }
@@ -71,12 +75,12 @@ export class FamilyComponent implements OnInit {
   removeFamily() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
-      data: <ConfirmationDialogData>{
+      data: {
         title: 'Delete family',
         message: `Are you sure you want to remove family ${this.family.name}`,
         okayLabel: 'Yes',
         cancelLabel: 'No'
-      }
+      } as ConfirmationDialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -85,12 +89,12 @@ export class FamilyComponent implements OnInit {
       }
       this.familiesService.removeFamily(this.family).subscribe(
         response => {
-          console.log(response);
           this.notificationsService.showNotification('Family has been removed');
           this.router.navigate(['/families']);
         },
         error => {
-          console.log(error);
+          // TODO: add handling
+          // console.log(error);
         }
       );
     });
@@ -101,12 +105,10 @@ export class FamilyComponent implements OnInit {
     this.familiesService.getFamily(familyId).subscribe(
       family => {
         this.family = family;
-        console.log(this.family);
         this.familiesService.setCurrentFamily(familyId);
       },
       error => {
         this.router.navigate(['/not-found']);
-        console.log(error);
       }
     );
   }

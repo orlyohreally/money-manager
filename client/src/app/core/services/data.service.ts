@@ -1,10 +1,7 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import {
-  HttpClient,
-  HttpResponse,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { Observable } from 'rxjs';
+// tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from './global-variables/global-variables.service';
 
 @Injectable({

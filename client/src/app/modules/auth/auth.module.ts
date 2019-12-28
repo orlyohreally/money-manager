@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatCheckboxModule,
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule,
-  MatCheckboxModule
+  MatInputModule
 } from '@angular/material';
-import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginFormComponent } from './login-form/login-form.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { LogoutComponent } from './logout/logout.component';
+import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
 
 @NgModule({
   declarations: [SignInFormComponent, LoginFormComponent, LogoutComponent],

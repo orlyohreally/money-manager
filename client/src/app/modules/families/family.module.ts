@@ -1,31 +1,32 @@
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatCardModule,
   MatDialogModule,
-  MatInputModule,
   MatFormFieldModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
-  MatCardModule,
   MatMenuModule
 } from '@angular/material';
-import { CommonModule } from '@angular/common';
-import { FamilyFormComponent } from './family-form/family-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { FamilyEditorComponent } from './family-editor/family-editor.component';
-import { FamilyManagerComponent } from './family-manager/family-manager.component';
-import { SharedModule } from '../shared/shared.module';
-import { FamilyRoutingModule } from './family-routing.module';
 import { PaymentModule } from '../payments/payment.module';
-import { FamilyComponent } from './family/family.component';
+import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FamiliesComponent } from './families.component';
-import { FamilyMembersComponent } from './family-members/family-members.component';
-import { FamiliesService } from './services/families/families.service';
-import { MembersService } from './services/members/members.service';
+import { FamilyEditorComponent } from './family-editor/family-editor.component';
+import { FamilyFormComponent } from './family-form/family-form.component';
+// tslint:disable-next-line: max-line-length
+import { FamilyManagerComponent } from './family-manager/family-manager.component';
+// tslint:disable-next-line: max-line-length
 import { FamilyMemberCardComponent } from './family-member-card/family-member-card.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
+// tslint:disable-next-line: max-line-length
+import { FamilyMembersComponent } from './family-members/family-members.component';
+import { FamilyRoutingModule } from './family-routing.module';
+import { FamilyComponent } from './family/family.component';
 
 @NgModule({
   declarations: [

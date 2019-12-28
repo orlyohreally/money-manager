@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { HtmlElementRepresentation } from "@shared-client/types/html-element";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HtmlElementRepresentation } from '@shared-client/types/html-element';
 
 @Component({
-  selector: "shared-html-element-select",
-  templateUrl: "./html-element-select.component.html",
-  styleUrls: ["./html-element-select.component.scss"]
+  selector: 'shared-html-element-select',
+  templateUrl: './html-element-select.component.html',
+  styleUrls: ['./html-element-select.component.scss']
 })
 export class HtmlElementSelectComponent implements OnInit {
   @Input() elements: HtmlElementRepresentation[];

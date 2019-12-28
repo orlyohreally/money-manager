@@ -1,7 +1,7 @@
-import { PipeTransform, Pipe } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "filter",
+  name: 'sharedFilter',
   pure: false
 })
 export class FilterPipe implements PipeTransform {

@@ -1,12 +1,13 @@
+import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
-import { TestBed, inject } from '@angular/core/testing';
-import { AuthenticationService } from '../services/authentication/authentication.service';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
-import { AuthInterceptor } from './auth.interceptor';
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../services/authentication/authentication.service';
+import { AuthInterceptor } from './auth.interceptor';
 
 describe('AuthInterceptor', () => {
   let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
@@ -30,34 +31,44 @@ describe('AuthInterceptor', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
-  it('should add auth header to http request when authenticationService.isAuthenticated is of(true)', () => {
-    authenticationServiceSpy.isAuthenticated.and.returnValue(of(true));
+  it(
+    'should add auth header to http request' +
+      ' when authenticationService.isAuthenticated is of(true)',
+    () => {
+      authenticationServiceSpy.isAuthenticated.and.returnValue(of(true));
 
-    http.get('/mocked-url').subscribe(response => {
-      expect(response).toBeTruthy();
-    });
+      http.get('/mocked-url').subscribe(response => {
+        expect(response).toBeTruthy();
+      });
 
-    const req = httpTestingController.expectOne('/mocked-url');
-    expect(req.request.headers.has('Authorization')).toBeTruthy();
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer bearerToken`);
-    expect(req.request.method).toEqual('GET');
+      const req = httpTestingController.expectOne('/mocked-url');
+      expect(req.request.headers.has('Authorization')).toBeTruthy();
+      expect(req.request.headers.get('Authorization')).toBe(
+        `Bearer bearerToken`
+      );
+      expect(req.request.method).toEqual('GET');
 
-    req.flush({});
-    httpTestingController.verify();
-  });
+      req.flush({});
+      httpTestingController.verify();
+    }
+  );
 
-  it('should not add auth header to http request when authenticationService.isAuthenticated is of(false)', () => {
-    authenticationServiceSpy.isAuthenticated.and.returnValue(of(false));
+  it(
+    'should not add auth header to http request' +
+      ' when authenticationService.isAuthenticated is of(false)',
+    () => {
+      authenticationServiceSpy.isAuthenticated.and.returnValue(of(false));
 
-    http.get('/mocked-url').subscribe(response => {
-      expect(response).toBeTruthy();
-    });
+      http.get('/mocked-url').subscribe(response => {
+        expect(response).toBeTruthy();
+      });
 
-    const req = httpTestingController.expectOne('/mocked-url');
-    expect(req.request.headers.has('Authorization')).toBeFalsy();
-    expect(req.request.method).toEqual('GET');
+      const req = httpTestingController.expectOne('/mocked-url');
+      expect(req.request.headers.has('Authorization')).toBeFalsy();
+      expect(req.request.method).toEqual('GET');
 
-    req.flush({});
-    httpTestingController.verify();
-  });
+      req.flush({});
+      httpTestingController.verify();
+    }
+  );
 });

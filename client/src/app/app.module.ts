@@ -1,17 +1,18 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { MatSidenavModule, MatProgressBarModule } from '@angular/material';
-import { NgxLocalStorageModule } from 'ngx-localstorage';
-import { NavigationModule } from './modules/navigation/navigation.module';
-import { FamilyModule } from './modules/families/family.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
+import { NgxLocalStorageModule } from 'ngx-localstorage';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+// tslint:disable-next-line: max-line-length
 import { ServerErrorInterceptor } from './core/interceptors/server-error.interceptor';
+import { FamilyModule } from './modules/families/family.module';
+import { NavigationModule } from './modules/navigation/navigation.module';
 
 @NgModule({
   declarations: [AppComponent],

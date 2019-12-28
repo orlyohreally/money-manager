@@ -1,11 +1,12 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 
-import { ErrorRoutingModule } from "./error-routing.module";
-import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
-import { MatButtonModule } from "@angular/material";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule } from '@angular/material';
+import { ErrorRoutingModule } from './error-routing.module';
+// tslint:disable-next-line: max-line-length
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [PageNotFoundComponent],

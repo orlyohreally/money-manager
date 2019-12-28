@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { MembersService, Member } from "../services/members/members.service";
-import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Member, MembersService } from '../services/members/members.service';
 
 @Component({
-  selector: "app-family-members",
-  templateUrl: "./family-members.component.html",
-  styleUrls: ["./family-members.component.scss"]
+  selector: 'family-members',
+  templateUrl: './family-members.component.html',
+  styleUrls: ['./family-members.component.scss']
 })
 export class FamilyMembersComponent implements OnInit {
   public members: Observable<Member[]>;

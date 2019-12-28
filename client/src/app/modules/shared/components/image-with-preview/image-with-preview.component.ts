@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { ImageManagerComponent } from '../image-manager/image-manager.component';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+// tslint:disable-next-line: max-line-length
+import { ImageManagerComponent } from '../image-manager/image-manager.component';
 
 @Component({
   selector: 'shared-image-with-preview',
@@ -18,7 +19,6 @@ export class ImageWithPreviewComponent implements OnInit {
   ngOnInit() {}
 
   public showPreview() {
-    console.log(this.imageUrl);
     const dialogRef = this.dialog.open(ImageManagerComponent, {
       width: '90%',
       height: '90%',

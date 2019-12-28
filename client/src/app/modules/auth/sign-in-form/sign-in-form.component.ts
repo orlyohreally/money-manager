@@ -1,15 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
+  AbstractControl,
   FormControl,
-  Validators,
-  AbstractControl
+  FormGroup,
+  Validators
 } from '@angular/forms';
-import { MembersService } from 'src/app/modules/families/services/members/members.service';
-import { HtmlElementRepresentation } from '@shared-client/types/html-element';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { User } from '@shared/types';
 
 @Component({
@@ -54,9 +53,7 @@ export class SignInFormComponent implements OnInit {
   }
 
   register() {
-    console.log('register', this.signInForm.valid);
     this.serverError = null;
-    event.preventDefault();
     if (this.signInForm.valid) {
       this.authService
         .register({
@@ -105,11 +102,11 @@ export class SignInFormComponent implements OnInit {
           'no-special-character',
           '(?=.*?[#?!@$%^_&*-])'
         ),
-        control => this.validatePasswords(control, 'password')
+        control => this.validatePasswords('password')
       ]),
       passwordVerification: new FormControl('', [
         Validators.required,
-        control => this.validatePasswords(control, 'passwordVerification')
+        control => this.validatePasswords('passwordVerification')
       ])
     });
   }
@@ -126,7 +123,7 @@ export class SignInFormComponent implements OnInit {
     };
   }
 
-  private validatePasswords(control: AbstractControl, name: string) {
+  private validatePasswords(name: string) {
     if (
       this.signInForm === undefined ||
       this.password.value === '' ||

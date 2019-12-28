@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { FamilyFormComponent } from '../family-form/family-form.component';
-import { Family } from '@shared/types';
-import { FamiliesService } from '../services/families/families.service';
 import { Router } from '@angular/router';
+import { Family } from '@shared/types';
 import { MemberFamily } from '../../shared/types/member-family';
+import { FamilyFormComponent } from '../family-form/family-form.component';
+import { FamiliesService } from '../services/families/families.service';
 
 @Component({
   selector: 'family-family-editor',
@@ -29,12 +29,10 @@ export class FamilyEditorComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((family: MemberFamily) => {
-      console.log(family);
       if (!family) {
         return;
       }
       if (!family._id) {
-        console.log('creating family');
         this.createFamily(family);
         return;
       }
@@ -43,13 +41,14 @@ export class FamilyEditorComponent implements OnInit {
   }
 
   private updateFamily(family: MemberFamily) {
-    console.log('update', family);
     this.familiesService.updateFamily(family).subscribe(
       response => {
-        console.log(response);
+        // TODO: add handling
+        // console.log(response);
       },
       error => {
-        console.log(error);
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }
@@ -57,11 +56,11 @@ export class FamilyEditorComponent implements OnInit {
   private createFamily(family: MemberFamily) {
     this.familiesService.createFamily(family).subscribe(
       (response: MemberFamily) => {
-        console.log(response);
         this.router.navigate([`/families/${response._id}/dashboard`]);
       },
       error => {
-        console.log(error);
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }

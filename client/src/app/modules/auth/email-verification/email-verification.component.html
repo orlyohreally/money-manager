@@ -1,0 +1,10 @@
+<div class="email-verification">
+  <div *ngIf="errorMessage | async as message; else verifying">
+    <shared-notification-message type="error">
+      {{ message }}
+    </shared-notification-message>
+  </div>
+  <ng-template #verifying>
+    <div>Verifying your email...</div>
+  </ng-template>
+</div>

@@ -15,9 +15,11 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LogoutComponent } from './logout/logout.component';
+import { EmailVerificationComponent } from './email-verification/email-verification.component';
+import { EmailVerificationRequestComponent } from './email-verification-request/email-verification-request.component';
 
 @NgModule({
-  declarations: [SignInFormComponent, LoginFormComponent, LogoutComponent],
+  declarations: [SignInFormComponent, LoginFormComponent, LogoutComponent, EmailVerificationComponent, EmailVerificationRequestComponent],
   imports: [
     CommonModule,
 

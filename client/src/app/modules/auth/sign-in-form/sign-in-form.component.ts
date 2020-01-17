@@ -6,9 +6,9 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '@shared/types';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -18,8 +18,7 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 export class SignInFormComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {}
 
   signInForm: FormGroup;
@@ -62,11 +61,14 @@ export class SignInFormComponent implements OnInit {
           lastName: this.lastName.value
         } as User)
         .subscribe(
-          () => {
-            const returnUrl = this.route.snapshot.queryParamMap.get(
-              'returnUrl'
-            );
-            this.router.navigate([returnUrl || '/']);
+          response => {
+            console.log(response);
+            this.router.navigate(['/auth/email-verification-request'], {
+              queryParams: {
+                email: response.email,
+                'verification-token': response.verificationToken
+              }
+            });
           },
           (error: HttpErrorResponse) => {
             this.serverError = error.error;

@@ -19,9 +19,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorMessageComponent } from '@shared-client/components/error-message/error-message.component';
+import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
 import { MockComponent } from 'ng-mocks';
 import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
 describe('SignInFormComponent', () => {
   let component: SignInFormComponent;
@@ -39,7 +40,10 @@ describe('SignInFormComponent', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [SignInFormComponent, MockComponent(ErrorMessageComponent)],
+      declarations: [
+        SignInFormComponent,
+        MockComponent(NotificationMessageComponent)
+      ],
       providers: [
         { provide: AuthenticationService, useValue: authServiceSpy },
         {
@@ -213,10 +217,11 @@ describe('SignInFormComponent', () => {
       submitForm();
       getTestScheduler().flush();
       fixture.detectChanges();
-      const errorEl: ErrorMessageComponent = fixture.debugElement.query(
-        By.directive(ErrorMessageComponent)
-      ).componentInstance;
-      expect(errorEl.errorMessage).toBe('error message');
+      const errorEl: DebugElement = fixture.debugElement.query(
+        By.directive(NotificationMessageComponent)
+      );
+      expect(errorEl.componentInstance.type).toBe('error');
+      expect(errorEl.nativeElement.textContent).toBe('error message');
     });
 
     it('submit button should not be disabled after submitting when authenticationService.register returns error', () => {

@@ -16,15 +16,22 @@ export class DataService {
     return this.http.get<T>(`${this.apiURL}/${url}`);
   }
 
+  protected post<T, S>(url: string, params: S): Observable<T>;
   protected post<T, S, W>(
     url: string,
     params: S,
+    options: W
+  ): Observable<HttpResponse<T>>;
+
+  protected post<T, S, W = null>(
+    url: string,
+    params: S,
     options: W = null
-  ): Observable<HttpResponse<T>> {
-    return this.http.post<HttpResponse<T>>(
+  ): Observable<HttpResponse<T> | T> {
+    return this.http.post<HttpResponse<T> | T>(
       `${this.apiURL}/${url}`,
       params,
-      options
+      options ? options : undefined
     );
   }
 }

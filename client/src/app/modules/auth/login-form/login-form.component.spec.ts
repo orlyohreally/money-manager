@@ -21,7 +21,8 @@ import { User } from '@shared/types';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ErrorMessageComponent } from '../../shared/components/error-message/error-message.component';
+import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { DebugElement } from '@angular/core';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
@@ -39,7 +40,10 @@ describe('LoginFormComponent', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [LoginFormComponent, MockComponent(ErrorMessageComponent)],
+      declarations: [
+        LoginFormComponent,
+        MockComponent(NotificationMessageComponent)
+      ],
       providers: [
         { provide: AuthenticationService, useValue: authServiceSpy },
         {
@@ -160,10 +164,11 @@ describe('LoginFormComponent', () => {
       submitForm();
       getTestScheduler().flush();
       fixture.detectChanges();
-      const errorEl: ErrorMessageComponent = fixture.debugElement.query(
-        By.directive(ErrorMessageComponent)
-      ).componentInstance;
-      expect(errorEl.errorMessage).toBe('error message');
+      const errorEl: DebugElement = fixture.debugElement.query(
+        By.directive(NotificationMessageComponent)
+      );
+      expect(errorEl.componentInstance.type).toBe('error');
+      expect(errorEl.nativeElement.textContent.trim()).toBe('error message');
     });
 
     it('should display button with icon to show password when it is hidden', () => {

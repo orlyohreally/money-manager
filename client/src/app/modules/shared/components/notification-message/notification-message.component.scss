@@ -1,0 +1,28 @@
+@import 'theme';
+
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.notification-message {
+  padding: 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+  width: 500px;
+  max-width: 80%;
+  text-align: center;
+  line-height: 25px;
+}
+
+.notification-message_success {
+  background-color: mat-color($angular-material-accent, lighter);
+}
+
+.notification-message_info {
+  background-color: mat-color($angular-material-primary, lighter);
+}
+
+.notification-message_error {
+  background-color: mat-color($angular-material-warn, lighter);
+}

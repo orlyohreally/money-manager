@@ -4,7 +4,11 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed, inject } from '@angular/core/testing';
 import { AuthenticationService } from '../services/authentication/authentication.service';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpRequest
+} from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { of } from 'rxjs';
 
@@ -13,11 +17,17 @@ describe('AuthInterceptor', () => {
   let http: HttpClient;
   let httpTestingController: HttpTestingController;
 
+  const mockedRequest = new HttpRequest<{}>('POST', 'mocked-url-1', null);
+
   beforeEach(() => {
     authenticationServiceSpy = {
-      ...jasmine.createSpyObj('AuthenticationService', ['isAuthenticated']),
-      token: 'bearerToken'
+      ...jasmine.createSpyObj('AuthenticationService', [
+        'addCredentialsToRequest'
+      ])
     } as jasmine.SpyObj<AuthenticationService>;
+    authenticationServiceSpy.addCredentialsToRequest.and.returnValue(
+      mockedRequest
+    );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -30,34 +40,15 @@ describe('AuthInterceptor', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
-  it('should add auth header to http request when authenticationService.isAuthenticated is of(true)', () => {
-    authenticationServiceSpy.isAuthenticated.and.returnValue(of(true));
-
+  it('should return request returned from authenticationService.addCredentialsToRequest', () => {
     http.get('/mocked-url').subscribe(response => {
       expect(response).toBeTruthy();
     });
 
-    const req = httpTestingController.expectOne('/mocked-url');
-    expect(req.request.headers.has('Authorization')).toBeTruthy();
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer bearerToken`);
-    expect(req.request.method).toEqual('GET');
-
+    const req = httpTestingController.expectOne(mockedRequest.url);
+    expect(req.request).toBe(mockedRequest);
     req.flush({});
-    httpTestingController.verify();
-  });
 
-  it('should not add auth header to http request when authenticationService.isAuthenticated is of(false)', () => {
-    authenticationServiceSpy.isAuthenticated.and.returnValue(of(false));
-
-    http.get('/mocked-url').subscribe(response => {
-      expect(response).toBeTruthy();
-    });
-
-    const req = httpTestingController.expectOne('/mocked-url');
-    expect(req.request.headers.has('Authorization')).toBeFalsy();
-    expect(req.request.method).toEqual('GET');
-
-    req.flush({});
     httpTestingController.verify();
   });
 });

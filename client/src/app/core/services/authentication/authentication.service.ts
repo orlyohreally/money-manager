@@ -1,20 +1,29 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '@shared/types';
 import { LocalStorageService } from 'ngx-localstorage';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { DataService } from '../data.service';
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
-import { UserManagerService } from '../user-manager/user-manager.service';
 
 @Injectable()
 export class AuthenticationService extends DataService {
-  token: string;
-  refreshToken: string;
+  readonly authApi = 'users';
+
+  authEndpoints = {
+    login: `${this.authApi}/login`,
+    register: `${this.authApi}/signin`,
+    refreshToken: `${this.authApi}/refresh-token`,
+    emailVerificationRequest: `${this.authApi}/request-email-verification`,
+    verifyEmail: `${this.authApi}/verify`
+  };
 
   private authenticated = new BehaviorSubject<boolean>(false);
+  private refreshToken: string;
   private user = new Subject<User>();
+  private token: string;
+
   constructor(
     http: HttpClient,
     globalVariablesService: GlobalVariablesService,
@@ -40,18 +49,26 @@ export class AuthenticationService extends DataService {
     return this.authenticated.asObservable();
   }
 
-  register(user: User): Observable<User> {
-    return this.post('users/signin', user, { observe: 'response' }).pipe(
-      switchMap((response: HttpResponse<User & { refreshToken: string }>) => {
-        this.updateTokens(response);
-        this.user.next(response.body);
-        return of(response.body);
-      })
-    );
+  register(
+    user: User
+  ): Observable<{ email: string; verificationToken: string }> {
+    return this.post(this.authEndpoints.register, user);
+  }
+
+  sendEmailVerificationEmail(
+    email: string,
+    verificationToken: string
+  ): Observable<string> {
+    return this.post(this.authEndpoints.emailVerificationRequest, {
+      email,
+      verificationToken
+    });
   }
 
   login(user: { email: string; password: string }): Observable<User> {
-    return this.post('users/login', user, { observe: 'response' }).pipe(
+    return this.post(this.authEndpoints.login, user, {
+      observe: 'response'
+    }).pipe(
       map((response: HttpResponse<User & { refreshToken: string }>) => {
         this.updateTokens(response);
         this.user.next(response.body);
@@ -66,20 +83,43 @@ export class AuthenticationService extends DataService {
     this.authenticated.next(false);
   }
 
-  requestRefreshToken(): Observable<string> {
+  requestRefreshToken(): Observable<void> {
     return this.post(
-      'users/refresh-token',
+      this.authEndpoints.refreshToken,
       { refreshToken: this.refreshToken },
       { observe: 'response' }
     ).pipe(
       map((response: HttpResponse<{ refreshToken: string }>) => {
         this.updateTokens(response);
-        return response.body.refreshToken;
       }),
       catchError(() => {
         return of(null);
       })
     );
+  }
+
+  verifyEmail(email: string, token: string): Observable<void> {
+    return this.post(
+      this.authEndpoints.verifyEmail,
+      { email, token },
+      { observe: 'response' }
+    ).pipe(
+      map((response: HttpResponse<User & { refreshToken: string }>) => {
+        this.updateTokens(response);
+        this.user.next(response.body);
+      })
+    );
+  }
+
+  addCredentialsToRequest<T>(request: HttpRequest<T>) {
+    if (!this.authenticated.getValue()) {
+      return request;
+    }
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${this.token}`
+      }
+    });
   }
 
   private updateTokens(response: HttpResponse<{ refreshToken: string }>) {
@@ -90,6 +130,6 @@ export class AuthenticationService extends DataService {
       JSON.stringify({ token: this.token, refreshToken: this.refreshToken }),
       'money-manager'
     );
-    this.authenticated.next(true);
+    this.authenticated.next(!!this.token);
   }
 }

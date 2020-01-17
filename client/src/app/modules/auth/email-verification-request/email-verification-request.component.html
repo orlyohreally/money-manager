@@ -1,0 +1,59 @@
+<div
+  class="email-verification-request"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <div class="mat-h1">Activate your account</div>
+  <a href="https://www.freepik.com/free-photos-vectors/computer">
+    <img class="icon" src="/assets/images/form.jpg" />
+  </a>
+  <ng-container *ngIf="!sendingEmail; else loading">
+    <shared-notification-message *ngIf="!attempts" type="success">
+      <span>
+        Activate your account by verifying your email using link that has been
+        sent to email
+      </span>
+      <b>{{ email }}</b>
+      <span>.</span>
+      <br />
+      <span>
+        If you do not receive the confirmation message within a few minutes of
+        signing up, please check your Spam or Bulk E-Mail folder just in case
+        the confirmation email got delivered there instead of your inbox.
+      </span>
+    </shared-notification-message>
+    <shared-notification-message *ngIf="attempts" type="success">
+      <span>Email with link to verify your email has been sent to email </span>
+      <b>{{ email }}</b>
+      <span>.</span>
+      <br />
+      <span>
+        If you do not receive the confirmation message within a few minutes of
+        signing up, please check your Spam or Bulk E-Mail folder just in case
+        the confirmation email got delivered there instead of your inbox.
+      </span>
+    </shared-notification-message>
+    <shared-notification-message
+      *ngIf="!showContactUsMessage && errorMessage"
+      type="error"
+    >
+      {{ errorMessage }}
+    </shared-notification-message>
+    <shared-notification-message *ngIf="showContactUsMessage" type="error">
+      If you still have not received email, contact us at
+      <a href="mailto: {{ supportEmail }}">{{ supportEmail }}</a>
+    </shared-notification-message>
+  </ng-container>
+  <ng-template #loading>
+    <shared-loader></shared-loader>
+  </ng-template>
+  <button
+    mat-raised-button
+    class="clicky"
+    color="accent"
+    *ngIf="allowResendEmailVerificationEmail"
+    (click)="sendEmailAgain()"
+  >
+    Send email again
+  </button>
+</div>

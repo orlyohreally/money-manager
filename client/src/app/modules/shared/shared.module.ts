@@ -31,7 +31,8 @@ import { BadgeDirective } from './directives/badge.directive';
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { ErrorMessageComponent } from './components/error-message/error-message.component';
+import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
     BadgeDirective,
     ValueEditorComponent,
     ConfirmationDialogComponent,
-    ErrorMessageComponent
+    NotificationMessageComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -83,7 +85,8 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
     BadgeDirective,
     ValueEditorComponent,
     ConfirmationDialogComponent,
-    ErrorMessageComponent
+    NotificationMessageComponent,
+    LoaderComponent
   ],
   providers: [],
   entryComponents: [

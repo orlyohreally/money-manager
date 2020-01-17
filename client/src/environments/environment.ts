@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendURL: '/api/v1'
+  backendURL: '/api/v1',
+  supportEmail: 'orly.knop@gmail.com'
 };
 
 /*

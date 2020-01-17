@@ -18,10 +18,14 @@
       <a class="account-note__link" [routerLink]="['/auth/login']">Log in</a>
     </div>
     <form [formGroup]="signInForm" (ngSubmit)="register($event)">
-      <shared-error-message
+      <shared-notification-message
+        #errorMessage
+        class="error-message"
         *ngIf="serverError"
-        [errorMessage]="serverError"
-      ></shared-error-message>
+        type="error"
+      >
+        {{ serverError }}
+      </shared-notification-message>
       <mat-form-field appearance="outline">
         <mat-label>First Name</mat-label>
         <input required formControlName="firstName" matInput />

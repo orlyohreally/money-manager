@@ -10,4 +10,8 @@ export class GlobalVariablesService {
   get apiURL(): string {
     return environment.backendURL;
   }
+
+  get supportEmail(): string {
+    return environment.supportEmail;
+  }
 }

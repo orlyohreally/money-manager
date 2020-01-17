@@ -1,7 +1,9 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
+import { Component, isDevMode, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalVariablesService } from '@src/app/core/services/global-variables/global-variables.service';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 
 @Component({
   selector: 'auth-email-verification-request',
@@ -74,6 +76,7 @@ export class EmailVerificationRequestComponent implements OnInit {
           }
           this.showContactUsMessage = true;
           if (isDevMode()) {
+            // tslint:disable-next-line: no-console
             console.log('error', error);
           }
         }

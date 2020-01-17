@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { SafeStyle } from '@angular/platform-browser';
+// tslint:disable-next-line: max-line-length
+import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { User } from '@shared/types';
-import { UserManagerService } from '@src/app/core/services/user-manager/user-manager.service';
 
 @Component({
   selector: 'nav-user-menu',

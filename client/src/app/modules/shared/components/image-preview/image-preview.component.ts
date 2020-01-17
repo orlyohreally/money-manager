@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'shared-image-preview',
@@ -14,8 +14,7 @@ export class ImagePreviewComponent implements OnInit {
 
   ngOnInit() {}
 
-  public onPreviewLoaded(event: Event) {
-    console.log('loaded');
+  public onPreviewLoaded() {
     this.imageLoaded = true;
   }
 }

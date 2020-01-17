@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: "shared-button",
-  templateUrl: "./button.component.html",
-  styleUrls: ["./button.component.scss"]
+  selector: 'shared-button',
+  templateUrl: './button.component.html',
+  styleUrls: ['./button.component.scss']
 })
 export class ButtonComponent implements OnInit {
   @Input() label: string;

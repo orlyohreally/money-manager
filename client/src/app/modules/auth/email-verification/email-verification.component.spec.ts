@@ -1,15 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmailVerificationComponent } from './email-verification.component';
-import { SharedModule } from '@shared-client/shared.module';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
-import { cold, getTestScheduler } from 'jasmine-marbles';
-import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
-import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { SharedModule } from '@shared-client/shared.module';
+import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { EmailVerificationComponent } from './email-verification.component';
 
 describe('EmailVerificationComponent', () => {
   let component: EmailVerificationComponent;
@@ -95,17 +97,21 @@ describe('EmailVerificationComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should display error message if authService.verifyEmail call returns error', () => {
-        getTestScheduler().flush();
-        fixture.detectChanges();
-        const errorEl: DebugElement = fixture.debugElement.query(
-          By.directive(NotificationMessageComponent)
-        );
-        const errorElComponent: NotificationMessageComponent =
-          errorEl.componentInstance;
-        expect(errorElComponent.type).toBe('error');
-        expectTextContentToBe(errorEl.nativeElement, 'Error message');
-      });
+      it(
+        'should display error message' +
+          'if authService.verifyEmail call returns error',
+        () => {
+          getTestScheduler().flush();
+          fixture.detectChanges();
+          const errorEl: DebugElement = fixture.debugElement.query(
+            By.directive(NotificationMessageComponent)
+          );
+          const errorElComponent: NotificationMessageComponent =
+            errorEl.componentInstance;
+          expect(errorElComponent.type).toBe('error');
+          expectTextContentToBe(errorEl.nativeElement, 'Error message');
+        }
+      );
     });
 
     describe('Verification is successful', () => {
@@ -117,15 +123,25 @@ describe('EmailVerificationComponent', () => {
         expect(component).toBeTruthy();
       });
 
-      it('should display "Verifying your email..." while verifying email', () => {
-        expectTextContentToBe(fixture.nativeElement, 'Verifying your email...');
-      });
+      it(
+        'should display "Verifying your email..."' + ' while verifying email',
+        () => {
+          expectTextContentToBe(
+            fixture.nativeElement,
+            'Verifying your email...'
+          );
+        }
+      );
 
-      it('should redirect to / page if authService.verifyEmail call is successful', () => {
-        getTestScheduler().flush();
-        expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
-        expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
-      });
+      it(
+        'should redirect to / page' +
+          ' if authService.verifyEmail call is successful',
+        () => {
+          getTestScheduler().flush();
+          expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
+          expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+        }
+      );
     });
   });
 

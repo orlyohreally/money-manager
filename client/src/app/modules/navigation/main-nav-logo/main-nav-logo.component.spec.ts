@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainNavLogoComponent } from "./main-nav-logo.component";
+import { MainNavLogoComponent } from './main-nav-logo.component';
 
-describe("MainNavLogoComponent", () => {
+describe('MainNavLogoComponent', () => {
   let component: MainNavLogoComponent;
   let fixture: ComponentFixture<MainNavLogoComponent>;
 
@@ -18,7 +18,7 @@ describe("MainNavLogoComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

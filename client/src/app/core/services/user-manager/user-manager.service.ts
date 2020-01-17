@@ -6,6 +6,7 @@ import { User } from '@shared/types';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DataService } from '../data.service';
+// tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
 @Injectable({

@@ -1,14 +1,16 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { MatButtonModule, MatDialogModule } from "@angular/material";
+import { MatButtonModule, MatDialogModule } from '@angular/material';
 
-import { HomePageComponent } from "./home-page/home-page.component";
-import { RegistrationBannerComponent } from "./registration-banner/registration-banner.component";
-import { SectionComponent } from "./section/section.component";
-import { FamilyModule } from "../families/family.module";
-import { FamilyFormComponent } from "../families/family-form/family-form.component";
-import { HomeRoutingModule } from "./home-routing.module";
+// tslint:disable-next-line: max-line-length
+import { FamilyFormComponent } from '../families/family-form/family-form.component';
+import { FamilyModule } from '../families/family.module';
+import { HomePageComponent } from './home-page/home-page.component';
+import { HomeRoutingModule } from './home-routing.module';
+// tslint:disable-next-line: max-line-length
+import { RegistrationBannerComponent } from './registration-banner/registration-banner.component';
+import { SectionComponent } from './section/section.component';
 
 @NgModule({
   declarations: [

@@ -4,13 +4,24 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      [
+        "app",
+        "shared"
+      ],
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      [
+        "app",
+        "auth",
+        "nav",
+        "shared",
+        "family",
+        "home",
+        "payment"
+      ],
       "kebab-case"
     ]
   }

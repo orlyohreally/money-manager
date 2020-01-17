@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { Payment, User as Payer, PaymentSubject } from "@shared/types";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Payment, PaymentSubject, User as Payer } from '@shared/types';
 
 @Component({
-  selector: "payment-payment",
-  templateUrl: "./payment.component.html",
-  styleUrls: ["./payment.component.scss"]
+  selector: 'payment-payment',
+  templateUrl: './payment.component.html',
+  styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit {
   @Input() payment: Payment;

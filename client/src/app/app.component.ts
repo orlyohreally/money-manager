@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
+import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
-  Data,
-  Router,
+  NavigationCancel,
   NavigationEnd,
-  RouterEvent,
-  NavigationStart,
   NavigationError,
-  NavigationCancel
+  NavigationStart,
+  Router,
+  RouterEvent
 } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -59,14 +58,12 @@ export class AppComponent implements OnInit {
         mergeMap(route => route.data)
       )
       .subscribe((data: { title: string; hideMenu: boolean }) => {
-        console.log(data);
-        const title = data['title'];
+        const title = data ? data.title : '';
         this.titleService.setTitle(`${title} | ${this.appName}`);
       });
   }
 
   private displayPageLoader(routerEvent: RouterEvent): void {
-    console.log('display', routerEvent);
     if (routerEvent instanceof NavigationStart) {
       this.pageIsLoading = true;
       return;

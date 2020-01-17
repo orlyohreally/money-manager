@@ -1,17 +1,16 @@
 import {
   Component,
-  OnInit,
-  Input,
-  Output,
+  ElementRef,
   EventEmitter,
-  HostListener,
-  ElementRef
-} from "@angular/core";
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 
 @Component({
-  selector: "app-home-page-section",
-  templateUrl: "./section.component.html",
-  styleUrls: ["./section.component.scss"]
+  selector: 'home-section',
+  templateUrl: './section.component.html',
+  styleUrls: ['./section.component.scss']
 })
 export class SectionComponent implements OnInit {
   @Input() public title: string;
@@ -46,13 +45,7 @@ export class SectionComponent implements OnInit {
     this.clickAction.emit();
   }
 
-  private animateSection(): void {
-    this.animateElementQuerySelector(".action-block");
-    this.animateElementQuerySelector(".section-image");
-    this.animated = true;
-  }
-
-  private animateElementQuerySelector(selector) {
-    this.el.nativeElement.querySelector(selector).classList.add("animated");
-  }
+  // private animateElementQuerySelector(selector) {
+  //   this.el.nativeElement.querySelector(selector).classList.add('animated');
+  // }
 }

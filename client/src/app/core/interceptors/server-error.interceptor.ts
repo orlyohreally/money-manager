@@ -6,9 +6,10 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError, Subject } from 'rxjs';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Injectable()
 export class ServerErrorInterceptor implements HttpInterceptor {

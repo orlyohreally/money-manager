@@ -1,22 +1,28 @@
 import {
   async,
   ComponentFixture,
-  TestBed,
   fakeAsync,
+  TestBed,
   tick
 } from '@angular/core/testing';
 
-import { EmailVerificationRequestComponent } from './email-verification-request.component';
-import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
-import { cold, getTestScheduler } from 'jasmine-marbles';
-import { SharedModule } from '@shared-client/shared.module';
-import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
-import { LoaderComponent } from '@shared-client/components/loader/loader.component';
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+// tslint:disable-next-line: max-line-length
 import { DebugElement } from '@angular/core';
-import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { LoaderComponent } from '@shared-client/components/loader/loader.component';
+// tslint:disable-next-line: max-line-length
+import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { SharedModule } from '@shared-client/shared.module';
+// tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '@src/app/core/services/global-variables/global-variables.service';
+import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+// tslint:disable-next-line: max-line-length
+import { EmailVerificationRequestComponent } from './email-verification-request.component';
 
 describe('EmailVerificationRequestComponent', () => {
   let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
@@ -148,8 +154,8 @@ describe('EmailVerificationRequestComponent', () => {
       const getLoader = () =>
         fixture.debugElement.query(By.directive(LoaderComponent));
       expect(getLoader()).toBeFalsy();
-      const requestVerificationButton: HTMLButtonElement = getRequestVerificationEmailButton();
-      requestVerificationButton.click();
+      const verificationButton: HTMLButtonElement = getVerificationButton();
+      verificationButton.click();
       fixture.detectChanges();
       expect(getLoader()).toBeTruthy();
       getTestScheduler().flush();
@@ -157,90 +163,121 @@ describe('EmailVerificationRequestComponent', () => {
       expect(getLoader()).toBeFalsy();
     });
 
-    it('should display success message before button to request email verification has been pressed', () => {
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      const messageEl: DebugElement = fixture.debugElement.query(
-        By.directive(NotificationMessageComponent)
-      );
-      expectTextContentToBe(
-        messageEl.nativeElement,
-        'Activate your account by verifying your email using link that has been sent to email email@gmail.com. ' +
-          'If you do not receive the confirmation message within a few minutes of signing up, please check ' +
-          'your Spam or Bulk E-Mail folder just in case the confirmation email got delivered there instead of your inbox.'
-      );
-      expect(messageEl.componentInstance.type).toBe('success');
-    });
+    it(
+      'should display success message' +
+        ' before button to request email verification has been pressed',
+      () => {
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        const messageEl: DebugElement = fixture.debugElement.query(
+          By.directive(NotificationMessageComponent)
+        );
+        expectTextContentToBe(
+          messageEl.nativeElement,
+          'Activate your account by verifying your email using link' +
+            ' that has been sent to email email@gmail.com. ' +
+            'If you do not receive the confirmation message' +
+            ' within a few minutes of signing up, please check ' +
+            'your Spam or Bulk E-Mail folder just in case' +
+            ' the confirmation email got delivered there instead of your inbox.'
+        );
+        expect(messageEl.componentInstance.type).toBe('success');
+      }
+    );
 
-    it('should display success message when attempts of sending verification is less then max value', () => {
-      getRequestVerificationEmailButton().click();
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      const messageEl: DebugElement = fixture.debugElement.query(
-        By.directive(NotificationMessageComponent)
-      );
-      expectTextContentToBe(
-        messageEl.nativeElement,
-        'Email with link to verify your email has been sent to email email@gmail.com. ' +
-          'If you do not receive the confirmation message within a few minutes of signing up, ' +
-          'please check your Spam or Bulk E-Mail folder just in case the confirmation ' +
-          'email got delivered there instead of your inbox.'
-      );
-      expect(messageEl.componentInstance.type).toBe('success');
-    });
+    it(
+      'should display success message' +
+        ' when attempts of sending verification is less then max value',
+      () => {
+        getVerificationButton().click();
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        const messageEl: DebugElement = fixture.debugElement.query(
+          By.directive(NotificationMessageComponent)
+        );
+        expectTextContentToBe(
+          messageEl.nativeElement,
+          'Email with link to verify your email has been sent' +
+            ' to email email@gmail.com. ' +
+            'If you do not receive the confirmation message' +
+            ' within a few minutes of signing up, ' +
+            'please check your Spam or Bulk E-Mail folder' +
+            ' just in case the confirmation ' +
+            'email got delivered there instead of your inbox.'
+        );
+        expect(messageEl.componentInstance.type).toBe('success');
+      }
+    );
 
-    it(`should display button to send verification email again after ${debounceTime}ms before manual attempt`, () => {
-      expect(getRequestVerificationEmailButton()).toBeTruthy();
-    });
+    it(
+      `should display button to send verification email again` +
+        ` after ${debounceTime}ms before manual attempt`,
+      () => {
+        expect(getVerificationButton()).toBeTruthy();
+      }
+    );
 
-    it(`should display button to send verification email again after ${debounceTime}ms after first manual attempt`, fakeAsync(() => {
-      getRequestVerificationEmailButton().click();
-      fixture.detectChanges();
-      getTestScheduler().flush();
-      fixture.detectChanges();
-      expect(getRequestVerificationEmailButton()).toBeFalsy();
-      tick(debounceTime);
-      fixture.detectChanges();
-      expect(getRequestVerificationEmailButton()).toBeTruthy();
-    }));
+    it(
+      `should display button to send verification email again` +
+        ` after ${debounceTime}ms after first manual attempt`,
+      fakeAsync(() => {
+        getVerificationButton().click();
+        fixture.detectChanges();
+        getTestScheduler().flush();
+        fixture.detectChanges();
+        expect(getVerificationButton()).toBeFalsy();
+        tick(debounceTime);
+        fixture.detectChanges();
+        expect(getVerificationButton()).toBeTruthy();
+      })
+    );
 
     it(`should display button to send verification email again after ${2 *
       debounceTime}ms after second manual attempt`, fakeAsync(() => {
       clickRequestVerificationEmailButton(debounceTime);
       clickRequestVerificationEmailButton(2 * debounceTime);
-      expect(getRequestVerificationEmailButton()).toBeTruthy();
+      expect(getVerificationButton()).toBeTruthy();
     }));
 
-    it(`should not display button to send verification email again after third (last) manual attempt`, fakeAsync(() => {
-      clickRequestVerificationEmailButton(debounceTime);
-      clickRequestVerificationEmailButton(2 * debounceTime);
-      clickRequestVerificationEmailButton(3 * debounceTime);
-      fixture.detectChanges();
-      expect(getRequestVerificationEmailButton()).toBeFalsy();
-    }));
+    it(
+      'should not display button to send verification email again' +
+        ' after third (last) manual attempt',
+      fakeAsync(() => {
+        clickRequestVerificationEmailButton(debounceTime);
+        clickRequestVerificationEmailButton(2 * debounceTime);
+        clickRequestVerificationEmailButton(3 * debounceTime);
+        fixture.detectChanges();
+        expect(getVerificationButton()).toBeFalsy();
+      })
+    );
 
-    it('should display error message when attempts of sending verification is equal to max value', fakeAsync(() => {
-      clickRequestVerificationEmailButton(debounceTime);
-      clickRequestVerificationEmailButton(2 * debounceTime);
-      clickRequestVerificationEmailButton(3 * debounceTime);
-      const messageEl: DebugElement = fixture.debugElement.queryAll(
-        By.directive(NotificationMessageComponent)
-      )[1];
-      const messageElComponent: NotificationMessageComponent =
-        messageEl.componentInstance;
-      expectTextContentToBe(
-        messageEl.nativeElement,
-        'If you still have not received email, contact us at support-email@gmail.com'
-      );
-      expect(messageElComponent.type).toBe('error');
-    }));
+    it(
+      'should display error message' +
+        ' when attempts of sending verification is equal to max value',
+      fakeAsync(() => {
+        clickRequestVerificationEmailButton(debounceTime);
+        clickRequestVerificationEmailButton(2 * debounceTime);
+        clickRequestVerificationEmailButton(3 * debounceTime);
+        const messageEl: DebugElement = fixture.debugElement.queryAll(
+          By.directive(NotificationMessageComponent)
+        )[1];
+        const messageElComponent: NotificationMessageComponent =
+          messageEl.componentInstance;
+        expectTextContentToBe(
+          messageEl.nativeElement,
+          'If you still have not received email,' +
+            ' contact us at support-email@gmail.com'
+        );
+        expect(messageElComponent.type).toBe('error');
+      })
+    );
 
-    function getRequestVerificationEmailButton(): HTMLButtonElement {
+    function getVerificationButton(): HTMLButtonElement {
       return fixture.nativeElement.querySelector('button');
     }
 
     function clickRequestVerificationEmailButton(expectedDebounceTime: number) {
-      getRequestVerificationEmailButton().click();
+      getVerificationButton().click();
       getTestScheduler().flush();
       tick(expectedDebounceTime);
       fixture.detectChanges();

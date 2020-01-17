@@ -1,34 +1,35 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { FamilyComponent } from "./family/family.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { ErrorModule } from "../errors/error.module";
-import { PaymentListComponent } from "../payments/payment-list/payment-list.component";
-import { FamiliesComponent } from "./families.component";
-import { FamilyMembersComponent } from "./family-members/family-members.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { PaymentListComponent } from '../payments/payment-list/payment-list.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FamiliesComponent } from './families.component';
+// tslint:disable-next-line: max-line-length
+import { FamilyMembersComponent } from './family-members/family-members.component';
+import { FamilyComponent } from './family/family.component';
 
 const routes: Routes = [
-  { path: "families", component: FamiliesComponent },
+  { path: 'families', component: FamiliesComponent },
   {
-    path: "families/:familyId",
+    path: 'families/:familyId',
     component: FamilyComponent,
     children: [
-      { path: "", redirectTo: "dashboard", pathMatch: "full" },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
-        path: "dashboard",
+        path: 'dashboard',
         component: DashboardComponent
       },
       {
-        path: "members",
+        path: 'members',
         component: FamilyMembersComponent
       },
       {
-        path: "payments",
+        path: 'payments',
         component: PaymentListComponent
       },
       {
-        path: "**",
-        redirectTo: "dashboard"
+        path: '**',
+        redirectTo: 'dashboard'
       }
     ]
   }

@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+// tslint:disable-next-line: max-line-length
 import { SideNavAuthenticatedUserComponent } from './side-nav-authenticated-user.component';
 
 describe('SideNavAuthenticatedUserComponent', () => {
@@ -8,9 +9,8 @@ describe('SideNavAuthenticatedUserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideNavAuthenticatedUserComponent ]
-    })
-    .compileComponents();
+      declarations: [SideNavAuthenticatedUserComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

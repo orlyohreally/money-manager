@@ -1,30 +1,33 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MAT_DATE_LOCALE,
   MatButtonModule,
+  MatDatepickerModule,
   MatDialogModule,
-  MatInputModule,
   MatFormFieldModule,
   MatIconModule,
-  MatDatepickerModule,
-  MAT_DATE_LOCALE,
+  MatInputModule,
+  MatNativeDateModule,
   MatSelectModule,
-  MatSnackBarModule,
-  MatNativeDateModule
-} from "@angular/material";
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
-import { PayerComponent } from "./payer/payer.component";
-import { NewPaymentComponent } from "./new-payment/new-payment.component";
-import { PaymentFormComponent } from "./payment-form/payment-form.component";
-import { PaymentListComponent } from "./payment-list/payment-list.component";
-import { PaymentSubjectComponent } from "./payment-subject/payment-subject.component";
-import { PaymentSubjectFormComponent } from "./payment-subject-form/payment-subject-form.component";
-import { PaymentComponent } from "./payment-list/payment/payment.component";
-import { MoneyAmountComponent } from "./money-amount/money-amount.component";
-import { TotalPaymentComponent } from "./payment-list/total-payment/total-payment.component";
-import { PaymentRoutingModule } from "./payment-routing.module";
-import { SharedModule } from "../shared/shared.module";
+  MatSnackBarModule
+} from '@angular/material';
+import { SharedModule } from '../shared/shared.module';
+import { MoneyAmountComponent } from './money-amount/money-amount.component';
+import { NewPaymentComponent } from './new-payment/new-payment.component';
+import { PayerComponent } from './payer/payer.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
+import { PaymentListComponent } from './payment-list/payment-list.component';
+import { PaymentComponent } from './payment-list/payment/payment.component';
+// tslint:disable-next-line: max-line-length
+import { TotalPaymentComponent } from './payment-list/total-payment/total-payment.component';
+import { PaymentRoutingModule } from './payment-routing.module';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectFormComponent } from './payment-subject-form/payment-subject-form.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectComponent } from './payment-subject/payment-subject.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +72,7 @@ import { SharedModule } from "../shared/shared.module";
   ],
   providers: [
     MatDatepickerModule,
-    { provide: MAT_DATE_LOCALE, useValue: "ru-RU" }
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }
   ],
   entryComponents: [PaymentFormComponent, PaymentSubjectFormComponent]
 })

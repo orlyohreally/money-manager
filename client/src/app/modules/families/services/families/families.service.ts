@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
-import { Family } from '@shared/types';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Family } from '@shared/types';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { MemberFamily } from 'src/app/modules/shared/types/member-family';
 
 @Injectable({
@@ -21,17 +21,22 @@ export class FamiliesService {
 
   public loadFamilies(): Observable<void> {
     return this.http.get(this.familyAPIRouter).pipe(
-      switchMap(
-        (families: MemberFamily[]) => {
-          this.familyStore.next({ families, currentFamily: families[0] });
-          return of(undefined);
-        },
-        error => {
-          console.log(error);
-          throwError(error);
-        }
-      )
+      map((families: MemberFamily[]) => {
+        this.familyStore.next({ families, currentFamily: families[0] });
+      })
     );
+    // return this.http.get(this.familyAPIRouter).pipe(
+    //   switchMap(
+    //     (families: MemberFamily[]) => {
+    //       this.familyStore.next({ families, currentFamily: families[0] });
+    //       return of(undefined);
+    //     },
+    //     error => {
+    //       console.log(error);
+    //       throwError(error);
+    //     }
+    //   )
+    // );
   }
 
   get familiesInfo(): Observable<{
@@ -68,7 +73,6 @@ export class FamiliesService {
           return of(newFamily);
         }),
         catchError(error => {
-          console.log('Could not create family.', error);
           return throwError(error);
         })
       );
@@ -92,7 +96,6 @@ export class FamiliesService {
           return of(updatedFamily);
         }),
         catchError(error => {
-          console.log('error', error);
           return throwError(error);
         })
       );
@@ -114,7 +117,6 @@ export class FamiliesService {
         return of(undefined);
       }),
       catchError(error => {
-        console.log('Could not remove family.', error);
         return throwError(error);
       })
     );

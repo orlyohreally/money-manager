@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap, catchError } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'auth-email-verification',

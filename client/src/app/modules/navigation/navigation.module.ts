@@ -1,28 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
-  MatMenuModule,
-  MatToolbarModule,
   MatButtonModule,
+  MatDialogModule,
   MatIconModule,
   MatListModule,
-  MatDialogModule
+  MatMenuModule,
+  MatToolbarModule
 } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { SharedModule } from '../shared/shared.module';
-import { PaymentModule } from '../payments/payment.module';
 import { FamilyModule } from '../families/family.module';
+import { PaymentModule } from '../payments/payment.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
 import { MainNavLogoComponent } from './main-nav-logo/main-nav-logo.component';
-import { SideNavComponent } from './side-nav/side-nav.component';
 import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
-import { SideNavToolbarComponent } from './side-nav-toolbar/side-nav-toolbar.component';
+// tslint:disable-next-line: max-line-length
 import { SideNavAuthenticatedUserComponent } from './side-nav-authenticated-user/side-nav-authenticated-user.component';
+// tslint:disable-next-line: max-line-length
+import { SideNavToolbarComponent } from './side-nav-toolbar/side-nav-toolbar.component';
+// tslint:disable-next-line: max-line-length
 import { SideNavUnauthenticatedUserComponent } from './side-nav-unauthenticated-user/side-nav-unauthenticated-user.component';
+import { SideNavComponent } from './side-nav/side-nav.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({

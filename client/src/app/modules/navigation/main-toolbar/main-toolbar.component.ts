@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { User } from '@shared/types';
-import { AuthenticationService } from '@src/app/core/services/authentication/authentication.service';
-import { UserManagerService } from '@src/app/core/services/user-manager/user-manager.service';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { MenuEntry } from "@shared-client/types/menu-entry";
+import { Component, Input, OnInit } from '@angular/core';
+import { MenuEntry } from '@shared-client/types/menu-entry';
 
 @Component({
-  selector: "shared-menu",
-  templateUrl: "./menu.component.html",
-  styleUrls: ["./menu.component.scss"]
+  selector: 'shared-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
   @Input() menuEntries: MenuEntry[];

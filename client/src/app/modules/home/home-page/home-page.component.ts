@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentFormComponent } from '../../payments/payment-form/payment-form.component';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
 import { FamilyFormComponent } from '../../families/family-form/family-form.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentFormComponent } from '../../payments/payment-form/payment-form.component';
 
 @Component({
-  selector: 'app-home-page',
+  selector: 'home-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
@@ -21,7 +23,6 @@ export class HomePageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.router.navigate(['families']);
       }
@@ -35,7 +36,6 @@ export class HomePageComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.router.navigate(['payments']);
       }
@@ -43,6 +43,6 @@ export class HomePageComponent implements OnInit {
   }
 
   public createReport(): void {
-    console.log('not implemented yet');
+    // console.log('not implemented yet');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
@@ -14,9 +14,11 @@ export interface ImageManagerData {
 })
 export class ImageManagerComponent implements OnInit {
   public loadedImage: string | ArrayBuffer;
-  public croppedImage: string = '';
+  public croppedImage = '';
   public previewStyles: { [property: string]: string };
-  public imageLoaded: boolean = false;
+  public imageLoaded = false;
+
+  // private imageChangedEvent: Event;
 
   constructor(
     public dialogRef: MatDialogRef<ImageManagerComponent>,
@@ -31,21 +33,16 @@ export class ImageManagerComponent implements OnInit {
   }
 
   public saveChanges() {
-    console.log('loadedImage', this.loadedImage, this.croppedImage);
     this.dialogRef.close(this.croppedImage);
   }
 
-  public onFileChange(event) {
-    console.log(event);
-    this.imageChangedEvent = event;
+  public onFileChange() {
+    // this.imageChangedEvent = event;
   }
 
-  imageChangedEvent: Event;
-
-  fileChangeEvent(event: any): void {}
+  fileChangeEvent(): void {}
 
   imageCropped(event: ImageCroppedEvent) {
-    console.log('event.file', event.file);
     this.croppedImage = event.base64;
   }
 

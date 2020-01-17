@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatDialog } from '@angular/material';
-import { PaymentFormComponent } from '../payment-form/payment-form.component';
-import { PaymentsService } from 'src/app/core/services/payments/payments.service';
-import { PaymentSubjectsService } from 'src/app/core/services/payment-subject/payment-subjects.service';
-import { PaymentSubject, Payment, User as Payer } from '@shared/types';
+import { MatDialog, MatSnackBar } from '@angular/material';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentsService } from '@core-client/services/payments/payments.service';
+import { Payment, PaymentSubject, User as Payer } from '@shared/types';
 import {
+  aggregateAmountsByMember,
   getDischargedTotal,
   getTotalPaymentAmount,
-  aggregateAmountsByMember,
   normalizedArray,
-  unnormalizeArray,
-  orderNormalizedArrayByKey
+  orderNormalizedArrayByKey,
+  unnormalizeArray
 } from '@shared/utils';
+import { PaymentFormComponent } from '../payment-form/payment-form.component';
 
 @Component({
   selector: 'payment-payment-list',
@@ -38,19 +40,21 @@ export class PaymentListComponent implements OnInit {
     this.calculateTotal();
   }
 
-  private getMembers(familyId: string) {
-    // this.payers = this.membersService.getMembers(familyId).subscribe(members => {
-    //    = members;
-    //   this.transformedMembers = normalize(members);
-    // });
-  }
+  // private getMembers(familyId: string) {
+  // tslint:disable-next-line: max-line-length
+  //   // this.payers = this.membersService.getMembers(familyId).subscribe(members => {
+  //   //    = members;
+  //   //   this.transformedMembers = normalize(members);
+  //   // });
+  // }
   private getPayments() {
     this.paymentsService.getPayments().subscribe(
       payments => {
         this.payments = payments;
       },
       error => {
-        console.log(error);
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }
@@ -101,9 +105,7 @@ export class PaymentListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result, payment);
       this.calculateTotal();
-      console.log(this.payments);
     });
   }
   public removePayment(payment: Payment) {
@@ -111,6 +113,7 @@ export class PaymentListComponent implements OnInit {
       result => {
         if (result.status === 'success') {
           this.snackBar.open(
+            // tslint:disable-next-line: max-line-length
             `Payment for ₪ ${payment.amount} by ${payment.memberId} was deleted`,
             null,
             {
@@ -126,7 +129,8 @@ export class PaymentListComponent implements OnInit {
         }
       },
       error => {
-        console.log(error);
+        // TODO: add handling
+        // console.log(error);
       }
     );
   }

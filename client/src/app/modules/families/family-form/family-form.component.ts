@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, Optional } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Family } from '@shared/types';
 
 @Component({

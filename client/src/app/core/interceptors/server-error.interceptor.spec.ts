@@ -1,16 +1,17 @@
 import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import { AuthenticationService } from '../services/authentication/authentication.service';
-import {
   HTTP_INTERCEPTORS,
   HttpClient,
   HttpErrorResponse,
   HttpRequest
 } from '@angular/common/http';
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { ServerErrorInterceptor } from './server-error.interceptor';
 
 describe('ServerErrorInterceptor', () => {
@@ -83,24 +84,28 @@ describe('ServerErrorInterceptor', () => {
     httpTestingController.verify();
   });
 
-  it('should throw error if request was for login endpoint when error status is 403', () => {
-    http.get(mockedEndpoints.login).subscribe(
-      () => {
-        fail('Should throw error');
-      },
-      (error: HttpErrorResponse) => {
-        expect(error.status).toBe(mockedError.status);
-        expect(error.statusText).toBe(mockedError.statusText);
-      }
-    );
+  it(
+    'should throw error if request was for login endpoint' +
+      ' when error status is 403',
+    () => {
+      http.get(mockedEndpoints.login).subscribe(
+        () => {
+          fail('Should throw error');
+        },
+        (error: HttpErrorResponse) => {
+          expect(error.status).toBe(mockedError.status);
+          expect(error.statusText).toBe(mockedError.statusText);
+        }
+      );
 
-    const req = httpTestingController.expectOne({
-      url: mockedEndpoints.login,
-      method: 'GET'
-    });
-    req.flush(null, mockedError);
-    httpTestingController.verify();
-  });
+      const req = httpTestingController.expectOne({
+        url: mockedEndpoints.login,
+        method: 'GET'
+      });
+      req.flush(null, mockedError);
+      httpTestingController.verify();
+    }
+  );
 
   it('should throw error if request was for registration endpoint', () => {
     http.post(mockedEndpoints.register, {}).subscribe(
@@ -121,59 +126,68 @@ describe('ServerErrorInterceptor', () => {
     httpTestingController.verify();
   });
 
-  it('should throw error if request was for refresh token in endpoint and call authenticationService.logout', () => {
-    http.post(mockedEndpoints.refreshToken, {}).subscribe(
-      () => {
-        fail('Should throw error');
-      },
-      (error: HttpErrorResponse) => {
-        expect(error.status).toBe(mockedError.status);
-        expect(error.statusText).toBe(mockedError.statusText);
-        expect(authenticationServiceSpy.logout).toHaveBeenCalledTimes(1);
-      }
-    );
+  it(
+    'should throw error if request was for refresh token in endpoint' +
+      ' and call authenticationService.logout',
+    () => {
+      http.post(mockedEndpoints.refreshToken, {}).subscribe(
+        () => {
+          fail('Should throw error');
+        },
+        (error: HttpErrorResponse) => {
+          expect(error.status).toBe(mockedError.status);
+          expect(error.statusText).toBe(mockedError.statusText);
+          expect(authenticationServiceSpy.logout).toHaveBeenCalledTimes(1);
+        }
+      );
 
-    const req = httpTestingController.expectOne({
-      url: mockedEndpoints.refreshToken,
-      method: 'POST'
-    });
-    req.flush(null, mockedError);
-    httpTestingController.verify();
-  });
+      const req = httpTestingController.expectOne({
+        url: mockedEndpoints.refreshToken,
+        method: 'POST'
+      });
+      req.flush(null, mockedError);
+      httpTestingController.verify();
+    }
+  );
 
-  it('should request refresh token if error status is 403 and repeat request with credentials if refresh request was successful', () => {
-    http.post(mockedUrl, { data: 1 }).subscribe(
-      () => {
-        expect(
-          authenticationServiceSpy.requestRefreshToken
-        ).toHaveBeenCalledTimes(1);
-        expect(
-          authenticationServiceSpy.addCredentialsToRequest
-        ).toHaveBeenCalledTimes(1);
-      },
-      () => {
-        fail('Should not throw error');
-      }
-    );
+  it(
+    'should request refresh token if error status is 403' +
+      ' and repeat request with credentials if refresh request was successful',
+    () => {
+      http.post(mockedUrl, { data: 1 }).subscribe(
+        () => {
+          expect(
+            authenticationServiceSpy.requestRefreshToken
+          ).toHaveBeenCalledTimes(1);
+          expect(
+            authenticationServiceSpy.addCredentialsToRequest
+          ).toHaveBeenCalledTimes(1);
+        },
+        () => {
+          fail('Should not throw error');
+        }
+      );
 
-    const req = httpTestingController.expectOne({
-      url: mockedUrl,
-      method: 'POST'
-    });
-    req.flush(null, { ...mockedError, status: 401 });
+      const req = httpTestingController.expectOne({
+        url: mockedUrl,
+        method: 'POST'
+      });
+      req.flush(null, { ...mockedError, status: 401 });
 
-    const reqCloned = httpTestingController.expectOne({
-      url: mockedRequest.url,
-      method: mockedRequest.method
-    });
-    reqCloned.flush({});
+      const reqCloned = httpTestingController.expectOne({
+        url: mockedRequest.url,
+        method: mockedRequest.method
+      });
+      reqCloned.flush({});
 
-    httpTestingController.verify();
-  });
+      httpTestingController.verify();
+    }
+  );
 
   it(
     'should request refresh token and call authenticationService.logout' +
-      ' if error status is 403 and throw error if request refresh request was not successful',
+      ' if error status is 403 and throw error' +
+      ' if request refresh request was not successful',
     () => {
       authenticationServiceSpy.requestRefreshToken.and.returnValue(
         of(new HttpErrorResponse({ status: 401, statusText: 'Invalid token' }))

@@ -6,9 +6,10 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { User } from '@shared/types';
-import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { User } from '@shared/types';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -62,7 +63,6 @@ export class SignInFormComponent implements OnInit {
         } as User)
         .subscribe(
           response => {
-            console.log(response);
             this.router.navigate(['/auth/email-verification-request'], {
               queryParams: {
                 email: response.email,
@@ -103,11 +103,11 @@ export class SignInFormComponent implements OnInit {
           'no-special-character',
           '(?=.*?[#?!@$%^_&*-])'
         ),
-        control => this.validatePasswords(control, 'password')
+        () => this.validatePasswords('password')
       ]),
       passwordVerification: new FormControl('', [
         Validators.required,
-        control => this.validatePasswords(control, 'passwordVerification')
+        () => this.validatePasswords('passwordVerification')
       ])
     });
   }
@@ -124,7 +124,7 @@ export class SignInFormComponent implements OnInit {
     };
   }
 
-  private validatePasswords(control: AbstractControl, name: string) {
+  private validatePasswords(name: string) {
     if (
       this.signInForm === undefined ||
       this.password.value === '' ||

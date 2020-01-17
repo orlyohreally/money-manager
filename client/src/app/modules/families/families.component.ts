@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-families',
+  selector: 'family-families',
   templateUrl: './families.component.html',
   styleUrls: ['./families.component.scss']
 })
 export class FamiliesComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

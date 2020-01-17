@@ -1,16 +1,13 @@
+import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HttpRequest } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
-import { TestBed, inject } from '@angular/core/testing';
-import { AuthenticationService } from '../services/authentication/authentication.service';
-import {
-  HTTP_INTERCEPTORS,
-  HttpClient,
-  HttpRequest
-} from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { AuthInterceptor } from './auth.interceptor';
-import { of } from 'rxjs';
 
 describe('AuthInterceptor', () => {
   let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
@@ -40,15 +37,19 @@ describe('AuthInterceptor', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
-  it('should return request returned from authenticationService.addCredentialsToRequest', () => {
-    http.get('/mocked-url').subscribe(response => {
-      expect(response).toBeTruthy();
-    });
+  it(
+    'should return request returned' +
+      ' from authenticationService.addCredentialsToRequest',
+    () => {
+      http.get('/mocked-url').subscribe(response => {
+        expect(response).toBeTruthy();
+      });
 
-    const req = httpTestingController.expectOne(mockedRequest.url);
-    expect(req.request).toBe(mockedRequest);
-    req.flush({});
+      const req = httpTestingController.expectOne(mockedRequest.url);
+      expect(req.request).toBe(mockedRequest);
+      req.flush({});
 
-    httpTestingController.verify();
-  });
+      httpTestingController.verify();
+    }
+  );
 });

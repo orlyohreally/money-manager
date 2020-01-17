@@ -7,7 +7,7 @@
   - footer
 -->
 <div class="home-page">
-  <app-home-page-registration-banner></app-home-page-registration-banner>
+  <home-registration-banner></home-registration-banner>
   <div class="section">
     <div class="icon">
       <a
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <app-home-page-section
+  <home-section
     iconLink="https://www.freepik.com/free-photos-vectors/banner"
     iconImagePath="assets/images/payment.jpg"
     title="Submit your payments in seconds"
@@ -39,13 +39,13 @@
     buttonLabel="Create payment"
     buttonClasses="button button_lg text-uppercase"
     (clickAction)="createPayment()"
-  ></app-home-page-section>
-  <app-home-page-section
+  ></home-section>
+  <home-section
     iconLink="https://www.freepik.com/free-photos-vectors/background"
     iconImagePath="assets/images/planning.jpg"
     title="Analyze your expenses and plan financial future"
     buttonLabel="Create expenses report"
     buttonClasses="button button_lg text-uppercase"
     (clickAction)="createReport()"
-  ></app-home-page-section>
+  ></home-section>
 </div>

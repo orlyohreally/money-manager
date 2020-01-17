@@ -1,10 +1,11 @@
 import * as Joi from "@hapi/joi";
-import { User } from "@shared/types";
+import { User, VerificationToken } from "@shared/types";
 // tslint:disable-next-line: no-require-imports
 import atob = require("atob");
 import * as bcrypt from "bcrypt";
+import * as cryptoRandomString from "crypto-random-string";
 import * as jwt from "jsonwebtoken";
-import { UserModel } from "./models";
+import { UserModel, VerificationModel } from "./models";
 import { IUsersDao } from "./UsersService";
 
 export class UsersDao implements IUsersDao {
@@ -112,10 +113,6 @@ export class UsersDao implements IUsersDao {
   }
 
   public tokenExpired(token: string): boolean {
-    console.log(
-      "token expired date",
-      new Date(this.parseJwt(token).exp * 1000)
-    );
     return this.parseJwt(token).exp < Date.now() / 1000;
   }
 
@@ -129,6 +126,45 @@ export class UsersDao implements IUsersDao {
         .join("")
     );
     return JSON.parse(jsonPayload) as { _id: string; iat: number; exp: number };
+  }
+
+  public getVerificationToken(token: string): Promise<VerificationToken> {
+    return VerificationModel.findOne({
+      token
+    })
+      .lean()
+      .exec();
+  }
+
+  public getUserVerificationToken(user: User): Promise<VerificationToken> {
+    return VerificationModel.findOne({
+      userId: user._id
+    })
+      .lean()
+      .exec();
+  }
+
+  public verifyUser(user: User): Promise<User> {
+    return UserModel.findOneAndUpdate(
+      { email: user.email },
+      { user, isVerified: true },
+      {
+        new: true
+      }
+    )
+      .lean()
+      .exec();
+  }
+
+  public async generateVerificationToken(
+    user: User
+  ): Promise<VerificationToken> {
+    const verificationToken = new VerificationModel({
+      token: cryptoRandomString({ length: 16, type: "url-safe" }),
+      userId: user._id
+    });
+    await verificationToken.save();
+    return verificationToken.toJSON() as VerificationToken;
   }
 
   private hashPassword(password: string): string {

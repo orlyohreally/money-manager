@@ -1,5 +1,5 @@
 import { ValidationResult } from "@hapi/joi";
-import { User } from "@shared/types";
+import { User, VerificationToken } from "@shared/types";
 import { NextFunction, Request, Response } from "express";
 
 export interface IUsersDao {
@@ -13,6 +13,10 @@ export interface IUsersDao {
   getUserFromToken(token: string, tokenType: string): Promise<User | undefined>;
   parseJwt(token: string): { _id: string; iat: number; exp: number };
   tokenExpired(token: string): boolean;
+  getVerificationToken(token: string): Promise<VerificationToken>;
+  generateVerificationToken(user: User): Promise<VerificationToken>;
+  getUserVerificationToken(user: User): Promise<VerificationToken>;
+  verifyUser(user: User): Promise<User>;
 }
 
 export class UsersService {
@@ -80,11 +84,27 @@ export class UsersService {
       next();
       return;
     } catch (error) {
-      return res.status(400).send("Invalid token.");
+      return res.status(401).send("Invalid token.");
     }
   }
 
   public tokenExpired(token: string): boolean {
     return this.dao.tokenExpired(token);
+  }
+
+  public getVerificationToken(token: string): Promise<VerificationToken> {
+    return this.dao.getVerificationToken(token);
+  }
+
+  public verifyUser(user: User): Promise<User> {
+    return this.dao.verifyUser(user);
+  }
+
+  public generateVerificationToken(user: User): Promise<VerificationToken> {
+    return this.dao.generateVerificationToken(user);
+  }
+
+  public getUserVerificationToken(user: User): Promise<VerificationToken> {
+    return this.dao.getUserVerificationToken(user);
   }
 }

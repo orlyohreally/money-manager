@@ -1,4 +1,6 @@
-import { User } from "@shared/types";
+import { User, VerificationToken } from "@shared/types";
+// tslint:disable-next-line: max-line-length
+import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
 import { RedisService } from "@src/services/redis/RedisService";
 import { asyncWrap } from "@src/utils";
 import { Request, Router } from "express";
@@ -9,17 +11,21 @@ export class UsersRouter {
   public router: IRouter;
   private service: UsersService;
   private redisService: RedisService;
+  private emailSenderService: EmailSenderService;
 
   constructor({
     service,
-    redisService
+    redisService,
+    emailSenderService
   }: {
     service: UsersService;
     redisService: RedisService;
+    emailSenderService: EmailSenderService;
   }) {
     this.router = Router();
     this.service = service;
     this.redisService = redisService;
+    this.emailSenderService = emailSenderService;
 
     this.router.get(
       "/users/user",
@@ -29,6 +35,11 @@ export class UsersRouter {
     this.router.post("/users/login", asyncWrap(this.loginUser));
     this.router.post("/users/signin", asyncWrap(this.registerUser));
     this.router.post("/users/refresh-token", asyncWrap(this.refreshToken));
+    this.router.post("/users/verify", asyncWrap(this.verifyUser));
+    this.router.post(
+      "/users/request-email-verification",
+      asyncWrap(this.sendEmailVerification)
+    );
   }
 
   private loginUser = async (req: Request, res: Response) => {
@@ -65,27 +76,25 @@ export class UsersRouter {
       const user = req.body as User;
       const { error } = this.service.validateUser(user);
       if (error) {
-        return res.status(400).send(error.details[0]);
+        return res.status(400).send(error.details[0].message);
       }
       const registeredUser = await this.service.getUser("email", user.email);
       if (registeredUser) {
         return res.status(400).send("User already registered.");
       }
       const newUser = await this.service.registerUser(user);
-      const token = this.service.generateAuthToken(newUser);
-      const refreshToken = this.service.generateRefreshToken(newUser);
-      await this.redisService.set(`refreshTokens.${token}`, refreshToken);
-
-      return res
-        .header("Authorization", token)
-        .status(200)
-        .json({
-          _id: newUser._id,
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          email: newUser.email,
-          refreshToken
-        });
+      // tslint:disable-next-line: max-line-length
+      const verificationToken: VerificationToken = await this.service.generateVerificationToken(
+        newUser
+      );
+      await this.sendEmailVerificationEmail(
+        user.email,
+        verificationToken.token
+      );
+      return res.status(200).json({
+        email: user.email,
+        verificationToken: verificationToken.token
+      });
     } catch (err) {
       return res.status(400).json(err);
     }
@@ -151,4 +160,73 @@ export class UsersRouter {
       return res.status(400).json(err);
     }
   };
+
+  private verifyUser = async (req: Request, res: Response) => {
+    try {
+      const body = req.body as { email: string; token: string };
+      if (!body.email || !body.token) {
+        return res.status(400).json("Email and token are required");
+      }
+      const user: User = await this.service.getUser("email", body.email);
+      const verificationToken = await this.service.getVerificationToken(
+        body.token
+      );
+      if (user._id.toString() !== verificationToken.userId.toString()) {
+        return res.status(403).json("Incorrect token");
+      }
+      if (user.isVerified) {
+        return res.status(403).json("User already has been verified");
+      }
+      await this.service.verifyUser(user);
+      return res.status(200).json("User has been verified");
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
+
+  private sendEmailVerification = async (req: Request, res: Response) => {
+    try {
+      const body = req.body as { email: string; verificationToken: string };
+      if (!body.email || !body.verificationToken) {
+        return res.status(400).json("Email and token are required");
+      }
+      const user = await this.service.getUser("email", body.email);
+      if (!user) {
+        return res.status(400).json("No user with this email");
+      }
+      if (user.isVerified) {
+        return res.status(400).json("User is already verified");
+      }
+      // tslint:disable-next-line: max-line-length
+      const expectedVerificationToken: VerificationToken = await this.service.getUserVerificationToken(
+        user
+      );
+
+      if (expectedVerificationToken.token !== body.verificationToken) {
+        return res.status(401).json("Invalid verification token");
+      }
+      await this.sendEmailVerificationEmail(
+        body.email,
+        expectedVerificationToken.token
+      );
+      return res.status(200).json(`Link has been sent to email ${user.email}`);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
+
+  private async sendEmailVerificationEmail(
+    email: string,
+    token: string
+  ): Promise<void> {
+    const frontEndURL = process.env.front_end_url as string;
+    if (!frontEndURL) {
+      process.exit(1);
+    }
+    const emailVerificationURL = `${frontEndURL}auth/email-verification`;
+    await this.emailSenderService.sendEmail(email, {
+      // tslint:disable-next-line: max-line-length
+      verifyAccountLink: `${emailVerificationURL}?email=${email}&token=${token}`
+    });
+  }
 }

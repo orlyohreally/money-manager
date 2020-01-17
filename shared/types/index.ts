@@ -4,3 +4,4 @@ export * from "./member";
 export * from "./payment";
 export * from "./payment-subject";
 export * from "./image-asset";
+export * from "./verification-token";

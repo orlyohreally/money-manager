@@ -23,6 +23,7 @@ const UserSchema = new Schema<User>(
     },
     colorScheme: { type: String, required: true, default: "primary" },
     icon: String,
+    isVerified: { type: Boolean, default: false },
     createdAt: Date,
     updatedAt: Date
   },

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpErrorResponse } from '@angular/common/http';
+import { DebugElement } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -17,8 +18,6 @@ import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
-// tslint:disable-next-line: max-line-length
-import { ErrorMessageComponent } from '@shared-client/components/error-message/error-message.component';
 // tslint:disable-next-line: max-line-length
 import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
 import { User } from '@shared/types';
@@ -186,10 +185,11 @@ describe('LoginFormComponent', () => {
         submitForm();
         getTestScheduler().flush();
         fixture.detectChanges();
-        const errorEl: ErrorMessageComponent = fixture.debugElement.query(
-          By.directive(ErrorMessageComponent)
+        const errorEl: DebugElement = fixture.debugElement.query(
+          By.directive(NotificationMessageComponent)
         ).componentInstance;
-        expect(errorEl.errorMessage).toBe('error message');
+        expect(errorEl.nativeElement.textContent.trim()).toBe('error message');
+        expect(errorEl.componentInstance.type).toBe('error');
       }
     );
 

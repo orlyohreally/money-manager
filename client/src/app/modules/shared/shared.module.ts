@@ -20,6 +20,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // tslint:disable-next-line: max-line-length
 import { AccordionComponent } from '../shared/components/accordion/accordion.component';
+import { CheckListModule } from './check-list/check-list.module';
 import { ButtonComponent } from './components/button/button.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
@@ -79,7 +80,8 @@ import { BadgeDirective } from './directives/badge.directive';
     MatMenuModule,
     MatDialogModule,
     MatIconModule,
-    ImageCropperModule
+    ImageCropperModule,
+    CheckListModule
   ],
   exports: [
     FilterPipe,
@@ -96,7 +98,8 @@ import { BadgeDirective } from './directives/badge.directive';
     ValueEditorComponent,
     ConfirmationDialogComponent,
     NotificationMessageComponent,
-    LoaderComponent
+    LoaderComponent,
+    CheckListModule
   ],
   providers: [],
   entryComponents: [

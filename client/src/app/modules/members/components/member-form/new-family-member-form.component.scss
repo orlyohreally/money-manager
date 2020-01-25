@@ -1,0 +1,12 @@
+.member-roles-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.member-roles-list__role {
+  display: block;
+  width: calc(50% - 20px);
+  min-height: 100px;
+  margin: 10px;
+  flex-basis: auto;
+}

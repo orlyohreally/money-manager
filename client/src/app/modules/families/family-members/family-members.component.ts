@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {
+  Member,
+  MembersService
+} from '@core-client/services/members/members.service';
 import { Observable } from 'rxjs';
-import { Member, MembersService } from '../services/members/members.service';
 
 @Component({
   selector: 'family-members',
@@ -10,6 +13,7 @@ import { Member, MembersService } from '../services/members/members.service';
 })
 export class FamilyMembersComponent implements OnInit {
   public members: Observable<Member[]>;
+
   constructor(
     private route: ActivatedRoute,
     private membersService: MembersService
@@ -17,13 +21,7 @@ export class FamilyMembersComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
-      this.getMembers(params.familyId);
-    });
-  }
-
-  private getMembers(familyId: string) {
-    this.membersService.getMembers(familyId).then(members => {
-      this.members = members;
+      this.members = this.membersService.getMembers(params.familyId);
     });
   }
 }

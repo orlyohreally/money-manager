@@ -8,9 +8,13 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 import { ConfirmationDialogComponent } from '@shared-client/components/confirmation-dialog/confirmation-dialog.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogData } from '@shared-client/types/confirmation-dialog-data';
+import { Member } from '@src/app/core/services/members/members.service';
 import { throwError } from 'rxjs';
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '../../../core/services/families/families.service';
+// tslint:disable-next-line: max-line-length
+import { NewFamilyMemberFormComponent } from '../../members/components/member-form/new-family-member-form.component';
 import { MemberFamily } from '../../shared/types/member-family';
-import { FamiliesService } from '../services/families/families.service';
 
 @Component({
   selector: 'family-family',
@@ -18,6 +22,9 @@ import { FamiliesService } from '../services/families/families.service';
   styleUrls: ['./family.component.scss']
 })
 export class FamilyComponent implements OnInit {
+  family: { _id: string; name: string; icon: string; membersCount: number };
+  displayNameEditor = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -25,8 +32,6 @@ export class FamilyComponent implements OnInit {
     private notificationsService: NotificationsService,
     private dialog: MatDialog
   ) {}
-  family: { name: string; icon: string; membersCount: number };
-  displayNameEditor = false;
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -100,11 +105,27 @@ export class FamilyComponent implements OnInit {
     });
   }
 
+  addMember() {
+    const dialogRef = this.dialog.open(NewFamilyMemberFormComponent, {
+      width: '1000px',
+      maxWidth: '80%',
+      height: '80%',
+      restoreFocus: false,
+      data: { familyId: this.family._id }
+    });
+
+    dialogRef.afterClosed().subscribe((familyMember: Partial<Member>) => {
+      if (!familyMember) {
+        return;
+      }
+    });
+  }
+
   private getFamily(familyId: string): void {
     this.family = null;
     this.familiesService.getFamily(familyId).subscribe(
       family => {
-        this.family = family;
+        this.family = { ...family, _id: familyId };
         this.familiesService.setCurrentFamily(familyId);
       },
       error => {

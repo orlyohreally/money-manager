@@ -1,0 +1,57 @@
+<div class="family-form">
+  <h1 mat-dialog-title>
+    Add new family member
+  </h1>
+  <div mat-dialog-content *ngIf="isLoaded | async; else loading">
+    <form [formGroup]="memberForm" (ngSubmit)="submitForm()">
+      <mat-form-field appearance="outline">
+        <mat-label>Member's email</mat-label>
+        <input
+          type="text"
+          required
+          matInput
+          formControlName="email"
+          #emailField
+        />
+        <mat-error *ngIf="memberForm.get('email').hasError('pattern')">
+          Invalid email
+        </mat-error>
+        <mat-error *ngIf="memberForm.get('email').hasError('server-error')">
+          {{ memberForm.get('email').getError('server-error') }}
+        </mat-error>
+      </mat-form-field>
+      <shared-checkbox-group>
+        <shared-check-list-title>Member roles</shared-check-list-title>
+        <div class="member-roles-list">
+          <shared-checkbox
+            *ngFor="let role of roles"
+            [checked]="role.default"
+            class="member-roles-list__role"
+            (changedValue)="onRoleChanged(role, $event)"
+          >
+            <div>
+              <div>{{ role.name }}</div>
+              <div class="mat-caption">{{ role.description }}</div>
+            </div>
+          </shared-checkbox>
+        </div>
+      </shared-checkbox-group>
+      <shared-notification-message
+        type="error"
+        *ngIf="memberForm.get('roles').hasError('required')"
+      >
+        Select at least one role for new member
+      </shared-notification-message>
+      <shared-notification-message type="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </shared-notification-message>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <button mat-raised-button class="button" color="accent" type="submit">
+          Add
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <ng-template #loading> <shared-loader></shared-loader></ng-template>
+</div>

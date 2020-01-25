@@ -1,1 +1,49 @@
+<shared-accordion toggleLabel="Personal" [collapsed]="false">
+  <mat-list role="list" class="nav-block__list">
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/user/dashboard"
+        sharedBadge="Coming soon"
+      >
+        Dashboard
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/families"
+        sharedBadge="Coming soon"
+      >
+        My families
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/user/payments"
+        sharedBadge="Coming soon"
+      >
+        My payments
+      </a>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <a
+        mat-button
+        class="mat-button_stretched nav-block__link"
+        routerLinkActive="nav-block__link_active"
+        routerLink="/user/reports"
+        sharedBadge="Coming soon"
+      >
+        My reports
+      </a>
+    </mat-list-item>
+  </mat-list>
+</shared-accordion>
 <family-family-manager></family-family-manager>

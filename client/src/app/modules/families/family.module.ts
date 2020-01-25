@@ -13,6 +13,7 @@ import {
   MatListModule,
   MatMenuModule
 } from '@angular/material';
+import { MembersModule } from '../members/members.module';
 import { PaymentModule } from '../payments/payment.module';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -57,7 +58,8 @@ import { FamilyComponent } from './family/family.component';
     MatCardModule,
 
     PaymentModule,
-    SharedModule
+    SharedModule,
+    MembersModule
   ],
   providers: [],
   exports: [

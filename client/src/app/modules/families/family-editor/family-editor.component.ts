@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Family } from '@shared/types';
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '../../../core/services/families/families.service';
 import { MemberFamily } from '../../shared/types/member-family';
 import { FamilyFormComponent } from '../family-form/family-form.component';
-import { FamiliesService } from '../services/families/families.service';
 
 @Component({
   selector: 'family-family-editor',

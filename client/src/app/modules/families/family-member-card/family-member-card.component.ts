@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Member } from '../services/members/members.service';
+import { Member } from '../../../core/services/members/members.service';
 
 @Component({
   selector: 'family-member-card',

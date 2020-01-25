@@ -1,0 +1,34 @@
+@import 'theme';
+
+::ng-deep .shared-checkbox {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  border: 1px solid rgba(mat-color($angular-material-primary, 100), 0.3);
+  margin-bottom: 16px;
+}
+
+::ng-deep .shared-checkbox_checked {
+  background: mat-color($angular-material-accent);
+  color: #ffffff;
+}
+
+::ng-deep .shared-checkbox .mat-checkbox-frame {
+  border-color: rgba(mat-color($angular-material-primary, 100), 0.3);
+  border-width: 1px;
+}
+
+::ng-deep .shared-checkbox .mat-checkbox-inner-container {
+  margin-right: 16px;
+}
+
+::ng-deep .shared-check-list-title {
+  display: block;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  margin: 0 0 16px;
+}

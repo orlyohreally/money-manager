@@ -1,27 +1,11 @@
 {
   "extends": "../tslint.json",
   "rules": {
-    "directive-selector": [
-      true,
-      "attribute",
-      [
-        "app",
-        "shared"
-      ],
-      "camelCase"
-    ],
+    "directive-selector": [true, "attribute", ["app", "shared"], "camelCase"],
     "component-selector": [
       true,
       "element",
-      [
-        "app",
-        "auth",
-        "nav",
-        "shared",
-        "family",
-        "home",
-        "payment"
-      ],
+      ["app", "auth", "nav", "shared", "family", "home", "payment", "member"],
       "kebab-case"
     ]
   }

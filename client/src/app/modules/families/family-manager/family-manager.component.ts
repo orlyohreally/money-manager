@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '../../../core/services/families/families.service';
 import { MemberFamily } from '../../shared/types/member-family';
-import { FamiliesService } from '../services/families/families.service';
 
 @Component({
   selector: 'family-family-manager',

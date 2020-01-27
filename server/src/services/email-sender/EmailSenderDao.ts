@@ -19,13 +19,14 @@ export class EmailSenderDao implements IEmailSenderDao {
   }
 
   public sendEmail(
+    templateId: string,
     to: string,
     dynamicTemplateData: { [key: string]: string | number }
   ): Promise<[RequestResponse, {}]> {
     const msg = {
       to: to,
       from: "orly.knop@gmail.com",
-      templateId: "d-723a9a6a0d34439da4f0fe24d46bdc56",
+      templateId,
       dynamic_template_data: dynamicTemplateData
     };
 

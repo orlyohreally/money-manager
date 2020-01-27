@@ -1,7 +1,9 @@
 export enum Roles {
   Owner = "Owner",
   Admin = "Admin",
-  Member = "Member"
+  Member = "Member",
+  Child = "Child",
+  Adult = "Adult"
 }
 
 export interface FamilyMember<Id = string> {

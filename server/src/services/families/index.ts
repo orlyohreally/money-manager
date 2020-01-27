@@ -1,4 +1,7 @@
 // tslint:disable-next-line: max-line-length
+import { EmailSenderDao } from "@src/services/email-sender/EmailSenderDao";
+// tslint:disable-next-line: max-line-length
+import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
 import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
@@ -14,5 +17,6 @@ export const familiesService = new FamiliesService({
 });
 export const familiesRouter = new FamiliesRouter({
   service: familiesService,
-  usersService: new UsersService({ dao: new UsersDao() })
+  usersService: new UsersService({ dao: new UsersDao() }),
+  emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() })
 }).router;

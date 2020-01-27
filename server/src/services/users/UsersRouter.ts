@@ -223,10 +223,14 @@ export class UsersRouter {
     if (!frontEndURL) {
       process.exit(1);
     }
-    const emailVerificationURL = `${frontEndURL}auth/email-verification`;
-    await this.emailSenderService.sendEmail(email, {
-      // tslint:disable-next-line: max-line-length
-      verifyAccountLink: `${emailVerificationURL}?email=${email}&token=${token}`
-    });
+    const emailVerificationURL = `${frontEndURL}/auth/email-verification`;
+    await this.emailSenderService.sendEmail(
+      process.env.email_verification_email_template as string,
+      email,
+      {
+        // tslint:disable-next-line: max-line-length
+        verifyAccountLink: `${emailVerificationURL}?email=${email}&token=${token}`
+      }
+    );
   }
 }

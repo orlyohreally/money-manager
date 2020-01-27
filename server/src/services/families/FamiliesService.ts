@@ -92,11 +92,12 @@ export class FamiliesService {
 
   public async createFamilyMember(
     userId: string,
-    familyId: string
+    familyId: string,
+    roles: string[]
   ): Promise<FamilyMember> {
     return this.dao.createFamilyMember({
       _id: { familyId, userId },
-      roles: [Roles.Member]
+      roles: roles.indexOf(Roles.Member) > -1 ? roles : [...roles, Roles.Member]
     });
   }
 
@@ -119,10 +120,7 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    if (familyMember) {
-      return true;
-    }
-    return false;
+    return !!familyMember;
   }
 
   public async userCanUpdateFamily(
@@ -130,15 +128,53 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    if (familyMember && familyMember.roles.indexOf("Owner") > -1) {
-      return true;
-    }
-    return false;
+    return (
+      familyMember &&
+      (familyMember.roles.indexOf(Roles.Owner) > -1 ||
+        familyMember.roles.indexOf(Roles.Admin) > -1)
+    );
   }
 
   public async removeFamily(familyId: string): Promise<void> {
-    // const family = await this.getFamily(familyId);
     await this.imageLoaderService.deleteImage(`families/${familyId}`);
     return this.dao.removeFamily(familyId);
+  }
+
+  public getFamilyMemberRoles(): {
+    name: string;
+    description: string;
+    default: boolean;
+  }[] {
+    return [
+      {
+        name: Roles.Member,
+        description: "Can view family members",
+        default: true
+      },
+      {
+        name: Roles.Owner,
+        // tslint:disable-next-line: max-line-length
+        description:
+          "Can add and remove family members, edit their roles in family",
+        default: false
+      },
+      {
+        name: Roles.Child,
+        description: "Can add and edit own payments in family",
+        default: false
+      },
+      {
+        name: Roles.Adult,
+        description:
+          "Can add and edit own payments in family and view everybody else's",
+        default: false
+      },
+      {
+        name: Roles.Admin,
+        // tslint:disable-next-line: max-line-length
+        description: "Can edit all family members' payments",
+        default: false
+      }
+    ];
   }
 }

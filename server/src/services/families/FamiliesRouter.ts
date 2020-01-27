@@ -4,6 +4,8 @@ import { IRouter } from "express-serve-static-core";
 import { asyncWrap } from "@src/utils";
 
 import { Family, User } from "@shared/types";
+// tslint:disable-next-line: max-line-length
+import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
 import { UsersService } from "@src/services/users/UsersService";
 import { FamiliesService } from "./FamiliesService";
 
@@ -11,17 +13,21 @@ export class FamiliesRouter {
   public router: IRouter;
   private service: FamiliesService;
   private usersService: UsersService;
+  private emailSenderService: EmailSenderService;
 
   constructor({
     service,
-    usersService
+    usersService,
+    emailSenderService
   }: {
     service: FamiliesService;
     usersService: UsersService;
+    emailSenderService: EmailSenderService;
   }) {
     this.router = Router();
     this.service = service;
     this.usersService = usersService;
+    this.emailSenderService = emailSenderService;
 
     this.router.get(
       "/families",
@@ -59,6 +65,11 @@ export class FamiliesRouter {
       "/families/:familyId/members",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.getFamilyMembers)
+    );
+    this.router.get(
+      "/families/:familyId/members/roles",
+      this.usersService.validateToken.bind(usersService),
+      asyncWrap(this.getFamilyMembersRoles)
     );
   }
   private getFamily = async (req: Request, res: Response) => {
@@ -174,12 +185,74 @@ export class FamiliesRouter {
 
   private postFamilyMember = async (req: Request, res: Response) => {
     try {
-      const userId = (req.body as { userId: string }).userId;
+      const body = req.body as {
+        email: string;
+        roles: string[];
+        user: User;
+      };
       const familyId = (req.params as { familyId: string }).familyId;
-      const member = await this.service.createFamilyMember(userId, familyId);
-      res.status(200).json(member);
+      const familyMemberEmail = body.email;
+      if (!familyId) {
+        return res.status(400).json({ familyId: "familyId is required" });
+      }
+      if (!familyMemberEmail) {
+        return res.status(400).json({ email: "Email is required" });
+      }
+      const updateAllowed = await this.service.userCanUpdateFamily(
+        body.user._id,
+        familyId
+      );
+      if (!updateAllowed) {
+        return res.status(403).json({ message: "Unathorized access" });
+      }
+      const family = await this.service.getFamily(familyId);
+      if (!family) {
+        return res.status(404).json({ familyId: "Family has not been found" });
+      }
+      const user = await this.usersService.getUser("email", familyMemberEmail);
+      if (!user) {
+        return res.status(404).json({ email: "Member has not been found" });
+      }
+      const alreadyMember = await this.service.isFamilyMember(
+        user._id,
+        familyId
+      );
+      if (alreadyMember) {
+        return res
+          .status(404)
+          .json({ email: "Member is already a family member" });
+      }
+      const member = await this.service.createFamilyMember(
+        user._id,
+        familyId,
+        body.roles
+      );
+      await this.emailSenderService.sendEmail(
+        process.env.member_was_added_to_family_email_template as string,
+        user.email,
+        {
+          adderFullName: `${body.user.firstName} ${body.user.lastName}`,
+          familyName: family.name,
+          familiesUrl: `${process.env.front_end_url}/families`
+        }
+      );
+      return res.status(200).json(member);
     } catch (err) {
-      res.status(400).json(err);
+      return res.status(400).json(err);
+    }
+  };
+
+  private getFamilyMembersRoles = async (req: Request, res: Response) => {
+    try {
+      const familyId = (req.params as { familyId: string }).familyId;
+      if (!familyId) {
+        return res.status(400).json({ message: "familyId is required" });
+      }
+
+      const roles = this.service.getFamilyMemberRoles();
+      return res.status(200).json({ roles });
+    } catch (err) {
+      return res.status(400).json(err);
     }
   };
 }

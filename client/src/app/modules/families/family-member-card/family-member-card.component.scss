@@ -1,41 +1,35 @@
 .payment-statistics {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-content: center;
-  align-items: center;
   margin: 10px 0;
 }
 
 .payment-statistics__item {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  padding: 0 10px;
-  width: calc(50% - 20px);
-  border: 1px solid;
-  border-top: none;
-  border-bottom: none;
-
-  &:first-child {
-    border-left: none;
-  }
-
-  &:last-child {
-    border-right: none;
-  }
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .payment-statistics__title {
   padding: 5px;
+  margin-right: 5px;
+  font-weight: bold;
 }
+
 .payment-statistics_value {
   padding: 5px;
+  margin-left: 5px;
 }
 
 .member-actions {
   position: absolute;
   right: 0;
+}
+
+.roles {
+  text-align: center;
+}
+
+.role {
+  color: #757575;
+  margin-right: 5px;
+  cursor: help;
 }

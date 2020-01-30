@@ -10,6 +10,7 @@ body,
 html {
   margin: 0;
   height: 100%;
+  background: #eef2f5;
 }
 
 .mat-form-field {
@@ -28,6 +29,7 @@ a {
 .mat-menu-panel {
   border-radius: 10px !important;
   min-width: 200px !important;
+  border: 1px solid rgba(188, 189, 189, 0.3);
 }
 
 .mat-menu-content {

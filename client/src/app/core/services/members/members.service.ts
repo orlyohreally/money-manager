@@ -14,9 +14,9 @@ export type Member = User & { roles: string[] };
   providedIn: 'root'
 })
 export class MembersService extends DataService {
-  private members: BehaviorSubject<Member[]>;
+  private members: BehaviorSubject<FamilyMember[]>;
   private dataStore: {
-    members: Member[];
+    members: FamilyMember[];
   };
 
   constructor(
@@ -28,7 +28,7 @@ export class MembersService extends DataService {
     this.dataStore = { members: [] };
   }
 
-  getMembers(familyId: string): Observable<Member[]> {
+  getMembers(familyId: string): Observable<FamilyMember[]> {
     return this.loadMembers(familyId).pipe(
       switchMap(() => {
         return this.members.asObservable();
@@ -59,9 +59,9 @@ export class MembersService extends DataService {
     );
   }
 
-  private loadMembers(familyId: string): Observable<Member[]> {
+  private loadMembers(familyId: string): Observable<FamilyMember[]> {
     return this.get(this.getMemberApi(familyId)).pipe(
-      map((members: Member[]) => {
+      map((members: FamilyMember[]) => {
         this.dataStore.members = members;
         this.members.next(Object.assign({}, this.dataStore).members);
         return members;

@@ -11,14 +11,22 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule
+  MatMenuModule,
+  MatTooltipModule
 } from '@angular/material';
 import { MembersModule } from '../members/members.module';
 import { PaymentModule } from '../payments/payment.module';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+// tslint:disable-next-line: max-line-length
+import { AddMemberDirective } from './directives/add-member/add-member.directive';
+// tslint:disable-next-line: max-line-length
+import { DeleteFamilyDirective } from './directives/delete-family/delete-family.directive';
+// tslint:disable-next-line: max-line-length
+import { EditFamilyDirective } from './directives/edit-family/edit-family.directive';
+// tslint:disable-next-line: max-line-length
+import { NewFamilyDirective } from './directives/new-family/new-family.directive';
 import { FamiliesComponent } from './families.component';
-import { FamilyEditorComponent } from './family-editor/family-editor.component';
 import { FamilyFormComponent } from './family-form/family-form.component';
 // tslint:disable-next-line: max-line-length
 import { FamilyManagerComponent } from './family-manager/family-manager.component';
@@ -32,13 +40,16 @@ import { FamilyComponent } from './family/family.component';
 @NgModule({
   declarations: [
     FamilyFormComponent,
-    FamilyEditorComponent,
     FamilyManagerComponent,
     FamilyComponent,
     DashboardComponent,
     FamiliesComponent,
     FamilyMembersComponent,
-    FamilyMemberCardComponent
+    FamilyMemberCardComponent,
+    NewFamilyDirective,
+    EditFamilyDirective,
+    DeleteFamilyDirective,
+    AddMemberDirective
   ],
   imports: [
     CommonModule,
@@ -53,6 +64,7 @@ import { FamilyComponent } from './family/family.component';
     MatInputModule,
     MatButtonModule,
     MatMenuModule,
+    MatTooltipModule,
     MatDialogModule,
     MatListModule,
     MatCardModule,
@@ -64,9 +76,12 @@ import { FamilyComponent } from './family/family.component';
   providers: [],
   exports: [
     FamilyFormComponent,
-    FamilyEditorComponent,
     FamilyManagerComponent,
-    FamilyMemberCardComponent
+    FamilyMemberCardComponent,
+    NewFamilyDirective,
+    EditFamilyDirective,
+    DeleteFamilyDirective,
+    AddMemberDirective
   ],
   entryComponents: [FamilyFormComponent]
 })

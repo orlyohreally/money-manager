@@ -21,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // tslint:disable-next-line: max-line-length
 import { AccordionComponent } from '../shared/components/accordion/accordion.component';
 import { CheckListModule } from './check-list/check-list.module';
+import { AvatarComponent } from './components/avatar/avatar.component';
 import { ButtonComponent } from './components/button/button.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
@@ -44,6 +45,7 @@ import { NotificationMessageComponent } from './components/notification-message/
 // tslint:disable-next-line: max-line-length
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { BadgeDirective } from './directives/badge.directive';
+import { FamilyIconPipe } from './pipes/family-icon.pipe';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { BadgeDirective } from './directives/badge.directive';
     ValueEditorComponent,
     ConfirmationDialogComponent,
     NotificationMessageComponent,
-    LoaderComponent
+    LoaderComponent,
+    AvatarComponent,
+    FamilyIconPipe
   ],
   imports: [
     CommonModule,
@@ -99,7 +103,9 @@ import { BadgeDirective } from './directives/badge.directive';
     ConfirmationDialogComponent,
     NotificationMessageComponent,
     LoaderComponent,
-    CheckListModule
+    CheckListModule,
+    AvatarComponent,
+    FamilyIconPipe
   ],
   providers: [],
   entryComponents: [

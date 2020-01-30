@@ -1,70 +1,72 @@
-<mat-card class="card">
-  <mat-card-header class="card__header">
-    <div class="card__avatar-holder">
-      <img
-        class="card__avatar"
-        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-      />
-
-      <!-- <shared-image-with-preview
-        imageUrl="https://material.angular.io/assets/img/examples/shiba2.jpg"
-      ></shared-image-with-preview> -->
-    </div>
-    <div class="member-actions">
-      <button
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Example icon-button with a menu"
-      >
-        <mat-icon>more_vert</mat-icon>
+<div class="card__header">
+  <shared-avatar
+    avatarSize="80px"
+    class="card__avatar"
+    [avatarUrl]="member.icon"
+  ></shared-avatar>
+  <div class="card-extra-action">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Member actions"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="mat-elevation-z0">
+      <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Edit member</span>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <mat-icon>edit</mat-icon>
-          <span>Edit member</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>link</mat-icon>
-          <span>Go to profile</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>clear</mat-icon>
-          <span>Delete member</span>
-        </button>
-      </mat-menu>
-    </div>
-  </mat-card-header>
-  <mat-card-content class="card__content">
-    <div class="card__title">
-      <span class="text text_ellipsis"
-        >{{ member.lastName }} {{ member.firstName }}</span
-      >
-    </div>
-    <div>
-      <button
-        mat-raised-button
-        color="primary"
-        class="button_rounded button_sm"
-        *ngFor="let role of member.roles"
-        [title]="getRoleButtonTitle(role)"
-      >
-        {{ role }}
+      <button mat-menu-item>
+        <mat-icon>clear</mat-icon>
+        <span>Delete member</span>
       </button>
+    </mat-menu>
+  </div>
+</div>
+<div class="card__content" fxLayout="column" fxLayoutAlign="center center">
+  <div class="card__title">
+    <span class="text text_ellipsis">
+      {{ member.fullName }}
+    </span>
+  </div>
+  <div class="roles">
+    <span
+      mat-raised-button
+      color="primary"
+      class="role"
+      *ngFor="let role of member.roles"
+      [matTooltip]="this.roles ? this.roles[role]?.description : null"
+    >
+      {{ role }}
+    </span>
+  </div>
+  <div>
+    <a
+      mat-icon-button
+      class="card__link"
+      color="primary"
+      matTooltip="Go to payments"
+    >
+      <mat-icon>receipt</mat-icon>
+    </a>
+    <a
+      mat-icon-button
+      class="card__link"
+      color="primary"
+      matTooltip="Go to reports"
+    >
+      <mat-icon>assignment</mat-icon>
+    </a>
+  </div>
+  <div class="payment-statistics">
+    <div class="payment-statistics__item">
+      <div class="payment-statistics__title">Spent:</div>
+      <div class="payment-statistics_value">₪300000</div>
     </div>
-
-    <div class="payment-statistics">
-      <div class="payment-statistics__item">
-        <div class="payment-statistics__title">Spent</div>
-        <div class="payment-statistics_value">₪300000</div>
-      </div>
-      <div class="payment-statistics__item">
-        <div class="payment-statistics__title">Debt</div>
-        <div class="payment-statistics_value">₪300000</div>
-      </div>
+    <div class="payment-statistics__item">
+      <div class="payment-statistics__title">Debt:</div>
+      <div class="payment-statistics_value">₪300000</div>
     </div>
-  </mat-card-content>
-  <mat-card-actions class="card__footer">
-    <a mat-raised-button color="primary">Payments</a>
-    <a mat-raised-button color="primary">Reports</a>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</div>

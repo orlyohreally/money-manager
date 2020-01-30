@@ -21,7 +21,8 @@ const routes: Routes = [
       },
       {
         path: 'members',
-        component: FamilyMembersComponent
+        component: FamilyMembersComponent,
+        data: { title: 'Family members' }
       },
       {
         path: 'payments',

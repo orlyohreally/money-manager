@@ -32,13 +32,13 @@ describe('MembersService', () => {
   it(
     'getMembers should make GET request' + ' to api/families/:familyId/members',
     () => {
-      const mockedMembers: Member[] = [
+      const mockedMembers: FamilyMember[] = [
         {
-          email: 'email@gmail.com',
+          firstName: 'Adam',
           roles: ['Admin']
-        } as Member
+        } as FamilyMember
       ];
-      service.getMembers('familyId').subscribe((response: Member[]) => {
+      service.getMembers('familyId').subscribe((response: FamilyMember[]) => {
         expect(response).toBe(mockedMembers);
       });
 

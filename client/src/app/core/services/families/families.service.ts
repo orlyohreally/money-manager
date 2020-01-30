@@ -14,29 +14,16 @@ export class FamiliesService {
     currentFamily: MemberFamily;
   }>({ families: [], currentFamily: null });
   private familyAPIRouter = '/api/v1/families/';
+  private familyDefaultIcon = '/assets/images/family-icon.png';
 
-  constructor(private http: HttpClient) {
-    // this.loadFamilies();
-  }
+  constructor(private http: HttpClient) {}
 
-  public loadFamilies(): Observable<void> {
+  loadFamilies(): Observable<void> {
     return this.http.get(this.familyAPIRouter).pipe(
       map((families: MemberFamily[]) => {
         this.familyStore.next({ families, currentFamily: families[0] });
       })
     );
-    // return this.http.get(this.familyAPIRouter).pipe(
-    //   switchMap(
-    //     (families: MemberFamily[]) => {
-    //       this.familyStore.next({ families, currentFamily: families[0] });
-    //       return of(undefined);
-    //     },
-    //     error => {
-    //       console.log(error);
-    //       throwError(error);
-    //     }
-    //   )
-    // );
   }
 
   get familiesInfo(): Observable<{
@@ -58,7 +45,7 @@ export class FamiliesService {
     }
   }
 
-  public createFamily(family: Partial<Family>): Observable<MemberFamily> {
+  createFamily(family: Partial<Family>): Observable<MemberFamily> {
     return this.http
       .post<Family>('/api/v1/families/', {
         family
@@ -78,7 +65,7 @@ export class FamiliesService {
       );
   }
 
-  public updateFamily(family: Partial<Family>): Observable<MemberFamily> {
+  updateFamily(family: Partial<MemberFamily>): Observable<MemberFamily> {
     return this.http
       .put<Family>(`/api/v1/families/${family._id}`, { family })
       .pipe(
@@ -101,7 +88,7 @@ export class FamiliesService {
       );
   }
 
-  public removeFamily(family: Partial<Family>): Observable<void> {
+  removeFamily(family: Partial<Family>): Observable<void> {
     return this.http.delete(`/api/v1/families/${family._id}`).pipe(
       switchMap(() => {
         const families = this.familyStore.getValue().families;
@@ -122,11 +109,15 @@ export class FamiliesService {
     );
   }
 
-  public getFamily(
+  getFamily(
     familyId: string
   ): Observable<{ name: string; icon: string; membersCount: number }> {
     return this.http.get<{ name: string; icon: string; membersCount: number }>(
       `/api/v1/families/${familyId}`
     );
+  }
+
+  getFamilyIcon(family: Family) {
+    return family.icon ? family.icon : this.familyDefaultIcon;
   }
 }

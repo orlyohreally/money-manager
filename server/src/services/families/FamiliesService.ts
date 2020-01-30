@@ -7,17 +7,7 @@ export interface IFamiliesDao {
   createFamilyMember(
     familyMember: Partial<FamilyMember>
   ): Promise<FamilyMember>;
-  getFamilyMembers(
-    familyId: string
-  ): Promise<
-    {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      createdAt: Date;
-      roles: string[];
-    }[]
-  >;
+  getFamilyMembers(familyId: string): Promise<FamilyMember[]>;
   getMemberFamilies(
     userId: string
   ): Promise<{ family: Family; roles: string[] }[]>;
@@ -101,17 +91,7 @@ export class FamiliesService {
     });
   }
 
-  public async getFamilyMembers(
-    familyId: string
-  ): Promise<
-    {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      createdAt: Date;
-      roles: string[];
-    }[]
-  > {
+  public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
     return this.dao.getFamilyMembers(familyId);
   }
 

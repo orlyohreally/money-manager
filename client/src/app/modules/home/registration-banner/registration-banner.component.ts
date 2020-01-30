@@ -12,6 +12,6 @@ export class RegistrationBannerComponent implements OnInit {
   ngOnInit() {}
 
   public relocateToRegisterPage() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/auth/register']);
   }
 }

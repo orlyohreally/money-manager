@@ -3,7 +3,7 @@
     [hidden]="!imageLoaded"
     (load)="onPreviewLoaded($event)"
     class="image-preview__image"
-    src="{{ imageUrl }}"
+    [src]="imageUrl"
   />
   <mat-spinner *ngIf="!imageLoaded"></mat-spinner>
 </div>

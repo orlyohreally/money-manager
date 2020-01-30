@@ -1,40 +1,13 @@
-<div *ngIf="!!family" class="family">
+<div *ngIf="family | async as familyInfo" class="family">
   <div class="family-card">
-    <shared-image-with-preview
-      [imageUrl]="family.icon"
-      (selectedImage)="familyIconLoaded($event)"
-    ></shared-image-with-preview>
+    <shared-avatar [avatarUrl]="family | familyIcon"></shared-avatar>
     <div class="family-info">
-      <div class="family-info__name" fxLayoutAlign="start center">
-        <div
-          fxLayoutAlign="start center"
-          *ngIf="!displayNameEditor"
-          (click)="toggleNameEditor()"
-        >
-          <span class="text text_ellipsis text_clickable">
-            Family {{ family.name }}
-          </span>
-          <button mat-icon-button class="mat-icon-button_dimmed">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </div>
-        <shared-value-editor
-          *ngIf="displayNameEditor"
-          [value]="family.name"
-          (valueSubmitted)="updatedFamilyName($event)"
-        ></shared-value-editor>
-        <button
-          *ngIf="displayNameEditor"
-          mat-icon-button
-          class="mat-icon-button_dimmed"
-          (click)="toggleNameEditor()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
+      <div class="family-info__name text text_ellipsis">
+        Family {{ familyInfo.name }}
       </div>
       <div class="family-info__members-count">
-        {{ family.membersCount }}
-        {{ family.membersCount === 1 ? 'member' : 'members' }}
+        {{ familyInfo.membersCount }}
+        {{ familyInfo.membersCount === 1 ? 'member' : 'members' }}
       </div>
     </div>
     <div class="family-card__actions">
@@ -45,26 +18,25 @@
       >
         <mat-icon>more_vert</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
-        <div mat-menu-item>
-          <family-family-editor
-            [family]="family"
-            title="Edit family information"
-          >
-            <mat-icon>edit</mat-icon>
-            <span>Edit family</span>
-          </family-family-editor>
+      <mat-menu #menu="matMenu" class="mat-elevation-z0">
+        <div
+          mat-menu-item
+          [familyEditFamily]="familyInfo"
+          title="Edit family information"
+        >
+          <mat-icon>edit</mat-icon>
+          <span>Edit family</span>
         </div>
-        <button mat-menu-item (click)="addMember()">
+        <button mat-menu-item [familyAddMember]="familyInfo._id">
           <mat-icon>person_add</mat-icon>
           <span>Add member</span>
         </button>
-        <button mat-menu-item (click)="removeFamily()">
+        <button mat-menu-item [familyDeleteFamily]="familyInfo">
           <mat-icon>clear</mat-icon>
           <span>Delete family</span>
         </button>
       </mat-menu>
     </div>
   </div>
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>

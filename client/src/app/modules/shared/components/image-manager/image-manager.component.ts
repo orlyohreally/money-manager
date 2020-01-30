@@ -18,7 +18,7 @@ export class ImageManagerComponent implements OnInit {
   public previewStyles: { [property: string]: string };
   public imageLoaded = false;
 
-  // private imageChangedEvent: Event;
+  public imageChangedEvent: Event;
 
   constructor(
     public dialogRef: MatDialogRef<ImageManagerComponent>,
@@ -36,8 +36,8 @@ export class ImageManagerComponent implements OnInit {
     this.dialogRef.close(this.croppedImage);
   }
 
-  public onFileChange() {
-    // this.imageChangedEvent = event;
+  public onFileChange(event: Event) {
+    this.imageChangedEvent = event;
   }
 
   fileChangeEvent(): void {}

@@ -2,7 +2,7 @@
   <div class="accordion__toggle">
     <button mat-button class="mat-button_stretched" (click)="toggle()">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div>
+        <div class="accordion__title text_ellipsis">
           {{ toggleLabel }}
         </div>
         <mat-icon>{{ collapsed ? 'expand_more' : 'expand_less' }}</mat-icon>

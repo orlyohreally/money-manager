@@ -1,9 +1,6 @@
 $padding: 16px;
 $avatar-size: 100px;
 
-.family {
-  padding: $padding;
-}
 .family-card {
   position: relative;
   display: flex;
@@ -11,7 +8,8 @@ $avatar-size: 100px;
   align-content: center;
   align-items: center;
   padding: $padding;
-  background: url("/assets/images/background-2.jpg");
+  border-radius: 20px;
+  background: url('/assets/images/background-2.jpg');
   background-size: cover;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -29,6 +27,7 @@ $avatar-size: 100px;
 .family-info__name {
   font-size: 26px;
   width: 100%;
+  line-height: normal;
 }
 
 .family-info__members-count {

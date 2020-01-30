@@ -1,18 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Member } from '../../../core/services/members/members.service';
+import { MemberRole } from '@src/app/types';
 
 @Component({
   selector: 'family-member-card',
   templateUrl: './family-member-card.component.html',
-  styleUrls: ['./family-member-card.component.scss']
+  styleUrls: ['./family-member-card.component.scss'],
+  host: { class: 'card' }
 })
 export class FamilyMemberCardComponent implements OnInit {
-  @Input() member: Member;
+  @Input() member: { fullName: string; roles: string[]; icon: string };
+  @Input() roles: { [roleName: string]: MemberRole };
+
   constructor() {}
 
   ngOnInit() {}
-
-  public getRoleButtonTitle(role: string): string {
-    return `What is ${role}?`;
-  }
 }

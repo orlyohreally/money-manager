@@ -64,17 +64,7 @@ export class FamiliesDao implements IFamiliesDao {
       .exec();
   }
 
-  public async getFamilyMembers(
-    familyId: string
-  ): Promise<
-    {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      createdAt: Date;
-      roles: string[];
-    }[]
-  > {
+  public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
     return FamilyMemberModel.aggregate([
       { $match: { "_id.familyId": new ObjectId(familyId) } },
       {
@@ -94,6 +84,7 @@ export class FamiliesDao implements IFamiliesDao {
           "member.firstName": "$user.firstName",
           "member.lastName": "$user.lastName",
           "member.roles": "$roles",
+          "member.icon": "$icon",
           "member.createdAt": "$_id.createAt"
         }
       },

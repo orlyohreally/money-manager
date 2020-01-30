@@ -6,6 +6,7 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { Observable, Subject, throwError } from 'rxjs';
@@ -16,7 +17,10 @@ export class ServerErrorInterceptor implements HttpInterceptor {
   private refreshTokenInProgress = false;
   private refreshTokenSubject: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private authService: AuthenticationService) {}
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
 
   intercept<T>(
     request: HttpRequest<T>,
@@ -33,6 +37,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
             request.url.includes(this.authService.authEndpoints.refreshToken)
           ) {
             this.authService.logout();
+            this.router.navigate(['/auth/login']);
           }
 
           return throwError(error);
@@ -65,6 +70,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
           catchError(() => {
             this.refreshTokenInProgress = false;
             this.authService.logout();
+            this.router.navigate(['/auth/login']);
             return throwError(error);
           })
         );

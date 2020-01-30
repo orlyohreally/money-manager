@@ -60,12 +60,14 @@ describe("FamiliesService", () => {
   });
 
   it("userCanUpdateFamily should return true for family Admin", async () => {
+    // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedFamilyMember: FamilyMember = {
       _id: { familyId: "", userId: "" },
       createdAt: new Date(),
       updatedAt: new Date(),
+      icon: "",
       roles: [Roles.Admin]
-    };
+    } as FamilyMember;
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
     const hasPermission = await service.userCanUpdateFamily(
@@ -80,6 +82,7 @@ describe("FamiliesService", () => {
       _id: { familyId: "", userId: "" },
       createdAt: new Date(),
       updatedAt: new Date(),
+      icon: "",
       roles: [Roles.Member]
     };
 

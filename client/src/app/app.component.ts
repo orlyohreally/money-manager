@@ -18,7 +18,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  pageIsLoading: boolean;
+  pageIsLoading = true;
 
   private appName = 'Money Manager';
 
@@ -64,17 +64,19 @@ export class AppComponent implements OnInit {
   }
 
   private displayPageLoader(routerEvent: RouterEvent): void {
-    if (routerEvent instanceof NavigationStart) {
-      this.pageIsLoading = true;
-      return;
-    }
+    setTimeout(() => {
+      if (routerEvent instanceof NavigationStart) {
+        this.pageIsLoading = true;
+        return;
+      }
 
-    if (
-      routerEvent instanceof NavigationEnd ||
-      routerEvent instanceof NavigationCancel ||
-      routerEvent instanceof NavigationError
-    ) {
-      this.pageIsLoading = false;
-    }
+      if (
+        routerEvent instanceof NavigationEnd ||
+        routerEvent instanceof NavigationCancel ||
+        routerEvent instanceof NavigationError
+      ) {
+        this.pageIsLoading = false;
+      }
+    });
   }
 }

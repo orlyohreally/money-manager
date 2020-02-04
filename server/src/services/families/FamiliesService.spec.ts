@@ -1,9 +1,11 @@
-import { FamilyMember, Roles } from "@shared/types";
+import { Family, FamilyMember, Roles, User } from "@shared/types";
 import { FamiliesDao } from "@src/services/families/FamiliesDao";
 import { FamiliesService } from "@src/services/families/FamiliesService";
 import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
+import { Response } from "express";
+import * as httpMocks from "node-mocks-http";
 
 const mockGetFamilyMember = jest.fn();
 const mockGetFamilyMembers = jest.fn();
@@ -45,24 +47,33 @@ describe("FamiliesService", () => {
     });
   });
 
-  it("userCanUpdateFamily should return true for family Owner", async () => {
+  it("userCanEditFamily should return true for family Owner", async () => {
     // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedFamilyMember: FamilyMember = {
       roles: [Roles.Member, Roles.Owner]
     } as FamilyMember;
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
-    const hasPermission = await service.userCanUpdateFamily(
-      "userId",
-      "familyId"
-    );
-    expect(hasPermission).toBe(true);
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedFamily: Family = {
+      _id: "mocked family id"
+    } as Family;
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedUser: User = { _id: "mocked user id" } as User;
+    const nextSpy = jest.fn();
+    const response = httpMocks.createResponse();
+    const request = httpMocks.createRequest({
+      params: { familyId: "familyId" },
+      body: { family: mockedFamily, user: mockedUser }
+    });
+    await service.userCanEditFamily(request, response as Response, nextSpy);
+    expect(nextSpy).toHaveBeenCalledTimes(1);
   });
 
   it("userCanUpdateFamily should return true for family Admin", async () => {
     // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedFamilyMember: FamilyMember = {
-      _id: { familyId: "", userId: "" },
+      _id: "",
       createdAt: new Date(),
       updatedAt: new Date(),
       icon: "",
@@ -70,36 +81,55 @@ describe("FamiliesService", () => {
     } as FamilyMember;
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
-    const hasPermission = await service.userCanUpdateFamily(
-      "userId",
-      "familyId"
-    );
-    expect(hasPermission).toBe(true);
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedFamily: Family = {
+      _id: "mocked family id"
+    } as Family;
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedUser: User = { _id: "mocked user id" } as User;
+    const nextSpy = jest.fn();
+    const response = httpMocks.createResponse();
+    const request = httpMocks.createRequest({
+      params: { familyId: "familyId" },
+      body: { family: mockedFamily, user: mockedUser }
+    });
+    await service.userCanEditFamily(request, response, nextSpy);
+    expect(nextSpy).toHaveBeenCalledTimes(1);
   });
 
   it("userCanUpdateFamily should return false for just Member", async () => {
+    const response = httpMocks.createResponse();
+    // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedFamilyMember: FamilyMember = {
-      _id: { familyId: "", userId: "" },
+      _id: "",
       createdAt: new Date(),
       updatedAt: new Date(),
       icon: "",
       roles: [Roles.Member]
-    };
+    } as FamilyMember;
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
-    const hasPermission = await service.userCanUpdateFamily(
-      "userId",
-      "familyId"
-    );
-    expect(hasPermission).toBe(false);
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedFamily: Family = {
+      _id: "mocked family id"
+    } as Family;
+    // tslint:disable-next-line: no-object-literal-type-assertion
+    const mockedUser: User = { _id: "mocked user id" } as User;
+    const nextSpy = jest.fn();
+    const request = httpMocks.createRequest({
+      params: { familyId: "familyId" },
+      body: { family: mockedFamily, user: mockedUser }
+    });
+    await service.userCanEditFamily(request, response, nextSpy);
+    expect(response.statusCode).toBe(403);
   });
 
   it("createFamilyMember should call dao.createFamilyMember with updated roles list when Member role is missing", async () => {
     spyOn(dao, "createFamilyMember");
     await service.createFamilyMember("userId", "familyId", [Roles.Owner]);
     expect(dao.createFamilyMember).toBeCalledTimes(1);
-    expect(dao.createFamilyMember).toBeCalledWith({
-      _id: { familyId: "familyId", userId: "userId" },
+    expect(dao.createFamilyMember).toBeCalledWith("familyId", {
+      _id: "userId",
       roles: [Roles.Owner, Roles.Member]
     });
   });
@@ -111,8 +141,8 @@ describe("FamiliesService", () => {
       Roles.Member
     ]);
     expect(dao.createFamilyMember).toBeCalledTimes(1);
-    expect(dao.createFamilyMember).toBeCalledWith({
-      _id: { familyId: "familyId", userId: "userId" },
+    expect(dao.createFamilyMember).toBeCalledWith("familyId", {
+      _id: "userId",
       roles: [Roles.Admin, Roles.Member]
     });
   });

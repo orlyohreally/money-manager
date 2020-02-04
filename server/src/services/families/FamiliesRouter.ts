@@ -3,7 +3,7 @@ import { IRouter } from "express-serve-static-core";
 
 import { asyncWrap } from "@src/utils";
 
-import { Family, User } from "@shared/types";
+import { Family, MemberPaymentPercentage, User } from "@shared/types";
 // tslint:disable-next-line: max-line-length
 import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
 import { UsersService } from "@src/services/users/UsersService";
@@ -34,7 +34,6 @@ export class FamiliesRouter {
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.getMemberFamilies)
     );
-
     this.router.post(
       "/families",
       this.usersService.validateToken.bind(usersService),
@@ -42,7 +41,10 @@ export class FamiliesRouter {
     );
     this.router.put(
       "/families/:familyId",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.userCanEditFamily.bind(service)
+      ],
       asyncWrap(this.putFamily)
     );
     this.router.get(
@@ -52,13 +54,18 @@ export class FamiliesRouter {
     );
     this.router.delete(
       "/families/:familyId",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.userCanEditFamily.bind(service)
+      ],
       asyncWrap(this.deleteFamily)
     );
-
     this.router.post(
       "/families/:familyId/members",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.userCanEditFamily.bind(service)
+      ],
       asyncWrap(this.postFamilyMember)
     );
     this.router.get(
@@ -70,6 +77,14 @@ export class FamiliesRouter {
       "/families/:familyId/members/roles",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.getFamilyMembersRoles)
+    );
+    this.router.put(
+      "/families/:familyId/members/payment-percentages",
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.userCanEditFamily.bind(service)
+      ],
+      asyncWrap(this.putMembersPaymentsPercentages)
     );
   }
   private getFamily = async (req: Request, res: Response) => {
@@ -113,22 +128,13 @@ export class FamiliesRouter {
   private putFamily = async (req: Request, res: Response) => {
     try {
       const family = (req.body as { family: Family; user: User }).family;
-      const user = (req.body as { family: Family; user: User }).user;
       const familyId = (req.params as { familyId: string }).familyId;
       if (!family) {
         res.status(404).json({ message: "New values are missing" });
         return;
       }
-      const updateAllowed = await this.service.userCanUpdateFamily(
-        user._id,
-        familyId
-      );
-      if (updateAllowed) {
-        const updatedFamily = await this.service.updateFamily(familyId, family);
-        res.status(200).json(updatedFamily);
-      } else {
-        res.status(403).json({ message: "Unathorized access" });
-      }
+      const updatedFamily = await this.service.updateFamily(familyId, family);
+      res.status(200).json(updatedFamily);
     } catch (err) {
       res.status(404).json(err);
     }
@@ -141,18 +147,10 @@ export class FamiliesRouter {
         res.status(404).json({ message: "Values are missing" });
         return;
       }
-      const updateAllowed = await this.service.userCanUpdateFamily(
-        (req.body as { user: User }).user._id,
-        familyId
-      );
-      if (updateAllowed) {
-        await this.service.removeFamily(familyId);
-        res.status(200).json({
-          message: `Family was removed successfully`
-        });
-      } else {
-        res.status(403).json({ message: "Unathorized access" });
-      }
+      await this.service.removeFamily(familyId);
+      res.status(200).json({
+        message: `Family was removed successfully`
+      });
     } catch (err) {
       res.status(404).json(err);
     }
@@ -197,13 +195,6 @@ export class FamiliesRouter {
       }
       if (!familyMemberEmail) {
         return res.status(400).json({ email: "Email is required" });
-      }
-      const updateAllowed = await this.service.userCanUpdateFamily(
-        body.user._id,
-        familyId
-      );
-      if (!updateAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
       }
       const family = await this.service.getFamily(familyId);
       if (!family) {
@@ -253,6 +244,41 @@ export class FamiliesRouter {
       return res.status(200).json({ roles });
     } catch (err) {
       return res.status(400).json(err);
+    }
+  };
+
+  private putMembersPaymentsPercentages = async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const familyId = (req.params as { familyId: string }).familyId;
+      const percentages = (req.body as {
+        percentages: MemberPaymentPercentage[];
+        user: User;
+      }).percentages;
+
+      if (!percentages) {
+        return res.status(404).json({ message: "Values are missing" });
+      }
+
+      const validPercentages = await this.service.validateMemberPercentages(
+        familyId,
+        percentages
+      );
+      if (!validPercentages) {
+        return res.status(404).json({
+          message:
+            "Percentages should be valid positive numbers. Total percentage of percentages for all family members should sum up to 100."
+        });
+      }
+      await this.service.updateMembersPercentages(familyId, percentages);
+
+      return res
+        .status(200)
+        .json({ message: "Succefully updated percentages" });
+    } catch (err) {
+      return res.status(404).json(err);
     }
   };
 }

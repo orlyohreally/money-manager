@@ -5,3 +5,4 @@ export * from "./payment";
 export * from "./payment-subject";
 export * from "./image-asset";
 export * from "./verification-token";
+export * from "./member-payment-percentage";

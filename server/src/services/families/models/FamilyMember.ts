@@ -9,13 +9,14 @@ const FamilyMemberSchema = new Schema<FamilyMember>(
   {
     _id: {
       familyId: { type: ObjectId, required: true, ref: "FamilyModel" },
-      userId: { type: ObjectId, required: true, ref: "UserModel" },
+      userId: { type: ObjectId, required: true, ref: "UserModel" }
     },
     roles: { type: [String], required: true },
+    paymentPercentage: Number,
     createdAt: Date,
-    updatedAt: Date,
+    updatedAt: Date
   },
-  { versionKey: false },
+  { versionKey: false }
 );
 
 FamilyMemberSchema.pre<FamilyMemberDocument>("save", function(next) {
@@ -31,5 +32,5 @@ FamilyMemberSchema.pre<FamilyMemberDocument>("updateOne", function() {
 
 export const FamilyMemberModel = model<FamilyMemberDocument>(
   "FamilyMemberModel",
-  FamilyMemberSchema,
+  FamilyMemberSchema
 );

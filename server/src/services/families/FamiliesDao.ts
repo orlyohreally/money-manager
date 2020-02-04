@@ -32,6 +32,8 @@ export class FamiliesDao implements IFamiliesDao {
             name: true,
             icon: true,
             _id: true,
+            currency: true,
+            equalPayments: true,
             membersCount: { $size: "$members" }
           }
         }
@@ -85,6 +87,7 @@ export class FamiliesDao implements IFamiliesDao {
           "member.lastName": "$user.lastName",
           "member.roles": "$roles",
           "member.icon": "$icon",
+          "member.paymentPercentage": "$paymentPercentage",
           "member.createdAt": "$_id.createAt"
         }
       },
@@ -93,9 +96,13 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async createFamilyMember(
+    familyId: string,
     familyMember: FamilyMember
   ): Promise<FamilyMember> {
-    const newFamilyMember = new FamilyMemberModel(familyMember);
+    const newFamilyMember = new FamilyMemberModel({
+      ...familyMember,
+      _id: { familyId, userId: familyMember._id }
+    });
     await newFamilyMember.save();
     return newFamilyMember.toJSON(modelTransformer) as FamilyMember;
   }
@@ -121,6 +128,8 @@ export class FamiliesDao implements IFamiliesDao {
           createdAt: "$family.createdAt",
           updatedAt: "$family.updatedAt",
           icon: "$family.icon",
+          currency: "$family.currency",
+          equalPayments: "$family.equalPayments",
           userRoles: "$roles"
         }
       }
@@ -135,6 +144,19 @@ export class FamiliesDao implements IFamiliesDao {
       "_id.familyId": familyId,
       "_id.userId": userId
     })
+      .lean()
+      .exec();
+  }
+
+  public async updateMemberPercentage(
+    memberId: { userId: string; familyId: string },
+    paymentPercentage: number
+  ) {
+    return FamilyMemberModel.updateOne(
+      { "_id.familyId": memberId.familyId, "_id.userId": memberId.userId },
+      { paymentPercentage },
+      { multi: true }
+    )
       .lean()
       .exec();
   }

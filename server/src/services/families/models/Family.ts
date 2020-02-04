@@ -8,10 +8,12 @@ const FamilySchema = new Schema<Family>(
   {
     name: { type: String, required: true },
     icon: String,
+    currency: String,
+    equalPayments: Boolean,
     createdAt: Date,
-    updatedAt: Date,
+    updatedAt: Date
   },
-  { versionKey: false },
+  { versionKey: false }
 );
 FamilySchema.pre<FamilyDocument>("save", function(next) {
   if (!this.createdAt) {

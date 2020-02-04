@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material';
 // tslint:disable-next-line: max-line-length
@@ -14,7 +15,7 @@ import { CheckboxGroupDirective } from './directives/checkbox-group.directive';
     CheckboxGroupDirective,
     CheckListTitleDirective
   ],
-  imports: [CommonModule, MatCheckboxModule, FormsModule],
+  imports: [CommonModule, FlexLayoutModule, MatCheckboxModule, FormsModule],
   exports: [CheckboxComponent, CheckboxGroupDirective, CheckListTitleDirective]
 })
 export class CheckListModule {}

@@ -1,4 +1,9 @@
-<div fxLayout="row" (click)="onChecked($event)">
+<div
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  (click)="onChecked($event)"
+  class="checkbox"
+>
   <mat-checkbox [(ngModel)]="checked">
     <ng-content></ng-content>
   </mat-checkbox>

@@ -1,12 +1,12 @@
 export interface Payment<Id = string> {
   _id: Id;
   amount: number;
-  createdAt: Date;
-  paidAt: Date;
   familyId: Id;
-  memberId: Id;
+  userId: Id;
   receipt?: string;
   subjectId: Id;
+  paidAt: Date;
+  createdAt: Date;
   updatedAt: Date;
 }
 

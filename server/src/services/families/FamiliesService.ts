@@ -229,7 +229,7 @@ export class FamiliesService {
     }
   }
 
-  private async userCanUpdateFamily(
+  public async userCanUpdateFamily(
     userId: string,
     familyId: string
   ): Promise<boolean> {

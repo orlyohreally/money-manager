@@ -46,7 +46,8 @@ export class FamiliesService {
 
   public async createFamily(
     userId: string,
-    family: Partial<Family>
+    family: Partial<Family>,
+    roles: string[]
   ): Promise<Family> {
     const familyIcon: string =
       family.icon && family.icon.search(/^http/) === -1 ? family.icon : "";
@@ -56,7 +57,7 @@ export class FamiliesService {
     let savedFamily: Family = await this.dao.createFamily(family);
     await this.dao.createFamilyMember(savedFamily._id, {
       _id: userId,
-      roles: [Roles.Owner]
+      roles: [...roles, roles.indexOf(Roles.Owner) > -1 ? "" : Roles.Owner]
     });
     if (familyIcon) {
       const newIcon = await this.imageLoaderService.loadImage(

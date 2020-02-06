@@ -1,0 +1,24 @@
+<form [formGroup]="adultMemberPercentageForm">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ adultMember.fullName }}'s percentage</mat-label>
+    <input
+      matInput
+      type="number"
+      placeholder="{{ adultMember.fullName }}'s percentage payment"
+      formControlName="paymentPercentage"
+    />
+    <mat-error *ngIf="percentage.hasError('invalid-percent')">
+      Invalid value
+    </mat-error>
+    <button
+      mat-button
+      *ngIf="percentage.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="resetPercentage()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>

@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>
     Add new family member
   </h1>
-  <div mat-dialog-content *ngIf="isLoaded | async; else loading">
+  <div mat-dialog-content>
     <form [formGroup]="memberForm" (ngSubmit)="submitForm()">
       <mat-form-field appearance="outline">
         <mat-label>Member's email</mat-label>
@@ -20,25 +20,22 @@
           {{ memberForm.get('email').getError('server-error') }}
         </mat-error>
       </mat-form-field>
-      <shared-checkbox-group>
-        <shared-check-list-title>Member roles</shared-check-list-title>
-        <div class="member-roles-list">
-          <shared-checkbox
-            *ngFor="let role of roles"
-            [checked]="role.default"
-            class="member-roles-list__role"
-            (changedValue)="onRoleChanged(role, $event)"
-          >
-            <div>
-              <div>{{ role.name }}</div>
-              <div class="mat-caption">{{ role.description }}</div>
-            </div>
-          </shared-checkbox>
-        </div>
-      </shared-checkbox-group>
+      <member-member-roles
+        [familyId]="data.family._id"
+        sectionTitle="Member roles in the family"
+        (rolesUpdated)="onRoleChanged($event)"
+        (initialized)="onRolesLoad()"
+      ></member-member-roles>
+      <member-members-payment-percentage
+        *ngIf="!data.family.equalPayments"
+        class="members-payment-percentage"
+        [familyId]="data.family._id"
+        [newFamilyMemberRoles]="this.memberForm.get('roles').value"
+        (valueUpdated)="onPercentagesSet($event)"
+      ></member-members-payment-percentage>
       <shared-notification-message
         type="error"
-        *ngIf="memberForm.get('roles').hasError('required')"
+        *ngIf="rolesLoaded && memberForm.get('roles').hasError('required')"
       >
         Select at least one role for new member
       </shared-notification-message>
@@ -46,12 +43,16 @@
         {{ errorMessage }}
       </shared-notification-message>
       <div fxLayout="row" fxLayoutAlign="center">
-        <button mat-raised-button class="button" color="accent" type="submit">
+        <button
+          mat-raised-button
+          class="button"
+          color="accent"
+          type="submit"
+          [disabled]="!memberForm.valid || !rolesLoaded"
+        >
           Add
         </button>
       </div>
     </form>
   </div>
-
-  <ng-template #loading> <shared-loader></shared-loader></ng-template>
 </div>

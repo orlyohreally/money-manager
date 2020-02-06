@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Family } from '@shared/types';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'family-family-form',
@@ -9,31 +8,26 @@ import { Family } from '@shared/types';
   styleUrls: ['./family-form.component.scss']
 })
 export class FamilyFormComponent implements OnInit {
-  familyForm: FormGroup;
+  @Input() familyForm: FormGroup;
+  @Output() formSubmitted = new EventEmitter<void>();
 
-  constructor(
-    public dialogRef: MatDialogRef<FamilyFormComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public family: Family
-  ) {}
+  familyMembers: Observable<
+    {
+      fullName: string;
+      memberId: { familyId: string; userId: string };
+      paymentPercentage: number;
+    }[]
+  >;
 
-  ngOnInit() {
-    this.familyForm = new FormGroup({
-      name: new FormControl(this.family ? this.family.name : '', [
-        Validators.required
-      ]),
-      icon: new FormControl(this.family ? this.family.icon : '')
-    });
-  }
+  constructor() {}
+
+  ngOnInit() {}
 
   familyIconLoaded(icon: string) {
     this.familyForm.get('icon').setValue(icon);
   }
 
   submitForm() {
-    if (!this.familyForm.valid) {
-      this.familyForm.markAsTouched();
-      return;
-    }
-    this.dialogRef.close(this.familyForm.value);
+    this.formSubmitted.emit();
   }
 }

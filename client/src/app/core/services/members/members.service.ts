@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FamilyMember, User } from '@shared/types';
+import { FamilyMember, Roles } from '@shared/types';
+import { User } from '@shared/types';
 import { MemberRole } from '@src/app/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
@@ -56,6 +57,14 @@ export class MembersService extends DataService {
       `${this.getMemberApi(familyId)}/roles`
     ).pipe(
       switchMap((response: { roles: MemberRole[] }) => of(response.roles))
+    );
+  }
+
+  memberIsAdult(memberRoles: string[]) {
+    return (
+      memberRoles.indexOf(Roles.Adult) > -1 ||
+      memberRoles.indexOf(Roles.Admin) > -1 ||
+      memberRoles.indexOf(Roles.Owner) > -1
     );
   }
 

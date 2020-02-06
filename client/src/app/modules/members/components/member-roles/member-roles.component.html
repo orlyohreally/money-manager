@@ -1,0 +1,22 @@
+<shared-checkbox-group class="members-roles">
+  <shared-check-list-title>{{ sectionTitle }}</shared-check-list-title>
+  <div
+    class="member-roles-list"
+    fxLayout="row wrap"
+    fxLayout.xs="column wrap"
+    *ngIf="roles | async as rolesList; else loading"
+  >
+    <shared-checkbox
+      *ngFor="let role of rolesList"
+      [checked]="role.default"
+      class="member-roles-list__role"
+      (changedValue)="onRoleChanged(role, $event)"
+    >
+      <div>
+        <div>{{ role.name }}</div>
+        <div class="mat-caption">{{ role.description }}</div>
+      </div>
+    </shared-checkbox>
+  </div>
+</shared-checkbox-group>
+<ng-template #loading> <shared-loader></shared-loader></ng-template>

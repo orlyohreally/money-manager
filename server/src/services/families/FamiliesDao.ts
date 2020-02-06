@@ -104,7 +104,16 @@ export class FamiliesDao implements IFamiliesDao {
       _id: { familyId, userId: familyMember._id }
     });
     await newFamilyMember.save();
-    return newFamilyMember.toJSON(modelTransformer) as FamilyMember;
+    return newFamilyMember.toJSON({
+      versionKey: false,
+      transform: (
+        doc,
+        ret: { _id: { userId: ObjectId; familyId: ObjectId } }
+      ) => ({
+        ...ret,
+        _id: ret._id.userId.toString()
+      })
+    }) as FamilyMember;
   }
 
   public async getMemberFamilies(

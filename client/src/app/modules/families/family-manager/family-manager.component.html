@@ -13,7 +13,10 @@
           routerLink="/families/{{ family._id }}/dashboard"
           sharedBadge="Coming soon"
         >
-          Dashboard
+          <div class="menu-item">
+            <mat-icon class="menu-item__icon">dashboard</mat-icon>
+            <div>Dashboard</div>
+          </div>
         </a>
       </mat-list-item>
       <mat-list-item role="listitem">
@@ -23,7 +26,10 @@
           routerLinkActive="nav-block__link_active"
           routerLink="/families/{{ family._id }}/members"
         >
-          Family members
+          <div class="menu-item">
+            <mat-icon class="menu-item__icon">people_alt</mat-icon>
+            <div>Family members</div>
+          </div>
         </a>
       </mat-list-item>
       <mat-list-item role="listitem">
@@ -34,7 +40,10 @@
           routerLink="/families/{{ family._id }}/payments"
           sharedBadge="Coming soon"
         >
-          Family payments
+          <div class="menu-item">
+            <mat-icon class="menu-item__icon">payment</mat-icon>
+            <div>Family payments</div>
+          </div>
         </a>
       </mat-list-item>
       <mat-list-item role="listitem">
@@ -45,7 +54,10 @@
           routerLink="/families/{{ family._id }}/reports"
           sharedBadge="Coming soon"
         >
-          Family reports
+          <div class="menu-item">
+            <mat-icon class="menu-item__icon">insert_chart</mat-icon>
+            <div>Family reports</div>
+          </div>
         </a>
       </mat-list-item>
     </mat-list>

@@ -1,1 +1,20 @@
-<button mat-raised-button familyNewFamily>Add family</button>
+<div class="page-content__header">
+  <div class="mat-h1">My families</div>
+  <button
+    class="button button_lg"
+    mat-raised-button
+    color="primary"
+    familyNewFamily
+  >
+    Add family
+  </button>
+</div>
+<div class="card-list" *ngIf="families | async as familiesList; else loading">
+  <family-family-card
+    *ngFor="let family of familiesList"
+    [family]="family"
+  ></family-family-card>
+</div>
+<ng-template #loading>
+  <shared-loader></shared-loader>
+</ng-template>

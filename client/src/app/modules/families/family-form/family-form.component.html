@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>
     Family
   </h1>
-  <div mat-dialog-content>
+  <div *ngIf="!!familyForm">
     <form [formGroup]="familyForm" (ngSubmit)="submitForm()">
       <shared-image-with-preview
         class="family-form__avatar-preview"
@@ -13,10 +13,17 @@
         <mat-label>Family name</mat-label>
         <input type="text" required matInput formControlName="name" />
         <mat-error *ngIf="familyForm.get('name').hasError('required')">
-          Required field
+          Select family name
         </mat-error>
       </mat-form-field>
-      <div fxLayout="row" fxLayoutAlign="center">
+      <shared-currency-selector
+        [currencyControl]="familyForm.get('currency')"
+      ></shared-currency-selector>
+      <mat-checkbox formControlName="equalPayments">
+        All adult members pay equally
+      </mat-checkbox>
+      <ng-content></ng-content>
+      <div class="action-buttons" fxLayout="row" fxLayoutAlign="center">
         <button mat-raised-button class="button" color="accent" type="submit">
           Save
         </button>

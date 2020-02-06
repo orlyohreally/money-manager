@@ -9,7 +9,11 @@ import { FamilyMembersComponent } from './family-members/family-members.componen
 import { FamilyComponent } from './family/family.component';
 
 const routes: Routes = [
-  { path: 'families', component: FamiliesComponent },
+  {
+    path: 'families',
+    component: FamiliesComponent,
+    data: { title: 'My families' }
+  },
   {
     path: 'families/:familyId',
     component: FamilyComponent,

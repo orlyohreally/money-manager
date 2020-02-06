@@ -1,0 +1,20 @@
+.payment-statistics {
+  margin: 10px 0;
+}
+
+.payment-statistics__item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.payment-statistics__title {
+  padding: 5px;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.payment-statistics_value {
+  padding: 5px;
+  margin-left: 5px;
+}

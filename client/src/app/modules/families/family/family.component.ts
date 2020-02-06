@@ -11,7 +11,7 @@ import { map, takeUntil } from 'rxjs/operators';
   templateUrl: './family.component.html',
   styleUrls: ['./family.component.scss'],
   host: {
-    style: 'padding: 20px; display: block;'
+    style: 'display: block;'
   }
 })
 export class FamilyComponent implements OnInit, OnDestroy {

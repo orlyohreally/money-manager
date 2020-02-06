@@ -15,7 +15,6 @@ html {
 
 .mat-form-field {
   width: 100%;
-  margin-bottom: 16px;
 }
 
 .mat-checkbox-layout {
@@ -50,6 +49,18 @@ a {
   margin-right: 8px !important;
 }
 
-.cdk-overlay-pane {
+.page-content__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+}
+
+.page-content__header button {
+  margin: 0 0 16px;
+}
+
+.dialog_scrollable {
   overflow: auto;
 }

@@ -1,0 +1,55 @@
+<div class="card__header">
+  <shared-avatar
+    avatarSize="80px"
+    class="card__avatar"
+    [avatarUrl]="family.icon"
+  ></shared-avatar>
+  <div class="card-extra-action">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Member actions"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="mat-elevation-z0">
+      <button mat-menu-item>
+        <mat-icon>clear</mat-icon>
+        <span>Delete family</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div class="card__content" fxLayout="column" fxLayoutAlign="center center">
+  <div class="card__title">
+    <span class="text text_ellipsis">
+      {{ family.name }}
+    </span>
+  </div>
+  <div>
+    <div fxLayoutAlign="center center">
+      <a
+        mat-icon-button
+        class="card__link"
+        color="primary"
+        routerLink="/families/{{ family._id }}"
+        matTooltip="Go to family details"
+      >
+        <mat-icon>ballot</mat-icon>
+      </a>
+      <button mat-icon-button [familyEditFamily]="family">
+        <mat-icon>create</mat-icon>
+      </button>
+    </div>
+    <div class="payment-statistics">
+      <div class="payment-statistics__item">
+        <div class="payment-statistics__title">Spent:</div>
+        <div class="payment-statistics_value">₪300000</div>
+      </div>
+      <div class="payment-statistics__item">
+        <div class="payment-statistics__title">Debt:</div>
+        <div class="payment-statistics_value">₪300000</div>
+      </div>
+    </div>
+  </div>
+</div>

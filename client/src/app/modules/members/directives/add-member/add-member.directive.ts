@@ -2,7 +2,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Member } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
-import { NewFamilyMemberFormComponent } from '@src/app/modules/members/components/member-form/new-family-member-form.component';
+import { NewFamilyMemberFormComponent } from '../../components/new-member-form/new-member-form.component';
 
 @Directive({
   selector: '[familyAddMember]'
@@ -22,7 +22,7 @@ export class AddMemberDirective {
       maxWidth: '80%',
       height: '80%',
       restoreFocus: false,
-      data: { familyId: this.familyAddMember }
+      data: { family: this.familyAddMember }
     });
 
     dialogRef.afterClosed().subscribe((familyMember: Partial<Member>) => {

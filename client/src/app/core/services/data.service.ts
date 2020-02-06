@@ -35,4 +35,21 @@ export class DataService {
       options ? options : undefined
     );
   }
+
+  protected put<T, S>(url: string, params: S): Observable<T>;
+  protected put<T, S, W = null>(
+    url: string,
+    params: S,
+    options: W = null
+  ): Observable<HttpResponse<T> | T> {
+    return this.http.put<HttpResponse<T> | T>(
+      `${this.apiURL}/${url}`,
+      params,
+      options ? options : undefined
+    );
+  }
+
+  protected delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(`${this.apiURL}/${url}`);
+  }
 }

@@ -1,3 +1,4 @@
 $custom-typography: mat-typography-config(
-  $font-family: 'Nunito Sans'
+  $font-family: 'Nunito Sans',
+  $display-1: mat-typography-level(32px, 40px, 600)
 );

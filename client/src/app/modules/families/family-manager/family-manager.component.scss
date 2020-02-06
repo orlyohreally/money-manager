@@ -1,0 +1,10 @@
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.menu-item__icon {
+  color: #757575 !important;
+  margin-right: 10px;
+}

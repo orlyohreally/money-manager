@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -19,14 +20,15 @@ import { PaymentModule } from '../payments/payment.module';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 // tslint:disable-next-line: max-line-length
-import { AddMemberDirective } from './directives/add-member/add-member.directive';
-// tslint:disable-next-line: max-line-length
 import { DeleteFamilyDirective } from './directives/delete-family/delete-family.directive';
 // tslint:disable-next-line: max-line-length
-import { EditFamilyDirective } from './directives/edit-family/edit-family.directive';
+import { EditFamilyDialogTriggerDirective } from './directives/edit-family-dialog-trigger/edit-family-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
-import { NewFamilyDirective } from './directives/new-family/new-family.directive';
+import { NewFamilyDialogTriggerDirective } from './directives/new-family-dialog-trigger/new-family-dialog-trigger.directive';
+// tslint:disable-next-line: max-line-length
+import { EditFamilyFormComponent } from './edit-family-form/edit-family-form.component';
 import { FamiliesComponent } from './families.component';
+import { FamilyCardComponent } from './family-card/family-card.component';
 import { FamilyFormComponent } from './family-form/family-form.component';
 // tslint:disable-next-line: max-line-length
 import { FamilyManagerComponent } from './family-manager/family-manager.component';
@@ -36,6 +38,8 @@ import { FamilyMemberCardComponent } from './family-member-card/family-member-ca
 import { FamilyMembersComponent } from './family-members/family-members.component';
 import { FamilyRoutingModule } from './family-routing.module';
 import { FamilyComponent } from './family/family.component';
+// tslint:disable-next-line: max-line-length
+import { NewFamilyFormComponent } from './new-family-form/new-family-form.component';
 
 @NgModule({
   declarations: [
@@ -46,10 +50,12 @@ import { FamilyComponent } from './family/family.component';
     FamiliesComponent,
     FamilyMembersComponent,
     FamilyMemberCardComponent,
-    NewFamilyDirective,
-    EditFamilyDirective,
+    NewFamilyDialogTriggerDirective,
+    EditFamilyDialogTriggerDirective,
     DeleteFamilyDirective,
-    AddMemberDirective
+    FamilyCardComponent,
+    NewFamilyFormComponent,
+    EditFamilyFormComponent
   ],
   imports: [
     CommonModule,
@@ -64,6 +70,7 @@ import { FamilyComponent } from './family/family.component';
     MatInputModule,
     MatButtonModule,
     MatMenuModule,
+    MatCheckboxModule,
     MatTooltipModule,
     MatDialogModule,
     MatListModule,
@@ -78,11 +85,17 @@ import { FamilyComponent } from './family/family.component';
     FamilyFormComponent,
     FamilyManagerComponent,
     FamilyMemberCardComponent,
-    NewFamilyDirective,
-    EditFamilyDirective,
+    NewFamilyDialogTriggerDirective,
+    EditFamilyDialogTriggerDirective,
     DeleteFamilyDirective,
-    AddMemberDirective
+    FamilyCardComponent,
+    NewFamilyFormComponent,
+    EditFamilyFormComponent
   ],
-  entryComponents: [FamilyFormComponent]
+  entryComponents: [
+    FamilyFormComponent,
+    EditFamilyFormComponent,
+    NewFamilyFormComponent
+  ]
 })
 export class FamilyModule {}

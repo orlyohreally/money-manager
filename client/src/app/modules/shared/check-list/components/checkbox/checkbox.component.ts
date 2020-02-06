@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
@@ -12,7 +11,6 @@ import {
   selector: 'shared-checkbox',
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'shared-checkbox'
   }

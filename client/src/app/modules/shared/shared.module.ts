@@ -10,7 +10,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatMenuModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSelectModule
 } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
@@ -26,7 +27,10 @@ import { ButtonComponent } from './components/button/button.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 // tslint:disable-next-line: max-line-length
+import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
+// tslint:disable-next-line: max-line-length
 import { FormFieldComponent } from './components/form-field/form-field.component';
+import { FormComponent } from './components/form/form.component';
 // tslint:disable-next-line: max-line-length
 import { HtmlElementSelectComponent } from './components/html-element-select/html-element-select.component';
 // tslint:disable-next-line: max-line-length
@@ -67,7 +71,9 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
     NotificationMessageComponent,
     LoaderComponent,
     AvatarComponent,
-    FamilyIconPipe
+    FamilyIconPipe,
+    CurrencySelectorComponent,
+    FormComponent
   ],
   imports: [
     CommonModule,
@@ -84,6 +90,7 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
     MatMenuModule,
     MatDialogModule,
     MatIconModule,
+    MatSelectModule,
     ImageCropperModule,
     CheckListModule
   ],
@@ -105,7 +112,9 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
     LoaderComponent,
     CheckListModule,
     AvatarComponent,
-    FamilyIconPipe
+    FamilyIconPipe,
+    CurrencySelectorComponent,
+    FormComponent
   ],
   providers: [],
   entryComponents: [

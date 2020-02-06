@@ -1,0 +1,241 @@
+<mat-form-field appearance="outline">
+  <mat-label>Family currency</mat-label>
+  <mat-select [formControl]="currencyControl" required>
+    <mat-option value="USD">
+      United States Dollars (e.g. {{ 10 | currency: 'USD' }})
+    </mat-option>
+    <mat-option value="EUR">Euro (e.g. {{ 10 | currency: 'EUR' }})</mat-option>
+    <mat-option value="GBP">
+      United Kingdom Pounds (e.g. {{ 10 | currency: 'GBP' }})
+    </mat-option>
+    <mat-option value="DZD">
+      Algeria Dinars (e.g. {{ 10 | currency: 'DZD' }})
+    </mat-option>
+    <mat-option value="ARP">
+      Argentina Pesos (e.g. {{ 10 | currency: 'ARP' }})
+    </mat-option>
+    <mat-option value="AUD">
+      Australia Dollars (e.g. {{ 10 | currency: 'AUD' }})
+    </mat-option>
+    <mat-option value="ATS"
+      >Austria Schillings (e.g. {{ 10 | currency: 'ATS' }})
+    </mat-option>
+    <mat-option value="BSD">
+      Bahamas Dollars (e.g. {{ 10 | currency: 'BSD' }})
+    </mat-option>
+    <mat-option value="BBD">
+      Barbados Dollars (e.g. {{ 10 | currency: 'BBD' }})
+    </mat-option>
+    <mat-option value="BEF">
+      Belgium Francs (e.g. {{ 10 | currency: 'BEF' }})
+    </mat-option>
+    <mat-option value="BMD">
+      Bermuda Dollars (e.g. {{ 10 | currency: 'EUR' }})
+    </mat-option>
+    <mat-option value="BRR">
+      Brazil Real (e.g. {{ 10 | currency: 'BRR' }})
+    </mat-option>
+    <mat-option value="BGL">
+      Bulgaria Lev (e.g. {{ 10 | currency: 'BGL' }})
+    </mat-option>
+    <mat-option value="CAD">
+      Canada Dollars (e.g. {{ 10 | currency: 'CAD' }})
+    </mat-option>
+    <mat-option value="CLP">
+      Chile Pesos (e.g. {{ 10 | currency: 'CLP' }})
+    </mat-option>
+    <mat-option value="CNY">
+      China Yuan Renmimbi (e.g. {{ 10 | currency: 'CNY' }})
+    </mat-option>
+    <mat-option value="CYP">
+      Cyprus Pounds (e.g. {{ 10 | currency: 'CYP' }})
+    </mat-option>
+    <mat-option value="CSK">
+      Czech Republic Koruna (e.g. {{ 10 | currency: 'CSK' }})
+    </mat-option>
+    <mat-option value="DKK">
+      Denmark Kroner (e.g. {{ 10 | currency: 'DKK' }})
+    </mat-option>
+    <mat-option value="NLG">
+      Dutch Guilders (e.g. {{ 10 | currency: 'NLG' }})
+    </mat-option>
+    <mat-option value="XCD">
+      Eastern Caribbean Dollars (e.g. {{ 10 | currency: 'XCD' }})
+    </mat-option>
+    <mat-option value="EGP">
+      Egypt Pounds (e.g. {{ 10 | currency: 'EGP' }})
+    </mat-option>
+    <mat-option value="FJD"
+      >Fiji Dollars (e.g. {{ 10 | currency: 'FJD' }})
+    </mat-option>
+    <mat-option value="FIM">
+      Finland Markka (e.g. {{ 10 | currency: 'FIM' }})
+    </mat-option>
+    <mat-option value="FRF">
+      France Francs (e.g. {{ 10 | currency: 'FRF' }})
+    </mat-option>
+    <mat-option value="DEM">
+      Germany Deutsche Marks (e.g. {{ 10 | currency: 'DEM' }})
+    </mat-option>
+    <mat-option value="XAU">
+      Gold Ounces (e.g. {{ 10 | currency: 'XAU' }})
+    </mat-option>
+    <mat-option value="GRD"
+      >Greece Drachmas (e.g. {{ 10 | currency: 'GRD' }})
+    </mat-option>
+    <mat-option value="HKD">
+      Hong Kong Dollars (e.g. {{ 10 | currency: 'HKD' }})
+    </mat-option>
+    <mat-option value="HUF">
+      Hungary Forint (e.g. {{ 10 | currency: 'HUF' }})
+    </mat-option>
+    <mat-option value="ISK"
+      >Iceland Krona (e.g. {{ 10 | currency: 'ISK' }})
+    </mat-option>
+    <mat-option value="INR">
+      India Rupees (e.g. {{ 10 | currency: 'INR' }})
+    </mat-option>
+    <mat-option value="IDR">
+      Indonesia Rupiah (e.g. {{ 10 | currency: 'IDR' }})
+    </mat-option>
+    <mat-option value="IEP"
+      >Ireland Punt (e.g. {{ 10 | currency: 'IEP' }})
+    </mat-option>
+    <mat-option value="ILS">
+      Israel New Shekels (e.g. {{ 10 | currency: 'ILS' }})
+    </mat-option>
+    <mat-option value="ITL">
+      Italy Lira (e.g. {{ 10 | currency: 'ITL' }})
+    </mat-option>
+    <mat-option value="JMD"
+      >Jamaica Dollars (e.g. {{ 10 | currency: 'JMD' }})
+    </mat-option>
+    <mat-option value="JPY">
+      Japan Yen (e.g. {{ 10 | currency: 'JPY' }})
+    </mat-option>
+    <mat-option value="JOD">
+      Jordan Dinar (e.g. {{ 10 | currency: 'JOD' }})
+    </mat-option>
+    <mat-option value="KRW">
+      Korea (South) Won (e.g. {{ 10 | currency: 'KRW' }})
+    </mat-option>
+    <mat-option value="LBP">
+      Lebanon Pounds (e.g. {{ 10 | currency: 'LBP' }})
+    </mat-option>
+    <mat-option value="LUF">
+      Luxembourg Francs (e.g. {{ 10 | currency: 'LUF' }})
+    </mat-option>
+    <mat-option value="MYR">
+      Malaysia Ringgit (e.g. {{ 10 | currency: 'MYR' }})
+    </mat-option>
+    <mat-option value="MXP"
+      >Mexico Pesos (e.g. {{ 10 | currency: 'MXP' }})
+    </mat-option>
+    <mat-option value="NLG">
+      Netherlands Guilders (e.g. {{ 10 | currency: 'NLG' }})
+    </mat-option>
+    <mat-option value="NZD">
+      New Zealand Dollars (e.g. {{ 10 | currency: 'NZD' }})
+    </mat-option>
+    <mat-option value="NOK"
+      >Norway Kroner (e.g. {{ 10 | currency: 'NOK' }})
+    </mat-option>
+    <mat-option value="PKR">
+      Pakistan Rupees (e.g. {{ 10 | currency: 'PKR' }})
+    </mat-option>
+    <mat-option value="XPD"
+      >Palladium Ounces (e.g. {{ 10 | currency: 'XPD' }})
+    </mat-option>
+    <mat-option value="PHP"
+      >Philippines Pesos (e.g. {{ 10 | currency: 'PHP' }})
+    </mat-option>
+    <mat-option value="XPT">
+      Platinum Ounces (e.g. {{ 10 | currency: 'XPT' }})
+    </mat-option>
+    <mat-option value="PLZ">
+      Poland Zloty (e.g. {{ 10 | currency: 'PLZ' }})
+    </mat-option>
+    <mat-option value="PTE"
+      >Portugal Escudo (e.g. {{ 10 | currency: 'PTE' }})
+    </mat-option>
+    <mat-option value="ROL">
+      Romania Leu (e.g. {{ 10 | currency: 'ROL' }})
+    </mat-option>
+    <mat-option value="RUR">
+      Russia Rubles (e.g. {{ 10 | currency: 'RUR' }})
+    </mat-option>
+    <mat-option value="SAR">
+      Saudi Arabia Riyal (e.g. {{ 10 | currency: 'SAR' }})
+    </mat-option>
+    <mat-option value="XAG">
+      Silver Ounces (e.g. {{ 10 | currency: 'XAG' }})
+    </mat-option>
+    <mat-option value="SGD">
+      Singapore Dollars (e.g. {{ 10 | currency: 'SGD' }})
+    </mat-option>
+    <mat-option value="SKK"
+      >Slovakia Koruna (e.g. {{ 10 | currency: 'SKK' }})
+    </mat-option>
+    <mat-option value="ZAR">
+      South Africa Rand (e.g. {{ 10 | currency: 'ZAR' }})
+    </mat-option>
+    <mat-option value="KRW">
+      South Korea Won (e.g. {{ 10 | currency: 'KRW' }})
+    </mat-option>
+    <mat-option value="ESP"
+      >Spain Pesetas (e.g. {{ 10 | currency: 'ESP' }})
+    </mat-option>
+    <mat-option value="XDR">
+      Special Drawing Right (IMF) (e.g. {{ 10 | currency: 'XDR' }})
+    </mat-option>
+    <mat-option value="SDD">
+      Sudan Dinar (e.g. {{ 10 | currency: 'SDD' }})
+    </mat-option>
+    <mat-option value="SEK"
+      >Sweden Krona (e.g. {{ 10 | currency: 'SEK' }})
+    </mat-option>
+    <mat-option value="CHF">
+      Switzerland Francs (e.g. {{ 10 | currency: 'CHF' }})
+    </mat-option>
+    <mat-option value="TWD"
+      >Taiwan Dollars (e.g. {{ 10 | currency: 'TWD' }})
+    </mat-option>
+    <mat-option value="THB">
+      Thailand Baht (e.g. {{ 10 | currency: 'THB' }})
+    </mat-option>
+    <mat-option value="TTD">
+      Trinidad and Tobago Dollars (e.g. {{ 10 | currency: 'TTD' }})
+    </mat-option>
+    <mat-option value="TRL"
+      >Turkey Lira (e.g. {{ 10 | currency: 'TRL' }})
+    </mat-option>
+    <mat-option value="VEB"
+      >Venezuela Bolivar (e.g. {{ 10 | currency: 'VEB' }})
+    </mat-option>
+    <mat-option value="ZMK">
+      Zambia Kwacha (e.g. {{ 10 | currency: 'ZMK' }})
+    </mat-option>
+    <mat-option value="EUR">Euro (e.g. {{ 10 | currency: 'EUR' }}) </mat-option>
+    <mat-option value="XCD">
+      Eastern Caribbean Dollars (e.g. {{ 10 | currency: 'XCD' }})
+    </mat-option>
+    <mat-option value="XDR">
+      Special Drawing Right (IMF) (e.g. {{ 10 | currency: 'XDR' }})
+    </mat-option>
+    <mat-option value="XAG">
+      Silver Ounces (e.g. {{ 10 | currency: 'XAG' }})
+    </mat-option>
+    <mat-option value="XAU">
+      Gold Ounces (e.g. {{ 10 | currency: 'XAU' }})
+    </mat-option>
+    <mat-option value="XPD">
+      Palladium Ounces (e.g. {{ 10 | currency: 'XPD' }})
+    </mat-option>
+    <mat-option value="XPT">
+      Platinum Ounces (e.g. {{ 10 | currency: 'XPT' }})
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="currencyControl.hasError('required')">
+    Select currency
+  </mat-error>
+</mat-form-field>

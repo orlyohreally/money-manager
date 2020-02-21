@@ -11,6 +11,7 @@ import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
 import { ServerErrorInterceptor } from '@core-client/interceptors/server-error.interceptor';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import 'hammerjs';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { DataService } from './core/services/data.service';

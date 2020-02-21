@@ -1,0 +1,94 @@
+<div class="payment-form">
+  <h1 mat-dialog-title>
+    Payment
+  </h1>
+  <div *ngIf="subjects; else loading" mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <mat-form-field
+        appearance="outline"
+        *ngIf="adminView"
+        class="payment-payer"
+      >
+        <mat-label>Payer</mat-label>
+        <mat-select
+          required
+          formControlName="userId"
+          [value]="defaultPayer._id"
+        >
+          <mat-option *ngFor="let payer of payersList" [value]="payer._id">
+            <div
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              class="select-option"
+            >
+              <img
+                class="select-option__icon"
+                [src]="payer | familyMemberIcon"
+              />
+              <div class="select-option__title">
+                {{ payer.firstName }} {{ payer.lastName }}
+              </div>
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date of payment</mat-label>
+        <input
+          formControlName="paidAt"
+          matInput
+          required
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="payment-subject-field">
+        <mat-label>Subject of payment</mat-label>
+
+        <mat-select
+          required
+          class="payment-subject-select"
+          formControlName="subjectId"
+        >
+          <mat-option *ngFor="let subject of subjects" [value]="subject._id">
+            <div
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              class="select-option"
+            >
+              <img class="select-option__icon" [src]="subject.icon" />
+              <div class="select-option__title">{{ subject.name }}</div>
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="payment__amount">
+        <mat-label>Amount</mat-label>
+        <div matSuffix>
+          {{ payment.currency | currencySymbol }}
+        </div>
+        <input type="number" required matInput formControlName="amount" />
+      </mat-form-field>
+      <!-- <div>
+        <mat-label>Receipt</mat-label>
+        <input type="file" (change)="onFileChange($event)" />
+      </div> -->
+      <shared-notification-message type="error">
+        {{ errorMessage }}
+      </shared-notification-message>
+      <div class="action-buttons">
+        <button mat-raised-button class="button" color="primary" type="submit">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<ng-template #loading>
+  <shared-loader></shared-loader>
+</ng-template>

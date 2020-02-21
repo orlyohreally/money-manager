@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 // tslint:disable-next-line: max-line-length
@@ -13,8 +13,11 @@ export class DataService {
     private globalVariablesService: GlobalVariablesService
   ) {}
 
-  protected get<T>(url: string): Observable<T> {
-    return this.http.get<T>(`${this.apiURL}/${url}`);
+  protected get<T>(url: string, params?: HttpParams): Observable<T> {
+    return this.http.get<T>(
+      `${this.apiURL}/${url}`,
+      params ? { params } : undefined
+    );
   }
 
   protected post<T, S>(url: string, params: S): Observable<T>;

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DATE_LOCALE,
@@ -12,26 +13,33 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatSelectModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTableModule,
+  MatTooltipModule
 } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
-import { MoneyAmountComponent } from './money-amount/money-amount.component';
-import { NewPaymentComponent } from './new-payment/new-payment.component';
-import { PayerComponent } from './payer/payer.component';
-import { PaymentFormComponent } from './payment-form/payment-form.component';
+// tslint:disable-next-line: max-line-length
+import { MoneyAmountComponent } from './components/money-amount/money-amount.component';
+// tslint:disable-next-line: max-line-length
+import { NewPaymentFormComponent } from './components/new-payment-form/new-payment-form.component';
+import { PayerComponent } from './components/payer/payer.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentFormComponent } from './components/payment-form/payment-form.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectFormComponent } from './components/payment-subject-form/payment-subject-form.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
+import { PaymentsComponent } from './components/payments/payments.component';
+// tslint:disable-next-line: max-line-length
+import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
 import { PaymentListComponent } from './payment-list/payment-list.component';
 import { PaymentComponent } from './payment-list/payment/payment.component';
 // tslint:disable-next-line: max-line-length
 import { TotalPaymentComponent } from './payment-list/total-payment/total-payment.component';
 import { PaymentRoutingModule } from './payment-routing.module';
-// tslint:disable-next-line: max-line-length
-import { PaymentSubjectFormComponent } from './payment-subject-form/payment-subject-form.component';
-// tslint:disable-next-line: max-line-length
-import { PaymentSubjectComponent } from './payment-subject/payment-subject.component';
 
 @NgModule({
   declarations: [
-    NewPaymentComponent,
     PayerComponent,
     PaymentComponent,
     PaymentFormComponent,
@@ -39,7 +47,10 @@ import { PaymentSubjectComponent } from './payment-subject/payment-subject.compo
     PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
-    TotalPaymentComponent
+    TotalPaymentComponent,
+    PaymentsComponent,
+    NewPaymentDialogTriggerDirective,
+    NewPaymentFormComponent
   ],
   imports: [
     CommonModule,
@@ -49,6 +60,9 @@ import { PaymentSubjectComponent } from './payment-subject/payment-subject.compo
 
     MatSnackBarModule,
     MatButtonModule,
+    MatTableModule,
+    MatTooltipModule,
+    FlexModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
@@ -60,7 +74,6 @@ import { PaymentSubjectComponent } from './payment-subject/payment-subject.compo
     PaymentRoutingModule
   ],
   exports: [
-    NewPaymentComponent,
     PayerComponent,
     PaymentComponent,
     PaymentFormComponent,
@@ -74,6 +87,6 @@ import { PaymentSubjectComponent } from './payment-subject/payment-subject.compo
     MatDatepickerModule,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }
   ],
-  entryComponents: [PaymentFormComponent, PaymentSubjectFormComponent]
+  entryComponents: [NewPaymentFormComponent, PaymentSubjectFormComponent]
 })
 export class PaymentModule {}

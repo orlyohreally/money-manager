@@ -3,8 +3,10 @@ import { Payment } from "@shared/types";
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
 
 export interface IPaymentsDao {
-  getPayments(userId: string, familyId?: string): Promise<Payment[]>;
+  getUserPayments(userId: string): Promise<Payment[]>;
+  getFamilyPayments(userId: string, familyId?: string): Promise<Payment[]>;
   createPayment(payment: Partial<Payment>): Promise<Payment>;
+  updatePayment(payment: Partial<Payment>): Promise<Payment>;
 }
 
 export class PaymentsService {
@@ -21,14 +23,37 @@ export class PaymentsService {
     // this.imageLoaderService = imageLoaderService;
   }
 
-  public async getPayments(
+  public async getFamilyPayments(
     userId: string,
-    familyId?: string
+    familyId: string
   ): Promise<Payment[]> {
-    return this.dao.getPayments(userId, familyId);
+    return this.dao.getFamilyPayments(userId, familyId);
+  }
+
+  public async getUserPayments(userId: string): Promise<Payment[]> {
+    return this.dao.getUserPayments(userId);
   }
 
   public async createPayment(payment: Partial<Payment>): Promise<Payment> {
     return this.dao.createPayment(payment);
+  }
+
+  public async updatePayment(payment: Partial<Payment>): Promise<Payment> {
+    return this.dao.updatePayment(payment);
+  }
+
+  public validatePayment(payment: Partial<Payment>): string | null {
+    if (!payment || !payment.amount || !payment.subjectId || !payment.paidAt) {
+      return "Values were not provided";
+    }
+
+    if (
+      parseFloat(payment.amount.toString()) !== payment.amount ||
+      payment.amount < 0
+    ) {
+      return "Invalid value for amount";
+    }
+    // tslint:disable-next-line: no-null-keyword
+    return null;
   }
 }

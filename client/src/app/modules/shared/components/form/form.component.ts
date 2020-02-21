@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-form',
@@ -9,9 +14,11 @@ import { MatDialogRef } from '@angular/material';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormComponent<T> implements OnInit {
+  @Output() formSubmitted = new EventEmitter<T>();
+
   form: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<T>) {}
+  constructor() {}
 
   ngOnInit() {}
 
@@ -20,6 +27,6 @@ export class FormComponent<T> implements OnInit {
       this.form.markAsTouched();
       return;
     }
-    this.dialogRef.close(this.form.value);
+    this.formSubmitted.emit(this.form.value);
   }
 }

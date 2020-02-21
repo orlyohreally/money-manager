@@ -9,7 +9,6 @@ import { Family } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { FormComponent } from '../../shared/components/form/form.component';
 import { MemberFamily } from '../../shared/types';
 
 @Component({
@@ -17,9 +16,7 @@ import { MemberFamily } from '../../shared/types';
   templateUrl: './edit-family-form.component.html',
   styleUrls: ['./edit-family-form.component.scss']
 })
-export class EditFamilyFormComponent
-  extends FormComponent<EditFamilyFormComponent>
-  implements OnInit {
+export class EditFamilyFormComponent implements OnInit {
   @Input() form: FormGroup;
 
   errorMessage: string;
@@ -30,13 +27,11 @@ export class EditFamilyFormComponent
   };
 
   constructor(
-    dialogRef: MatDialogRef<EditFamilyFormComponent>,
+    private dialogRef: MatDialogRef<EditFamilyFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public family: Family,
     private familiesService: FamiliesService,
     private notificationsService: NotificationsService
-  ) {
-    super(dialogRef);
-  }
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({

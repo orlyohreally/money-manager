@@ -5,6 +5,7 @@
 @import 'buttons';
 @import 'cards';
 @import 'mm-badge';
+@import 'navigation';
 
 body,
 html {
@@ -55,6 +56,11 @@ a {
   flex-wrap: wrap;
   align-items: center;
   align-content: center;
+  width: 100%;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .page-content__header button {
@@ -63,4 +69,43 @@ a {
 
 .dialog_scrollable {
   overflow: auto;
+}
+
+$table-border-radius: 6px;
+
+.mat-table {
+  background: transparent !important;
+  border-collapse: separate;
+  width: 100%;
+}
+
+.mat-header-row {
+  height: unset !important;
+}
+
+.mat-header-cell {
+  font-weight: bold !important;
+  color: #000000 !important;
+}
+
+.mat-header-cell,
+.mat-cell {
+  background: #ffffff;
+  padding: 4px 8px !important;
+}
+
+.mat-header-cell:first-child {
+  border-top-left-radius: $table-border-radius;
+}
+
+.mat-header-cell:last-child {
+  border-top-right-radius: $table-border-radius;
+}
+
+.mat-row:last-child .mat-cell:first-child {
+  border-bottom-left-radius: $table-border-radius;
+}
+
+.mat-row:last-child .mat-cell:last-child {
+  border-bottom-right-radius: $table-border-radius;
 }

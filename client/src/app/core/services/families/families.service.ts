@@ -130,6 +130,32 @@ export class FamiliesService extends DataService {
     return family.icon ? family.icon : this.familyDefaultIcon;
   }
 
+  getFamiliesList(): Observable<Family[]> {
+    return this.familiesInfo.pipe(
+      map(
+        (familiesInfo: {
+          families: MemberFamily[];
+          currentFamily: MemberFamily;
+        }) => {
+          return familiesInfo.families;
+        }
+      )
+    );
+  }
+
+  getFamilyCurrency(familyId: string): Observable<string> {
+    return this.getFamiliesList()
+      .pipe(
+        map((families: Family[]) => {
+          const foundFamily = families.filter(
+            family => family._id === familyId
+          );
+          return foundFamily.length ? foundFamily[0].currency : null;
+        })
+      )
+      .pipe();
+  }
+
   updateMembersPaymentPercentages(
     familyId: string,
     percentages: MemberPaymentPercentage[]

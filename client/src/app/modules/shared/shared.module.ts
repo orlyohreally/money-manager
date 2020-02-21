@@ -49,7 +49,9 @@ import { NotificationMessageComponent } from './components/notification-message/
 // tslint:disable-next-line: max-line-length
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { BadgeDirective } from './directives/badge.directive';
+import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
+import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 
 @NgModule({
   declarations: [
@@ -72,8 +74,10 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
     LoaderComponent,
     AvatarComponent,
     FamilyIconPipe,
+    FamilyMemberIconPipe,
     CurrencySelectorComponent,
-    FormComponent
+    FormComponent,
+    CurrencySymbolPipe
   ],
   imports: [
     CommonModule,
@@ -113,8 +117,10 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
     CheckListModule,
     AvatarComponent,
     FamilyIconPipe,
+    FamilyMemberIconPipe,
     CurrencySelectorComponent,
-    FormComponent
+    FormComponent,
+    CurrencySymbolPipe
   ],
   providers: [],
   entryComponents: [

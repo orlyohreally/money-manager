@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { FamilyFormComponent } from '../../families/family-form/family-form.component';
 // tslint:disable-next-line: max-line-length
-import { PaymentFormComponent } from '../../payments/payment-form/payment-form.component';
+import { PaymentFormComponent } from '../../payments/components/payment-form/payment-form.component';
 
 @Component({
   selector: 'home-home-page',

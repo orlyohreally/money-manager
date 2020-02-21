@@ -5,6 +5,7 @@ import { AuthenticationService } from '@core-client/services/authentication/auth
 import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { User } from '@shared/types';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'nav-main-toolbar',
@@ -14,6 +15,7 @@ import { Observable } from 'rxjs';
 export class MainToolbarComponent implements OnInit {
   isAuthenticated: Observable<boolean>;
   user: Observable<User>;
+
   @Output() toggleNavbar = new EventEmitter();
 
   constructor(
@@ -22,8 +24,12 @@ export class MainToolbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isAuthenticated = this.authenticationService.isAuthenticated();
-    this.user = this.userManagerService.loadUser();
+    this.isAuthenticated = this.authenticationService.isAuthenticated().pipe(
+      map((authenticated: boolean) => {
+        this.user = this.userManagerService.loadUser();
+        return authenticated;
+      })
+    );
   }
 
   public onMenuIconClick() {

@@ -141,7 +141,7 @@ export class FamiliesService {
       },
       {
         name: Roles.Child,
-        description: "Can add and edit own payments in family",
+        description: "Can add and edit payments in family and thier own",
         default: false
       },
       {
@@ -239,6 +239,11 @@ export class FamiliesService {
       (familyMember.roles.indexOf(Roles.Owner) > -1 ||
         familyMember.roles.indexOf(Roles.Admin) > -1)
     );
+  }
+
+  public async isFamilyAdmin(userId: string, familyId: string) {
+    const familyMember = await this.dao.getFamilyMember(userId, familyId);
+    return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
   }
 
   private isAdultMember(member: FamilyMember) {

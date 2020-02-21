@@ -1,8 +1,9 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { User } from '@shared/types';
 import { LocalStorageService } from 'ngx-localstorage';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
@@ -22,13 +23,14 @@ export class AuthenticationService extends DataService {
 
   private authenticated = new BehaviorSubject<boolean>(false);
   private refreshToken: string;
-  private user = new Subject<User>();
+  private user = new ReplaySubject<User>(1);
   private token: string;
 
   constructor(
     http: HttpClient,
     globalVariablesService: GlobalVariablesService,
-    private storageService: LocalStorageService
+    private storageService: LocalStorageService,
+    private dialogRef: MatDialog
   ) {
     super(http, globalVariablesService);
     const tokens = JSON.parse(
@@ -38,8 +40,11 @@ export class AuthenticationService extends DataService {
       this.token = tokens.token;
       this.refreshToken = tokens.refreshToken;
       this.authenticated.next(!!this.token);
-      return;
     }
+  }
+
+  setUser(user: User) {
+    this.user.next(user);
   }
 
   getUser(): Observable<User> {
@@ -82,6 +87,7 @@ export class AuthenticationService extends DataService {
     this.storageService.remove('user_token', 'money-manager');
     this.user.next(null);
     this.authenticated.next(false);
+    this.dialogRef.closeAll();
   }
 
   requestRefreshToken(): Observable<void> {

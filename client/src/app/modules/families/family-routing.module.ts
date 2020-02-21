@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 // tslint:disable-next-line: max-line-length
-import { PaymentListComponent } from '../payments/payment-list/payment-list.component';
+import { PaymentsComponent } from '../payments/components/payments/payments.component';
+// tslint:disable-next-line: max-line-length
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FamiliesComponent } from './families.component';
 // tslint:disable-next-line: max-line-length
@@ -30,7 +31,8 @@ const routes: Routes = [
       },
       {
         path: 'payments',
-        component: PaymentListComponent
+        component: PaymentsComponent,
+        data: { title: 'Family payments' }
       },
       {
         path: '**',

@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["Datepicker", "Sidenav"]
+  "cSpell.words": [
+    "Datepicker",
+    "Sidenav"
+  ],
+  "explorer.compactFolders": false
 }

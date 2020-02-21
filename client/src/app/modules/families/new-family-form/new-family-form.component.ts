@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
-import { FormComponent } from '@shared-client/components/form/form.component';
 import { MemberFamily } from '../../shared/types';
 
 @Component({
@@ -20,21 +19,17 @@ import { MemberFamily } from '../../shared/types';
   styleUrls: ['./new-family-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NewFamilyFormComponent
-  extends FormComponent<NewFamilyFormComponent>
-  implements OnInit {
+export class NewFamilyFormComponent implements OnInit {
   @Input() form: FormGroup;
 
   memberRoles: string[];
 
   constructor(
-    dialogRef: MatDialogRef<NewFamilyFormComponent>,
+    private dialogRef: MatDialogRef<NewFamilyFormComponent>,
     private familiesService: FamiliesService,
     private notificationsService: NotificationsService,
     private router: Router
-  ) {
-    super(dialogRef);
-  }
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({

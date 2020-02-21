@@ -1,0 +1,14 @@
+<div class="payments" fxLayout="column" fxLayoutAlign="center start">
+  <div class="page-content__header">
+    <div class="mat-h1">Payments</div>
+    <button
+      [paymentNewPayment]="familyId | async"
+      class="button button_lg"
+      mat-raised-button
+      color="primary"
+    >
+      New payment
+    </button>
+  </div>
+  <payment-payment-list [payments]="payments | async"> </payment-payment-list>
+</div>

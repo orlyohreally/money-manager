@@ -22,8 +22,8 @@ import { NotificationMessageComponent } from '@shared-client/components/notifica
 import { SharedModule } from '@src/app/modules/shared/shared.module';
 import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
 import { cold, getTestScheduler } from 'jasmine-marbles';
+import { NewFamilyMemberFormComponent } from './new-member-form.component';
 // tslint:disable-next-line: max-line-length
-import { NewFamilyMemberFormComponent } from './new-family-member-form.component';
 
 describe('MemberFormComponent', () => {
   let component: NewFamilyMemberFormComponent;

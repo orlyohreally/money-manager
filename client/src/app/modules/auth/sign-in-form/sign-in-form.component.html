@@ -95,8 +95,9 @@
           Passwords do not match
         </mat-error>
       </mat-form-field>
-      <div class="password-hints">
+      <div class="password-hints" fxLayout="row wrap">
         <div
+          fxFlex="1 1 50%"
           class="password-hint"
           [ngClass]="{
             'password-hint_shadowed': !password.hasError('no-lower-letter')
@@ -105,6 +106,7 @@
           One lowercase character
         </div>
         <div
+          fxFlex="1 1 50%"
           class="password-hint"
           [ngClass]="{
             'password-hint_shadowed': !password.hasError('no-capital-letter')
@@ -113,6 +115,7 @@
           One uppercase character
         </div>
         <div
+          fxFlex="1 1 50%"
           class="password-hint"
           [ngClass]="{
             'password-hint_shadowed': !password.hasError('no-digit-character')
@@ -121,6 +124,7 @@
           One number
         </div>
         <div
+          fxFlex="1 1 50%"
           class="password-hint"
           [ngClass]="{
             'password-hint_shadowed': !password.hasError('no-special-character')
@@ -129,6 +133,7 @@
           One special character
         </div>
         <div
+          fxFlex="1 1 50%"
           class="password-hint"
           [ngClass]="{
             'password-hint_shadowed':

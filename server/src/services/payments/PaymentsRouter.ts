@@ -29,15 +29,13 @@ export class PaymentsRouter {
     this.familiesService = familiesService;
 
     this.router.get(
-      "/payments",
+      "/payments/:familyId",
       this.usersService.validateToken.bind(usersService),
-
       asyncWrap(this.getPayments)
     );
 
     this.router.post(
-      "/payments",
-
+      "/payments/:familyId",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.postPayment)
     );
@@ -45,21 +43,21 @@ export class PaymentsRouter {
 
   private getPayments = async (req: Request, res: Response) => {
     try {
-      const body = req.body as { payment: Partial<Payment>; user: User };
-      const familyId: string | null = (req.query as { familyId: string })
-        .familyId;
-      if (familyId) {
-        const updateIsAllowed =
-          body.payment.familyId &&
-          (await this.familiesService.userCanUpdateFamily(
-            body.user._id,
-            familyId
-          ));
-        if (!updateIsAllowed) {
-          return res.status(403).json("Unathorized access");
-        }
+      const body = req.body as { user: User };
+      const familyId: string = (req.params as { familyId: string }).familyId;
+      const updateIsAllowed =
+        familyId &&
+        (await this.familiesService.userCanUpdateFamily(
+          body.user._id,
+          familyId
+        ));
+      if (!updateIsAllowed) {
+        return res.status(403).json({ message: "Unathorized access" });
       }
-      const payments = await this.service.getPayments(body.user._id, familyId);
+      const payments = await this.service.getFamilyPayments(
+        body.user._id,
+        familyId
+      );
       return res.status(200).json(payments);
     } catch (err) {
       return res.status(400).json(err);
@@ -68,33 +66,66 @@ export class PaymentsRouter {
 
   private postPayment = async (req: Request, res: Response) => {
     try {
-      const body = req.body as { payment: Partial<Payment>; user: User };
+      const body = req.body as { payment: Payment; user: User };
+      const familyId = (req.params as { familyId: string }).familyId;
+      if (!familyId) {
+        return this.postUserPayment(req, res);
+      }
       const updateIsAllowed =
-        body.payment.familyId &&
+        familyId &&
         (await this.familiesService.userCanUpdateFamily(
           body.user._id,
-          body.payment.familyId
+          familyId
         ));
       if (!updateIsAllowed) {
-        return res.status(403).json("Unathorized access");
+        return res.status(403).json({ message: "Unathorized access" });
       }
 
-      if (
-        !body.payment ||
-        !body.payment.amount ||
-        !body.payment.subjectId ||
-        !body.payment.paidAt
-      ) {
-        return res.status(400).json("Values were not provided");
+      const error = this.service.validatePayment(body.payment);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+      const isFamilyAdmin = this.familiesService.isFamilyAdmin(
+        body.user._id,
+        familyId
+      );
+      let payment: Payment;
+      if (!body.payment._id) {
+        if (isFamilyAdmin) {
+          payment = await this.service.createPayment({
+            ...body.payment,
+            familyId
+          });
+        } else {
+          payment = await this.service.createPayment({
+            ...body.payment,
+            userId: body.user._id,
+            familyId
+          });
+        }
+        return res.status(200).json(payment);
       }
 
-      const payment = await this.service.createPayment({
-        ...body.payment,
-        userId: body.user._id
-      });
+      if (isFamilyAdmin) {
+        payment = await this.service.updatePayment(body.payment);
+      } else {
+        payment = await this.service.updatePayment({
+          ...body.payment,
+          userId: body.user._id,
+          familyId
+        });
+      }
       return res.status(200).json(payment);
     } catch (err) {
-      return res.status(400).json(err);
+      return res.status(400).json({ message: err });
+    }
+  };
+
+  private postUserPayment = async (req: Request, res: Response) => {
+    try {
+      throw new Error("not implemented");
+    } catch (err) {
+      return res.status(400).json({ message: err });
     }
   };
 }

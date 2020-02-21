@@ -5,8 +5,10 @@ import { PaymentSubjectModel } from "./models";
 import { IPaymentSubjectsDao } from "./PaymentSubjectsService";
 
 export class PaymentSubjectsDao implements IPaymentSubjectsDao {
-  public async getPaymentSubjects(): Promise<PaymentSubject[]> {
-    return PaymentSubjectModel.find({})
+  public async getPaymentSubjects(familyId: string): Promise<PaymentSubject[]> {
+    return PaymentSubjectModel.find({
+      $or: [{ familyId: undefined }, { familyId: { $eq: familyId } }]
+    })
       .lean()
       .exec();
   }

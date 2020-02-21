@@ -25,7 +25,7 @@ export class PaymentSubjectsRouter {
     this.usersService = usersService;
 
     this.router.get(
-      "/payment-subjects",
+      "/payment-subjects/:familyId",
       this.usersService.validateToken.bind(usersService),
 
       asyncWrap(this.getPaymentSubjects)
@@ -39,7 +39,8 @@ export class PaymentSubjectsRouter {
 
   private getPaymentSubjects = async (req: Request, res: Response) => {
     try {
-      const paymentSubjects = await this.service.getPaymentSubjects();
+      const familyId: string = (req.params as { familyId: string }).familyId;
+      const paymentSubjects = await this.service.getPaymentSubjects(familyId);
       return res.status(200).json(paymentSubjects);
     } catch (err) {
       return res.status(400).json(err);

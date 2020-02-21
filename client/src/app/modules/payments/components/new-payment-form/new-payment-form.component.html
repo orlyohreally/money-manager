@@ -1,0 +1,10 @@
+<payment-form
+  *ngIf="payment"
+  [subjects]="subjects | async"
+  [defaultPayer]="data.defaultUserId"
+  [adminView]="adminView | async"
+  [payment]="payment | async"
+  [payersList]="familyMembers | async"
+  [errorMessage]="errorMessage"
+  (formSubmitted)="createPayment($event)"
+></payment-form>

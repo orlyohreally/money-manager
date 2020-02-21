@@ -11,6 +11,7 @@
           class="mat-button_stretched nav-block__link"
           routerLinkActive="nav-block__link_active"
           routerLink="/families/{{ family._id }}/dashboard"
+          [routerLinkActiveOptions]="{ exact: true }"
           sharedBadge="Coming soon"
         >
           <div class="menu-item">
@@ -25,6 +26,7 @@
           class="mat-button_stretched nav-block__link"
           routerLinkActive="nav-block__link_active"
           routerLink="/families/{{ family._id }}/members"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           <div class="menu-item">
             <mat-icon class="menu-item__icon">people_alt</mat-icon>
@@ -38,7 +40,7 @@
           class="mat-button_stretched nav-block__link"
           routerLinkActive="nav-block__link_active"
           routerLink="/families/{{ family._id }}/payments"
-          sharedBadge="Coming soon"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           <div class="menu-item">
             <mat-icon class="menu-item__icon">payment</mat-icon>
@@ -52,6 +54,7 @@
           class="mat-button_stretched nav-block__link"
           routerLinkActive="nav-block__link_active"
           routerLink="/families/{{ family._id }}/reports"
+          [routerLinkActiveOptions]="{ exact: true }"
           sharedBadge="Coming soon"
         >
           <div class="menu-item">

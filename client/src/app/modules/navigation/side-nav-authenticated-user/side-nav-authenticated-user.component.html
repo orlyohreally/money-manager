@@ -6,6 +6,7 @@
         class="mat-button_stretched nav-block__link"
         routerLinkActive="nav-block__link_active"
         routerLink="/user/dashboard"
+        [routerLinkActiveOptions]="{ exact: true }"
         sharedBadge="Coming soon"
       >
         Dashboard
@@ -17,7 +18,7 @@
         class="mat-button_stretched nav-block__link"
         routerLinkActive="nav-block__link_active"
         routerLink="/families"
-        sharedBadge="Coming soon"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
         My families
       </a>
@@ -28,6 +29,7 @@
         class="mat-button_stretched nav-block__link"
         routerLinkActive="nav-block__link_active"
         routerLink="/user/payments"
+        [routerLinkActiveOptions]="{ exact: true }"
         sharedBadge="Coming soon"
       >
         My payments
@@ -39,6 +41,7 @@
         class="mat-button_stretched nav-block__link"
         routerLinkActive="nav-block__link_active"
         routerLink="/user/reports"
+        [routerLinkActiveOptions]="{ exact: true }"
         sharedBadge="Coming soon"
       >
         My reports

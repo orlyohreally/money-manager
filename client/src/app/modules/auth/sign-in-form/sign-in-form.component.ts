@@ -1,5 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -10,25 +18,39 @@ import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { User } from '@shared/types';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'auth-sign-in-form',
   templateUrl: './sign-in-form.component.html',
   styleUrls: ['./sign-in-form.component.scss']
 })
-export class SignInFormComponent implements OnInit {
+export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private authService: AuthenticationService,
     private router: Router
   ) {}
+  @ViewChildren('errorMessageBlock')
+  errorMessageBlocks: QueryList<ElementRef>;
 
   signInForm: FormGroup;
   serverError: string;
   showPassword = false;
+  errorMessageBlock: ElementRef;
+  destroyed = new Subject<void>();
 
   ngOnInit() {
     this.authService.logout();
     this.initForm();
+  }
+
+  public ngAfterViewInit(): void {
+    this.errorMessageBlocks.changes
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((components: QueryList<ElementRef>) => {
+        this.errorMessageBlock = components.first;
+      });
   }
 
   get lastName() {
@@ -72,6 +94,12 @@ export class SignInFormComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             this.serverError = error.error;
+            setTimeout(() => {
+              this.errorMessageBlock.nativeElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              });
+            });
           }
         );
     }
@@ -149,5 +177,10 @@ export class SignInFormComponent implements OnInit {
       return;
     }
     return { 'verification-error': true };
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

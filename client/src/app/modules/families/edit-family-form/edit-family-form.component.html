@@ -5,7 +5,7 @@
     [familyId]="family._id"
     (valueUpdated)="onPercentagesSet($event)"
   ></member-members-payment-percentage>
-  <shared-notification-message type="error" *ngIf="errorMessage">
+  <div sharedNotificationBlock="error" *ngIf="errorMessage">
     {{ errorMessage }}
-  </shared-notification-message>
+  </div>
 </family-family-form>

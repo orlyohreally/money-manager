@@ -15,7 +15,8 @@ import { AuthenticationService } from '@core-client/services/authentication/auth
 // tslint:disable-next-line: max-line-length
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 // tslint:disable-next-line: max-line-length
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+// tslint:disable-next-line: max-line-length
 import { SharedModule } from '@shared-client/shared.module';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '@src/app/core/services/global-variables/global-variables.service';
@@ -170,7 +171,7 @@ describe('EmailVerificationRequestComponent', () => {
         getTestScheduler().flush();
         fixture.detectChanges();
         const messageEl: DebugElement = fixture.debugElement.query(
-          By.directive(NotificationMessageComponent)
+          By.directive(NotificationBlockDirective)
         );
         expectTextContentToBe(
           messageEl.nativeElement,
@@ -193,7 +194,7 @@ describe('EmailVerificationRequestComponent', () => {
         getTestScheduler().flush();
         fixture.detectChanges();
         const messageEl: DebugElement = fixture.debugElement.query(
-          By.directive(NotificationMessageComponent)
+          By.directive(NotificationBlockDirective)
         );
         expectTextContentToBe(
           messageEl.nativeElement,
@@ -259,16 +260,16 @@ describe('EmailVerificationRequestComponent', () => {
         clickRequestVerificationEmailButton(2 * debounceTime);
         clickRequestVerificationEmailButton(3 * debounceTime);
         const messageEl: DebugElement = fixture.debugElement.queryAll(
-          By.directive(NotificationMessageComponent)
+          By.directive(NotificationBlockDirective)
         )[1];
-        const messageElComponent: NotificationMessageComponent =
+        const messageElComponent: NotificationBlockDirective =
           messageEl.componentInstance;
         expectTextContentToBe(
           messageEl.nativeElement,
           'If you still have not received email,' +
             ' contact us at support-email@gmail.com'
         );
-        expect(messageElComponent.type).toBe('error');
+        expect(messageElComponent.sharedNotificationBlock).toBe('error');
       })
     );
 

@@ -45,10 +45,11 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { MenuEntryComponent } from './components/menu/menu-entry/menu-entry.component';
 import { MenuComponent } from './components/menu/menu.component';
 // tslint:disable-next-line: max-line-length
-import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
 // tslint:disable-next-line: max-line-length
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { BadgeDirective } from './directives/badge.directive';
+// tslint:disable-next-line: max-line-length
+import { NotificationBlockDirective } from './directives/notification-block.directive';
 import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
@@ -70,14 +71,14 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
     BadgeDirective,
     ValueEditorComponent,
     ConfirmationDialogComponent,
-    NotificationMessageComponent,
     LoaderComponent,
     AvatarComponent,
     FamilyIconPipe,
     FamilyMemberIconPipe,
     CurrencySelectorComponent,
     FormComponent,
-    CurrencySymbolPipe
+    CurrencySymbolPipe,
+    NotificationBlockDirective
   ],
   imports: [
     CommonModule,
@@ -112,7 +113,6 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
     BadgeDirective,
     ValueEditorComponent,
     ConfirmationDialogComponent,
-    NotificationMessageComponent,
     LoaderComponent,
     CheckListModule,
     AvatarComponent,
@@ -120,7 +120,8 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
     FamilyMemberIconPipe,
     CurrencySelectorComponent,
     FormComponent,
-    CurrencySymbolPipe
+    CurrencySymbolPipe,
+    NotificationBlockDirective
   ],
   providers: [],
   entryComponents: [

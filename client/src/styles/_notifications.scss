@@ -1,18 +1,15 @@
 @import 'theme';
 
-:host {
-  display: flex;
-  justify-content: center;
-}
-
 .notification-message {
   padding: 16px;
   border-radius: 4px;
-  margin: 16px 0;
+  margin: 16px auto;
   width: 500px;
   max-width: 80%;
   text-align: center;
   line-height: 25px;
+  display: flex;
+  justify-content: center;
 }
 
 .notification-message_success {

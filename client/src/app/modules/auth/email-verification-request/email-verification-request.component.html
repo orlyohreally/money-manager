@@ -8,7 +8,7 @@
     <img class="icon" src="/assets/images/form.jpg" />
   </a>
   <ng-container *ngIf="!sendingEmail; else loading">
-    <shared-notification-message *ngIf="!attempts" type="success">
+    <div *ngIf="!attempts" sharedNotificationBlock="success">
       <span>
         Activate your account by verifying your email using link that has been
         sent to email
@@ -21,8 +21,8 @@
         signing up, please check your Spam or Bulk E-Mail folder just in case
         the confirmation email got delivered there instead of your inbox.
       </span>
-    </shared-notification-message>
-    <shared-notification-message *ngIf="attempts" type="success">
+    </div>
+    <div *ngIf="attempts" sharedNotificationBlock="success">
       <span>Email with link to verify your email has been sent to email </span>
       <b>{{ email }}</b>
       <span>.</span>
@@ -32,17 +32,17 @@
         signing up, please check your Spam or Bulk E-Mail folder just in case
         the confirmation email got delivered there instead of your inbox.
       </span>
-    </shared-notification-message>
-    <shared-notification-message
+    </div>
+    <div
       *ngIf="!showContactUsMessage && errorMessage"
-      type="error"
+      sharedNotificationBlock="error"
     >
       {{ errorMessage }}
-    </shared-notification-message>
-    <shared-notification-message *ngIf="showContactUsMessage" type="error">
+    </div>
+    <div *ngIf="showContactUsMessage" sharedNotificationBlock="error">
       If you still have not received email, contact us at
       <a href="mailto: {{ supportEmail }}">{{ supportEmail }}</a>
-    </shared-notification-message>
+    </div>
   </ng-container>
   <ng-template #loading>
     <shared-loader></shared-loader>

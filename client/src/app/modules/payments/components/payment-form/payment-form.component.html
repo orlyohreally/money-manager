@@ -55,14 +55,9 @@
           formControlName="subjectId"
         >
           <mat-option *ngFor="let subject of subjects" [value]="subject._id">
-            <div
-              fxLayout="row"
-              fxLayoutAlign="start center"
-              class="select-option"
-            >
-              <img class="select-option__icon" [src]="subject.icon" />
-              <div class="select-option__title">{{ subject.name }}</div>
-            </div>
+            <payment-payment-subject
+              [paymentSubject]="subject"
+            ></payment-payment-subject>
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -78,9 +73,9 @@
         <mat-label>Receipt</mat-label>
         <input type="file" (change)="onFileChange($event)" />
       </div> -->
-      <shared-notification-message type="error">
+      <div sharedNotificationBlock="error" *ngIf="errorMessage">
         {{ errorMessage }}
-      </shared-notification-message>
+      </div>
       <div class="action-buttons">
         <button mat-raised-button class="button" color="primary" type="submit">
           Save

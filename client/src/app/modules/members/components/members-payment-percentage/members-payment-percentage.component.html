@@ -28,12 +28,12 @@
       >
       </member-payment-percentage>
     </div>
-    <shared-notification-message
-      type="error"
+    <div
+      sharedNotificationBlock="error"
       *ngIf="paymentsPercentagesList.hasError('totalPercentage')"
     >
       Values should add up to 100%
-    </shared-notification-message>
+    </div>
   </form>
 </ng-container>
 

@@ -33,15 +33,15 @@
         [newFamilyMemberRoles]="this.memberForm.get('roles').value"
         (valueUpdated)="onPercentagesSet($event)"
       ></member-members-payment-percentage>
-      <shared-notification-message
-        type="error"
+      <div
+        sharedNotificationBlock="error"
         *ngIf="rolesLoaded && memberForm.get('roles').hasError('required')"
       >
         Select at least one role for new member
-      </shared-notification-message>
-      <shared-notification-message type="error" *ngIf="errorMessage">
+      </div>
+      <div sharedNotificationBlock="error" *ngIf="errorMessage">
         {{ errorMessage }}
-      </shared-notification-message>
+      </div>
       <div fxLayout="row" fxLayoutAlign="center">
         <button
           mat-raised-button

@@ -17,7 +17,7 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 // tslint:disable-next-line: max-line-length
 import { CheckboxComponent } from '@shared-client/check-list/components/checkbox/checkbox.component';
 // tslint:disable-next-line: max-line-length
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { SharedModule } from '@src/app/modules/shared/shared.module';
 import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
@@ -161,11 +161,12 @@ describe('MemberFormComponent', () => {
       getTestScheduler().flush();
       fixture.detectChanges();
       const errorMessage: DebugElement = fixture.debugElement.query(
-        By.directive(NotificationMessageComponent)
+        By.directive(NotificationBlockDirective)
       );
       expectTextContentToBe(errorMessage.nativeElement, 'error message');
       expect(
-        (errorMessage.componentInstance as NotificationMessageComponent).type
+        (errorMessage.componentInstance as NotificationBlockDirective)
+          .sharedNotificationBlock
       ).toBe('error');
     }
   );

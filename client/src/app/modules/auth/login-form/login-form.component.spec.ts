@@ -19,7 +19,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+// tslint:disable-next-line: max-line-length
 import { User } from '@shared/types';
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { cold, getTestScheduler } from 'jasmine-marbles';
@@ -44,7 +45,7 @@ describe('LoginFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         LoginFormComponent,
-        MockComponent(NotificationMessageComponent)
+        MockComponent(NotificationBlockDirective)
       ],
       providers: [
         { provide: AuthenticationService, useValue: authServiceSpy },
@@ -186,10 +187,13 @@ describe('LoginFormComponent', () => {
         getTestScheduler().flush();
         fixture.detectChanges();
         const errorEl: DebugElement = fixture.debugElement.query(
-          By.directive(NotificationMessageComponent)
-        ).componentInstance;
+          By.directive(NotificationBlockDirective)
+        );
         expect(errorEl.nativeElement.textContent.trim()).toBe('error message');
-        expect(errorEl.componentInstance.type).toBe('error');
+        expect(
+          (errorEl.componentInstance as NotificationBlockDirective)
+            .sharedNotificationBlock
+        ).toBe('error');
       }
     );
 

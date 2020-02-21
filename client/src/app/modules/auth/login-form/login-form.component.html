@@ -18,9 +18,9 @@
       </a>
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="login($event)">
-      <shared-notification-message *ngIf="serverError" type="error">
+      <div *ngIf="serverError" sharedNotificationBlock="error">
         {{ serverError }}
-      </shared-notification-message>
+      </div>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input required formControlName="email" matInput />

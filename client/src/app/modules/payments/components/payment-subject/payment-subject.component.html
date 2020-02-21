@@ -1,7 +1,4 @@
-<div class="payment-subject">
-  <img
-    title="{{ paymentSubject.name }}"
-    class="icon"
-    src="{{ paymentSubject.icon }}"
-  />
+<div fxLayout="row" fxLayoutAlign="start center">
+  <img class="subject__icon" [src]="paymentSubject.icon" />
+  <div>{{ paymentSubject.name }}</div>
 </div>

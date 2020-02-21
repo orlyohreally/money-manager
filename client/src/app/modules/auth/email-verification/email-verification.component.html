@@ -1,8 +1,8 @@
 <div class="email-verification">
   <div *ngIf="errorMessage | async as message; else verifying">
-    <shared-notification-message type="error">
+    <div sharedNotificationBlock="error" *ngIf="message">
       {{ message }}
-    </shared-notification-message>
+    </div>
   </div>
   <ng-template #verifying>
     <div>Verifying your email...</div>

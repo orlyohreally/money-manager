@@ -7,7 +7,8 @@ import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
-import { NotificationMessageComponent } from '@shared-client/components/notification-message/notification-message.component';
+import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+// tslint:disable-next-line: max-line-length
 import { SharedModule } from '@shared-client/shared.module';
 import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
 import { cold, getTestScheduler } from 'jasmine-marbles';
@@ -104,11 +105,11 @@ describe('EmailVerificationComponent', () => {
           getTestScheduler().flush();
           fixture.detectChanges();
           const errorEl: DebugElement = fixture.debugElement.query(
-            By.directive(NotificationMessageComponent)
+            By.directive(NotificationBlockDirective)
           );
-          const errorElComponent: NotificationMessageComponent =
+          const errorElComponent: NotificationBlockDirective =
             errorEl.componentInstance;
-          expect(errorElComponent.type).toBe('error');
+          expect(errorElComponent.sharedNotificationBlock).toBe('error');
           expectTextContentToBe(errorEl.nativeElement, 'Error message');
         }
       );

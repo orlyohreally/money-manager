@@ -13,6 +13,16 @@ export class PaymentSubjectsDao implements IPaymentSubjectsDao {
       .exec();
   }
 
+  public async getUserPaymentSubjects(
+    userId: string
+  ): Promise<PaymentSubject[]> {
+    return PaymentSubjectModel.find({
+      $or: [{ userId: undefined }, { userId: { $eq: userId } }]
+    })
+      .lean()
+      .exec();
+  }
+
   public async createPaymentSubject(
     subject: Partial<PaymentSubject>
   ): Promise<PaymentSubject> {

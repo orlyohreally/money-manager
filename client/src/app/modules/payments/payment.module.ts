@@ -12,8 +12,10 @@ import {
   MatIconModule,
   MatInputModule,
   MatNativeDateModule,
+  MatPaginatorModule,
   MatSelectModule,
   MatSnackBarModule,
+  MatSortModule,
   MatTableModule,
   MatTooltipModule
 } from '@angular/material';
@@ -30,6 +32,10 @@ import { PaymentSubjectFormComponent } from './components/payment-subject-form/p
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
 import { PaymentsComponent } from './components/payments/payments.component';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsListComponent } from './components/user-payment-list/user-payment-list.component';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsComponent } from './components/user-payments/user-payments.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
 import { PaymentListComponent } from './payment-list/payment-list.component';
@@ -50,7 +56,9 @@ import { PaymentRoutingModule } from './payment-routing.module';
     TotalPaymentComponent,
     PaymentsComponent,
     NewPaymentDialogTriggerDirective,
-    NewPaymentFormComponent
+    NewPaymentFormComponent,
+    UserPaymentsListComponent,
+    UserPaymentsComponent
   ],
   imports: [
     CommonModule,
@@ -70,6 +78,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatPaginatorModule,
+    MatSortModule,
 
     PaymentRoutingModule
   ],
@@ -81,7 +91,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
-    TotalPaymentComponent
+    TotalPaymentComponent,
+    UserPaymentsComponent
   ],
   providers: [
     MatDatepickerModule,

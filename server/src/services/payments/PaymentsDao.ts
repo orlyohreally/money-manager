@@ -14,118 +14,17 @@ export class PaymentsDao implements IPaymentsDao {
       userId: new ObjectId(userId),
       familyId: new ObjectId(familyId)
     });
-    return PaymentModel.aggregate([
-      {
-        $match: {
-          userId: new ObjectId(userId),
-          familyId: new ObjectId(familyId)
-        }
-      },
-      {
-        $lookup: {
-          from: "paymentsubjectmodels",
-          localField: "subjectId",
-          foreignField: "_id",
-          as: "subject"
-        }
-      },
-      {
-        $unwind: "$subject"
-      },
-      {
-        $lookup: {
-          from: "usermodels",
-          localField: "userId",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      {
-        $unwind: "$user"
-      },
-      {
-        $lookup: {
-          from: "familymodels",
-          localField: "familyId",
-          foreignField: "_id",
-          as: "family"
-        }
-      },
-      {
-        $unwind: "$family"
-      },
-      {
-        $project: {
-          amount: true,
-          currency: "$family.currency",
-          paidAt: true,
-          createdAt: true,
-          updatedAt: true,
-          receipt: true,
-          "subject._id": "$subject._id",
-          "subject.name": "$subject.name",
-          "subject.icon": "$subject.icon",
-          "user._id": "$user._id",
-          "user.firstName": "$user.firstName",
-          "user.lastName": "$user.lastName",
-          "user.paymentPercentage": "$user.paymentPercentage"
-        }
-      }
-    ]);
   }
 
   public async getUserPayments(userId: string): Promise<Payment[]> {
-    return PaymentModel.aggregate([
-      {
-        $match: {
-          userId: new ObjectId(userId)
-        }
-      },
-      {
-        $lookup: {
-          from: "paymentsubjectmodels",
-          localField: "subjectId",
-          foreignField: "_id",
-          as: "subject"
-        }
-      },
-      {
-        $unwind: "$subject"
-      },
-      {
-        $lookup: {
-          from: "usermodels",
-          localField: "userId",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      {
-        $unwind: "$user"
-      },
-      {
-        $lookup: {
-          from: "familymodels",
-          localField: "familyId",
-          foreignField: "_id",
-          as: "family"
-        }
-      },
-      {
-        $unwind: { path: "$family", preserveNullAndEmptyArrays: true }
-      },
-      {
-        $project: {
-          subjectId: false,
-          userId: false,
-          familyId: false
-        }
-      }
-    ]);
+    return PaymentModel.find({
+      userId: new ObjectId(userId)
+    });
   }
 
   public async createPayment(payment: Partial<Payment>): Promise<Payment> {
     const newPayment = new PaymentModel(payment);
+    console.log("newPayment", newPayment, payment);
     await newPayment.save();
     return newPayment.toJSON(modelTransformer) as Payment;
   }

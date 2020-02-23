@@ -8,6 +8,12 @@ import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
+export interface FamilyView {
+  name: string;
+  icon: string;
+  membersCount: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,10 +33,27 @@ export class FamiliesService extends DataService {
     super(http, globalVariablesService);
   }
 
-  loadFamilies(): Observable<void> {
+  loadFamilies(): Observable<MemberFamily[]> {
     return this.get(this.familyAPIRouter).pipe(
       map((families: MemberFamily[]) => {
         this.familyStore.next({ families, currentFamily: families[0] });
+        return families;
+      })
+    );
+  }
+
+  getFamilyById(familyId: string): Observable<MemberFamily> {
+    if (this.familyStore.getValue().families) {
+      return of(
+        this.familyStore
+          .getValue()
+          .families.filter(family => family._id === familyId)[0]
+      );
+    }
+
+    return this.loadFamilies().pipe(
+      switchMap(families => {
+        return of(families.filter(family => family._id === familyId)[0]);
       })
     );
   }
@@ -118,9 +141,7 @@ export class FamiliesService extends DataService {
     );
   }
 
-  getFamily(
-    familyId: string
-  ): Observable<{ name: string; icon: string; membersCount: number }> {
+  getFamily(familyId: string): Observable<FamilyView> {
     return this.get<{ name: string; icon: string; membersCount: number }>(
       `${this.familyAPIRouter}${familyId}`
     );

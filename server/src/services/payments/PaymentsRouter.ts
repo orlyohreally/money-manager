@@ -29,17 +29,38 @@ export class PaymentsRouter {
     this.familiesService = familiesService;
 
     this.router.get(
+      "/payments/",
+      this.usersService.validateToken.bind(usersService),
+      asyncWrap(this.getUserPayments)
+    );
+    this.router.get(
       "/payments/:familyId",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.getPayments)
     );
-
+    this.router.post(
+      "/payments/",
+      this.usersService.validateToken.bind(usersService),
+      asyncWrap(this.postUserPayment)
+    );
     this.router.post(
       "/payments/:familyId",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.postPayment)
     );
   }
+
+  private getUserPayments = async (req: Request, res: Response) => {
+    try {
+      const body = req.body as { user: User };
+      const payments: Payment[] = await this.service.getUserPayments(
+        body.user._id
+      );
+      return res.status(200).json(payments);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
 
   private getPayments = async (req: Request, res: Response) => {
     try {
@@ -54,7 +75,8 @@ export class PaymentsRouter {
       if (!updateIsAllowed) {
         return res.status(403).json({ message: "Unathorized access" });
       }
-      const payments = await this.service.getFamilyPayments(
+
+      const payments: Payment[] = await this.service.getFamilyPayments(
         body.user._id,
         familyId
       );
@@ -120,10 +142,27 @@ export class PaymentsRouter {
       return res.status(400).json({ message: err });
     }
   };
-
   private postUserPayment = async (req: Request, res: Response) => {
     try {
-      throw new Error("not implemented");
+      const body = req.body as { payment: Payment; user: User };
+      const error = this.service.validatePayment(body.payment);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+      let payment: Payment;
+
+      if (!body.payment._id) {
+        payment = await this.service.createPayment({
+          ...body.payment,
+          userId: body.user._id
+        });
+      } else {
+        payment = await this.service.updatePayment({
+          ...body.payment,
+          userId: body.user._id
+        });
+      }
+      return res.status(200).json(payment);
     } catch (err) {
       return res.status(400).json({ message: err });
     }

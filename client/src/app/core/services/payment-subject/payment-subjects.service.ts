@@ -22,12 +22,12 @@ export class PaymentSubjectsService extends DataService {
     super(http, globalVariablesService);
   }
 
-  getSubjects(familyId: string): Observable<PaymentSubject[]> {
-    return this.get(`${this.subjectsApi}/${familyId}`).pipe(
+  loadSubjects(familyId?: string): Observable<PaymentSubject[]> {
+    return this.get(`${this.subjectsApi}/${familyId ? familyId : ''}`).pipe(
       switchMap((subjects: PaymentSubject[]) => {
         this.subjectsList.next({
           ...this.subjectsList.getValue(),
-          [familyId]: subjects
+          [familyId ? familyId : 'user']: subjects
         });
         return of(subjects);
       })
@@ -36,20 +36,25 @@ export class PaymentSubjectsService extends DataService {
 
   getSubjectById(
     subjectId: string,
-    familyId: string
+    familyId?: string
   ): Observable<PaymentSubject> {
-    if (!this.subjectsList.getValue()[familyId]) {
-      return this.getSubjects(familyId).pipe(
+    if (!this.subjectsList.getValue()[familyId ? familyId : 'user']) {
+      return this.loadSubjects(familyId).pipe(
         switchMap(() => of(this.findSubjectById(subjectId, familyId)))
       );
     }
     return of(this.findSubjectById(subjectId, familyId));
   }
 
-  private findSubjectById(subjectId: string, familyId: string): PaymentSubject {
+  private findSubjectById(
+    subjectId: string,
+    familyId?: string
+  ): PaymentSubject {
     const foundSubjects = this.subjectsList
       .getValue()
-      [familyId].filter(subject => subject._id === subjectId);
+      [familyId ? familyId : 'user'].filter(
+        subject => subject._id === subjectId
+      );
     return foundSubjects.length ? foundSubjects[0] : null;
   }
 }

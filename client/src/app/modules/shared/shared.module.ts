@@ -53,6 +53,7 @@ import { NotificationBlockDirective } from './directives/notification-block.dire
 import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
+import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
     CurrencySelectorComponent,
     FormComponent,
     CurrencySymbolPipe,
-    NotificationBlockDirective
+    NotificationBlockDirective,
+    PrefixedNumberPipe
   ],
   imports: [
     CommonModule,
@@ -121,7 +123,8 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
     CurrencySelectorComponent,
     FormComponent,
     CurrencySymbolPipe,
-    NotificationBlockDirective
+    NotificationBlockDirective,
+    PrefixedNumberPipe
   ],
   providers: [],
   entryComponents: [

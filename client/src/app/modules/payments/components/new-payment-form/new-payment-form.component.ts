@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 // tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
@@ -9,7 +11,7 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
-import { FamilyMember, Payment, PaymentSubject } from '@shared/types';
+import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -24,6 +26,7 @@ export class NewPaymentFormComponent implements OnInit {
   adminView: Observable<boolean>;
   familyMembers: Observable<FamilyMember[]>;
   errorMessage: string;
+  paymentCurrency: string;
 
   constructor(
     private dialogRef: MatDialogRef<NewPaymentFormComponent>,
@@ -32,53 +35,89 @@ export class NewPaymentFormComponent implements OnInit {
     private familiesService: FamiliesService,
     private membersService: MembersService,
     private notificationsService: NotificationsService,
+    private authService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA)
     public data: { defaultUserId: string; familyId: string }
   ) {}
 
   ngOnInit() {
-    this.subjects = this.paymentSubjectsService.getSubjects(this.data.familyId);
-    this.adminView = this.membersService.userIsFamilyAdmin(
-      this.data.defaultUserId,
+    this.subjects = this.paymentSubjectsService.loadSubjects(
       this.data.familyId
     );
-    this.familyMembers = this.membersService
-      .getMembers(this.data.familyId)
-      .pipe(
-        map(members =>
-          members.filter(member =>
-            this.membersService.familyMemberCanManageFamilyPayments(member)
+
+    if (this.data.familyId) {
+      this.adminView = this.membersService.userIsFamilyAdmin(
+        this.data.defaultUserId,
+        this.data.familyId
+      );
+      this.familyMembers = this.membersService
+        .getMembers(this.data.familyId)
+        .pipe(
+          map(members =>
+            members.filter(member =>
+              this.membersService.familyMemberCanManageFamilyPayments(member)
+            )
           )
-        )
-      );
-    this.payment = this.familiesService
-      .getFamilyCurrency(this.data.familyId)
-      .pipe(
-        take(1),
-        map((currency: string) => {
-          return {
-            userId: this.data.defaultUserId,
-            familyId: this.data.familyId,
-            paidAt: new Date(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            subjectId: null,
-            amount: 0,
-            currency
-          };
-        })
-      );
+        );
+    }
+    this.payment = this.data.familyId
+      ? this.createDefaultFamilyPayment()
+      : this.createDefaultUserPayment();
   }
 
   createPayment(payment: Partial<Payment>) {
-    this.paymentsService.createPayment(this.data.familyId, payment).subscribe(
-      result => {
-        this.dialogRef.close(result);
-        this.notificationsService.showNotification('Payment has been added');
-      },
-      error => {
-        this.errorMessage = error.error.message;
-      }
+    this.paymentsService
+      .createPayment(this.data.familyId, {
+        ...payment,
+        currency: this.paymentCurrency
+      })
+      .subscribe(
+        result => {
+          this.dialogRef.close(result);
+          this.notificationsService.showNotification('Payment has been added');
+        },
+        error => {
+          this.errorMessage = error.error.message;
+        }
+      );
+  }
+
+  private createDefaultFamilyPayment(): Observable<Partial<Payment>> {
+    return this.familiesService.getFamilyCurrency(this.data.familyId).pipe(
+      take(1),
+      map((currency: string) => {
+        this.paymentCurrency = currency;
+        return {
+          userId: this.data.defaultUserId,
+          familyId: this.data.familyId,
+          paidAt: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          subjectId: null,
+          amount: 0,
+          currency
+        };
+      })
+    );
+  }
+
+  private createDefaultUserPayment(): Observable<Partial<Payment>> {
+    return this.authService.getUser().pipe(
+      take(1),
+      map((user: User) => {
+        this.paymentCurrency = user.currency;
+
+        return {
+          userId: this.data.defaultUserId,
+          familyId: this.data.familyId,
+          paidAt: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          subjectId: null,
+          amount: 0,
+          currency: user.currency
+        };
+      })
     );
   }
 

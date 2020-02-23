@@ -1,3 +1,4 @@
+import { Family } from ".";
 import { FamilyMember } from "./family-member";
 import { PaymentSubject } from "./payment-subject";
 
@@ -21,8 +22,8 @@ export interface PaymentView<Id = string> {
   receipt?: string;
   subject: PaymentSubject;
   paidAt: Date;
-  user: FamilyMember;
-  familyId: Id;
+  user?: FamilyMember;
+  family?: Family;
   createdAt: Date;
   updatedAt: Date;
 }

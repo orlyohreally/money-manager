@@ -11,6 +11,7 @@ const PaymentSchema = new Schema<Payment>(
     familyId: { type: ObjectId, ref: "FamilyModel" },
     userId: { type: ObjectId, required: true, ref: "UserModel" },
     subjectId: { type: ObjectId, required: true, ref: "PaymentSubjectModel" },
+    currency: String,
     receipt: String,
     paidAt: { type: Date, required: true },
     createdAt: Date,

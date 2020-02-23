@@ -7,6 +7,7 @@ export interface User<Id = string> {
   icon: string;
   colorScheme: string;
   isVerified: boolean;
+  currency: string;
   createdAt: Date;
   updatedAt: Date;
 }

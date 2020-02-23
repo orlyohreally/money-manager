@@ -4,17 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { PaymentsComponent } from '../payments/components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FamiliesComponent } from './families.component';
 // tslint:disable-next-line: max-line-length
 import { FamilyMembersComponent } from './family-members/family-members.component';
 import { FamilyComponent } from './family/family.component';
 
 const routes: Routes = [
-  {
-    path: 'families',
-    component: FamiliesComponent,
-    data: { title: 'My families' }
-  },
+  // {
+  //   path: 'families',
+  //   component: FamiliesComponent,
+  //   data: { title: 'My families' }
+  // },
   {
     path: 'families/:familyId',
     component: FamilyComponent,

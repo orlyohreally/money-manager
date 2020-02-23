@@ -7,6 +7,7 @@ export interface IPaymentSubjectsDao {
     subject: Partial<PaymentSubject>
   ): Promise<PaymentSubject>;
   getPaymentSubjects(familyId: string): Promise<PaymentSubject[]>;
+  getUserPaymentSubjects(userId: string): Promise<PaymentSubject[]>;
 }
 
 export class PaymentSubjectsService {
@@ -25,6 +26,12 @@ export class PaymentSubjectsService {
 
   public async getPaymentSubjects(familyId: string): Promise<PaymentSubject[]> {
     return this.dao.getPaymentSubjects(familyId);
+  }
+
+  public async getUserPaymentSubjects(
+    userId: string
+  ): Promise<PaymentSubject[]> {
+    return this.dao.getUserPaymentSubjects(userId);
   }
 
   public async createPaymentSubject(

@@ -3,7 +3,7 @@ import { IRouter } from "express-serve-static-core";
 
 import { asyncWrap } from "@src/utils";
 
-import { PaymentSubject } from "@shared/types";
+import { PaymentSubject, User } from "@shared/types";
 // tslint:disable-next-line: max-line-length
 import { UsersService } from "@src/services/users/UsersService";
 import { PaymentSubjectsService } from "./PaymentSubjectsService";
@@ -25,6 +25,13 @@ export class PaymentSubjectsRouter {
     this.usersService = usersService;
 
     this.router.get(
+      "/payment-subjects/",
+      this.usersService.validateToken.bind(usersService),
+
+      asyncWrap(this.getUserPaymentSubjects)
+    );
+
+    this.router.get(
       "/payment-subjects/:familyId",
       this.usersService.validateToken.bind(usersService),
 
@@ -36,6 +43,16 @@ export class PaymentSubjectsRouter {
       asyncWrap(this.postPaymentSubject)
     );
   }
+
+  private getUserPaymentSubjects = async (req: Request, res: Response) => {
+    try {
+      const userId: string = (req.body as { user: User }).user._id;
+      const paymentSubjects = await this.service.getUserPaymentSubjects(userId);
+      return res.status(200).json(paymentSubjects);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
 
   private getPaymentSubjects = async (req: Request, res: Response) => {
     try {

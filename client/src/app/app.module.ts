@@ -17,6 +17,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { DataService } from './core/services/data.service';
 import { FamilyModule } from './modules/families/family.module';
 import { NavigationModule } from './modules/navigation/navigation.module';
+import { UserModule } from './modules/user/user.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,8 @@ import { NavigationModule } from './modules/navigation/navigation.module';
     NgxLocalStorageModule.forRoot(),
 
     NavigationModule,
-    FamilyModule
+    FamilyModule,
+    UserModule
   ],
   providers: [
     DataService,

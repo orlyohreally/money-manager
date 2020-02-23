@@ -23,7 +23,8 @@
         "family",
         "home",
         "payment",
-        "member"
+        "member",
+        "user"
       ],
       "kebab-case"
     ]

@@ -33,6 +33,7 @@ export class FamilyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.familyId = params.get('familyId');
+
       this.familiesService.setCurrentFamily(this.familyId);
       this.family = this.getFamily(this.familyId);
     });

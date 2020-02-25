@@ -6,3 +6,4 @@ __tests__/**/*.js
 __tests__/**/*.js.map
 coverage
 .env
+src/assets/frontend

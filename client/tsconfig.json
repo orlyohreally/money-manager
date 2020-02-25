@@ -8,7 +8,7 @@
       "@shared-client/*": ["../client/src/app/modules/shared/*"],
       "@core-client/*": ["../client/src/app/core/*"]
     },
-    "outDir": "./dist/out-tsc",
+    "outDir": "../server/src/assets/frontend",
     "sourceMap": true,
     "declaration": false,
     "module": "es2015",

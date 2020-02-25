@@ -4,6 +4,7 @@ import "module-alias/register";
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as mongoose from "mongoose";
+import * as path from "path";
 import { familiesRouter } from "./services/families";
 import { paymentSubjectsRouter } from "./services/payment-subjects";
 import { paymentsRouter } from "./services/payments";
@@ -30,6 +31,14 @@ const runServer = async () => {
   app.use(apiPath, paymentSubjectsRouter);
   app.use(apiPath, paymentsRouter);
   app.use(apiPath, usersRouter);
+
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(`${__dirname}/assets/frontend`));
+
+    app.get("/*", (req, res) => {
+      res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
+    });
+  }
 };
 
 runServer().catch(console.error);

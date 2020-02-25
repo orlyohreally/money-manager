@@ -66,8 +66,8 @@ export class PaymentsComponent implements OnInit {
             createdAt: payment.createdAt,
             memberFullName: this.userManagerService.getFullName(payment.user),
             updatedAt: payment.updatedAt,
-            subjectName: payment.subject.name,
-            subjectIcon: payment.subject.icon,
+            subjectName: payment.subject ? payment.subject.name : '',
+            subjectIcon: payment.subject ? payment.subject.icon : '',
             currency: payment.currency
           };
         })

@@ -126,7 +126,7 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     NotificationBlockDirective,
     PrefixedNumberPipe
   ],
-  providers: [],
+  providers: [CurrencySymbolPipe],
   entryComponents: [
     ImageManagerComponent,
     ImagePreviewComponent,

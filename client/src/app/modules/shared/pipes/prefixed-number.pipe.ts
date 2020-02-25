@@ -1,22 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { CurrencySymbolPipe } from './currency-symbol.pipe';
 
 @Pipe({
   name: 'sharedPrefixedNumber'
 })
 export class PrefixedNumberPipe implements PipeTransform {
-  transform(number: number, args?: any): any {
-    if (isNaN(number)) {
-      return null;
-    } // will only work value is a number
-    if (number === null) {
-      return null;
-    }
-    if (number === 0) {
+  constructor(private currencySymbolPipe: CurrencySymbolPipe) {}
+
+  transform(number: number, currency: string): any {
+    if (isNaN(number) || !number) {
       return null;
     }
+
     let abs = Math.abs(number);
     const rounder = Math.pow(10, 1);
-    const isNegative = number < 0; // will also work for Negetive numbers
+    const isNegative = number < 0;
     let key = '';
 
     const powers = [
@@ -27,16 +25,18 @@ export class PrefixedNumberPipe implements PipeTransform {
       { key: 'K', value: 1000 }
     ];
 
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < powers.length; i++) {
-      let reduced = abs / powers[i].value;
+    for (const power of powers) {
+      let reduced = abs / power.value;
       reduced = Math.round(reduced * rounder) / rounder;
       if (reduced >= 1) {
         abs = reduced;
-        key = powers[i].key;
+        key = power.key;
         break;
       }
     }
-    return (isNegative ? '-' : '') + abs + key;
+
+    return `${isNegative ? '-' : ''}${
+      currency ? this.currencySymbolPipe.transform(currency) : ''
+    }${abs}${key}`;
   }
 }

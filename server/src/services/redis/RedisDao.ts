@@ -5,7 +5,7 @@ export class RedisDao implements IRedisDao {
   private client: redis.RedisClient;
 
   constructor() {
-    this.client = redis.createClient(process.env.rediscloud_url as string);
+    this.client = redis.createClient(process.env.REDISCLOUD_URL as string);
   }
 
   public set(key: string, value: string): Promise<void> {

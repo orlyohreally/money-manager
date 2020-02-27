@@ -219,7 +219,7 @@ export class UsersRouter {
     email: string,
     token: string
   ): Promise<void> {
-    const frontEndURL = process.env.front_end_url as string;
+    const frontEndURL = process.env.FRONT_END_URL as string;
     if (!frontEndURL) {
       process.exit(1);
     }

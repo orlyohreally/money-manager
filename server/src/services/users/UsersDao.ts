@@ -12,8 +12,8 @@ export class UsersDao implements IUsersDao {
   private tokenHash: string;
   private refreshTokenHash: string;
   constructor() {
-    this.tokenHash = process.env.JWT_hash as string;
-    this.refreshTokenHash = process.env.JWT_refresh_hash as string;
+    this.tokenHash = process.env.JWT_HASH as string;
+    this.refreshTokenHash = process.env.JWT_REFRESH_HASH as string;
     if (!this.tokenHash || !this.refreshTokenHash) {
       process.exit(1);
     }

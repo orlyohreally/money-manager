@@ -11,17 +11,17 @@ import { paymentsRouter } from "./services/payments";
 import { usersRouter } from "./services/users";
 
 const runServer = async () => {
-  const port = process.env.port;
-  if (!port) {
-    console.log("port is not set");
-    process.exit(1);
-  }
+  // const port = process.env.port;
+  // if (!port) {
+  //   console.log("port is not set");
+  //   process.exit(1);
+  // }
   await mongoose.connect(process.env.mongodb_uri as string);
 
   const apiPath = "/api/v1";
   const app: express.Application = express();
 
-  app.listen(port, () => {
+  app.listen(80, () => {
     console.log("Example app listening on port 3000!");
   });
 

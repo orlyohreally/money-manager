@@ -17,7 +17,7 @@
       </span>
       <a class="account-note__link" [routerLink]="['/auth/login']">Log in</a>
     </div>
-    <form [formGroup]="signInForm" (ngSubmit)="register($event)">
+    <form [formGroup]="signInForm" (ngSubmit)="register()">
       <div
         #errorMessageBlock
         sharedNotificationBlock="error"
@@ -41,7 +41,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input required formControlName="email" matInput />
+        <input required formControlName="email" type="email" matInput />
         <mat-error *ngIf="signInForm.get('email').hasError('pattern')">
           Invalid email
         </mat-error>

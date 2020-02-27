@@ -25,8 +25,7 @@ export class PaymentListComponent implements OnInit {
     'memberFullName',
     'paidAt',
     'createdAt',
-    'updatedAt',
-    'actions'
+    'updatedAt'
   ];
 
   constructor() {}

@@ -54,6 +54,7 @@ import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
+import { ScrollableContentDirective } from './directives/scrollable-content.directive';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     FormComponent,
     CurrencySymbolPipe,
     NotificationBlockDirective,
-    PrefixedNumberPipe
+    PrefixedNumberPipe,
+    ScrollableContentDirective
   ],
   imports: [
     CommonModule,
@@ -124,7 +126,8 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     FormComponent,
     CurrencySymbolPipe,
     NotificationBlockDirective,
-    PrefixedNumberPipe
+    PrefixedNumberPipe,
+    ScrollableContentDirective
   ],
   providers: [CurrencySymbolPipe],
   entryComponents: [

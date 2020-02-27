@@ -23,7 +23,7 @@
       </div>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input required formControlName="email" matInput />
+        <input required formControlName="email" type="email" matInput />
         <mat-error *ngIf="loginForm.get('email').hasError('pattern')">
           Invalid email
         </mat-error>

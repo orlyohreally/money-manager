@@ -50,11 +50,12 @@ import { ValueEditorComponent } from './components/value-editor/value-editor.com
 import { BadgeDirective } from './directives/badge.directive';
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from './directives/notification-block.directive';
+// tslint:disable-next-line: max-line-length
+import { ScrollableContentDirective } from './directives/scrollable-content.directive';
 import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
-import { ScrollableContentDirective } from './directives/scrollable-content.directive';
 
 @NgModule({
   declarations: [

@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/orlyohreally/money-manager.git"
   },
+  "scripts": {
+    "install": "cd server && npm install && cd ../client && npm install && cd ../shared && npm install"
+  },
   "workspaces": [
     "client",
     "server",

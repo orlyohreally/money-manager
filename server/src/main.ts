@@ -15,7 +15,7 @@ const runServer = async () => {
   if (!port) {
     process.exit(1);
   }
-  await mongoose.connect("mongodb://localhost:27017/money-manager");
+  await mongoose.connect(process.env.mongodb_uri as string);
 
   const apiPath = "/api/v1";
   const app: express.Application = express();

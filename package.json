@@ -14,6 +14,10 @@
     "server",
     "shared"
   ],
+  "engines": {
+    "node": "~10.15.3",
+    "npm": "~6.9.0"
+  },
   "author": "Orly Knop",
   "license": "MIT",
   "bugs": {

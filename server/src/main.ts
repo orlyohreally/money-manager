@@ -14,7 +14,7 @@ const runServer = async () => {
   const port = process.env.PORT;
   if (!port) {
     console.log("port is not set");
-    // process.exit(1);
+    process.exit(1);
   }
   await mongoose.connect(process.env.MONGODB_URI as string);
 
@@ -22,7 +22,7 @@ const runServer = async () => {
   const app: express.Application = express();
 
   app.listen(port, () => {
-    console.log("Example app listening on port 3000!");
+    console.log(`Example app listening on port ${port}!`);
   });
 
   app.use(bodyParser.json({ limit: "10mb" }));

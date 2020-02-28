@@ -95,10 +95,10 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
           (error: HttpErrorResponse) => {
             this.serverError = error.error;
             setTimeout(() => {
-              this.errorMessageBlock.nativeElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-              });
+              // this.errorMessageBlock.nativeElement.scrollIntoView({
+              //   behavior: 'smooth',
+              //   block: 'center'
+              // });
             });
           }
         );

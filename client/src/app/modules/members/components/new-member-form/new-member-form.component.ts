@@ -107,10 +107,10 @@ export class NewFamilyMemberFormComponent implements OnInit {
             this.memberForm
               .get('email')
               .setErrors({ 'server-error': error.error.email });
-            this.emailField.nativeElement.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center'
-            });
+            // this.emailField.nativeElement.scrollIntoView({
+            //   behavior: 'smooth',
+            //   block: 'center'
+            // });
           } else if (error.error && error.error.message) {
             this.errorMessage = error.error.message;
           } else {

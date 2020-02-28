@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PaymentSubject } from '@shared/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -23,15 +23,21 @@ export class PaymentSubjectsService extends DataService {
   }
 
   loadSubjects(familyId?: string): Observable<PaymentSubject[]> {
-    return this.get(`${this.subjectsApi}/${familyId ? familyId : ''}`).pipe(
-      switchMap((subjects: PaymentSubject[]) => {
-        this.subjectsList.next({
-          ...this.subjectsList.getValue(),
-          [familyId ? familyId : 'user']: subjects
-        });
-        return of(subjects);
-      })
-    );
+    return this.get(`${this.subjectsApi}/${familyId ? familyId : ''}`)
+      .pipe(
+        switchMap((subjects: PaymentSubject[]) => {
+          this.subjectsList.next({
+            ...this.subjectsList.getValue(),
+            [familyId ? familyId : 'user']: subjects
+          });
+          return of(subjects);
+        })
+      )
+      .pipe(
+        map((subjects: PaymentSubject[]) =>
+          subjects.sort(this.sortSubjectsByName)
+        )
+      );
   }
 
   getSubjectById(
@@ -56,5 +62,9 @@ export class PaymentSubjectsService extends DataService {
         subject => subject._id === subjectId
       );
     return foundSubjects.length ? foundSubjects[0] : null;
+  }
+
+  private sortSubjectsByName(a: PaymentSubject, b: PaymentSubject) {
+    return a.name.localeCompare(b.name);
   }
 }

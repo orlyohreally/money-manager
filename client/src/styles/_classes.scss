@@ -34,8 +34,7 @@
   background: rgba(0, 0, 0, 0.1) !important;
 }
 
-.block_scrollable,
-.block__child_scrollable div {
+* {
   &::-webkit-scrollbar {
     width: 8px;
   }

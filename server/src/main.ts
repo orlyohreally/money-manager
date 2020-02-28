@@ -13,7 +13,6 @@ import { usersRouter } from "./services/users";
 const runServer = async () => {
   const port = process.env.PORT;
   if (!port) {
-    console.log("port is not set");
     process.exit(1);
   }
   await mongoose.connect(process.env.MONGODB_URI as string);

@@ -225,7 +225,7 @@ export class UsersRouter {
     }
     const emailVerificationURL = `${frontEndURL}/auth/email-verification`;
     await this.emailSenderService.sendEmail(
-      process.env.email_verification_email_template as string,
+      process.env.EMAIL_VERIFICATION_EMAIL_TEMPLATE as string,
       email,
       {
         // tslint:disable-next-line: max-line-length

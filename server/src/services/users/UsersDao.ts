@@ -168,7 +168,7 @@ export class UsersDao implements IUsersDao {
   }
 
   private hashPassword(password: string): string {
-    const saltRounds: number = parseInt(process.env.salt_rounds as string, 10);
+    const saltRounds: number = parseInt(process.env.SALT_ROUNDS as string, 10);
     const salt = bcrypt.genSaltSync(saltRounds);
     return bcrypt.hashSync(password, salt);
   }

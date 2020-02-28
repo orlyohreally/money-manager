@@ -220,12 +220,12 @@ export class FamiliesRouter {
         body.roles
       );
       await this.emailSenderService.sendEmail(
-        process.env.member_was_added_to_family_email_template as string,
+        process.env.MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE as string,
         user.email,
         {
           adderFullName: `${body.user.firstName} ${body.user.lastName}`,
           familyName: family.name,
-          familiesUrl: `${process.env.front_end_url}/families`
+          familiesUrl: `${process.env.FRONT_END_URL}/families`
         }
       );
       return res.status(200).json(member);

@@ -10,11 +10,16 @@
   </button>
 </div>
 <div class="card-list" *ngIf="families | async as familiesList; else loading">
-  <family-family-card
-    *ngFor="let family of familiesList"
-    [family]="family"
-  ></family-family-card>
+  <div *ngIf="familiesList.length; else noFamilies">
+    <family-family-card
+      *ngFor="let family of familiesList"
+      [family]="family"
+    ></family-family-card>
+  </div>
 </div>
 <ng-template #loading>
   <shared-loader></shared-loader>
+</ng-template>
+<ng-template #noFamilies>
+  <div fxLayoutAlign="center center">No families added yet...</div>
 </ng-template>

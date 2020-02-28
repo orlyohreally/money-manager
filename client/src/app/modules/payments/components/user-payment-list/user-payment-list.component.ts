@@ -13,18 +13,7 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
-
-export interface UserPaymentView {
-  amount: number;
-  paidAt: string;
-  createdAt: string;
-  familyName: string;
-  familyId: string;
-  updatedAt: string;
-  subjectName: string;
-  subjectIcon: string;
-  currency: string;
-}
+import { UserPaymentView } from '@src/app/types';
 
 @Component({
   selector: 'payment-user-payment-list',

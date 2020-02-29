@@ -14,6 +14,11 @@
   margin: 5px 0 15px 0;
 }
 
+.account-note__text,
+.account-note__link {
+  display: inline-block;
+}
+
 .action-buttons {
   display: flex;
   justify-content: center;

@@ -171,7 +171,11 @@ export class UsersRouter {
       const verificationToken = await this.service.getVerificationToken(
         body.token
       );
-      if (user._id.toString() !== verificationToken.userId.toString()) {
+      if (
+        !user ||
+        !verificationToken ||
+        user._id.toString() !== verificationToken.userId.toString()
+      ) {
         return res.status(403).json("Incorrect token");
       }
       if (user.isVerified) {

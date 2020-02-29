@@ -19,7 +19,8 @@ const routes: Routes = [
       },
       {
         path: 'families',
-        component: FamiliesComponent
+        component: FamiliesComponent,
+        data: { title: 'My families' }
       },
 
       {

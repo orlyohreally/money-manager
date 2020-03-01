@@ -91,7 +91,9 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
           return 0;
       }
     });
-    this.dataSource.paginator.firstPage();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
 

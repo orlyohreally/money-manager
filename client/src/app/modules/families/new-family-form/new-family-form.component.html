@@ -3,4 +3,7 @@
     sectionTitle="Your roles in the family"
     (rolesUpdated)="onRolesUpdated($event)"
   ></member-member-roles>
+  <div sharedNotificationBlock="error" *ngIf="!memberRoles.length">
+    Select at least one role for you in the family
+  </div>
 </family-family-form>

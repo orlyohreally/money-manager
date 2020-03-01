@@ -22,7 +22,7 @@ import { MemberFamily } from '../../shared/types';
 export class NewFamilyFormComponent implements OnInit {
   @Input() form: FormGroup;
 
-  memberRoles: string[];
+  memberRoles: string[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<NewFamilyFormComponent>,
@@ -41,7 +41,7 @@ export class NewFamilyFormComponent implements OnInit {
   }
 
   submitForm() {
-    if (!this.form.valid) {
+    if (!this.form.valid || !this.memberRoles.length) {
       this.form.markAsTouched();
       return;
     }

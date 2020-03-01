@@ -9,29 +9,35 @@
   </a>
   <ng-container *ngIf="!sendingEmail; else loading">
     <div *ngIf="!attempts" sharedNotificationBlock="success">
-      <span>
-        Activate your account by verifying your email using link that has been
-        sent to email
-      </span>
-      <b>{{ email }}</b>
-      <span>.</span>
-      <br />
-      <span>
-        If you do not receive the confirmation message within a few minutes of
-        signing up, please check your Spam or Bulk E-Mail folder just in case
-        the confirmation email got delivered there instead of your inbox.
-      </span>
+      <div>
+        <span>
+          Activate your account by verifying your email using link that has been
+          sent to email
+        </span>
+        <b>{{ email }}</b>
+        <span>.</span>
+        <br />
+        <span>
+          If you do not receive the confirmation message within a few minutes of
+          signing up, please check your Spam or Bulk E-Mail folder just in case
+          the confirmation email got delivered there instead of your inbox.
+        </span>
+      </div>
     </div>
     <div *ngIf="attempts" sharedNotificationBlock="success">
-      <span>Email with link to verify your email has been sent to email </span>
-      <b>{{ email }}</b>
-      <span>.</span>
-      <br />
-      <span>
-        If you do not receive the confirmation message within a few minutes of
-        signing up, please check your Spam or Bulk E-Mail folder just in case
-        the confirmation email got delivered there instead of your inbox.
-      </span>
+      <div>
+        <span>
+          Email with link to verify your email has been sent to email
+        </span>
+        <b>{{ email }}</b>
+        <span>.</span>
+        <br />
+        <span>
+          If you do not receive the confirmation message within a few minutes of
+          signing up, please check your Spam or Bulk E-Mail folder just in case
+          the confirmation email got delivered there instead of your inbox.
+        </span>
+      </div>
     </div>
     <div
       *ngIf="!showContactUsMessage && errorMessage"

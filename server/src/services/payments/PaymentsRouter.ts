@@ -77,7 +77,6 @@ export class PaymentsRouter {
       }
 
       const payments: Payment[] = await this.service.getFamilyPayments(
-        body.user._id,
         familyId
       );
       return res.status(200).json(payments);

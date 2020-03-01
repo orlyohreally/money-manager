@@ -6,12 +6,8 @@ import { PaymentModel } from "./models";
 import { IPaymentsDao } from "./PaymentsService";
 
 export class PaymentsDao implements IPaymentsDao {
-  public async getFamilyPayments(
-    userId: string,
-    familyId: string
-  ): Promise<Payment[]> {
+  public async getFamilyPayments(familyId: string): Promise<Payment[]> {
     return PaymentModel.find({
-      userId: new ObjectId(userId),
       familyId: new ObjectId(familyId)
     });
   }

@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+// tslint:disable-next-line: max-line-length
+import { CurrencyService } from '@core-client/services/currency/currency.service';
+import { Currency } from '@src/app/types/currency';
 
 @Component({
   selector: 'shared-currency-selector',
@@ -9,7 +12,11 @@ import { FormControl } from '@angular/forms';
 export class CurrencySelectorComponent implements OnInit {
   @Input() currencyControl: FormControl;
 
-  constructor() {}
+  currencyList: Currency[];
 
-  ngOnInit() {}
+  constructor(private currencyService: CurrencyService) {}
+
+  ngOnInit() {
+    this.currencyList = this.currencyService.getCurrencies();
+  }
 }

@@ -18,6 +18,9 @@ export type Member = User & { roles: string[] };
 export class MembersService extends DataService {
   private members: BehaviorSubject<{ [familyId: string]: FamilyMember[] }>;
   private defaultIcon = '/assets/images/profile.png';
+  private memberRoles = new BehaviorSubject<{
+    [familyId: string]: MemberRole[];
+  }>({});
 
   constructor(
     http: HttpClient,
@@ -28,11 +31,12 @@ export class MembersService extends DataService {
   }
 
   getMembers(familyId: string): Observable<FamilyMember[]> {
-    return this.loadMembers(familyId).pipe(
-      switchMap(() => {
-        return of(this.members.getValue()[familyId]);
-      })
-    );
+    if (!this.members.getValue()[familyId ? familyId : 'user']) {
+      return this.loadMembers(familyId).pipe(
+        switchMap(() => of(this.members.getValue()[familyId]))
+      );
+    }
+    return of(this.members.getValue()[familyId]);
   }
 
   getFamilyMemberById(
@@ -63,10 +67,19 @@ export class MembersService extends DataService {
   }
 
   getRoles(familyId: string): Observable<MemberRole[]> {
+    if (this.memberRoles.getValue()[familyId]) {
+      return of(this.memberRoles.getValue()[familyId]);
+    }
     return this.get<{ roles: MemberRole[] }>(
       `${this.getMemberApi(familyId)}/roles`
     ).pipe(
-      switchMap((response: { roles: MemberRole[] }) => of(response.roles))
+      switchMap((response: { roles: MemberRole[] }) => {
+        this.memberRoles.next({
+          ...this.memberRoles.getValue(),
+          [familyId]: response.roles
+        });
+        return of(response.roles);
+      })
     );
   }
 

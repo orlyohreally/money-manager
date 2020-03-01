@@ -37,21 +37,6 @@ export class PaymentsService extends DataService {
     super(http, globalVariablesService);
   }
 
-  loadPayments(familyId?: string): Observable<Payment[]> {
-    const paymentsUrl = familyId
-      ? `${this.paymentsApiUrl}/${familyId}`
-      : this.paymentsApiUrl;
-    return this.get(paymentsUrl).pipe(
-      map((payments: Payment[]) => {
-        this.paymentsList.next({
-          ...this.paymentsList.getValue(),
-          [familyId ? familyId : 'user']: payments
-        });
-        return payments;
-      })
-    );
-  }
-
   getPayments(familyId?: string): Observable<Payment[]> {
     return this.paymentsList.asObservable().pipe(
       switchMap(payments => {
@@ -104,7 +89,7 @@ export class PaymentsService extends DataService {
     return this.getPayments(familyId).pipe(
       mergeMap((payments: Payment[]) => {
         return from(payments).pipe(
-          mergeMap(payment =>
+          concatMap(payment =>
             combineLatest([
               this.paymentSubjectsService.getSubjectById(
                 payment.subjectId,
@@ -132,7 +117,7 @@ export class PaymentsService extends DataService {
     );
   }
 
-  public createPayment(
+  createPayment(
     familyId: string,
     payment: Partial<Payment>
   ): Observable<Payment> {
@@ -159,7 +144,7 @@ export class PaymentsService extends DataService {
     );
   }
 
-  public updatePayment() {
+  updatePayment() {
     // this.payments[payment._id] = payment;
     return of({
       status: 'success',
@@ -167,11 +152,26 @@ export class PaymentsService extends DataService {
     });
   }
 
-  public removePayment() {
+  removePayment() {
     // delete this.payments[payment._id];
     return of({
       status: 'success',
       msg: null
     });
+  }
+
+  private loadPayments(familyId?: string): Observable<Payment[]> {
+    const paymentsUrl = familyId
+      ? `${this.paymentsApiUrl}/${familyId}`
+      : this.paymentsApiUrl;
+    return this.get(paymentsUrl).pipe(
+      map((payments: Payment[]) => {
+        this.paymentsList.next({
+          ...this.paymentsList.getValue(),
+          [familyId ? familyId : 'user']: payments
+        });
+        return payments;
+      })
+    );
   }
 }

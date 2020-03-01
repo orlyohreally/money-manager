@@ -27,6 +27,8 @@ import { ButtonComponent } from './components/button/button.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 // tslint:disable-next-line: max-line-length
+import { ContentWithLoaderComponent } from './components/content-with-loader/content-with-loader.component';
+// tslint:disable-next-line: max-line-length
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
 // tslint:disable-next-line: max-line-length
 import { FormFieldComponent } from './components/form-field/form-field.component';
@@ -83,7 +85,8 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     CurrencySymbolPipe,
     NotificationBlockDirective,
     PrefixedNumberPipe,
-    ScrollableContentDirective
+    ScrollableContentDirective,
+    ContentWithLoaderComponent
   ],
   imports: [
     CommonModule,
@@ -128,7 +131,8 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     CurrencySymbolPipe,
     NotificationBlockDirective,
     PrefixedNumberPipe,
-    ScrollableContentDirective
+    ScrollableContentDirective,
+    ContentWithLoaderComponent
   ],
   providers: [CurrencySymbolPipe],
   entryComponents: [

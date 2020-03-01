@@ -1,4 +1,8 @@
-<family-family-form [familyForm]="form" (formSubmitted)="submitForm()">
+<family-family-form
+  [familyForm]="form"
+  [submittingForm]="submittingForm"
+  (formSubmitted)="submitForm()"
+>
   <member-member-roles
     sectionTitle="Your roles in the family"
     (rolesUpdated)="onRolesUpdated($event)"

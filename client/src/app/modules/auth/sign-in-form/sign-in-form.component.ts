@@ -37,8 +37,10 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   signInForm: FormGroup;
   serverError: string;
   showPassword = false;
-  errorMessageBlock: ElementRef;
-  destroyed = new Subject<void>();
+  submittingForm = false;
+
+  private errorMessageBlock: ElementRef;
+  private destroyed = new Subject<void>();
 
   ngOnInit() {
     this.authService.logout();
@@ -76,6 +78,7 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   register() {
     this.serverError = null;
     if (this.signInForm.valid) {
+      this.submittingForm = true;
       this.authService
         .register({
           email: this.email.value,
@@ -85,6 +88,7 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
         } as User)
         .subscribe(
           response => {
+            this.submittingForm = false;
             this.router.navigate(['/auth/email-verification-request'], {
               queryParams: {
                 email: response.email,
@@ -93,6 +97,7 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           },
           (error: HttpErrorResponse) => {
+            this.submittingForm = false;
             this.serverError = error.error;
             setTimeout(() => {
               this.errorMessageBlock.nativeElement.scrollIntoView({

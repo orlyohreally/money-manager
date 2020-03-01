@@ -77,9 +77,16 @@
         {{ errorMessage }}
       </div>
       <div class="action-buttons">
-        <button mat-raised-button class="button" color="primary" type="submit">
-          Save
-        </button>
+        <shared-content-with-loader [showLoader]="submittingForm">
+          <button
+            mat-raised-button
+            class="button"
+            color="primary"
+            type="submit"
+          >
+            Save
+          </button>
+        </shared-content-with-loader>
       </div>
     </form>
   </div>

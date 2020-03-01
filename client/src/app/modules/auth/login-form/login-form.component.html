@@ -61,7 +61,10 @@
           Password is required
         </mat-error>
       </mat-form-field>
-      <div class="action-buttons">
+      <shared-content-with-loader
+        class="action-buttons"
+        [showLoader]="submittingForm"
+      >
         <button
           mat-raised-button
           class="button"
@@ -71,7 +74,7 @@
         >
           Log In
         </button>
-      </div>
+      </shared-content-with-loader>
     </form>
   </div>
 </div>

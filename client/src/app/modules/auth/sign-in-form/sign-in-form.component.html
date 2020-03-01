@@ -8,9 +8,14 @@
     fxLayout.lt-sm="column"
     fxLayoutAlign="center center"
   >
-    <a href="https://www.freepik.com/free-photos-vectors/computer">
+    <!-- <a href="https://www.freepik.com/free-photos-vectors/computer">
       <img class="icon" src="/assets/images/form.jpg" />
-    </a>
+    </a> -->
+    <div class="mat-h4 signin-form__description">
+      Create a family and all your family members to track how much you spend.
+      Add payments and get reports on how much you have spent during specific
+      period and on what exactly.
+    </div>
     <div class="account-note">
       <span class="account-note__text">
         Already have a Money Manager account?
@@ -147,15 +152,17 @@
           By clicking "Sign in" button you agree to Money Manager Terms of
           Service and Privacy Policy
         </div>
-        <button
-          mat-raised-button
-          class="button"
-          color="primary"
-          [disabled]="signInForm.invalid"
-          type="submit"
-        >
-          Sign in
-        </button>
+        <shared-content-with-loader [showLoader]="submittingForm">
+          <button
+            mat-raised-button
+            class="button"
+            color="primary"
+            [disabled]="signInForm.invalid"
+            type="submit"
+          >
+            Sign in
+          </button>
+        </shared-content-with-loader>
       </div>
     </form>
   </div>

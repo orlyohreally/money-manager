@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 })
 export class FamilyFormComponent implements OnInit {
   @Input() familyForm: FormGroup;
+  @Input() submittingForm: boolean;
+
   @Output() formSubmitted = new EventEmitter<void>();
 
   familyMembers: Observable<

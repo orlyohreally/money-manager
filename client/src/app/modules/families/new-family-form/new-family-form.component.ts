@@ -23,6 +23,7 @@ export class NewFamilyFormComponent implements OnInit {
   @Input() form: FormGroup;
 
   memberRoles: string[] = [];
+  submittingForm = false;
 
   constructor(
     private dialogRef: MatDialogRef<NewFamilyFormComponent>,
@@ -53,8 +54,11 @@ export class NewFamilyFormComponent implements OnInit {
   }
 
   private createFamily(family: MemberFamily) {
+    this.submittingForm = true;
     this.familiesService.createFamily(family, this.memberRoles).subscribe(
       (response: MemberFamily) => {
+        this.submittingForm = false;
+
         this.dialogRef.close();
         this.notificationsService.showNotification(
           'Family has been successfully created'
@@ -62,6 +66,7 @@ export class NewFamilyFormComponent implements OnInit {
         this.router.navigate([`/families/${response._id}/dashboard`]);
       },
       () => {
+        this.submittingForm = false;
         this.notificationsService.showNotification('Server Error');
       }
     );

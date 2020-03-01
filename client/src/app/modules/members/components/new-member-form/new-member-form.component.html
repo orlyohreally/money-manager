@@ -42,16 +42,18 @@
       <div sharedNotificationBlock="error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-      <div fxLayout="row" fxLayoutAlign="center">
-        <button
-          mat-raised-button
-          class="button"
-          color="accent"
-          type="submit"
-          [disabled]="!memberForm.valid || !rolesLoaded"
-        >
-          Add
-        </button>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <shared-content-with-loader [showLoader]="submittingForm">
+          <button
+            mat-raised-button
+            class="button"
+            color="accent"
+            type="submit"
+            [disabled]="!memberForm.valid || !rolesLoaded"
+          >
+            Add
+          </button>
+        </shared-content-with-loader>
       </div>
     </form>
   </div>

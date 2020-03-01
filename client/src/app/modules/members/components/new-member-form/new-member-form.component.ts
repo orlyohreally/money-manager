@@ -33,6 +33,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
   memberForm: FormGroup;
   rolesLoaded: boolean;
   errorMessage: string;
+  submittingForm = false;
 
   @ViewChild('emailField') emailField: ElementRef;
 
@@ -82,6 +83,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
       this.memberForm.markAsTouched();
       return;
     }
+    this.submittingForm = true;
     this.membersService
       .addFamilyMember(this.data.family._id, this.memberForm.value)
       .pipe(
@@ -97,12 +99,15 @@ export class NewFamilyMemberFormComponent implements OnInit {
       )
       .subscribe(
         () => {
+          this.submittingForm = false;
           this.notificationsService.showNotification(
             'New member has been added'
           );
           this.dialogRef.close();
         },
         (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+
           if (error.error && error.error.email) {
             this.memberForm
               .get('email')

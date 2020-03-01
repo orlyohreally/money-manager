@@ -1,4 +1,8 @@
-<family-family-form [familyForm]="form" (formSubmitted)="submitForm()">
+<family-family-form
+  [familyForm]="form"
+  [submittingForm]="submittingForm"
+  (formSubmitted)="submitForm()"
+>
   <mat-checkbox [formControl]="form.get('equalPayments')">
     All adult members pay equally
   </mat-checkbox>

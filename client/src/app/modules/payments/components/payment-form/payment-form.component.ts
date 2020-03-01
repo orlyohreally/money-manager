@@ -16,6 +16,7 @@ export class PaymentFormComponent extends FormComponent<Payment>
   @Input() defaultPayer: User;
   @Input() payersList: FamilyMember[];
   @Input() errorMessage: string;
+  @Input() submittingForm: boolean;
 
   constructor() {
     super();

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
@@ -20,6 +21,7 @@ export class EditFamilyFormComponent implements OnInit {
   @Input() form: FormGroup;
 
   errorMessage: string;
+  submittingForm = false;
 
   private membersPaymentPercentagesInfo: {
     value: AdultMember[];
@@ -51,6 +53,7 @@ export class EditFamilyFormComponent implements OnInit {
 
   submitForm() {
     this.errorMessage = null;
+    this.submittingForm = true;
     const invalidPercentage =
       !this.membersPaymentPercentagesInfo ||
       !this.membersPaymentPercentagesInfo.valid;
@@ -76,13 +79,17 @@ export class EditFamilyFormComponent implements OnInit {
       )
       .subscribe(
         () => {
+          this.submittingForm = false;
           this.dialogRef.close();
           this.notificationsService.showNotification(
             'Family has been successfully updated'
           );
         },
-        error => {
-          this.errorMessage = error.error.message;
+        (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.errorMessage = error.error.message
+            ? error.error.message
+            : error.statusText;
         }
       );
   }

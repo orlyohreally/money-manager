@@ -9,14 +9,14 @@
     Add family
   </button>
 </div>
-<div class="card-list" *ngIf="families | async as familiesList; else loading">
-  <div *ngIf="familiesList.length; else noFamilies">
+<ng-container *ngIf="families | async as familiesList; else loading">
+  <div class="card-list" *ngIf="familiesList.length; else noFamilies">
     <family-family-card
       *ngFor="let family of familiesList"
       [family]="family"
     ></family-family-card>
   </div>
-</div>
+</ng-container>
 <ng-template #loading>
   <shared-loader></shared-loader>
 </ng-template>

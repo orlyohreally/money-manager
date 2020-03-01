@@ -90,9 +90,6 @@ export class PaymentsRouter {
     try {
       const body = req.body as { payment: Payment; user: User };
       const familyId = (req.params as { familyId: string }).familyId;
-      if (!familyId) {
-        return this.postUserPayment(req, res);
-      }
       const updateIsAllowed =
         familyId &&
         (await this.familiesService.userCanUpdateFamily(

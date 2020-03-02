@@ -31,6 +31,8 @@ import { PaymentFormComponent } from './components/payment-form/payment-form.com
 import { PaymentSubjectFormComponent } from './components/payment-subject-form/payment-subject-form.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentsCalculatedPerMemberComponent } from './components/payments-calculated-per-member/payments-calculated-per-member.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsListComponent } from './components/user-payment-list/user-payment-list.component';
@@ -39,26 +41,22 @@ import { UserPaymentsComponent } from './components/user-payments/user-payments.
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
 import { PaymentListComponent } from './payment-list/payment-list.component';
-import { PaymentComponent } from './payment-list/payment/payment.component';
-// tslint:disable-next-line: max-line-length
-import { TotalPaymentComponent } from './payment-list/total-payment/total-payment.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 
 @NgModule({
   declarations: [
     PayerComponent,
-    PaymentComponent,
     PaymentFormComponent,
     PaymentListComponent,
     PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
-    TotalPaymentComponent,
     PaymentsComponent,
     NewPaymentDialogTriggerDirective,
     NewPaymentFormComponent,
     UserPaymentsListComponent,
-    UserPaymentsComponent
+    UserPaymentsComponent,
+    PaymentsCalculatedPerMemberComponent
   ],
   imports: [
     CommonModule,
@@ -85,13 +83,11 @@ import { PaymentRoutingModule } from './payment-routing.module';
   ],
   exports: [
     PayerComponent,
-    PaymentComponent,
     PaymentFormComponent,
     PaymentListComponent,
     PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
-    TotalPaymentComponent,
     UserPaymentsComponent
   ],
   providers: [

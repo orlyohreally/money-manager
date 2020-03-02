@@ -11,4 +11,8 @@
     </button>
   </div>
   <payment-payment-list [payments]="payments | async"> </payment-payment-list>
+  <payment-payments-calculated-per-member
+    class="payments-calculated-per-member"
+    [payments]="payments | async"
+  ></payment-payments-calculated-per-member>
 </div>

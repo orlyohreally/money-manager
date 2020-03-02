@@ -13,6 +13,7 @@ import {
   Sort
 } from '@angular/material';
 import { FamilyPaymentView } from '@src/app/types';
+import { compare } from '../../shared/functions';
 
 @Component({
   selector: 'payment-payment-list',
@@ -94,8 +95,4 @@ export class PaymentListComponent implements OnInit, OnChanges {
       this.dataSource.paginator.firstPage();
     }
   }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

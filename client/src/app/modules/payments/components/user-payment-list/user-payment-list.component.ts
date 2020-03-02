@@ -13,6 +13,7 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
+import { compare } from '@shared-client/functions';
 import { UserPaymentView } from '@src/app/types';
 
 @Component({
@@ -95,8 +96,4 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
       this.dataSource.paginator.firstPage();
     }
   }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

@@ -3,6 +3,7 @@ export interface FamilyPaymentView {
   paidAt: string;
   createdAt: string;
   memberFullName: string;
+  memberEmail: string;
   updatedAt: string;
   subjectName: string;
   subjectIcon: string;

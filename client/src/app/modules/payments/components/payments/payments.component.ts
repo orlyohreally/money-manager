@@ -3,9 +3,9 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
 // tslint:disable-next-line: max-line-length
-// tslint:disable-next-line: max-line-length
 import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { PaymentView } from '@shared/types';
+import { FamilyPaymentView } from '@src/app/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -15,18 +15,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./payments.component.scss']
 })
 export class PaymentsComponent implements OnInit {
-  payments: Observable<
-    {
-      amount: number;
-      paidAt: Date;
-      currency: string;
-      memberFullName: string;
-      subjectName: string;
-      subjectIcon: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[]
-  >;
+  payments: Observable<FamilyPaymentView[]>;
 
   displayedColumns: string[] = [
     'subject',
@@ -62,10 +51,11 @@ export class PaymentsComponent implements OnInit {
         payments.map((payment: PaymentView) => {
           return {
             amount: payment.amount,
-            paidAt: payment.paidAt,
-            createdAt: payment.createdAt,
+            paidAt: payment.paidAt.toString(),
+            createdAt: payment.createdAt.toString(),
             memberFullName: this.userManagerService.getFullName(payment.user),
-            updatedAt: payment.updatedAt,
+            memberEmail: payment.user.email,
+            updatedAt: payment.updatedAt.toString(),
             subjectName: payment.subject ? payment.subject.name : '',
             subjectIcon: payment.subject ? payment.subject.icon : '',
             currency: payment.currency

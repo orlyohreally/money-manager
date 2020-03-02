@@ -10,6 +10,7 @@ export interface FamilyMember<Id = string> {
   _id: Id;
   firstName: string;
   lastName: string;
+  email: string;
   roles: string[];
   icon: string;
   paymentPercentage: number;

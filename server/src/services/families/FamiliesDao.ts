@@ -85,6 +85,7 @@ export class FamiliesDao implements IFamiliesDao {
           "member._id": "$user._id",
           "member.firstName": "$user.firstName",
           "member.lastName": "$user.lastName",
+          "member.email": "$user.email",
           "member.roles": "$roles",
           "member.icon": "$icon",
           "member.paymentPercentage": "$paymentPercentage",

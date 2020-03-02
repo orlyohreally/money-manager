@@ -13,28 +13,29 @@ import {
   Sort
 } from '@angular/material';
 import { compare } from '@src/app/modules/shared/functions';
-import { FamilyPaymentView } from '@src/app/types';
+import { UserPaymentView } from '@src/app/types';
 
 @Component({
-  selector: 'payment-payments-calculated-per-member',
-  templateUrl: './payments-calculated-per-member.component.html',
-  styleUrls: ['./payments-calculated-per-member.component.scss'],
+  selector: 'payment-user-payments-calculated-per-member',
+  templateUrl: './user-payments-calculated-per-member.component.html',
+  styleUrls: ['./user-payments-calculated-per-member.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[style.width]': '"100%"'
   }
 })
-export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
-  @Input() payments: FamilyPaymentView[];
+export class UserPaymentsCalculatedPerMemberComponent
+  implements OnInit, OnChanges {
+  @Input() payments: UserPaymentView[];
 
   calculatedPayments: {
-    memberFullName: string;
+    familyName: string;
     currency: string;
     amount: number;
   }[];
-  displayedColumns: string[] = ['memberFullName', 'amount'];
+  displayedColumns: string[] = ['familyName', 'amount'];
   dataSource: MatTableDataSource<{
-    memberFullName: string;
+    familyName: string;
     currency: string;
     amount: number;
   }>;
@@ -60,17 +61,17 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
     }
     const aggregatedPayments = this.aggregatePayments();
     this.calculatedPayments = Object.keys(aggregatedPayments)
-      .map((memberFullName: string) =>
-        Object.keys(aggregatedPayments[memberFullName]).map(currency => ({
-          amount: aggregatedPayments[memberFullName][currency],
-          memberFullName,
+      .map((familyName: string) =>
+        Object.keys(aggregatedPayments[familyName]).map(currency => ({
+          amount: aggregatedPayments[familyName][currency],
+          familyName: familyName === 'user' ? '' : familyName,
           currency
         }))
       )
       .reduce((acc, val) => acc.concat(val), []);
 
     this.dataSource = new MatTableDataSource<{
-      memberFullName: string;
+      familyName: string;
       currency: string;
       amount: number;
     }>(this.calculatedPayments);
@@ -99,8 +100,8 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
       switch (sort.active) {
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
-        case 'memberFullName':
-          return compare(a.memberFullName, b.memberFullName, isAsc);
+        case 'familyName':
+          return compare(a.familyName, b.familyName, isAsc);
 
         default:
           return 0;
@@ -113,24 +114,25 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   }
 
   private aggregatePayments(): {
-    [memberFullName: string]: { [currency: string]: number };
+    [familyName: string]: { [currency: string]: number };
   } {
     return (this.payments || []).reduce(
       (
-        res: { [memberFullName: string]: { [currency: string]: number } },
-        payment: FamilyPaymentView
+        res: { [familyName: string]: { [currency: string]: number } },
+        payment: UserPaymentView
       ) => {
-        if (!res[payment.memberFullName]) {
+        const familyName = payment.familyName ? payment.familyName : 'user';
+        if (!res[familyName]) {
           return {
             ...res,
-            [payment.memberFullName]: { [payment.currency]: payment.amount }
+            [familyName]: { [payment.currency]: payment.amount }
           };
         }
-        if (!res[payment.memberFullName][payment.currency]) {
+        if (!res[familyName][payment.currency]) {
           return {
             ...res,
-            [payment.memberFullName]: {
-              ...res[payment.memberFullName],
+            [familyName]: {
+              ...res[familyName],
               [payment.currency]: payment.amount
             }
           };
@@ -138,10 +140,10 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
 
         return {
           ...res,
-          [payment.memberFullName]: {
-            ...res[payment.memberFullName],
+          [familyName]: {
+            ...res[familyName],
             [payment.currency]:
-              res[payment.memberFullName][payment.currency] + payment.amount
+              res[familyName][payment.currency] + payment.amount
           }
         };
       },

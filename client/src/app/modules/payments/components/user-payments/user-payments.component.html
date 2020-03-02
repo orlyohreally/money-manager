@@ -12,4 +12,8 @@
   </div>
   <payment-user-payment-list [payments]="payments | async">
   </payment-user-payment-list>
+  <payment-user-payments-calculated-per-member
+    class="payments-calculated-per-member"
+    [payments]="payments | async"
+  ></payment-user-payments-calculated-per-member>
 </div>

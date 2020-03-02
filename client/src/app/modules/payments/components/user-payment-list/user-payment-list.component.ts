@@ -26,6 +26,7 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
   @HostBinding('style.width') width = '100%';
 
   @Input() payments: UserPaymentView[];
+
   dataSource: MatTableDataSource<UserPaymentView>;
   displayedColumns: string[] = [
     'subject',

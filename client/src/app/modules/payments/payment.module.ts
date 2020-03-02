@@ -37,6 +37,8 @@ import { PaymentsComponent } from './components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsListComponent } from './components/user-payment-list/user-payment-list.component';
 // tslint:disable-next-line: max-line-length
+import { UserPaymentsCalculatedPerMemberComponent } from './components/user-payments-calculated-per-member/user-payments-calculated-per-member.component';
+// tslint:disable-next-line: max-line-length
 import { UserPaymentsComponent } from './components/user-payments/user-payments.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
@@ -56,7 +58,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     NewPaymentFormComponent,
     UserPaymentsListComponent,
     UserPaymentsComponent,
-    PaymentsCalculatedPerMemberComponent
+    PaymentsCalculatedPerMemberComponent,
+    UserPaymentsCalculatedPerMemberComponent
   ],
   imports: [
     CommonModule,

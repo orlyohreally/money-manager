@@ -1,4 +1,4 @@
-<div class="mat-h3">Calculated expenses per family member</div>
+<div class="mat-h3">Calculated expenses per family</div>
 <div *ngIf="calculatedPayments; else loading">
   <div *ngIf="calculatedPayments.length">
     <div sharedScrollableContent>
@@ -18,16 +18,12 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="memberFullName">
-          <th
-            mat-sort-header="memberFullName"
-            mat-header-cell
-            *matHeaderCellDef
-          >
-            Member
+        <ng-container matColumnDef="familyName">
+          <th mat-sort-header="familyName" mat-header-cell *matHeaderCellDef>
+            Family
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.memberFullName }}
+            {{ element.familyName }}
           </td>
         </ng-container>
 

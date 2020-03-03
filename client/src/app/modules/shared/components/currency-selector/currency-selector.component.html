@@ -1,7 +1,7 @@
 <mat-form-field appearance="outline">
   <mat-label>Family currency</mat-label>
   <mat-select [formControl]="currencyControl" required>
-    <mat-option *ngFor="let option of currencyList" value="option.symbol">
+    <mat-option *ngFor="let option of currencyList" [value]="option.symbol">
       {{ option.currency }} ({{ option.symbol | currencySymbol }})
     </mat-option>
   </mat-select>

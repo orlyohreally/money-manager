@@ -1,4 +1,3 @@
-
 export interface FamilyMemberPaymentPercentage<Id = string> {
   userId: Id;
   familyId: Id;

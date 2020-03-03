@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
-import { FamilyMember, Roles } from '@shared/types';
+import { FamilyMember, MemberPaymentPercentage, Roles } from '@shared/types';
 import { User } from '@shared/types';
 import { MemberRole } from '@src/app/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -113,6 +113,36 @@ export class MembersService extends DataService {
 
   getMemberIcon(user: FamilyMember): SafeResourceUrl {
     return user.icon || this.defaultIcon;
+  }
+
+  updateMembersPaymentPercentages(
+    familyId: string,
+    percentages: MemberPaymentPercentage[]
+  ): Observable<void> {
+    return this.put(`${this.getMemberApi(familyId)}/payment-percentages`, {
+      familyId,
+      percentages
+    }).pipe(
+      switchMap(() => this.getMembers(familyId)),
+      map(members => {
+        const updatedMembers: FamilyMember[] = members.map(member => {
+          const foundPercentages = percentages.filter(
+            percentage => percentage.userId === member._id
+          );
+          if (!foundPercentages) {
+            return member;
+          }
+          return {
+            ...member,
+            paymentPercentage: foundPercentages[0].paymentPercentage
+          };
+        });
+        this.members.next({
+          ...this.members.getValue(),
+          [familyId]: updatedMembers
+        });
+      })
+    );
   }
 
   private loadMembers(familyId: string): Observable<FamilyMember[]> {

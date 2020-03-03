@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Family, MemberPaymentPercentage } from '@shared/types';
+import { Family } from '@shared/types';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MemberFamily } from 'src/app/modules/shared/types/member-family';
@@ -175,18 +175,5 @@ export class FamiliesService extends DataService {
         })
       )
       .pipe();
-  }
-
-  updateMembersPaymentPercentages(
-    familyId: string,
-    percentages: MemberPaymentPercentage[]
-  ): Observable<void> {
-    return this.put(
-      `${this.familyAPIRouter}${familyId}/members/payment-percentages`,
-      {
-        familyId,
-        percentages
-      }
-    );
   }
 }

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
+import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 import { Family } from '@shared/types';
@@ -32,6 +33,7 @@ export class EditFamilyFormComponent implements OnInit {
     private dialogRef: MatDialogRef<EditFamilyFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public family: Family,
     private familiesService: FamiliesService,
+    private membersService: MembersService,
     private notificationsService: NotificationsService
   ) {}
 
@@ -107,7 +109,7 @@ export class EditFamilyFormComponent implements OnInit {
       userId: adult.userId,
       paymentPercentage: adult.paymentPercentage
     }));
-    return this.familiesService.updateMembersPaymentPercentages(
+    return this.membersService.updateMembersPaymentPercentages(
       this.family._id,
       percentages
     );

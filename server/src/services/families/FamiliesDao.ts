@@ -5,6 +5,8 @@ import { ObjectId } from "mongodb";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel } from "./models";
 import { FamilyMemberModel } from "./models/FamilyMember";
+// tslint:disable-next-line: max-line-length
+import { FamilyMemberPaymentPercentageModel } from "./models/FamilyMemberPaymentPercentage";
 
 export class FamiliesDao implements IFamiliesDao {
   public async createFamily(family: Partial<Family>): Promise<Family> {
@@ -78,6 +80,56 @@ export class FamiliesDao implements IFamiliesDao {
         }
       },
       {
+        $lookup: {
+          let: {
+            userId: "$_id.userId",
+            familyId: "$_id.familyId"
+          },
+          from: "familymemberpaymentpercentagemodels",
+          as: "paymentPercentage",
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id.familyId", "$$familyId"] },
+                    { $eq: ["$_id.userId", "$$userId"] }
+                  ]
+                }
+              }
+            },
+            {
+              $sort: {
+                "_id.createdAt": -1
+              }
+            },
+            {
+              $group: {
+                // tslint:disable-next-line: no-null-keyword
+                _id: null,
+                first: { $first: "$_id.createdAt" },
+                paymentPercentage: { $first: "$paymentPercentage" }
+              }
+            },
+            {
+              $unwind: "$paymentPercentage"
+            },
+            {
+              $project: {
+                _id: false,
+                paymentPercentage: true
+              }
+            }
+          ]
+        }
+      },
+      {
+        $unwind: {
+          path: "$paymentPercentage",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $unwind: "$user"
       },
       {
@@ -88,8 +140,8 @@ export class FamiliesDao implements IFamiliesDao {
           "member.email": "$user.email",
           "member.roles": "$roles",
           "member.icon": "$icon",
-          "member.paymentPercentage": "$paymentPercentage",
-          "member.createdAt": "$_id.createAt"
+          "member.createdAt": "$_id.createAt",
+          "member.paymentPercentage": "$paymentPercentage.paymentPercentage"
         }
       },
       { $replaceRoot: { newRoot: "$member" } }
@@ -162,12 +214,10 @@ export class FamiliesDao implements IFamiliesDao {
     memberId: { userId: string; familyId: string },
     paymentPercentage: number
   ) {
-    return FamilyMemberModel.updateOne(
-      { "_id.familyId": memberId.familyId, "_id.userId": memberId.userId },
-      { paymentPercentage },
-      { multi: true }
-    )
-      .lean()
-      .exec();
+    const memberPaymentPercentage = new FamilyMemberPaymentPercentageModel({
+      _id: { familyId: memberId.familyId, userId: memberId.userId },
+      paymentPercentage
+    });
+    await memberPaymentPercentage.save();
   }
 }

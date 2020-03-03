@@ -6,3 +6,4 @@ export * from "./payment-subject";
 export * from "./image-asset";
 export * from "./verification-token";
 export * from "./member-payment-percentage";
+export * from "./family-member-payment-percentage";

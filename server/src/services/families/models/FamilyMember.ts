@@ -12,7 +12,6 @@ const FamilyMemberSchema = new Schema<FamilyMember>(
       userId: { type: ObjectId, required: true, ref: "UserModel" }
     },
     roles: { type: [String], required: true },
-    paymentPercentage: Number,
     createdAt: Date,
     updatedAt: Date
   },

@@ -89,7 +89,7 @@ export class UserPaymentsCalculatedPerMemberComponent
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.data.slice();
+    const data = [...this.dataSource.data];
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;
       return;

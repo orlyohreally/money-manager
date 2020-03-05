@@ -8,4 +8,5 @@ export interface FamilyPaymentView {
   subjectName: string;
   subjectIcon: string;
   currency: string;
+  paymentPercentages: { userId: string; paymentPercentage: number }[];
 }

@@ -10,10 +10,19 @@
       New payment
     </button>
   </div>
-  <payment-user-payment-list [payments]="payments | async">
-  </payment-user-payment-list>
-  <payment-user-payments-calculated-per-member
-    class="payments-calculated-per-member"
-    [payments]="payments | async"
-  ></payment-user-payments-calculated-per-member>
+
+  <ng-template
+    let-paymentsList="paymentsList"
+    [ngTemplateOutletContext]="{ paymentsList: payments | async }"
+    [ngTemplateOutlet]="paymentsListTemplate"
+    #paymentsListTemplate
+  >
+    <payment-user-payment-list [payments]="paymentsList">
+    </payment-user-payment-list>
+    <payment-user-payments-calculated-per-member
+      *ngIf="paymentsList?.length"
+      class="payments-calculated-per-member"
+      [payments]="paymentsList"
+    ></payment-user-payments-calculated-per-member>
+  </ng-template>
 </div>

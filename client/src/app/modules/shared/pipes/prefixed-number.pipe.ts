@@ -7,7 +7,8 @@ import { CurrencySymbolPipe } from './currency-symbol.pipe';
 export class PrefixedNumberPipe implements PipeTransform {
   constructor(private currencySymbolPipe: CurrencySymbolPipe) {}
 
-  transform(number: number, currency: string): any {
+  transform(value: number | string, currency: string): any {
+    const number = Number(value.toString().replace(',', ''));
     if (isNaN(number) || !number) {
       return null;
     }

@@ -1,0 +1,23 @@
+<div *ngIf="overpaysAndDebtsList | async as overpaysAndDebts; loading">
+  <ng-container *ngIf="overpaysAndDebts.length">
+    <div class="member-debt-list">
+      <div class="mat-h3">Family members' balances</div>
+      <payment-member-debt-list
+        [debts]="overpaysAndDebts"
+        [currency]="familyCurrency | async"
+      ></payment-member-debt-list>
+      <div class="text_link mat-caption" (click)="showMoreLessDetails()">
+        {{ showMoreDetailedList ? 'Hide' : 'Show' }} more detailed list
+      </div>
+    </div>
+    <ng-container *ngIf="showMoreDetailedList">
+      <div class="mat-h3">List of debts and overpays</div>
+      <payment-member-overpay-and-debt-list
+        [calculatedPayments]="overpaysAndDebts"
+      ></payment-member-overpay-and-debt-list>
+    </ng-container>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <shared-loader></shared-loader>
+</ng-template>

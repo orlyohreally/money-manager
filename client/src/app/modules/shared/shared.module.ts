@@ -51,6 +51,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { BadgeDirective } from './directives/badge.directive';
 // tslint:disable-next-line: max-line-length
+import { ColoredNumberDirective } from './directives/colored-number/colored-number.directive';
+// tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from './directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { ScrollableContentDirective } from './directives/scrollable-content.directive';
@@ -58,6 +60,7 @@ import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
+import { UserFullNamePipe } from './pipes/user-full-name.pipe';
 
 @NgModule({
   declarations: [
@@ -86,7 +89,9 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     NotificationBlockDirective,
     PrefixedNumberPipe,
     ScrollableContentDirective,
-    ContentWithLoaderComponent
+    ContentWithLoaderComponent,
+    ColoredNumberDirective,
+    UserFullNamePipe
   ],
   imports: [
     CommonModule,
@@ -132,7 +137,9 @@ import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
     NotificationBlockDirective,
     PrefixedNumberPipe,
     ScrollableContentDirective,
-    ContentWithLoaderComponent
+    ContentWithLoaderComponent,
+    ColoredNumberDirective,
+    UserFullNamePipe
   ],
   providers: [CurrencySymbolPipe],
   entryComponents: [

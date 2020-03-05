@@ -27,6 +27,7 @@ export interface IFamiliesDao {
     memberId: { userId: string; familyId: string },
     percentage: number
   ): Promise<void>;
+  getPaymentPercentages(familyId: string): Promise<MemberPaymentPercentage[]>;
 }
 
 export class FamiliesService {
@@ -67,6 +68,12 @@ export class FamiliesService {
       savedFamily.icon = newIcon;
       savedFamily = await this.dao.updateFamily(savedFamily._id, savedFamily);
     }
+    await this.updateMembersPercentages(savedFamily._id, [
+      {
+        userId,
+        paymentPercentage: 100
+      }
+    ]);
     return savedFamily;
   }
 
@@ -98,10 +105,18 @@ export class FamiliesService {
     familyId: string,
     roles: string[]
   ): Promise<FamilyMember> {
-    return this.dao.createFamilyMember(familyId, {
+    const newMember = await this.dao.createFamilyMember(familyId, {
       _id: userId,
       roles: roles.indexOf(Roles.Member) > -1 ? roles : [...roles, Roles.Member]
     });
+
+    const paymentPercentages = await this.getPaymentPercentages(familyId);
+    await this.updateMembersPercentages(familyId, [
+      ...paymentPercentages,
+      { userId: newMember._id, paymentPercentage: 0 }
+    ]);
+
+    return newMember;
   }
 
   public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
@@ -234,6 +249,7 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
+    console.log(familyMember);
     return (
       familyMember &&
       (familyMember.roles.indexOf(Roles.Owner) > -1 ||
@@ -241,9 +257,22 @@ export class FamiliesService {
     );
   }
 
+  public async userCanCreatePayment(
+    userId: string,
+    familyId: string
+  ): Promise<boolean> {
+    const familyMember = await this.dao.getFamilyMember(userId, familyId);
+    console.log(familyMember);
+    return familyMember && this.isAdultMember(familyMember);
+  }
+
   public async isFamilyAdmin(userId: string, familyId: string) {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
     return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
+  }
+
+  public getPaymentPercentages(familyId: string) {
+    return this.dao.getPaymentPercentages(familyId);
   }
 
   private isAdultMember(member: FamilyMember) {

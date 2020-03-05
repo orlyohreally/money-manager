@@ -50,19 +50,18 @@ export class PaymentsComponent implements OnInit {
     this.payments = this.paymentsService.getAggregatedPayments(familyId).pipe(
       map((payments: PaymentView[]) =>
         payments
-          .map((payment: PaymentView) => {
-            return {
-              amount: payment.amount,
-              paidAt: payment.paidAt.toString(),
-              createdAt: payment.createdAt.toString(),
-              memberFullName: this.userManagerService.getFullName(payment.user),
-              memberEmail: payment.user.email,
-              updatedAt: payment.updatedAt.toString(),
-              subjectName: payment.subject ? payment.subject.name : '',
-              subjectIcon: payment.subject ? payment.subject.icon : '',
-              currency: payment.currency
-            };
-          })
+          .map((payment: PaymentView) => ({
+            amount: payment.amount,
+            paidAt: payment.paidAt.toString(),
+            createdAt: payment.createdAt.toString(),
+            memberFullName: this.userManagerService.getFullName(payment.user),
+            memberEmail: payment.user.email,
+            updatedAt: payment.updatedAt.toString(),
+            subjectName: payment.subject ? payment.subject.name : '',
+            subjectIcon: payment.subject ? payment.subject.icon : '',
+            currency: payment.currency,
+            paymentPercentages: payment.paymentPercentages
+          }))
           .sort((a, b) => compare(a.createdAt, b.createdAt, true))
       )
     );

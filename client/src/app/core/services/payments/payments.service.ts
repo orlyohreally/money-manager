@@ -38,18 +38,13 @@ export class PaymentsService extends DataService {
   }
 
   getPayments(familyId?: string): Observable<Payment[]> {
-    return this.paymentsList.asObservable().pipe(
-      switchMap(payments => {
-        if (!payments[familyId ? familyId : 'user']) {
-          return this.loadPayments(familyId).pipe(
-            map(
-              () => this.paymentsList.getValue()[familyId ? familyId : 'user']
-            )
-          );
-        }
-        return of(payments[familyId ? familyId : 'user']);
-      })
-    );
+    const payments = this.paymentsList.getValue();
+    if (!payments[familyId ? familyId : 'user']) {
+      return this.loadPayments(familyId).pipe(
+        map(() => this.paymentsList.getValue()[familyId ? familyId : 'user'])
+      );
+    }
+    return of(payments[familyId ? familyId : 'user']);
   }
 
   getAggregatedUserPayments(familyId?: string): Observable<PaymentView[]> {
@@ -75,7 +70,8 @@ export class PaymentsService extends DataService {
                 paidAt: payment.paidAt,
                 family,
                 createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt
+                updatedAt: payment.updatedAt,
+                paymentPercentages: payment.paymentPercentages
               }))
             )
           ),
@@ -107,7 +103,8 @@ export class PaymentsService extends DataService {
                 user,
                 familyId: payment.familyId,
                 createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt
+                updatedAt: payment.updatedAt,
+                paymentPercentages: payment.paymentPercentages
               }))
             )
           ),

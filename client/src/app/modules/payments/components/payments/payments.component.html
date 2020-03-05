@@ -1,18 +1,38 @@
 <div class="payments" fxLayout="column" fxLayoutAlign="center start">
-  <div class="page-content__header">
-    <div class="mat-h1">Payments</div>
-    <button
-      [paymentNewPayment]="familyId | async"
-      class="button button_lg"
-      mat-raised-button
-      color="primary"
+  <ng-template
+    let-familyIdValue="familyIdValue"
+    [ngTemplateOutletContext]="{ familyIdValue: familyId | async }"
+    [ngTemplateOutlet]="familyIdValueTemplate"
+    #familyIdValueTemplate
+  >
+    <div class="page-content__header">
+      <div class="mat-h1">Payments</div>
+      <button
+        [paymentNewPayment]="familyIdValue"
+        class="button button_lg"
+        mat-raised-button
+        color="primary"
+      >
+        New payment
+      </button>
+    </div>
+
+    <ng-template
+      let-paymentsList="paymentsList"
+      [ngTemplateOutletContext]="{ paymentsList: payments | async }"
+      [ngTemplateOutlet]="paymentsListTemplate"
+      #paymentsListTemplate
     >
-      New payment
-    </button>
-  </div>
-  <payment-payment-list [payments]="payments | async"> </payment-payment-list>
-  <payment-payments-calculated-per-member
-    class="payments-calculated-per-member"
-    [payments]="payments | async"
-  ></payment-payments-calculated-per-member>
+      <payment-payment-list [payments]="paymentsList"> </payment-payment-list>
+      <payment-payments-calculated-per-member
+        *ngIf="paymentsList?.length"
+        class="payments-calculated-per-member"
+        [payments]="paymentsList"
+      ></payment-payments-calculated-per-member>
+      <payment-member-overpay-and-debt
+        class="member-overpay-and-debt"
+        [familyId]="familyIdValue"
+      ></payment-member-overpay-and-debt>
+    </ng-template>
+  </ng-template>
 </div>

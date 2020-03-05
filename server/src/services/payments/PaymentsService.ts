@@ -1,4 +1,4 @@
-import { MemberPaymentPercentage, Payment } from "@shared/types";
+import { Payment } from "@shared/types";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
 
@@ -7,7 +7,6 @@ export interface IPaymentsDao {
   getFamilyPayments(familyId: string): Promise<Payment[]>;
   createPayment(payment: Partial<Payment>): Promise<Payment>;
   updatePayment(payment: Partial<Payment>): Promise<Payment>;
-  getPaymentPercentages(familyId: string): Promise<MemberPaymentPercentage[]>;
 }
 
 export class PaymentsService {
@@ -53,9 +52,5 @@ export class PaymentsService {
     }
     // tslint:disable-next-line: no-null-keyword
     return null;
-  }
-
-  public getPaymentPercentages(familyId: string) {
-    return this.dao.getPaymentPercentages(familyId);
   }
 }

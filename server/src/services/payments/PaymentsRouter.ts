@@ -68,7 +68,7 @@ export class PaymentsRouter {
       const familyId: string = (req.params as { familyId: string }).familyId;
       const updateIsAllowed =
         familyId &&
-        (await this.familiesService.userCanUpdateFamily(
+        (await this.familiesService.userCanCreatePayment(
           body.user._id,
           familyId
         ));
@@ -91,7 +91,7 @@ export class PaymentsRouter {
       const familyId = (req.params as { familyId: string }).familyId;
       const updateIsAllowed =
         familyId &&
-        (await this.familiesService.userCanUpdateFamily(
+        (await this.familiesService.userCanCreatePayment(
           body.user._id,
           familyId
         ));

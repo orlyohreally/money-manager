@@ -13,6 +13,7 @@ export interface Payment<Id = string> {
   familyId?: Id;
   createdAt?: Date;
   updatedAt?: Date;
+  paymentPercentages: { userId: Id; paymentPercentage: number }[];
 }
 
 export interface PaymentView<Id = string> {
@@ -26,6 +27,7 @@ export interface PaymentView<Id = string> {
   family?: Family;
   createdAt: Date;
   updatedAt: Date;
+  paymentPercentages: { userId: Id; paymentPercentage: number }[];
 }
 
 // /families/:id

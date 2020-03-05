@@ -1,9 +1,7 @@
-import { MemberPaymentPercentage, Payment } from "@shared/types";
+import { Payment } from "@shared/types";
 import { modelTransformer } from "@src/utils";
 import { ObjectId } from "mongodb";
 
-// tslint:disable-next-line: max-line-length
-import { FamilyMemberPaymentPercentageModel } from "@src/services/families/models/FamilyMemberPaymentPercentage";
 import { PaymentModel } from "./models";
 import { IPaymentsDao } from "./PaymentsService";
 
@@ -43,6 +41,13 @@ export class PaymentsDao implements IPaymentsDao {
               $group: {
                 _id: "$_id.userId",
                 paymentPercentage: { $first: "$paymentPercentage" }
+              }
+            },
+            {
+              $project: {
+                userId: "$_id",
+                _id: false,
+                paymentPercentage: true
               }
             }
           ]
@@ -87,6 +92,13 @@ export class PaymentsDao implements IPaymentsDao {
                 _id: "$_id.userId",
                 paymentPercentage: { $first: "$paymentPercentage" }
               }
+            },
+            {
+              $project: {
+                userId: "$_id",
+                _id: false,
+                paymentPercentage: true
+              }
             }
           ]
         }
@@ -109,26 +121,5 @@ export class PaymentsDao implements IPaymentsDao {
     )
       .lean()
       .exec();
-  }
-
-  public async getPaymentPercentages(
-    familyId: string
-  ): Promise<MemberPaymentPercentage[]> {
-    return FamilyMemberPaymentPercentageModel.aggregate([
-      { $match: { "_id.familyId": new ObjectId(familyId) } },
-      {
-        $group: {
-          _id: "$_id.userId",
-          paymentPercentage: { $first: "$paymentPercentage" }
-        }
-      },
-      {
-        $project: {
-          _id: false,
-          paymentPercentage: true,
-          userId: "$_id"
-        }
-      }
-    ]);
   }
 }

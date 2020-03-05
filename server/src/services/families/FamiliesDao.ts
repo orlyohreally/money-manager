@@ -1,4 +1,4 @@
-import { Family, FamilyMember } from "@shared/types";
+import { Family, FamilyMember, MemberPaymentPercentage } from "@shared/types";
 import { modelTransformer } from "@src/utils";
 
 import { ObjectId } from "mongodb";
@@ -105,18 +105,14 @@ export class FamiliesDao implements IFamiliesDao {
             },
             {
               $group: {
-                // tslint:disable-next-line: no-null-keyword
-                _id: null,
-                first: { $first: "$_id.createdAt" },
+                _id: "$_id.userId",
                 paymentPercentage: { $first: "$paymentPercentage" }
               }
             },
             {
-              $unwind: "$paymentPercentage"
-            },
-            {
               $project: {
                 _id: false,
+                userId: "$_id",
                 paymentPercentage: true
               }
             }
@@ -219,5 +215,26 @@ export class FamiliesDao implements IFamiliesDao {
       paymentPercentage
     });
     await memberPaymentPercentage.save();
+  }
+
+  public async getPaymentPercentages(
+    familyId: string
+  ): Promise<MemberPaymentPercentage[]> {
+    return FamilyMemberPaymentPercentageModel.aggregate([
+      { $match: { "_id.familyId": new ObjectId(familyId) } },
+      {
+        $group: {
+          _id: "$_id.userId",
+          paymentPercentage: { $first: "$paymentPercentage" }
+        }
+      },
+      {
+        $project: {
+          _id: false,
+          paymentPercentage: true,
+          userId: "$_id"
+        }
+      }
+    ]);
   }
 }

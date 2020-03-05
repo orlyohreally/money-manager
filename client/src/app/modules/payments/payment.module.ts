@@ -21,6 +21,12 @@ import {
 } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 // tslint:disable-next-line: max-line-length
+import { MemberPaymentDebtListComponent } from './components/member-payment-debt-list/member-payment-debt-list.component';
+// tslint:disable-next-line: max-line-length
+import { MemberPaymentOverpayAndDebtListComponent } from './components/member-payment-overpay-and-debt-list/member-payment-overpay-and-debt-list.component';
+// tslint:disable-next-line: max-line-length
+import { MemberPaymentOverpayAndDebtComponent } from './components/member-payment-overpay-and-debt/member-payment-overpay-and-debt.component';
+// tslint:disable-next-line: max-line-length
 import { MoneyAmountComponent } from './components/money-amount/money-amount.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentFormComponent } from './components/new-payment-form/new-payment-form.component';
@@ -59,7 +65,10 @@ import { PaymentRoutingModule } from './payment-routing.module';
     UserPaymentsListComponent,
     UserPaymentsComponent,
     PaymentsCalculatedPerMemberComponent,
-    UserPaymentsCalculatedPerMemberComponent
+    UserPaymentsCalculatedPerMemberComponent,
+    MemberPaymentOverpayAndDebtComponent,
+    MemberPaymentOverpayAndDebtListComponent,
+    MemberPaymentDebtListComponent
   ],
   imports: [
     CommonModule,

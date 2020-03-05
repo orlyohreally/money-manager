@@ -14,6 +14,7 @@ export interface FamilyMember<Id = string> {
   roles: string[];
   icon: string;
   paymentPercentage: number;
+  inactive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

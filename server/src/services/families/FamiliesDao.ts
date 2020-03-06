@@ -17,7 +17,7 @@ export class FamiliesDao implements IFamiliesDao {
 
   public async getFamily(
     familyId: string
-  ): Promise<{ name: string; membersCount: number }> {
+  ): Promise<Family & { name: string; membersCount: number }> {
     return new Promise((resolve, reject) => {
       FamilyModel.aggregate([
         { $match: { _id: new ObjectId(familyId) } },
@@ -40,7 +40,10 @@ export class FamiliesDao implements IFamiliesDao {
           }
         }
       ]).exec(
-        (err: Error, families: { name: string; membersCount: number }[]) => {
+        (
+          err: Error,
+          families: (Family & { name: string; membersCount: number })[]
+        ) => {
           if (families) {
             resolve(families[0]);
           } else {

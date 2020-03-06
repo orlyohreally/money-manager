@@ -38,13 +38,17 @@ export class PaymentsService extends DataService {
   }
 
   getPayments(familyId?: string): Observable<Payment[]> {
-    const payments = this.paymentsList.getValue();
-    if (!payments[familyId ? familyId : 'user']) {
-      return this.loadPayments(familyId).pipe(
-        map(() => this.paymentsList.getValue()[familyId ? familyId : 'user'])
-      );
-    }
-    return of(payments[familyId ? familyId : 'user']);
+    const familyIdPrefix = familyId ? familyId : 'user';
+    return this.paymentsList.asObservable().pipe(
+      switchMap(payments => {
+        if (!payments[familyIdPrefix]) {
+          return this.loadPayments(familyId).pipe(
+            map(() => this.paymentsList.getValue()[familyIdPrefix])
+          );
+        }
+        return of(payments[familyIdPrefix]);
+      })
+    );
   }
 
   getAggregatedUserPayments(familyId?: string): Observable<PaymentView[]> {
@@ -125,14 +129,11 @@ export class PaymentsService extends DataService {
         return this.paymentsList.asObservable().pipe(
           take(1),
           switchMap((payments: { [familyId: string]: Payment<string>[] }) => {
-            const familyPayments: Payment[] =
-              payments[familyId ? familyId : 'user'];
+            const familyPrefix = familyId ? familyId : 'user';
+            const familyPayments: Payment[] = payments[familyPrefix];
             this.paymentsList.next({
               ...payments,
-              [familyId ? familyId : 'user']: [
-                ...familyPayments,
-                createdPayment
-              ]
+              [familyPrefix]: [...familyPayments, createdPayment]
             });
             return of(createdPayment);
           })

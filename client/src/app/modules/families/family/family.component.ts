@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { catchError, map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'family-family',
@@ -27,6 +27,7 @@ export class FamilyComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private familiesService: FamiliesService
   ) {}
 
@@ -56,6 +57,10 @@ export class FamilyComponent implements OnInit, OnDestroy {
     return this.familiesService.getFamily(familyId).pipe(
       map((family: { name: string; icon: string; membersCount: number }) => {
         return { ...family, _id: familyId };
+      }),
+      catchError(() => {
+        this.router.navigate(['/']);
+        return [];
       })
     );
   }

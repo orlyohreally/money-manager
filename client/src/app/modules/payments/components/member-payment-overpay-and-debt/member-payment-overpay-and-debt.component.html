@@ -13,7 +13,7 @@
     <ng-container *ngIf="showMoreDetailedList">
       <div class="mat-h3">List of debts and overpays</div>
       <payment-member-overpay-and-debt-list
-        [calculatedPayments]="overpaysAndDebts"
+        [calculatedPayments]="paymentTransactions | async"
       ></payment-member-overpay-and-debt-list>
     </ng-container>
   </ng-container>

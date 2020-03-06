@@ -41,6 +41,9 @@ export class UserManagerService extends DataService {
   }
 
   getFullName(user: { firstName: string; lastName: string }): string {
+    if (!user) {
+      return;
+    }
     return `${user.firstName} ${user.lastName}`;
   }
 

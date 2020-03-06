@@ -54,9 +54,7 @@ export class MemberPaymentOverpayAndDebtComponent implements OnInit {
     this.showMoreDetailedList = !this.showMoreDetailedList;
   }
 
-  private getOverpayAndDebtsList(): Observable<
-    { user: User; debt: number; overpaid: number; amount: number }[]
-  > {
+  private getOverpayAndDebtsList(): Observable<PaymentDebt[]> {
     return this.paymentTransactions.pipe(
       map(payments => {
         if (!payments.length) {
@@ -143,7 +141,6 @@ export class MemberPaymentOverpayAndDebtComponent implements OnInit {
           user._id === percentageUser._id
             ? (payment.amount * (100 - percentage.paymentPercentage)) / 100
             : 0;
-
         return {
           user: percentageUser,
           toUser: user,
@@ -170,7 +167,6 @@ export class MemberPaymentOverpayAndDebtComponent implements OnInit {
           user._id === percentageUser._id
             ? (payment.amount * (100 - paymentPercentage)) / 100
             : 0;
-
         return {
           user: percentageUser,
           toUser: user,
@@ -183,159 +179,4 @@ export class MemberPaymentOverpayAndDebtComponent implements OnInit {
       })
       .reduce((acc, val) => acc.concat(val), []);
   }
-
-  // private calculateDebts(): Observable<{
-  //   [user: string]: {
-  //     [toUser: string]: {
-  //       [currency: string]: { debt: number; user: User; toUser: User };
-  //     };
-  //   };
-  // }> {
-  //   return this.overpayAndDebtList.pipe(
-  //     map(payments => {
-  //       if (!payments.length) {
-  //         return {};
-  //       }
-  //       return payments.reduce((res, payment) => {
-  //         if (!payment.debt) {
-  //           return res;
-  //         }
-  //         if (res[payment.user._id]) {
-  //           if (res[payment.user._id][payment.toUser._id]) {
-  // tslint:disable-next-line: max-line-length
-  //             if (res[payment.user._id][payment.toUser._id][payment.currency]) {
-  //               return {
-  //                 ...res,
-  //                 [payment.user._id]: {
-  //                   ...res[payment.user._id],
-  //                   [payment.toUser._id]: {
-  //                     [payment.currency]: {
-  //                       ...res[payment.user._id][payment.toUser._id][
-  //                         payment.currency
-  //                       ],
-  //                       debt:
-  //                         res[payment.user._id][payment.toUser._id][
-  //                           payment.currency
-  //                         ].debt + payment.debt,
-  //                       user: payment.user,
-  //                       toUser: payment.toUser
-  //                     }
-  //                   }
-  //                 }
-  //               };
-  //             }
-  //             return {
-  //               ...res,
-  //               [payment.user._id]: {
-  //                 ...res[payment.user._id],
-  //                 [payment.toUser._id]: {
-  //                   ...res[payment.user._id][payment.toUser._id],
-  //                   [payment.currency]: {
-  //                     debt: payment.debt,
-  //                     user: payment.user,
-  //                     toUser: payment.toUser
-  //                   }
-  //                 }
-  //               }
-  //             };
-  //           }
-  //           return {
-  //             ...res,
-  //             [payment.user._id]: {
-  //               ...res[payment.user._id],
-  //               [payment.toUser._id]: {
-  //                 [payment.currency]: {
-  //                   debt: payment.debt,
-  //                   user: payment.user,
-  //                   toUser: payment.toUser
-  //                 }
-  //               }
-  //             }
-  //           };
-  //         }
-  //         return {
-  //           ...res,
-  //           [payment.user._id]: {
-  //             [payment.toUser._id]: {
-  //               [payment.currency]: {
-  //                 debt: payment.debt,
-  //                 user: payment.user,
-  //                 toUser: payment.toUser
-  //               }
-  //             }
-  //           }
-  //         };
-  //       }, {});
-  //     })
-  //   );
-  // }
-
-  // getDebtsList(): Observable<
-  //   {
-  //     user: User;
-  //     toUser: User;
-  //     currency: string;
-  //     amount: number;
-  //   }[]
-  // > {
-  //   return this.calculateDebts1().pipe(
-  //     map(debts => {
-  //       const lookedToUserIds = [];
-  //       const calc = Object.keys(debts).map(userId => {
-  //         return Object.keys(debts[userId]).map(toUserId => {
-  //           if (lookedToUserIds.indexOf(userId) > -1) {
-  //             return null;
-  //           }
-  //           return Object.keys(debts[userId][toUserId]).map(currency => {
-  //             if (
-  //               debts[toUserId] &&
-  //               debts[toUserId][userId] &&
-  //               debts[toUserId][userId][currency]
-  //             ) {
-  //               const toUserDebts = debts[toUserId][userId][currency];
-  //               const userDebts = debts[userId][toUserId][currency];
-  //               if (userDebts > toUserDebts) {
-  //                 return {
-  //                   [userDebts.user._id]: {
-  //                     [toUserDebts.user._id]: {
-  //                       [currency]: {
-  //                         debt: userDebts.debt - toUserDebts.debt,
-  //                         user: debts[userId][toUserId][currency].user,
-  //                         toUser: debts[userId][toUserId][currency].toUser,
-  //                         currency
-  //                       }
-  //                     }
-  //                   }
-  //                 };
-  //               }
-  //             }
-  //             lookedToUserIds.push(toUserId);
-  //             return debts[userId][toUserId][currency];
-  //           });
-  //         });
-  //       });
-  //       console.log('calc', calc, 'debts', debts);
-  //       return debts;
-  //     }),
-  //     map(debts => {
-  //       console.log('debts', debts);
-  //       const calc = Object.keys(debts)
-  //         .map((userId: string) =>
-  //           Object.keys(debts[userId])
-  //             .map(toUser =>
-  //               Object.keys(debts[userId][toUser]).map(currency => ({
-  //                 user: debts[userId][toUser][currency].user,
-  //                 toUser: debts[userId][toUser][currency].toUser,
-  //                 currency,
-  //                 amount: debts[userId][toUser][currency].debt
-  //               }))
-  //             )
-  //             .reduce((acc, val) => acc.concat(val), [])
-  //         )
-  //         .reduce((acc, val) => acc.concat(val), []);
-  //       console.log('last', calc);
-  //       return calc;
-  //     })
-  //   );
-  // }
 }

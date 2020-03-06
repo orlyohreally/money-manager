@@ -19,7 +19,9 @@ export interface IFamiliesDao {
   getMemberFamilies(
     userId: string
   ): Promise<{ family: Family; roles: string[] }[]>;
-  getFamily(familyId: string): Promise<{ name: string; membersCount: number }>;
+  getFamily(
+    familyId: string
+  ): Promise<Family & { name: string; membersCount: number }>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
   removeFamily(familyId: string): Promise<void>;
@@ -90,7 +92,7 @@ export class FamiliesService {
 
   public async getFamily(
     familyId: string
-  ): Promise<{ name: string; membersCount: number }> {
+  ): Promise<Family & { name: string; membersCount: number }> {
     return this.dao.getFamily(familyId);
   }
 
@@ -109,12 +111,28 @@ export class FamiliesService {
       _id: userId,
       roles: roles.indexOf(Roles.Member) > -1 ? roles : [...roles, Roles.Member]
     });
-
-    const paymentPercentages = await this.getPaymentPercentages(familyId);
-    await this.updateMembersPercentages(familyId, [
-      ...paymentPercentages,
-      { userId: newMember._id, paymentPercentage: 0 }
-    ]);
+    if (this.isAdultMember(newMember)) {
+      const family = await this.getFamily(familyId);
+      const paymentPercentages = await this.getPaymentPercentages(familyId);
+      if (!family.equalPayments) {
+        await this.updateMembersPercentages(familyId, [
+          ...paymentPercentages,
+          { userId: newMember._id, paymentPercentage: 0 }
+        ]);
+      } else {
+        const members = (await this.getFamilyMembers(familyId)).filter(member =>
+          this.isAdultMember(member)
+        );
+        const paymentPercentage = 100 / members.length;
+        await this.updateMembersPercentages(familyId, [
+          ...paymentPercentages.map(percentage => ({
+            userId: percentage.userId,
+            paymentPercentage
+          })),
+          { userId: newMember._id, paymentPercentage }
+        ]);
+      }
+    }
 
     return newMember;
   }

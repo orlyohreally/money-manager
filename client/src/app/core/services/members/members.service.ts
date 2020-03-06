@@ -31,12 +31,16 @@ export class MembersService extends DataService {
   }
 
   getMembers(familyId: string): Observable<FamilyMember[]> {
-    if (!this.members.getValue()[familyId ? familyId : 'user']) {
-      return this.loadMembers(familyId).pipe(
-        switchMap(() => of(this.members.getValue()[familyId]))
-      );
-    }
-    return of(this.members.getValue()[familyId]);
+    return this.members.asObservable().pipe(
+      switchMap(members => {
+        if (!members[familyId ? familyId : 'user']) {
+          return this.loadMembers(familyId).pipe(
+            switchMap(() => of(this.members.getValue()[familyId]))
+          );
+        }
+        return of(members[familyId]);
+      })
+    );
   }
 
   getFamilyMemberById(

@@ -226,6 +226,11 @@ export class FamiliesDao implements IFamiliesDao {
     return FamilyMemberPaymentPercentageModel.aggregate([
       { $match: { "_id.familyId": new ObjectId(familyId) } },
       {
+        $sort: {
+          "_id.createdAt": -1
+        }
+      },
+      {
         $group: {
           _id: "$_id.userId",
           paymentPercentage: { $first: "$paymentPercentage" }

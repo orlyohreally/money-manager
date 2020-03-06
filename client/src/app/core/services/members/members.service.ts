@@ -5,7 +5,7 @@ import { FamilyMember, MemberPaymentPercentage, Roles } from '@shared/types';
 import { User } from '@shared/types';
 import { MemberRole } from '@src/app/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -33,9 +33,9 @@ export class MembersService extends DataService {
   getMembers(familyId: string): Observable<FamilyMember[]> {
     return this.members.asObservable().pipe(
       switchMap(members => {
-        if (!members[familyId ? familyId : 'user']) {
+        if (!members[familyId]) {
           return this.loadMembers(familyId).pipe(
-            switchMap(() => of(this.members.getValue()[familyId]))
+            map(() => this.members.getValue()[familyId])
           );
         }
         return of(members[familyId]);
@@ -127,18 +127,18 @@ export class MembersService extends DataService {
       familyId,
       percentages
     }).pipe(
-      switchMap(() => this.getMembers(familyId)),
+      switchMap(() => this.getMembers(familyId).pipe(take(1))),
       map(members => {
         const updatedMembers: FamilyMember[] = members.map(member => {
-          const foundPercentages = percentages.filter(
+          const foundPercentage = percentages.filter(
             percentage => percentage.userId === member._id
-          );
-          if (!foundPercentages) {
+          )[0];
+          if (!foundPercentage) {
             return member;
           }
           return {
             ...member,
-            paymentPercentage: foundPercentages[0].paymentPercentage
+            paymentPercentage: foundPercentage.paymentPercentage
           };
         });
         this.members.next({

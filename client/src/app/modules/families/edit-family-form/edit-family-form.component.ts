@@ -10,7 +10,7 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 import { Family } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
 import { of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { MemberFamily } from '../../shared/types';
 
 @Component({
@@ -72,7 +72,7 @@ export class EditFamilyFormComponent implements OnInit {
       _id: this.family._id
     })
       .pipe(
-        concatMap(() => {
+        switchMap(() => {
           if (this.form.value.equalPayments) {
             return of(undefined);
           }

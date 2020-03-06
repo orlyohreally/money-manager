@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>
     Payment
   </h1>
-  <div *ngIf="subjects; else loading" mat-dialog-content>
+  <ng-container *ngIf="subjects; else loading">
     <form [formGroup]="form" (ngSubmit)="submitForm()">
       <mat-form-field
         appearance="outline"
@@ -89,7 +89,7 @@
         </shared-content-with-loader>
       </div>
     </form>
-  </div>
+  </ng-container>
 </div>
 <ng-template #loading>
   <shared-loader></shared-loader>

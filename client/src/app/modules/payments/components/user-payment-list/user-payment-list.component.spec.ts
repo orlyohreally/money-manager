@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { UserPaymentsListComponent } from './user-payments-list.component';
+import { UserPaymentsListComponent } from './user-payment-list.component';
 
 describe('UserPaymentsListComponent', () => {
   let component: UserPaymentsListComponent;
@@ -8,9 +7,8 @@ describe('UserPaymentsListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserPaymentsListComponent ]
-    })
-    .compileComponents();
+      declarations: [UserPaymentsListComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

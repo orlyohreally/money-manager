@@ -108,9 +108,56 @@ export class PaymentsDao implements IPaymentsDao {
 
   public async createPayment(payment: Partial<Payment>): Promise<Payment> {
     const newPayment = new PaymentModel(payment);
-    console.log("newPayment", newPayment, payment);
     await newPayment.save();
-    return newPayment.toJSON(modelTransformer) as Payment;
+    return (PaymentModel.aggregate([
+      {
+        $match: {
+          _id: new ObjectId(
+            (newPayment.toJSON(modelTransformer) as Payment)._id
+          )
+        }
+      },
+      {
+        $lookup: {
+          let: {
+            familyId: "$familyId",
+            paymentCreatedAt: "$createdAt"
+          },
+          from: "familymemberpaymentpercentagemodels",
+          as: "paymentPercentages",
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id.familyId", "$$familyId"] },
+                    { $lt: ["$_id.createdAt", "$$paymentCreatedAt"] }
+                  ]
+                }
+              }
+            },
+            {
+              $sort: {
+                "_id.createdAt": -1
+              }
+            },
+            {
+              $group: {
+                _id: "$_id.userId",
+                paymentPercentage: { $first: "$paymentPercentage" }
+              }
+            },
+            {
+              $project: {
+                userId: "$_id",
+                _id: false,
+                paymentPercentage: true
+              }
+            }
+          ]
+        }
+      }
+    ]).exec() as Promise<Payment[]>).then((payments: Payment[]) => payments[0]);
   }
 
   public async updatePayment(payment: Partial<Payment>): Promise<Payment> {

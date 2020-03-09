@@ -68,10 +68,13 @@ export class NewPaymentFormComponent implements OnInit {
   createPayment(payment: Partial<Payment>) {
     this.submittingForm = true;
     this.paymentsService
-      .createPayment(this.data.familyId, {
-        ...payment,
-        currency: this.paymentCurrency
-      })
+      .createPayment(
+        {
+          ...payment,
+          currency: this.paymentCurrency
+        },
+        this.data.familyId
+      )
       .subscribe(
         result => {
           this.submittingForm = false;

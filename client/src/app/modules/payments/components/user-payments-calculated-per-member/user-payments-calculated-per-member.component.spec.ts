@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 // tslint:disable-next-line: max-line-length
-import { PaymentsCalculatedPerMemberComponent } from './payments-calculated-per-member.component';
+import { PaymentsCalculatedPerMemberComponent } from '../payments-calculated-per-member/payments-calculated-per-member.component';
 
 describe('PaymentsCalculatedPerMemberComponent', () => {
   let component: PaymentsCalculatedPerMemberComponent;

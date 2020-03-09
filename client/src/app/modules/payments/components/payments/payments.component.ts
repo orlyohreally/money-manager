@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 // tslint:disable-next-line: max-line-length
-import { PaymentsService } from '@core-client/services/payments/payments.service';
-// tslint:disable-next-line: max-line-length
-import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
-import { compare } from '@shared-client/functions';
-import { PaymentView } from '@shared/types';
+import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 import { FamilyPaymentView } from '@src/app/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -32,8 +28,7 @@ export class PaymentsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private paymentsService: PaymentsService,
-    private userManagerService: UserManagerService
+    private paymentsCalculationsService: PaymentsCalculationsService
   ) {}
 
   ngOnInit() {
@@ -47,23 +42,9 @@ export class PaymentsComponent implements OnInit {
   }
 
   private getPayments(familyId?: string) {
-    this.payments = this.paymentsService.getAggregatedPayments(familyId).pipe(
-      map((payments: PaymentView[]) =>
-        payments
-          .map((payment: PaymentView) => ({
-            amount: payment.amount,
-            paidAt: payment.paidAt.toString(),
-            createdAt: payment.createdAt.toString(),
-            memberFullName: this.userManagerService.getFullName(payment.user),
-            memberEmail: payment.user.email,
-            updatedAt: payment.updatedAt.toString(),
-            subjectName: payment.subject ? payment.subject.name : '',
-            subjectIcon: payment.subject ? payment.subject.icon : '',
-            currency: payment.currency,
-            paymentPercentages: payment.paymentPercentages
-          }))
-          .sort((a, b) => compare(a.createdAt, b.createdAt, true))
-      )
+    // tslint:disable-next-line: max-line-length
+    this.payments = this.paymentsCalculationsService.getAggregatedPayments(
+      familyId
     );
   }
 }

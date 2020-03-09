@@ -8,8 +8,7 @@ import {
 } from '@angular/core';
 import { MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { compare } from '@src/app/modules/shared/functions';
-// tslint:disable-next-line: max-line-length
-import { PaymentDebt } from '../member-payment-overpay-and-debt/member-payment-overpay-and-debt.component';
+import { PaymentDebt } from '@src/app/modules/shared/types';
 
 @Component({
   selector: 'payment-member-debt-list',
@@ -59,10 +58,8 @@ export class MemberPaymentDebtListComponent implements OnInit, OnChanges {
     this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'debt':
-          return compare(a.debt, b.debt, isAsc);
-        case 'overpaid':
-          return compare(a.overpaid, b.overpaid, isAsc);
+        case 'amount':
+          return compare(a.amount, b.amount, isAsc);
         case 'user': {
           const comparisonByLastName = compare(
             a.user.lastName,

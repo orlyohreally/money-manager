@@ -120,17 +120,23 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
         res: { [memberFullName: string]: { [currency: string]: number } },
         payment: FamilyPaymentView
       ) => {
-        if (!res[payment.memberFullName]) {
+        if (!res[`${payment.member.firstName} ${payment.member.lastName}`]) {
           return {
             ...res,
-            [payment.memberFullName]: { [payment.currency]: payment.amount }
+            [`${payment.member.firstName} ${payment.member.lastName}`]: {
+              [payment.currency]: payment.amount
+            }
           };
         }
-        if (!res[payment.memberFullName][payment.currency]) {
+        if (
+          !res[`${payment.member.firstName} ${payment.member.lastName}`][
+            payment.currency
+          ]
+        ) {
           return {
             ...res,
-            [payment.memberFullName]: {
-              ...res[payment.memberFullName],
+            [`${payment.member.firstName} ${payment.member.lastName}`]: {
+              ...res[`${payment.member.firstName} ${payment.member.lastName}`],
               [payment.currency]: payment.amount
             }
           };
@@ -138,10 +144,12 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
 
         return {
           ...res,
-          [payment.memberFullName]: {
-            ...res[payment.memberFullName],
+          [`${payment.member.firstName} ${payment.member.lastName}`]: {
+            ...res[`${payment.member.firstName} ${payment.member.lastName}`],
             [payment.currency]:
-              res[payment.memberFullName][payment.currency] + payment.amount
+              res[`${payment.member.firstName} ${payment.member.lastName}`][
+                payment.currency
+              ] + payment.amount
           }
         };
       },

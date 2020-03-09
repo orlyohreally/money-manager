@@ -13,8 +13,8 @@ import {
   Sort
 } from '@angular/material';
 import { compare } from '@src/app/modules/shared/functions';
+import { OverpaidDebtPayment } from '@src/app/modules/shared/types';
 // tslint:disable-next-line: max-line-length
-import { OverpaidDebtPayment } from '../member-payment-overpay-and-debt/member-payment-overpay-and-debt.component';
 
 @Component({
   selector: 'payment-member-overpay-and-debt-list',

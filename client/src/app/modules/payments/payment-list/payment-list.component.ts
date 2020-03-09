@@ -28,7 +28,7 @@ export class PaymentListComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [
     'subject',
     'amount',
-    'memberFullName',
+    'member',
     'paidAt',
     'createdAt',
     'updatedAt'
@@ -79,8 +79,16 @@ export class PaymentListComponent implements OnInit, OnChanges {
           return compare(a.amount, b.amount, isAsc);
         case 'subject':
           return compare(a.subjectName, b.subjectName, isAsc);
-        case 'familyName':
-          return compare(a.memberFullName, b.memberFullName, isAsc);
+        case 'member': {
+          const comparisonByLastName = compare(
+            a.member.lastName,
+            b.member.lastName,
+            isAsc
+          );
+          return !comparisonByLastName
+            ? compare(a.member.firstName, b.member.firstName, isAsc)
+            : comparisonByLastName;
+        }
         case 'paidAt':
           return compare(a.paidAt, b.paidAt, isAsc);
         case 'createdAt':

@@ -1,4 +1,5 @@
 export interface UserPaymentView {
+  _id: string;
   amount: number;
   paidAt: string;
   createdAt: string;

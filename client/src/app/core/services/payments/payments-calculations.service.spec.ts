@@ -75,18 +75,6 @@ describe('PaymentsCalculationsService', () => {
     () => {
       const expectedPayments = [
         {
-          _id: 'paymentId-2',
-          amount: 20,
-          currency: 'USD',
-          paidAt: new Date('2020-01-04').toString(),
-          familyId: 'familyId-2',
-          familyName: 'familyName-2',
-          subjectName: 'subjectName-2',
-          subjectIcon: 'subject-icon-2.png',
-          createdAt: new Date('2020-10-02').toString(),
-          updatedAt: new Date('2020-10-02').toString()
-        },
-        {
           _id: 'paymentId-1',
           amount: 10,
           currency: 'USD',
@@ -96,6 +84,18 @@ describe('PaymentsCalculationsService', () => {
           subjectName: 'subjectName-1',
           subjectIcon: 'subject-icon-1.png',
           createdAt: new Date('2020-10-01').toString(),
+          updatedAt: new Date('2020-10-02').toString()
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          currency: 'USD',
+          paidAt: new Date('2020-01-04').toString(),
+          familyId: 'familyId-2',
+          familyName: 'familyName-2',
+          subjectName: 'subjectName-2',
+          subjectIcon: 'subject-icon-2.png',
+          createdAt: new Date('2020-10-02').toString(),
           updatedAt: new Date('2020-10-02').toString()
         }
       ];

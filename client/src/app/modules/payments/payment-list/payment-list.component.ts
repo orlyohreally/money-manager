@@ -25,14 +25,7 @@ export class PaymentListComponent implements OnInit, OnChanges {
 
   @Input() payments: FamilyPaymentView[];
 
-  displayedColumns: string[] = [
-    'subject',
-    'amount',
-    'member',
-    'paidAt',
-    'createdAt',
-    'updatedAt'
-  ];
+  displayedColumns: string[] = ['subject', 'amount', 'member', 'paidAt'];
   dataSource: MatTableDataSource<FamilyPaymentView>;
 
   private paginator: MatPaginator;
@@ -91,12 +84,6 @@ export class PaymentListComponent implements OnInit, OnChanges {
         }
         case 'paidAt':
           return compare(a.paidAt, b.paidAt, isAsc);
-        case 'createdAt':
-          return compare(a.createdAt, b.createdAt, isAsc);
-        case 'updatedAt':
-          return compare(a.updatedAt, b.updatedAt, isAsc);
-        default:
-          return 0;
       }
     });
     if (this.dataSource.paginator) {

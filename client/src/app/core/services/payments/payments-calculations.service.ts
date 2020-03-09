@@ -68,7 +68,7 @@ export class PaymentsCalculationsService {
         }))
       ),
       map(payments =>
-        payments.sort((a, b) => compare(a.paidAt, b.paidAt, true))
+        payments.sort((a, b) => compare(a.paidAt, b.paidAt, false))
       )
     );
   }
@@ -118,7 +118,7 @@ export class PaymentsCalculationsService {
             currency: payment.currency,
             paymentPercentages: payment.paymentPercentages
           }))
-          .sort((a, b) => compare(a.paidAt, b.paidAt, true))
+          .sort((a, b) => compare(a.paidAt, b.paidAt, false))
       )
     );
   }

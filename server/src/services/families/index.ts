@@ -5,6 +5,8 @@ import { EmailSenderService } from "@src/services/email-sender/EmailSenderServic
 import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
+import { PaymentsDao } from "@src/services/payments/PaymentsDao";
+import { PaymentsService } from "@src/services/payments/PaymentsService";
 import { UsersDao } from "@src/services/users/UsersDao";
 import { UsersService } from "@src/services/users/UsersService";
 import { FamiliesDao } from "./FamiliesDao";
@@ -18,5 +20,11 @@ export const familiesService = new FamiliesService({
 export const familiesRouter = new FamiliesRouter({
   service: familiesService,
   usersService: new UsersService({ dao: new UsersDao() }),
-  emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() })
+  emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() }),
+  paymentsService: new PaymentsService({
+    dao: new PaymentsDao(),
+    imageLoaderService: new ImageManagerService({
+      dao: new ImageManagerDao()
+    })
+  })
 }).router;

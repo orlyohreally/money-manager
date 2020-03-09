@@ -169,4 +169,14 @@ export class PaymentsDao implements IPaymentsDao {
       .lean()
       .exec();
   }
+
+  public async updatePaymentsAmountByRate(
+    familyId: string,
+    exchangeRate: number
+  ): Promise<void> {
+    return PaymentModel.updateMany(
+      { familyId: new ObjectId(familyId) },
+      { $mul: { amount: exchangeRate } }
+    );
+  }
 }

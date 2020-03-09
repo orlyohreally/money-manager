@@ -7,6 +7,10 @@ export interface IPaymentsDao {
   getFamilyPayments(familyId: string): Promise<Payment[]>;
   createPayment(payment: Partial<Payment>): Promise<Payment>;
   updatePayment(payment: Partial<Payment>): Promise<Payment>;
+  updatePaymentsAmountByRate(
+    familyId: string,
+    exchangeRate: number
+  ): Promise<void>;
 }
 
 export class PaymentsService {
@@ -52,5 +56,12 @@ export class PaymentsService {
     }
     // tslint:disable-next-line: no-null-keyword
     return null;
+  }
+
+  public async updatePaymentsAmountByRate(
+    familyId: string,
+    exchangeRate: number
+  ): Promise<void> {
+    return this.dao.updatePaymentsAmountByRate(familyId, exchangeRate);
   }
 }

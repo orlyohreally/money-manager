@@ -96,6 +96,24 @@ export class PaymentsService extends DataService {
     });
   }
 
+  updatePaymentsByExchangeRate(
+    familyId: string,
+    exchangeRate: number
+  ): Observable<void> {
+    return this.getPayments(familyId).pipe(
+      take(1),
+      map(payments => {
+        this.paymentsList.next({
+          ...this.paymentsList.getValue(),
+          [familyId]: payments.map(payment => ({
+            ...payment,
+            amount: payment.amount * exchangeRate
+          }))
+        });
+      })
+    );
+  }
+
   removePayment() {
     // delete this.payments[payment._id];
     return of({

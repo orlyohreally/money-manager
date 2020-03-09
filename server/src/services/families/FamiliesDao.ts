@@ -58,9 +58,13 @@ export class FamiliesDao implements IFamiliesDao {
     if (family._id) {
       delete family._id;
     }
-    return FamilyModel.findOneAndUpdate({ _id: familyId }, family, {
-      new: true
-    })
+    return FamilyModel.findOneAndUpdate(
+      { _id: new ObjectId(familyId) },
+      family,
+      {
+        new: true
+      }
+    )
       .lean()
       .exec();
   }

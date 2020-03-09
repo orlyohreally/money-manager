@@ -16,9 +16,38 @@
           Select family name
         </mat-error>
       </mat-form-field>
-      <shared-currency-selector
-        [currencyControl]="familyForm.get('currency')"
-      ></shared-currency-selector>
+      <div
+        fxLayoutAlign="column"
+        fxLayoutAlign.gt-md="row"
+        fxLayoutGap="10px grid"
+      >
+        <shared-currency-selector
+          fxFlex="60"
+          [currencyControl]="familyForm.get('currency')"
+        ></shared-currency-selector>
+        <mat-form-field
+          appearance="outline"
+          *ngIf="displayExchangeRate"
+          fxFlex="40"
+        >
+          <mat-label>Exchange rate</mat-label>
+          <input
+            type="number"
+            required
+            matInput
+            formControlName="exchangeRate"
+          />
+          <mat-error
+            *ngIf="familyForm.get('exchangeRate').hasError('required')"
+          >
+            Exchange rate is required
+          </mat-error>
+          <mat-hint>
+            Set exchange rate to update all already added payments' amount
+            values
+          </mat-hint>
+        </mat-form-field>
+      </div>
       <ng-content></ng-content>
       <div class="action-buttons" fxLayout="row" fxLayoutAlign="center">
         <shared-content-with-loader [showLoader]="submittingForm">

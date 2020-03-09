@@ -7,6 +7,7 @@ import { MemberFamily } from 'src/app/modules/shared/types/member-family';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
+import { PaymentsService } from '../payments/payments.service';
 
 export interface FamilyView {
   name: string;
@@ -28,7 +29,8 @@ export class FamiliesService extends DataService {
 
   constructor(
     http: HttpClient,
-    globalVariablesService: GlobalVariablesService
+    globalVariablesService: GlobalVariablesService,
+    private paymentsService: PaymentsService
   ) {
     super(http, globalVariablesService);
   }
@@ -99,8 +101,14 @@ export class FamiliesService extends DataService {
     );
   }
 
-  updateFamily(family: Partial<MemberFamily>): Observable<MemberFamily> {
-    return this.put(`${this.familyAPIRouter}${family._id}`, { family }).pipe(
+  updateFamily(
+    family: Partial<MemberFamily>,
+    exchangeRate?: number
+  ): Observable<MemberFamily> {
+    return this.put(`${this.familyAPIRouter}${family._id}`, {
+      ...{ family },
+      ...(exchangeRate && { exchangeRate })
+    }).pipe(
       switchMap((updatedFamily: MemberFamily) => {
         const families = this.familyStore.getValue().families;
         let oldFamilyValue = families.filter(
@@ -112,6 +120,14 @@ export class FamiliesService extends DataService {
           families,
           currentFamily: this.familyStore.getValue().currentFamily
         });
+        return of(updatedFamily);
+      }),
+      switchMap(updatedFamily => {
+        if (exchangeRate) {
+          return this.paymentsService
+            .updatePaymentsByExchangeRate(family._id, exchangeRate)
+            .pipe(map(() => updatedFamily));
+        }
         return of(updatedFamily);
       }),
       catchError(error => {

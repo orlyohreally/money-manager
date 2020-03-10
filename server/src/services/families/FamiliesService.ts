@@ -80,7 +80,8 @@ export class FamiliesService {
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
-    if (family.icon && family.icon.search(/^http/) === -1) {
+    const currentIcon = (await this.getFamily(familyId)).icon;
+    if (family.icon && currentIcon !== family.icon) {
       const newIcon = await this.imageLoaderService.loadImage(
         family.icon,
         `families/${family._id}`

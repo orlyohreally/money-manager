@@ -56,6 +56,8 @@ import { ColoredNumberDirective } from './directives/colored-number/colored-numb
 import { NotificationBlockDirective } from './directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { ScrollableContentDirective } from './directives/scrollable-content.directive';
+// tslint:disable-next-line: max-line-length
+import { BypassSecurityTrustUrlPipe } from './pipes/bypass-security-trust-url.pipe';
 import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
@@ -91,7 +93,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     ScrollableContentDirective,
     ContentWithLoaderComponent,
     ColoredNumberDirective,
-    UserFullNamePipe
+    UserFullNamePipe,
+    BypassSecurityTrustUrlPipe
   ],
   imports: [
     CommonModule,
@@ -139,7 +142,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     ScrollableContentDirective,
     ContentWithLoaderComponent,
     ColoredNumberDirective,
-    UserFullNamePipe
+    UserFullNamePipe,
+    BypassSecurityTrustUrlPipe
   ],
   providers: [CurrencySymbolPipe],
   entryComponents: [

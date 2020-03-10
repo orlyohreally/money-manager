@@ -110,15 +110,15 @@ export class FamiliesService extends DataService {
       ...(exchangeRate && { exchangeRate })
     }).pipe(
       switchMap((updatedFamily: MemberFamily) => {
-        const families = this.familyStore.getValue().families;
-        let oldFamilyValue = families.filter(
-          (currentFamily: MemberFamily) =>
-            currentFamily._id === updatedFamily._id
-        )[0];
-        oldFamilyValue = Object.assign(oldFamilyValue, updatedFamily);
+        const families = this.familyStore
+          .getValue()
+          .families.map(f => (f._id === family._id ? updatedFamily : f));
+        const currentFamily = this.familyStore.getValue().currentFamily;
+
         this.familyStore.next({
           families,
-          currentFamily: this.familyStore.getValue().currentFamily
+          currentFamily:
+            currentFamily._id === family._id ? updatedFamily : currentFamily
         });
         return of(updatedFamily);
       }),

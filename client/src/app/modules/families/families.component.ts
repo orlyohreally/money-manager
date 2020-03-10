@@ -17,17 +17,7 @@ export class FamiliesComponent implements OnInit {
 
   ngOnInit() {
     this.families = this.familiesService.familiesInfo.pipe(
-      map(
-        (familiesInfo: {
-          families: MemberFamily[];
-          currentFamily: MemberFamily;
-        }) => {
-          return familiesInfo.families.map((family: MemberFamily) => ({
-            ...family,
-            icon: this.familiesService.getFamilyIcon(family)
-          }));
-        }
-      )
+      map(familiesInfo => familiesInfo.families)
     );
   }
 }

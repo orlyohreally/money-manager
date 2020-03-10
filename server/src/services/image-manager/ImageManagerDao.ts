@@ -16,6 +16,9 @@ export class ImageManagerDao implements IImageLoaderDao {
           if (error) {
             reject(error);
           }
+          if (!result) {
+            reject("Something went wrong");
+          }
           resolve(result.secure_url || result.url);
         }
       );

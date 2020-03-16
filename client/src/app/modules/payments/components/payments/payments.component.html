@@ -1,7 +1,11 @@
 <div class="payments" fxLayout="column" fxLayoutAlign="center start">
   <ng-template
     let-familyIdValue="familyIdValue"
-    [ngTemplateOutletContext]="{ familyIdValue: familyId | async }"
+    let-familyCurrency="familyCurrency"
+    [ngTemplateOutletContext]="{
+      familyIdValue: familyId | async,
+      familyCurrency: currency | async
+    }"
     [ngTemplateOutlet]="familyIdValueTemplate"
     #familyIdValueTemplate
   >
@@ -23,15 +27,21 @@
       [ngTemplateOutlet]="paymentsListTemplate"
       #paymentsListTemplate
     >
-      <payment-payment-list [payments]="paymentsList"> </payment-payment-list>
+      <payment-payment-list
+        [payments]="paymentsList"
+        [currency]="familyCurrency"
+      >
+      </payment-payment-list>
       <payment-payments-calculated-per-member
         *ngIf="paymentsList?.length"
         class="payments-calculated-per-member"
         [payments]="paymentsList"
+        [currency]="familyCurrency"
       ></payment-payments-calculated-per-member>
       <payment-member-overpay-and-debt
         class="member-overpay-and-debt"
         [familyId]="familyIdValue"
+        [currency]="familyCurrency"
       ></payment-member-overpay-and-debt>
     </ng-template>
   </ng-template>

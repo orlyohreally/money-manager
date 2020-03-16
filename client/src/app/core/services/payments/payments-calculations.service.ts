@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { FamilyMember, Payment, PaymentView } from '@shared/types';
+import { FamilyMember, Payment, User } from '@shared/types';
 import { compare } from '@src/app/modules/shared/functions';
 import {
   OverpaidDebtPayment,
   PaymentDebt
 } from '@src/app/modules/shared/types';
+import { PaymentView } from '@src/app/modules/shared/types/payment-view';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { concatMap, map, mergeMap, toArray } from 'rxjs/operators';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 import { FamiliesService } from '../families/families.service';
 import { MembersService } from '../members/members.service';
 // tslint:disable-next-line: max-line-length
@@ -22,12 +25,19 @@ export class PaymentsCalculationsService {
     private paymentSubjectsService: PaymentSubjectsService,
     private familiesService: FamiliesService,
     private membersService: MembersService,
-    private paymentsService: PaymentsService
+    private paymentsService: PaymentsService,
+    private authenticationService: AuthenticationService
   ) {}
 
   getAggregatedUserPayments(): Observable<UserPaymentView[]> {
-    return this.paymentsService.getUserPayments().pipe(
-      mergeMap((payments: Payment[]) => {
+    return combineLatest([
+      this.authenticationService.getUser(),
+      this.paymentsService.getUserPayments()
+    ]).pipe(
+      mergeMap(([user, payments]: [User, Payment[]]) => {
+        if (!user) {
+          return of([]);
+        }
         return from(payments).pipe(
           concatMap(payment =>
             combineLatest([
@@ -39,7 +49,7 @@ export class PaymentsCalculationsService {
               map(([subject, family]) => ({
                 _id: payment._id,
                 amount: payment.amount,
-                currency: payment.currency,
+                currency: family ? family.currency : user.currency,
                 receipt: payment.receipt,
                 subject,
                 paidAt: payment.paidAt,
@@ -53,17 +63,16 @@ export class PaymentsCalculationsService {
           toArray()
         );
       }),
-      map((payments: PaymentView[]) =>
-        payments.map((payment: PaymentView) => ({
+      map((payments: (PaymentView & { currency: string })[]) =>
+        payments.map((payment: PaymentView & { currency: string }) => ({
           _id: payment._id,
           amount: payment.amount,
           paidAt: payment.paidAt.toString(),
           createdAt: payment.createdAt.toString(),
-          familyName: payment.family ? payment.family.name : undefined,
-          familyId: payment.family ? payment.family._id : undefined,
+          family: payment.family,
+          receipt: payment.receipt,
           updatedAt: payment.updatedAt.toString(),
-          subjectName: payment.subject.name,
-          subjectIcon: payment.subject.icon,
+          subject: payment.subject,
           currency: payment.currency
         }))
       ),
@@ -88,7 +97,6 @@ export class PaymentsCalculationsService {
               map(([subject, user]) => ({
                 _id: payment._id,
                 amount: payment.amount,
-                currency: payment.currency,
                 receipt: payment.receipt,
                 subject,
                 paidAt: payment.paidAt,
@@ -110,12 +118,11 @@ export class PaymentsCalculationsService {
             amount: payment.amount,
             paidAt: payment.paidAt.toString(),
             createdAt: payment.createdAt.toString(),
+            receipt: payment.receipt,
             member: payment.user,
             memberEmail: payment.user.email,
             updatedAt: payment.updatedAt.toString(),
-            subjectName: payment.subject ? payment.subject.name : '',
-            subjectIcon: payment.subject ? payment.subject.icon : '',
-            currency: payment.currency,
+            subject: payment.subject,
             paymentPercentages: payment.paymentPercentages
           }))
           .sort((a, b) => compare(a.paidAt, b.paidAt, false))
@@ -218,7 +225,6 @@ export class PaymentsCalculationsService {
           ...(user._id !== percentageUser._id && { toUser: user }),
           debt,
           overpaid,
-          currency: payment.currency,
           createdAt: payment.createdAt.toString(),
           updatedAt: payment.updatedAt.toString()
         };

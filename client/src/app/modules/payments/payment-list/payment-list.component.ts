@@ -24,6 +24,7 @@ export class PaymentListComponent implements OnInit, OnChanges {
   @HostBinding('style.width') width = '100%';
 
   @Input() payments: FamilyPaymentView[];
+  @Input() currency: string;
 
   displayedColumns: string[] = ['subject', 'amount', 'member', 'paidAt'];
   dataSource: MatTableDataSource<FamilyPaymentView>;
@@ -71,7 +72,7 @@ export class PaymentListComponent implements OnInit, OnChanges {
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
         case 'subject':
-          return compare(a.subjectName, b.subjectName, isAsc);
+          return compare(a.subject.name, b.subject.name, isAsc);
         case 'member': {
           const comparisonByLastName = compare(
             a.member.lastName,

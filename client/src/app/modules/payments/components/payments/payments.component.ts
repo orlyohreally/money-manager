@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 // tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@core-client/services/families/families.service';
+// tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 import { FamilyPaymentView } from '@src/app/types';
 import { Observable } from 'rxjs';
@@ -13,6 +15,7 @@ import { map } from 'rxjs/operators';
 })
 export class PaymentsComponent implements OnInit {
   payments: Observable<FamilyPaymentView[]>;
+  currency: Observable<string>;
 
   displayedColumns: string[] = [
     'subject',
@@ -28,13 +31,15 @@ export class PaymentsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private paymentsCalculationsService: PaymentsCalculationsService
+    private paymentsCalculationsService: PaymentsCalculationsService,
+    private familiesService: FamiliesService
   ) {}
 
   ngOnInit() {
     this.familyId = this.route.parent.paramMap.pipe(
       map((params: ParamMap) => {
         const familyId = params.get('familyId');
+        this.currency = this.familiesService.getFamilyCurrency(familyId);
         this.getPayments(familyId);
         return familyId;
       })

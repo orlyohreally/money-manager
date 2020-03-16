@@ -45,7 +45,7 @@ export class UsersRouter {
   private loginUser = async (req: Request, res: Response) => {
     try {
       const user = req.body as User;
-      if (!user.password || !user.email) {
+      if (!(user.password as string) || !user.email) {
         return res.status(400).send("Email and password are required");
       }
       try {

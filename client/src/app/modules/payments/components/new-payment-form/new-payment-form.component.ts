@@ -67,27 +67,19 @@ export class NewPaymentFormComponent implements OnInit {
 
   createPayment(payment: Partial<Payment>) {
     this.submittingForm = true;
-    this.paymentsService
-      .createPayment(
-        {
-          ...payment,
-          currency: this.paymentCurrency
-        },
-        this.data.familyId
-      )
-      .subscribe(
-        result => {
-          this.submittingForm = false;
-          this.dialogRef.close(result);
-          this.notificationsService.showNotification('Payment has been added');
-        },
-        (error: HttpErrorResponse) => {
-          this.submittingForm = false;
-          this.errorMessage = error.error.message
-            ? error.error.message
-            : error.statusText;
-        }
-      );
+    this.paymentsService.createPayment(payment, this.data.familyId).subscribe(
+      result => {
+        this.submittingForm = false;
+        this.dialogRef.close(result);
+        this.notificationsService.showNotification('Payment has been added');
+      },
+      (error: HttpErrorResponse) => {
+        this.submittingForm = false;
+        this.errorMessage = error.error.message
+          ? error.error.message
+          : error.statusText;
+      }
+    );
   }
 
   private createDefaultFamilyPayment(): Observable<Partial<Payment>> {

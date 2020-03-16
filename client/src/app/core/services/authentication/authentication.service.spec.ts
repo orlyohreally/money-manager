@@ -19,12 +19,12 @@ describe('AuthenticationService', () => {
   let localStorageServiceSpy: jasmine.SpyObj<LocalStorageService>;
   let httpTestingController: HttpTestingController;
 
-  const mockedUser: User = {
+  const mockedUser: User & { password: string } = {
     lastName: 'lastNameMock',
     firstName: 'firstNameMock',
-    password: 'passwordMock',
-    email: 'emailMock'
-  } as User;
+    email: 'emailMock',
+    password: 'password'
+  };
 
   beforeEach(() => {
     localStorageServiceSpy = jasmine.createSpyObj('LocalStorageService', [
@@ -117,14 +117,16 @@ describe('AuthenticationService', () => {
       ' from api/users/login',
     () => {
       createService();
-      service.login(mockedUser).subscribe(() => {
-        expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
-        expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
-          'user_token',
-          '{"token":"bearerToken","refreshToken":"refresh-token"}',
-          'money-manager'
-        );
-      });
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          expect(localStorageServiceSpy.set).toHaveBeenCalledTimes(1);
+          expect(localStorageServiceSpy.set).toHaveBeenCalledWith(
+            'user_token',
+            '{"token":"bearerToken","refreshToken":"refresh-token"}',
+            'money-manager'
+          );
+        });
 
       const mockReq = httpTestingController.expectOne('apiURL/users/login');
       expect(mockReq.request.method).toBe('POST');
@@ -145,19 +147,21 @@ describe('AuthenticationService', () => {
       ' when token was provided in header',
     () => {
       createService();
-      service.login(mockedUser).subscribe(() => {
-        const scheduler = new TestScheduler((actual, expected) => {
-          expect(actual).toEqual(expected);
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          const scheduler = new TestScheduler((actual, expected) => {
+            expect(actual).toEqual(expected);
+          });
+          scheduler.run(({ expectObservable }) => {
+            expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
+              '(a|)',
+              {
+                a: true
+              }
+            );
+          });
         });
-        scheduler.run(({ expectObservable }) => {
-          expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
-            '(a|)',
-            {
-              a: true
-            }
-          );
-        });
-      });
 
       const mockReq = httpTestingController.expectOne('apiURL/users/login');
       mockReq.flush(
@@ -177,19 +181,21 @@ describe('AuthenticationService', () => {
       ' when token was not provided in header',
     () => {
       createService();
-      service.login(mockedUser).subscribe(() => {
-        const scheduler = new TestScheduler((actual, expected) => {
-          expect(actual).toEqual(expected);
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          const scheduler = new TestScheduler((actual, expected) => {
+            expect(actual).toEqual(expected);
+          });
+          scheduler.run(({ expectObservable }) => {
+            expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
+              '(a|)',
+              {
+                a: false
+              }
+            );
+          });
         });
-        scheduler.run(({ expectObservable }) => {
-          expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
-            '(a|)',
-            {
-              a: false
-            }
-          );
-        });
-      });
 
       const mockReq = httpTestingController.expectOne('apiURL/users/login');
       mockReq.flush({});
@@ -204,9 +210,11 @@ describe('AuthenticationService', () => {
       lastName: 'lastNameMock'
     } as User;
 
-    service.login(mockedUser).subscribe((user: User) => {
-      expect(user).toBe(mockedResponse);
-    });
+    service
+      .login({ email: mockedUser.email, password: 'passwordMock' })
+      .subscribe((user: User) => {
+        expect(user).toBe(mockedResponse);
+      });
 
     const mockReq = httpTestingController.expectOne('apiURL/users/login');
     mockReq.flush(mockedResponse);
@@ -222,16 +230,18 @@ describe('AuthenticationService', () => {
         firstName: 'firstNameMock',
         lastName: 'lastNameMock'
       } as User;
-      service.login(mockedUser).subscribe(() => {
-        const mockedRequest = new HttpRequest<{}>('GET', '/mocked-url');
-        const updatedRequest = service.addCredentialsToRequest(mockedRequest);
-        expect(updatedRequest.headers.has('Authorization')).toBeTruthy();
-        expect(updatedRequest.headers.get('Authorization')).toBe(
-          `Bearer bearerToken`
-        );
-        expect(updatedRequest.method).toEqual(mockedRequest.method);
-        expect(updatedRequest.url).toEqual(mockedRequest.url);
-      });
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          const mockedRequest = new HttpRequest<{}>('GET', '/mocked-url');
+          const updatedRequest = service.addCredentialsToRequest(mockedRequest);
+          expect(updatedRequest.headers.has('Authorization')).toBeTruthy();
+          expect(updatedRequest.headers.get('Authorization')).toBe(
+            `Bearer bearerToken`
+          );
+          expect(updatedRequest.method).toEqual(mockedRequest.method);
+          expect(updatedRequest.url).toEqual(mockedRequest.url);
+        });
 
       const mockReq = httpTestingController.expectOne({
         url: 'apiURL/users/login',
@@ -254,11 +264,13 @@ describe('AuthenticationService', () => {
         firstName: 'firstNameMock',
         lastName: 'lastNameMock'
       } as User;
-      service.login(mockedUser).subscribe(() => {
-        const mockedRequest = new HttpRequest<{}>('GET', '/mocked-url');
-        const updatedRequest = service.addCredentialsToRequest(mockedRequest);
-        expect(updatedRequest).toBe(mockedRequest);
-      });
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          const mockedRequest = new HttpRequest<{}>('GET', '/mocked-url');
+          const updatedRequest = service.addCredentialsToRequest(mockedRequest);
+          expect(updatedRequest).toBe(mockedRequest);
+        });
 
       const mockReq = httpTestingController.expectOne({
         url: 'apiURL/users/login',
@@ -277,21 +289,23 @@ describe('AuthenticationService', () => {
         firstName: 'firstNameMock',
         lastName: 'lastNameMock'
       } as User;
-      service.login(mockedUser).subscribe(() => {
-        service.requestRefreshToken().subscribe(() => {
-          const scheduler = new TestScheduler((actual, expected) => {
-            expect(actual).toEqual(expected);
-          });
-          scheduler.run(({ expectObservable }) => {
-            expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
-              '(a|)',
-              {
-                a: true
-              }
-            );
+      service
+        .login({ email: mockedUser.email, password: 'passwordMock' })
+        .subscribe(() => {
+          service.requestRefreshToken().subscribe(() => {
+            const scheduler = new TestScheduler((actual, expected) => {
+              expect(actual).toEqual(expected);
+            });
+            scheduler.run(({ expectObservable }) => {
+              expectObservable(service.isAuthenticated().pipe(take(1))).toBe(
+                '(a|)',
+                {
+                  a: true
+                }
+              );
+            });
           });
         });
-      });
 
       const reqLogin = httpTestingController.expectOne({
         url: 'apiURL/users/login',

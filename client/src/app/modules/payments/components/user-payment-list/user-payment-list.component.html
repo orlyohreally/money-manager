@@ -24,19 +24,22 @@
             <div fxLayout="row" fxLayoutAlign="center center">
               <img
                 class="subject__icon"
-                [src]="element.subjectIcon"
-                [matTooltip]="element.subjectName"
+                [src]="element.subject.icon"
+                [matTooltip]="element.subject.name"
               />
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="familyName">
-          <th mat-sort-header="familyName" mat-header-cell *matHeaderCellDef>
+        <ng-container matColumnDef="family">
+          <th mat-sort-header="family" mat-header-cell *matHeaderCellDef>
             Family
           </th>
           <td mat-cell *matCellDef="let element">
-            <a routerLink="/families/{{ element.familyId }}">
-              {{ element.familyName }}
+            <a
+              *ngIf="!!element.family"
+              routerLink="/families/{{ element.family._id }}"
+            >
+              {{ element.family.name }}
             </a>
           </td>
         </ng-container>

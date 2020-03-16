@@ -26,16 +26,15 @@ import { FamilyPaymentView } from '@src/app/types';
 })
 export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   @Input() payments: FamilyPaymentView[];
+  @Input() currency: string;
 
   calculatedPayments: {
     memberFullName: string;
-    currency: string;
     amount: number;
   }[];
   displayedColumns: string[] = ['memberFullName', 'amount'];
   dataSource: MatTableDataSource<{
     memberFullName: string;
-    currency: string;
     amount: number;
   }>;
 
@@ -60,18 +59,14 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
     }
     const aggregatedPayments = this.aggregatePayments();
     this.calculatedPayments = Object.keys(aggregatedPayments)
-      .map((memberFullName: string) =>
-        Object.keys(aggregatedPayments[memberFullName]).map(currency => ({
-          amount: aggregatedPayments[memberFullName][currency],
-          memberFullName,
-          currency
-        }))
-      )
+      .map((memberFullName: string) => ({
+        amount: aggregatedPayments[memberFullName],
+        memberFullName
+      }))
       .reduce((acc, val) => acc.concat(val), []);
 
     this.dataSource = new MatTableDataSource<{
       memberFullName: string;
-      currency: string;
       amount: number;
     }>(this.calculatedPayments);
     this.setDataSourceAttributes();
@@ -113,44 +108,26 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   }
 
   private aggregatePayments(): {
-    [memberFullName: string]: { [currency: string]: number };
+    [memberFullName: string]: number;
   } {
     return (this.payments || []).reduce(
       (
-        res: { [memberFullName: string]: { [currency: string]: number } },
+        res: { [memberFullName: string]: number },
         payment: FamilyPaymentView
       ) => {
         if (!res[`${payment.member.firstName} ${payment.member.lastName}`]) {
           return {
             ...res,
-            [`${payment.member.firstName} ${payment.member.lastName}`]: {
-              [payment.currency]: payment.amount
-            }
-          };
-        }
-        if (
-          !res[`${payment.member.firstName} ${payment.member.lastName}`][
-            payment.currency
-          ]
-        ) {
-          return {
-            ...res,
-            [`${payment.member.firstName} ${payment.member.lastName}`]: {
-              ...res[`${payment.member.firstName} ${payment.member.lastName}`],
-              [payment.currency]: payment.amount
-            }
+            // tslint:disable-next-line: max-line-length
+            [`${payment.member.firstName} ${payment.member.lastName}`]: payment.amount
           };
         }
 
         return {
           ...res,
-          [`${payment.member.firstName} ${payment.member.lastName}`]: {
-            ...res[`${payment.member.firstName} ${payment.member.lastName}`],
-            [payment.currency]:
-              res[`${payment.member.firstName} ${payment.member.lastName}`][
-                payment.currency
-              ] + payment.amount
-          }
+          [`${payment.member.firstName} ${payment.member.lastName}`]:
+            res[`${payment.member.firstName} ${payment.member.lastName}`] +
+            payment.amount
         };
       },
       {}

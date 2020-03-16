@@ -121,7 +121,7 @@ export class UserPaymentsCalculatedPerMemberComponent
         res: { [familyName: string]: { [currency: string]: number } },
         payment: UserPaymentView
       ) => {
-        const familyName = payment.familyName ? payment.familyName : 'user';
+        const familyName = payment.family ? payment.family.name : 'user';
         if (!res[familyName]) {
           return {
             ...res,

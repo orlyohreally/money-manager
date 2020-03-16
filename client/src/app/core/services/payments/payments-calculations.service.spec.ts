@@ -1,7 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OverpaidDebtPayment, PaymentDebt } from '@shared-client/types';
 import {
+  MemberFamily,
+  OverpaidDebtPayment,
+  PaymentDebt
+} from '@shared-client/types';
+import {
+  AuthenticationServiceMock,
+  IAuthenticationServiceMock,
   IPaymentServiceMock,
   IPaymentSubjectsServiceMock,
   PaymentServiceMock,
@@ -18,6 +24,8 @@ import {
 } from '@src/app/tests-utils/mocks/members.service.spec';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { of } from 'rxjs';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 import { FamiliesService } from '../families/families.service';
 import { MembersService } from '../members/members.service';
 // tslint:disable-next-line: max-line-length
@@ -30,11 +38,13 @@ describe('PaymentsCalculationsService', () => {
   let paymentSubjectsServiceSpy: jasmine.SpyObj<PaymentSubjectsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
   let familiesServiceSpy: jasmine.SpyObj<FamiliesService>;
+  let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
   let familiesServiceMock: IFamiliesServiceMock;
   let membersServiceMock: IMembersServiceMock;
   let paymentsServiceMock: IPaymentServiceMock;
   let paymentSubjectsServiceMock: IPaymentSubjectsServiceMock;
   let paymentsServiceSpy: jasmine.SpyObj<PaymentsService>;
+  let authenticationServiceMock: IAuthenticationServiceMock;
 
   beforeEach(() => {
     paymentSubjectsServiceMock = PaymentSubjectsServiceMock();
@@ -45,6 +55,8 @@ describe('PaymentsCalculationsService', () => {
     membersServiceSpy = membersServiceMock.service;
     paymentsServiceMock = PaymentServiceMock();
     paymentsServiceSpy = paymentsServiceMock.service;
+    authenticationServiceMock = AuthenticationServiceMock();
+    authenticationServiceSpy = authenticationServiceMock.service;
 
     TestBed.configureTestingModule({
       providers: [
@@ -57,7 +69,8 @@ describe('PaymentsCalculationsService', () => {
           useValue: familiesServiceSpy
         },
         { provide: MembersService, useValue: membersServiceSpy },
-        { provide: PaymentsService, useValue: paymentsServiceSpy }
+        { provide: PaymentsService, useValue: paymentsServiceSpy },
+        { provide: AuthenticationService, useValue: authenticationServiceSpy }
       ]
     });
     service = TestBed.get(PaymentsCalculationsService);
@@ -73,30 +86,28 @@ describe('PaymentsCalculationsService', () => {
     'getAggregatedUserPayments should aggregate subjects and family' +
       ' for every user payment',
     () => {
-      const expectedPayments = [
+      const expectedPayments: UserPaymentView[] = [
         {
           _id: 'paymentId-1',
           amount: 10,
-          currency: 'USD',
-          familyId: 'familyId-1',
-          familyName: 'familyName-1',
+          receipt: 'receipt-1.png',
+          subject: paymentSubjectsServiceMock.paymentSubjectsList[0],
           paidAt: new Date('2020-01-02').toString(),
-          subjectName: 'subjectName-1',
-          subjectIcon: 'subject-icon-1.png',
+          family: familiesServiceMock.familyList[0] as MemberFamily,
           createdAt: new Date('2020-10-01').toString(),
-          updatedAt: new Date('2020-10-02').toString()
+          updatedAt: new Date('2020-10-02').toString(),
+          currency: familiesServiceMock.familyList[0].currency
         },
         {
           _id: 'paymentId-2',
           amount: 20,
-          currency: 'USD',
+          receipt: 'receipt-2.png',
+          subject: paymentSubjectsServiceMock.paymentSubjectsList[1],
           paidAt: new Date('2020-01-04').toString(),
-          familyId: 'familyId-2',
-          familyName: 'familyName-2',
-          subjectName: 'subjectName-2',
-          subjectIcon: 'subject-icon-2.png',
+          family: familiesServiceMock.familyList[1] as MemberFamily,
           createdAt: new Date('2020-10-02').toString(),
-          updatedAt: new Date('2020-10-02').toString()
+          updatedAt: new Date('2020-10-02').toString(),
+          currency: familiesServiceMock.familyList[1].currency
         }
       ];
       familiesServiceSpy.getFamilyById.and.callFake((familyId: string) => {
@@ -159,11 +170,9 @@ describe('PaymentsCalculationsService', () => {
             {
               _id: 'paymentId-2',
               amount: 20,
-              currency: 'USD',
               paidAt: new Date('2020-01-04').toString(),
               member: membersServiceMock.membersList[1],
-              subjectName: 'subjectName-2',
-              subjectIcon: 'subject-icon-2.png',
+              subject: paymentSubjectsServiceMock.paymentSubjectsList[1],
               createdAt: new Date('2020-10-02').toString(),
               updatedAt: new Date('2020-10-02').toString(),
               paymentPercentages: paymentsServiceMock.paymentPercentage
@@ -171,11 +180,9 @@ describe('PaymentsCalculationsService', () => {
             {
               _id: 'paymentId-1',
               amount: 10,
-              currency: 'USD',
               member: membersServiceMock.membersList[0],
               paidAt: new Date('2020-01-02').toString(),
-              subjectName: 'subjectName-1',
-              subjectIcon: 'subject-icon-1.png',
+              subject: paymentSubjectsServiceMock.paymentSubjectsList[0],
               createdAt: new Date('2020-10-01').toString(),
               updatedAt: new Date('2020-10-02').toString(),
               paymentPercentages: paymentsServiceMock.paymentPercentage

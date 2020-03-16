@@ -64,15 +64,15 @@ export class UsersDao implements IUsersDao {
       password: user.password,
       email: user.email
     });
-    newUser.password = this.hashPassword(user.password);
+    newUser.password = this.hashPassword(user.password as string);
     return newUser.save();
   }
 
   public async authUser(user: User): Promise<User> {
     const registeredUser: User = await this.getUser("email", user.email);
     const correctPassword = await this.comparePasswords(
-      user.password,
-      registeredUser.password
+      user.password as string,
+      registeredUser.password as string
     );
     if (correctPassword) {
       return registeredUser;

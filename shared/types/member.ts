@@ -3,11 +3,11 @@ export interface User<Id = string> {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  icon: string;
-  colorScheme: string;
-  isVerified: boolean;
-  currency: string;
-  createdAt: Date;
-  updatedAt: Date;
+  icon?: string;
+  password?: string;
+  colorScheme?: string;
+  isVerified?: boolean;
+  currency?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

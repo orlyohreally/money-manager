@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { User } from '@shared/types';
 import { LocalStorageService } from 'ngx-localstorage';
-import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
@@ -23,7 +23,7 @@ export class AuthenticationService extends DataService {
 
   private authenticated = new BehaviorSubject<boolean>(false);
   private refreshToken: string;
-  private user = new ReplaySubject<User>(1);
+  private user = new BehaviorSubject<User>(null);
   private token: string;
 
   constructor(
@@ -56,7 +56,7 @@ export class AuthenticationService extends DataService {
   }
 
   register(
-    user: User
+    user: User & { password: string }
   ): Observable<{ email: string; verificationToken: string }> {
     return this.post(this.authEndpoints.register, user);
   }

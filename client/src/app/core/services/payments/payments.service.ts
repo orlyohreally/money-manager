@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Payment } from '@shared/types';
+import { Payment, User } from '@shared/types';
 import { compare } from '@src/app/modules/shared/functions';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -19,9 +21,15 @@ export class PaymentsService extends DataService {
 
   constructor(
     http: HttpClient,
-    globalVariablesService: GlobalVariablesService
+    globalVariablesService: GlobalVariablesService,
+    private authenticationService: AuthenticationService
   ) {
     super(http, globalVariablesService);
+    authenticationService.getUser().subscribe(user => {
+      if (!user) {
+        this.paymentsList.next({});
+      }
+    });
   }
 
   getPayments(familyId: string): Observable<Payment[]> {
@@ -47,16 +55,14 @@ export class PaymentsService extends DataService {
         if (!payments['user']) {
           return this.loadPayments().pipe(
             map(() =>
-              Object.values(this.paymentsList.getValue()).reduce(
+              Object.values(this.paymentsList.getValue()['user']).reduce(
                 (acc, val) => acc.concat(val),
                 []
               )
             )
           );
         }
-        return of(
-          Object.values(payments).reduce((acc, val) => acc.concat(val), [])
-        );
+        return of(payments['user']);
       }),
       map(payments =>
         payments.sort((a, b) => compare(a.paidAt, b.paidAt, true))
@@ -72,17 +78,29 @@ export class PaymentsService extends DataService {
       payment
     }).pipe(
       switchMap((createdPayment: Payment) => {
-        return this.paymentsList.asObservable().pipe(
+        return combineLatest([
+          this.authenticationService.getUser(),
+          this.paymentsList.asObservable()
+        ]).pipe(
           take(1),
-          switchMap((payments: { [familyId: string]: Payment<string>[] }) => {
-            const familyPrefix = familyId ? familyId : 'user';
-            const familyPayments: Payment[] = payments[familyPrefix] || [];
-            this.paymentsList.next({
-              ...payments,
-              [familyPrefix]: [...familyPayments, createdPayment]
-            });
-            return of(createdPayment);
-          })
+          switchMap(
+            ([user, payments]: [
+              User,
+              { [familyId: string]: Payment<string>[] }
+            ]) => {
+              const familyPrefix = familyId ? familyId : 'user';
+              const familyPayments: Payment[] = payments[familyPrefix] || [];
+              this.paymentsList.next({
+                ...payments,
+                [familyPrefix]: [...familyPayments, createdPayment],
+                ...(!!familyId &&
+                  createdPayment.userId === user._id && {
+                    user: [...(payments['user'] || []), createdPayment]
+                  })
+              });
+              return of(createdPayment);
+            }
+          )
         );
       })
     );

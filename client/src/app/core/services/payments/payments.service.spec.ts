@@ -6,7 +6,9 @@ import {
 } from '@angular/common/http/testing';
 import { Payment } from '@shared/types';
 import {
+  AuthenticationServiceMock,
   getGlobalVariablesServiceSpy,
+  IAuthenticationServiceMock,
   IPaymentServiceMock,
   IPaymentSubjectsServiceMock,
   PaymentServiceMock,
@@ -23,6 +25,8 @@ import {
 } from '@src/app/tests-utils/mocks/members.service.spec';
 import { map, switchMap, take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 import { FamiliesService } from '../families/families.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -36,11 +40,13 @@ describe('PaymentsService', () => {
   let paymentSubjectsServiceSpy: jasmine.SpyObj<PaymentSubjectsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
   let familiesServiceSpy: jasmine.SpyObj<FamiliesService>;
+  let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
   let httpTestingController: HttpTestingController;
   let familiesServiceMock: IFamiliesServiceMock;
   let membersServiceMock: IMembersServiceMock;
   let paymentsServiceMock: IPaymentServiceMock;
   let paymentSubjectsServiceMock: IPaymentSubjectsServiceMock;
+  let authenticationServiceMock: IAuthenticationServiceMock;
 
   const scheduler = new TestScheduler((actual, expected) => {
     expect(actual).toEqual(expected);
@@ -53,6 +59,8 @@ describe('PaymentsService', () => {
     familiesServiceSpy = familiesServiceMock.service;
     membersServiceMock = MembersServiceMock();
     membersServiceSpy = membersServiceMock.service;
+    authenticationServiceMock = AuthenticationServiceMock();
+    authenticationServiceSpy = authenticationServiceMock.service;
     paymentsServiceMock = PaymentServiceMock();
 
     TestBed.configureTestingModule({
@@ -70,7 +78,8 @@ describe('PaymentsService', () => {
           provide: FamiliesService,
           useValue: familiesServiceSpy
         },
-        { provide: MembersService, useValue: membersServiceSpy }
+        { provide: MembersService, useValue: membersServiceSpy },
+        { provide: AuthenticationService, useValue: authenticationServiceSpy }
       ]
     });
     service = TestBed.get(PaymentsService);
@@ -132,7 +141,7 @@ describe('PaymentsService', () => {
       .getUserPayments()
       .pipe(take(1))
       .subscribe(payments => {
-        expect(payments).toEqual(paymentsServiceMock.payments);
+        expect(payments).toEqual(paymentsServiceMock.userPayments);
       });
 
     const req = httpTestingController.expectOne({
@@ -140,54 +149,23 @@ describe('PaymentsService', () => {
       method: 'GET'
     });
 
-    req.flush(paymentsServiceMock.payments);
+    req.flush(paymentsServiceMock.userPayments);
   });
 
   it('getUserPayment should cache payments received from API', () => {
-    const userPayments: Payment[] = [
-      {
-        _id: 'paymentId-3',
-        amount: 20,
-        currency: 'USD',
-        receipt: 'receipt-2.png',
-        subjectId: 'subjectId-2',
-        paidAt: new Date('2020-01-04'),
-        userId: 'userId-2',
-        createdAt: new Date('2020-01-02'),
-        updatedAt: new Date('2020-01-02'),
-        paymentPercentages: [
-          { userId: 'userId-1', paymentPercentage: 20 },
-          { userId: 'userId-2', paymentPercentage: 80 }
-        ]
-      }
-    ];
-
-    service
-      .getPayments('familyId')
-      .pipe(
-        switchMap(() => {
-          return service.getUserPayments().pipe(take(1));
-        })
-      )
-      .subscribe(() => {
-        scheduler.run(({ expectObservable }) => {
-          expectObservable(service.getUserPayments()).toBe('a', {
-            a: [...paymentsServiceMock.payments, ...userPayments]
-          });
+    service.getUserPayments().subscribe(() => {
+      scheduler.run(({ expectObservable }) => {
+        expectObservable(service.getUserPayments()).toBe('a', {
+          a: paymentsServiceMock.userPayments
         });
       });
-    const reqFamilyPayments = httpTestingController.expectOne({
-      url: 'apiURL/payments/familyId',
-      method: 'GET'
     });
-
-    reqFamilyPayments.flush(paymentsServiceMock.payments);
 
     const reqPayments = httpTestingController.expectOne({
       url: 'apiURL/payments/',
       method: 'GET'
     });
-    reqPayments.flush(userPayments);
+    reqPayments.flush(paymentsServiceMock.userPayments);
   });
 
   it(
@@ -263,7 +241,6 @@ describe('PaymentsService', () => {
       {
         _id: 'paymentId-3',
         amount: 20,
-        currency: 'USD',
         receipt: 'receipt-2.png',
         subjectId: 'subjectId-2',
         paidAt: new Date('2020-01-04'),

@@ -28,7 +28,7 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
   @Input() payments: UserPaymentView[];
 
   dataSource: MatTableDataSource<UserPaymentView>;
-  displayedColumns: string[] = ['subject', 'amount', 'familyName', 'paidAt'];
+  displayedColumns: string[] = ['subject', 'amount', 'family', 'paidAt'];
 
   private paginator: MatPaginator;
   private sort: MatSort;
@@ -70,12 +70,16 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
     this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'amount':
-          return compare(a.amount, b.amount, isAsc);
+        case 'amount': {
+          const compareByCurrency = compare(a.currency, b.currency, true);
+          return compareByCurrency === 0
+            ? compare(a.amount, b.amount, isAsc)
+            : compareByCurrency;
+        }
         case 'subject':
-          return compare(a.subjectName, b.subjectName, isAsc);
-        case 'familyName':
-          return compare(a.familyName, b.familyName, isAsc);
+          return compare(a.subject.name, b.subject.name, isAsc);
+        case 'family':
+          return compare(a.family.name, b.family.name, isAsc);
         case 'paidAt':
           return compare(a.paidAt, b.paidAt, isAsc);
       }

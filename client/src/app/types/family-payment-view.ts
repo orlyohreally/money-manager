@@ -1,14 +1,13 @@
-import { FamilyMember } from '@shared/types';
+import { FamilyMember, PaymentSubject } from '@shared/types';
 
 export interface FamilyPaymentView {
   _id: string;
   amount: number;
   paidAt: string;
   createdAt: string;
+  receipt?: string;
   member: FamilyMember;
   updatedAt: string;
-  subjectName: string;
-  subjectIcon: string;
-  currency: string;
+  subject: PaymentSubject;
   paymentPercentages: { userId: string; paymentPercentage: number }[];
 }

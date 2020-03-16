@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 // tslint:disable-next-line: max-line-length
-import { FamiliesService } from '@core-client/services/families/families.service';
-// tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 import { OverpaidDebtPayment, PaymentDebt } from '@shared-client/types';
 import { Observable } from 'rxjs';
@@ -13,14 +11,13 @@ import { Observable } from 'rxjs';
 })
 export class MemberPaymentOverpayAndDebtComponent implements OnInit {
   @Input() familyId: string;
+  @Input() currency: string;
 
-  familyCurrency: Observable<string>;
   paymentTransactions: Observable<OverpaidDebtPayment[]>;
   overpaysAndDebtsList: Observable<PaymentDebt[]>;
   showMoreDetailedList = false;
 
   constructor(
-    private familiesService: FamiliesService,
     private paymentsCalculationsService: PaymentsCalculationsService
   ) {}
 
@@ -33,7 +30,6 @@ export class MemberPaymentOverpayAndDebtComponent implements OnInit {
     this.overpaysAndDebtsList = this.paymentsCalculationsService.getOverpayAndDebtsList(
       this.familyId
     );
-    this.familyCurrency = this.familiesService.getFamilyCurrency(this.familyId);
   }
 
   showMoreLessDetails() {

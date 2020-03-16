@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class UserPaymentsComponent implements OnInit {
   payments: Observable<UserPaymentView[]>;
+  currency: Observable<string>;
 
   displayedColumns: string[] = [
     'subject',

@@ -13,7 +13,7 @@
             Amount
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.amount | sharedPrefixedNumber: element.currency }}
+            {{ element.amount | sharedPrefixedNumber: currency }}
           </td>
         </ng-container>
         <ng-container matColumnDef="subject">
@@ -24,8 +24,8 @@
             <div fxLayout="row" fxLayoutAlign="center center">
               <img
                 class="subject__icon"
-                [src]="element.subjectIcon"
-                [matTooltip]="element.subjectName"
+                [src]="element.subject.icon"
+                [matTooltip]="element.subject.name"
               />
             </div>
           </td>

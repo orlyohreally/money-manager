@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 })
 export class MemberPaymentOverpayAndDebtComponent implements OnInit {
   @Input() familyId: string;
-  @Input() currency: string;
 
   paymentTransactions: Observable<OverpaidDebtPayment[]>;
   overpaysAndDebtsList: Observable<PaymentDebt[]>;

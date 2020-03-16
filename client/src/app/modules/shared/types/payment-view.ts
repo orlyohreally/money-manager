@@ -7,6 +7,7 @@ export interface PaymentView<Id = string> {
   receipt?: string;
   subject: PaymentSubject;
   paidAt: Date;
+  currency: string;
   user?: FamilyMember;
   family?: MemberFamily;
   createdAt: Date;

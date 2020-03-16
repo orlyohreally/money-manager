@@ -6,6 +6,7 @@ export interface OverpaidDebtPayment {
   debt: number;
   overpaid: number;
   currency: string;
+  paidAt: string;
   createdAt: string;
   updatedAt: string;
 }

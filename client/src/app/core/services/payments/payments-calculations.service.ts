@@ -83,8 +83,11 @@ export class PaymentsCalculationsService {
   }
 
   getAggregatedPayments(familyId?: string): Observable<FamilyPaymentView[]> {
-    return this.paymentsService.getPayments(familyId).pipe(
-      mergeMap((payments: Payment[]) => {
+    return combineLatest(
+      this.paymentsService.getPayments(familyId),
+      this.familiesService.getFamilyCurrency(familyId)
+    ).pipe(
+      mergeMap(([payments, currency]: [Payment[], string]) => {
         return from(payments).pipe(
           concatMap(payment =>
             combineLatest([
@@ -101,6 +104,7 @@ export class PaymentsCalculationsService {
                 subject,
                 paidAt: payment.paidAt,
                 user,
+                currency,
                 familyId: payment.familyId,
                 createdAt: payment.createdAt,
                 updatedAt: payment.updatedAt,
@@ -116,6 +120,7 @@ export class PaymentsCalculationsService {
           .map((payment: PaymentView) => ({
             _id: payment._id,
             amount: payment.amount,
+            currency: payment.currency,
             paidAt: payment.paidAt.toString(),
             createdAt: payment.createdAt.toString(),
             receipt: payment.receipt,
@@ -133,17 +138,29 @@ export class PaymentsCalculationsService {
   getPaymentTransactions(familyId: string): Observable<OverpaidDebtPayment[]> {
     return combineLatest([
       this.membersService.getMembers(familyId),
-      this.paymentsService.getPayments(familyId)
+      this.paymentsService.getPayments(familyId),
+      this.familiesService.getFamilyCurrency(familyId)
     ]).pipe(
-      map(([members, payments]: [FamilyMember[], Payment[]]) => {
-        if (!payments.length) {
-          return [];
+      map(
+        ([members, payments, currency]: [
+          FamilyMember[],
+          Payment[],
+          string
+        ]) => {
+          if (!payments.length) {
+            return [];
+          }
+          const calc = payments
+            .map(payment =>
+              this.calcForDifferentPercentages(
+                { ...payment, currency },
+                members
+              )
+            )
+            .reduce((acc, val) => acc.concat(val), []);
+          return calc;
         }
-        const calc = payments
-          .map(payment => this.calcForDifferentPercentages(payment, members))
-          .reduce((acc, val) => acc.concat(val), []);
-        return calc;
-      }),
+      ),
       map(payments => {
         return payments.sort((a, b) => {
           const compareByCreatedAt = compare(a.paidAt, b.paidAt, true);
@@ -173,6 +190,7 @@ export class PaymentsCalculationsService {
                   res[payment.user._id].amount +
                   payment.overpaid -
                   payment.debt,
+                currency: payment.currency,
                 debt: res[payment.user._id].debt + payment.debt,
                 overpaid: res[payment.user._id].overpaid + payment.overpaid
               }
@@ -183,6 +201,7 @@ export class PaymentsCalculationsService {
             [payment.user._id]: {
               ...res[payment.user._id],
               user: payment.user,
+              currency: payment.currency,
               amount: payment.overpaid - payment.debt
             }
           };
@@ -192,6 +211,7 @@ export class PaymentsCalculationsService {
         return Object.keys(debts)
           .map((userId: string) => ({
             user: debts[userId].user,
+            currency: debts[userId].currency,
             amount: debts[userId].amount
           }))
           .reduce((acc, val) => acc.concat(val), []);
@@ -203,9 +223,9 @@ export class PaymentsCalculationsService {
   }
 
   private calcForDifferentPercentages(
-    payment: Payment,
+    payment: Payment & { currency: string },
     members: FamilyMember[]
-  ) {
+  ): OverpaidDebtPayment[] {
     return payment.paymentPercentages
       .map(percentage => {
         const user = members.filter(member => member._id === payment.userId)[0];
@@ -225,9 +245,11 @@ export class PaymentsCalculationsService {
           ...(user._id !== percentageUser._id && { toUser: user }),
           debt,
           overpaid,
+          currency: payment.currency,
+          paidAt: payment.paidAt.toString(),
           createdAt: payment.createdAt.toString(),
           updatedAt: payment.updatedAt.toString()
-        };
+        } as OverpaidDebtPayment;
       })
       .reduce((acc, val) => acc.concat(val), []);
   }

@@ -36,12 +36,10 @@
         *ngIf="paymentsList?.length"
         class="payments-calculated-per-member"
         [payments]="paymentsList"
-        [currency]="familyCurrency"
       ></payment-payments-calculated-per-member>
       <payment-member-overpay-and-debt
         class="member-overpay-and-debt"
         [familyId]="familyIdValue"
-        [currency]="familyCurrency"
       ></payment-member-overpay-and-debt>
     </ng-template>
   </ng-template>

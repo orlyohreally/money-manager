@@ -14,7 +14,7 @@
             Amount
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.amount | sharedPrefixedNumber: currency }}
+            {{ element.amount | sharedPrefixedNumber: element.currency }}
           </td>
         </ng-container>
 
@@ -27,7 +27,7 @@
             Member
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.memberFullName }}
+            {{ element.member | sharedUserFullName }}
           </td>
         </ng-container>
 

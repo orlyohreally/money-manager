@@ -18,7 +18,6 @@ import { PaymentDebt } from '@src/app/modules/shared/types';
 })
 export class MemberPaymentDebtListComponent implements OnInit, OnChanges {
   @Input() debts: PaymentDebt[];
-  @Input() currency: string;
 
   displayedColumns = ['user', 'amount'];
 

@@ -145,7 +145,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     UserFullNamePipe,
     BypassSecurityTrustUrlPipe
   ],
-  providers: [CurrencySymbolPipe],
+  providers: [CurrencySymbolPipe, UserFullNamePipe],
   entryComponents: [
     ImageManagerComponent,
     ImagePreviewComponent,

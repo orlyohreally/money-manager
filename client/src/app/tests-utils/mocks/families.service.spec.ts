@@ -13,7 +13,7 @@ const family: Family = {
   updatedAt: new Date('2020-02-03')
 };
 
-const familyList = [
+const familyList: Family[] = [
   {
     _id: 'familyId-1',
     name: 'familyName-1',
@@ -38,13 +38,18 @@ function getFamiliesServiceSpy() {
   // tslint:disable-next-line: max-line-length
   const familiesServiceSpy: jasmine.SpyObj<FamiliesService> = jasmine.createSpyObj(
     'FamiliesService',
-    ['getFamilyById', 'getFamiliesList']
+    ['getFamilyById', 'getFamiliesList', 'getFamilyCurrency']
   );
   familiesServiceSpy.getFamilyById.and.returnValue(cold('--a', { a: family }));
 
   familiesServiceSpy.getFamiliesList.and.returnValue(
     cold('--a', { a: familyList })
   );
+
+  familiesServiceSpy.getFamilyCurrency.and.callFake((familyId: string) => {
+    return cold('--a', { a: familyId === 'familyId-1' ? 'USD' : 'ILS' });
+  });
+
   return familiesServiceSpy;
 }
 

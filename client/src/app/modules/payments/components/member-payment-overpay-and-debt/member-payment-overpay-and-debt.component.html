@@ -4,7 +4,6 @@
       <div class="mat-h3">Family members' balances</div>
       <payment-member-debt-list
         [debts]="overpaysAndDebts"
-        [currency]="currency"
       ></payment-member-debt-list>
       <div class="text_link mat-caption" (click)="showMoreLessDetails()">
         {{ showMoreDetailedList ? 'Hide' : 'Show' }} more detailed list

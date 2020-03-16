@@ -175,6 +175,7 @@ describe('PaymentsCalculationsService', () => {
               subject: paymentSubjectsServiceMock.paymentSubjectsList[1],
               createdAt: new Date('2020-10-02').toString(),
               updatedAt: new Date('2020-10-02').toString(),
+              currency: 'USD',
               paymentPercentages: paymentsServiceMock.paymentPercentage
             },
             {
@@ -185,6 +186,7 @@ describe('PaymentsCalculationsService', () => {
               subject: paymentSubjectsServiceMock.paymentSubjectsList[0],
               createdAt: new Date('2020-10-01').toString(),
               updatedAt: new Date('2020-10-02').toString(),
+              currency: 'USD',
               paymentPercentages: paymentsServiceMock.paymentPercentage
             }
           ]);
@@ -201,6 +203,7 @@ describe('PaymentsCalculationsService', () => {
         overpaid: 10,
         user: membersServiceMock.membersList[1],
         currency: 'USD',
+        paidAt: new Date('2020-01-04').toString(),
         createdAt: new Date('2020-10-03').toString(),
         updatedAt: new Date('2020-10-04').toString()
       },
@@ -210,6 +213,7 @@ describe('PaymentsCalculationsService', () => {
         user: membersServiceMock.membersList[0],
         toUser: membersServiceMock.membersList[1],
         currency: 'USD',
+        paidAt: new Date('2020-01-02').toString(),
         createdAt: new Date('2020-10-03').toString(),
         updatedAt: new Date('2020-10-04').toString()
       },
@@ -218,6 +222,7 @@ describe('PaymentsCalculationsService', () => {
         overpaid: 9,
         user: membersServiceMock.membersList[0],
         currency: 'USD',
+        paidAt: new Date('2020-01-04').toString(),
         createdAt: new Date('2020-10-01').toString(),
         updatedAt: new Date('2020-10-02').toString()
       },
@@ -227,6 +232,7 @@ describe('PaymentsCalculationsService', () => {
         user: membersServiceMock.membersList[1],
         toUser: membersServiceMock.membersList[0],
         currency: 'USD',
+        paidAt: new Date('2020-01-02').toString(),
         createdAt: new Date('2020-10-01').toString(),
         updatedAt: new Date('2020-10-02').toString()
       }
@@ -244,11 +250,13 @@ describe('PaymentsCalculationsService', () => {
     const expectedResponse: PaymentDebt[] = [
       {
         amount: 1,
-        user: membersServiceMock.membersList[1]
+        user: membersServiceMock.membersList[1],
+        currency: 'USD'
       },
       {
         amount: -1,
-        user: membersServiceMock.membersList[0]
+        user: membersServiceMock.membersList[0],
+        currency: 'USD'
       }
     ];
     service

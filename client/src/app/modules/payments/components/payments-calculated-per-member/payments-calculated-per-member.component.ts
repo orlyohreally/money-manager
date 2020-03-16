@@ -12,7 +12,9 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
-import { compare } from '@src/app/modules/shared/functions';
+import { compare } from '@shared-client/functions';
+import { UserFullNamePipe } from '@shared-client/pipes/user-full-name.pipe';
+import { FamilyMember } from '@shared/types';
 import { FamilyPaymentView } from '@src/app/types';
 
 @Component({
@@ -26,20 +28,23 @@ import { FamilyPaymentView } from '@src/app/types';
 })
 export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   @Input() payments: FamilyPaymentView[];
-  @Input() currency: string;
 
   calculatedPayments: {
-    memberFullName: string;
+    member: FamilyMember;
     amount: number;
+    currency: string;
   }[];
   displayedColumns: string[] = ['memberFullName', 'amount'];
   dataSource: MatTableDataSource<{
-    memberFullName: string;
+    member: FamilyMember;
     amount: number;
+    currency: string;
   }>;
 
   private paginator: MatPaginator;
   private sort: MatSort;
+
+  constructor(private userFullNamePipe: UserFullNamePipe) {}
 
   ngOnInit() {}
 
@@ -59,15 +64,17 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
     }
     const aggregatedPayments = this.aggregatePayments();
     this.calculatedPayments = Object.keys(aggregatedPayments)
-      .map((memberFullName: string) => ({
-        amount: aggregatedPayments[memberFullName],
-        memberFullName
+      .map((memberId: string) => ({
+        amount: aggregatedPayments[memberId].amount,
+        currency: aggregatedPayments[memberId].currency,
+        member: aggregatedPayments[memberId].member
       }))
       .reduce((acc, val) => acc.concat(val), []);
 
     this.dataSource = new MatTableDataSource<{
-      memberFullName: string;
+      member: FamilyMember;
       amount: number;
+      currency: string;
     }>(this.calculatedPayments);
     this.setDataSourceAttributes();
     if (this.sort) {
@@ -95,7 +102,11 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
         case 'memberFullName':
-          return compare(a.memberFullName, b.memberFullName, isAsc);
+          return compare(
+            this.userFullNamePipe.transform(a.member),
+            this.userFullNamePipe.transform(b.member),
+            isAsc
+          );
 
         default:
           return 0;
@@ -108,26 +119,41 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   }
 
   private aggregatePayments(): {
-    [memberFullName: string]: number;
+    [memberId: string]: {
+      amount: number;
+      currency: string;
+      member: FamilyMember;
+    };
   } {
     return (this.payments || []).reduce(
       (
-        res: { [memberFullName: string]: number },
+        res: {
+          [memberId: string]: {
+            member: FamilyMember;
+            amount: number;
+            currency: string;
+          };
+        },
         payment: FamilyPaymentView
       ) => {
-        if (!res[`${payment.member.firstName} ${payment.member.lastName}`]) {
+        if (!res[payment.member._id]) {
           return {
             ...res,
             // tslint:disable-next-line: max-line-length
-            [`${payment.member.firstName} ${payment.member.lastName}`]: payment.amount
+            [payment.member._id]: {
+              member: payment.member,
+              amount: payment.amount,
+              currency: payment.currency
+            }
           };
         }
-
         return {
           ...res,
-          [`${payment.member.firstName} ${payment.member.lastName}`]:
-            res[`${payment.member.firstName} ${payment.member.lastName}`] +
-            payment.amount
+          [payment.member._id]: {
+            member: payment.member,
+            amount: res[payment.member._id].amount + payment.amount,
+            currency: payment.currency
+          }
         };
       },
       {}

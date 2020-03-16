@@ -19,12 +19,12 @@ describe('AuthenticationService', () => {
   let localStorageServiceSpy: jasmine.SpyObj<LocalStorageService>;
   let httpTestingController: HttpTestingController;
 
-  const mockedUser: User & { password: string } = {
+  const mockedUser: User = {
     lastName: 'lastNameMock',
     firstName: 'firstNameMock',
     email: 'emailMock',
     password: 'password'
-  };
+  } as User;
 
   beforeEach(() => {
     localStorageServiceSpy = jasmine.createSpyObj('LocalStorageService', [

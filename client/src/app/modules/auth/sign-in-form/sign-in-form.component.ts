@@ -17,6 +17,7 @@ import {
 import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { User } from '@shared/types';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -84,7 +85,7 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
           firstName: this.firstName.value,
           lastName: this.lastName.value,
           password: this.password.value
-        })
+        } as User)
         .subscribe(
           response => {
             this.submittingForm = false;

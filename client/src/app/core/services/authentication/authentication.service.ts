@@ -56,7 +56,7 @@ export class AuthenticationService extends DataService {
   }
 
   register(
-    user: User & { password: string }
+    user: User
   ): Observable<{ email: string; verificationToken: string }> {
     return this.post(this.authEndpoints.register, user);
   }

@@ -160,7 +160,8 @@ export class FamiliesService {
     return [
       {
         name: Roles.Member,
-        description: "Can view family members",
+        description:
+          "Can view family members, add and edit own payments in family and view everybody's",
         default: true
       },
       {
@@ -168,17 +169,6 @@ export class FamiliesService {
         // tslint:disable-next-line: max-line-length
         description:
           "Can add and remove family members, edit their roles in family",
-        default: false
-      },
-      {
-        name: Roles.Child,
-        description: "Can add and edit payments in family and thier own",
-        default: false
-      },
-      {
-        name: Roles.Adult,
-        description:
-          "Can add and edit own payments in family and view everybody else's",
         default: false
       },
       {
@@ -251,12 +241,12 @@ export class FamiliesService {
       const user = (req.body as { family: Family; user: User }).user;
       const updateAllowed = await this.userCanUpdateFamily(user._id, familyId);
       if (!updateAllowed) {
-        throw new Error("Unathorized access");
+        throw new Error("Unauthorized access");
       }
       next();
       return;
     } catch (error) {
-      return res.status(403).json({ message: "Unathorized access" });
+      return res.status(403).json({ message: "Unauthorized access" });
     }
   }
 
@@ -293,7 +283,6 @@ export class FamiliesService {
 
   private isAdultMember(member: FamilyMember) {
     return (
-      member.roles.indexOf(Roles.Adult) > -1 ||
       member.roles.indexOf(Roles.Admin) > -1 ||
       member.roles.indexOf(Roles.Owner) > -1
     );

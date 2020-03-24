@@ -22,7 +22,7 @@ export class PaymentsDao implements IPaymentsDao {
     }
 
     return this.db
-      .collection("FamilyPaymentsList")
+      .collection("AggregatedPayments")
       .find({
         familyId: new ObjectId(familyId)
       })
@@ -35,7 +35,7 @@ export class PaymentsDao implements IPaymentsDao {
     }
 
     return this.db
-      .collection("FamilyPaymentsList")
+      .collection("AggregatedPayments")
       .find({
         userId: new ObjectId(userId)
       })
@@ -50,7 +50,7 @@ export class PaymentsDao implements IPaymentsDao {
     const newPayment = new PaymentModel(payment);
     await newPayment.save();
     const createdPayment = (await this.db
-      .collection("FamilyPaymentsList")
+      .collection("AggregatedPayments")
       .find({
         _id: new ObjectId(newPayment._id as string)
       })
@@ -80,7 +80,7 @@ export class PaymentsDao implements IPaymentsDao {
 
   public async initView(db: Connection): Promise<void> {
     this.db = db;
-    await db.createCollection("FamilyPaymentsList", {
+    await db.createCollection("AggregatedPayments", {
       viewOn: "paymentmodels",
       pipeline: [
         {

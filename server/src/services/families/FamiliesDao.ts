@@ -7,6 +7,7 @@ import {
 import { modelTransformer } from "@src/utils";
 
 import { ObjectId } from "mongodb";
+import { Connection } from "mongoose";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel } from "./models";
 import { FamilyMemberModel } from "./models/FamilyMember";
@@ -14,6 +15,13 @@ import { FamilyMemberModel } from "./models/FamilyMember";
 import { FamilyMemberPaymentPercentageModel } from "./models/FamilyMemberPaymentPercentage";
 
 export class FamiliesDao implements IFamiliesDao {
+  private db: Connection | null;
+
+  constructor() {
+    // tslint:disable-next-line: no-null-keyword
+    this.db = null;
+  }
+
   public async createFamily(family: Partial<Family>): Promise<Family> {
     const newFamily = new FamilyModel(family);
     await newFamily.save();
@@ -21,40 +29,16 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getFamily(familyId: string): Promise<FamilyView> {
-    return new Promise((resolve, reject) => {
-      FamilyModel.aggregate([
-        { $match: { _id: new ObjectId(familyId) } },
-        {
-          $lookup: {
-            from: "familymembermodels",
-            localField: "_id",
-            foreignField: "_id.familyId",
-            as: "members"
-          }
-        },
-        {
-          $project: {
-            name: true,
-            icon: true,
-            _id: true,
-            currency: true,
-            equalPayments: true,
-            membersCount: { $size: "$members" }
-          }
-        }
-      ]).exec(
-        (
-          err: Error,
-          families: (Family & { name: string; membersCount: number })[]
-        ) => {
-          if (families) {
-            resolve(families[0]);
-          } else {
-            reject(err);
-          }
-        }
-      );
-    });
+    if (!this.db) {
+      throw new Error("Server error");
+    }
+
+    return (
+      await this.db
+        .collection("AggregatedFamilies")
+        .find({ _id: new ObjectId(familyId) })
+        .toArray()
+    )[0] as FamilyView;
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
@@ -79,79 +63,14 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
-    return FamilyMemberModel.aggregate([
-      { $match: { "_id.familyId": new ObjectId(familyId) } },
-      {
-        $lookup: {
-          from: "usermodels",
-          localField: "_id.userId",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      {
-        $lookup: {
-          let: {
-            userId: "$_id.userId",
-            familyId: "$_id.familyId"
-          },
-          from: "familymemberpaymentpercentagemodels",
-          as: "paymentPercentage",
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ["$_id.familyId", "$$familyId"] },
-                    { $eq: ["$_id.userId", "$$userId"] }
-                  ]
-                }
-              }
-            },
-            {
-              $sort: {
-                "_id.createdAt": -1
-              }
-            },
-            {
-              $group: {
-                _id: "$_id.userId",
-                paymentPercentage: { $first: "$paymentPercentage" }
-              }
-            },
-            {
-              $project: {
-                _id: false,
-                userId: "$_id",
-                paymentPercentage: true
-              }
-            }
-          ]
-        }
-      },
-      {
-        $unwind: {
-          path: "$paymentPercentage",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $unwind: "$user"
-      },
-      {
-        $project: {
-          "member._id": "$user._id",
-          "member.firstName": "$user.firstName",
-          "member.lastName": "$user.lastName",
-          "member.email": "$user.email",
-          "member.roles": "$roles",
-          "member.icon": "$icon",
-          "member.createdAt": "$_id.createAt",
-          "member.paymentPercentage": "$paymentPercentage.paymentPercentage"
-        }
-      },
-      { $replaceRoot: { newRoot: "$member" } }
-    ]);
+    if (!this.db) {
+      throw new Error("Server error");
+    }
+
+    return this.db
+      .collection("AggregatedFamilyMembers")
+      .find({ familyId: new ObjectId(familyId) })
+      .toArray();
   }
 
   public async createFamilyMember(
@@ -178,30 +97,14 @@ export class FamiliesDao implements IFamiliesDao {
   public async getMemberFamilies(
     userId: string
   ): Promise<{ family: Family; roles: string[] }[]> {
-    return FamilyMemberModel.aggregate([
-      { $match: { "_id.userId": new ObjectId(userId) } },
-      {
-        $lookup: {
-          from: "familymodels",
-          localField: "_id.familyId",
-          foreignField: "_id",
-          as: "family"
-        }
-      },
-      { $unwind: "$family" },
-      {
-        $project: {
-          _id: "$family._id",
-          name: "$family.name",
-          createdAt: "$family.createdAt",
-          updatedAt: "$family.updatedAt",
-          icon: "$family.icon",
-          currency: "$family.currency",
-          equalPayments: "$family.equalPayments",
-          userRoles: "$roles"
-        }
-      }
-    ]);
+    if (!this.db) {
+      throw new Error("Server error");
+    }
+
+    return this.db
+      .collection("AggregatedMemberFamilies")
+      .find({ userId: new ObjectId(userId) })
+      .toArray();
   }
 
   public async getFamilyMember(
@@ -251,5 +154,147 @@ export class FamiliesDao implements IFamiliesDao {
         }
       }
     ]);
+  }
+
+  public async initViews(db: Connection): Promise<void> {
+    this.db = db;
+    await this.createFamiliesView(db);
+    await this.createFamilyMembersView(db);
+    await this.createMemberFamiliesView(db);
+  }
+
+  private async createFamiliesView(db: Connection): Promise<void> {
+    await db.createCollection("AggregatedFamilies", {
+      viewOn: "familymodels",
+      pipeline: [
+        {
+          $lookup: {
+            from: "familymembermodels",
+            localField: "_id",
+            foreignField: "_id.familyId",
+            as: "members"
+          }
+        },
+        {
+          $project: {
+            name: true,
+            icon: true,
+            _id: true,
+            currency: true,
+            equalPayments: true,
+            membersCount: { $size: "$members" }
+          }
+        }
+      ]
+    });
+  }
+
+  private async createMemberFamiliesView(db: Connection): Promise<void> {
+    await db.createCollection("AggregatedMemberFamilies", {
+      viewOn: "familymembermodels",
+      pipeline: [
+        {
+          $lookup: {
+            from: "familymodels",
+            localField: "_id.familyId",
+            foreignField: "_id",
+            as: "family"
+          }
+        },
+        { $unwind: "$family" },
+        {
+          $project: {
+            _id: "$family._id",
+            userId: "$_id.userId",
+            name: "$family.name",
+            createdAt: "$family.createdAt",
+            updatedAt: "$family.updatedAt",
+            icon: "$family.icon",
+            currency: "$family.currency",
+            equalPayments: "$family.equalPayments",
+            userRoles: "$roles"
+          }
+        }
+      ]
+    });
+  }
+
+  private async createFamilyMembersView(db: Connection): Promise<void> {
+    await db.createCollection("AggregatedFamilyMembers", {
+      viewOn: "familymembermodels",
+      pipeline: [
+        {
+          $lookup: {
+            from: "usermodels",
+            localField: "_id.userId",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        {
+          $lookup: {
+            let: {
+              userId: "$_id.userId",
+              familyId: "$_id.familyId"
+            },
+            from: "familymemberpaymentpercentagemodels",
+            as: "paymentPercentage",
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$_id.familyId", "$$familyId"] },
+                      { $eq: ["$_id.userId", "$$userId"] }
+                    ]
+                  }
+                }
+              },
+              {
+                $sort: {
+                  "_id.createdAt": -1
+                }
+              },
+              {
+                $group: {
+                  _id: "$_id.userId",
+                  paymentPercentage: { $first: "$paymentPercentage" }
+                }
+              },
+              {
+                $project: {
+                  _id: false,
+                  userId: "$_id",
+                  paymentPercentage: true
+                }
+              }
+            ]
+          }
+        },
+        {
+          $unwind: {
+            path: "$paymentPercentage",
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $project: {
+            "member._id": "$user._id",
+            "member.familyId": "$_id.familyId",
+            "member.firstName": "$user.firstName",
+            "member.lastName": "$user.lastName",
+            "member.email": "$user.email",
+            "member.roles": "$roles",
+            "member.icon": "$icon",
+            "member.createdAt": "$_id.createAt",
+            "member.paymentPercentage": "$paymentPercentage.paymentPercentage"
+          }
+        },
+        { $replaceRoot: { newRoot: "$member" } }
+      ]
+    });
   }
 }

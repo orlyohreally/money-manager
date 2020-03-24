@@ -29,7 +29,7 @@ const runServer = async () => {
   app.use(bodyParser.json({ limit: "10mb" }));
   app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
-  app.use(apiPath, familiesRouter);
+  app.use(apiPath, await familiesRouter(db.connection));
   app.use(apiPath, paymentSubjectsRouter);
   app.use(apiPath, await paymentsRouter(db.connection));
   app.use(apiPath, usersRouter);

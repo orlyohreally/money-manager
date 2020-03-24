@@ -9,22 +9,30 @@ import { PaymentsDao } from "@src/services/payments/PaymentsDao";
 import { PaymentsService } from "@src/services/payments/PaymentsService";
 import { UsersDao } from "@src/services/users/UsersDao";
 import { UsersService } from "@src/services/users/UsersService";
+import { Connection } from "mongoose";
 import { FamiliesDao } from "./FamiliesDao";
 import { FamiliesRouter } from "./FamiliesRouter";
 import { FamiliesService } from "./FamiliesService";
 
-export const familiesService = new FamiliesService({
-  dao: new FamiliesDao(),
-  imageLoaderService: new ImageManagerService({ dao: new ImageManagerDao() })
-});
-export const familiesRouter = new FamiliesRouter({
-  service: familiesService,
-  usersService: new UsersService({ dao: new UsersDao() }),
-  emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() }),
-  paymentsService: new PaymentsService({
-    dao: new PaymentsDao(),
-    imageLoaderService: new ImageManagerService({
-      dao: new ImageManagerDao()
+export const familiesService = async (db: Connection) => {
+  const familiesDao = new FamiliesDao();
+  await familiesDao.initViews(db);
+  return new FamiliesService({
+    dao: familiesDao,
+    imageLoaderService: new ImageManagerService({ dao: new ImageManagerDao() })
+  });
+};
+
+export const familiesRouter = async (db: Connection) => {
+  return new FamiliesRouter({
+    service: await familiesService(db),
+    usersService: new UsersService({ dao: new UsersDao() }),
+    emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() }),
+    paymentsService: new PaymentsService({
+      dao: new PaymentsDao(),
+      imageLoaderService: new ImageManagerService({
+        dao: new ImageManagerDao()
+      })
     })
-  })
-}).router;
+  }).router;
+};

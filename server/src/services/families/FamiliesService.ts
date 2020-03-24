@@ -265,7 +265,6 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    console.log(familyMember);
     return (
       familyMember &&
       (familyMember.roles.indexOf(Roles.Owner) > -1 ||
@@ -278,7 +277,6 @@ export class FamiliesService {
     familyId: string
   ): Promise<boolean> {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    console.log(familyMember);
     return familyMember && this.isAdultMember(familyMember);
   }
 
@@ -287,7 +285,9 @@ export class FamiliesService {
     return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
   }
 
-  public getPaymentPercentages(familyId: string) {
+  public getPaymentPercentages(
+    familyId: string
+  ): Promise<MemberPaymentPercentage[]> {
     return this.dao.getPaymentPercentages(familyId);
   }
 

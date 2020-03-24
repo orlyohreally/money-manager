@@ -1,4 +1,10 @@
-import { Family, FamilyMember, Roles, User } from "@shared/types";
+import {
+  FamilyMember,
+  FamilyMemberPaymentPercentage,
+  FamilyView,
+  Roles,
+  User
+} from "@shared/types";
 import { FamiliesDao } from "@src/services/families/FamiliesDao";
 import { FamiliesService } from "@src/services/families/FamiliesService";
 import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
@@ -9,6 +15,9 @@ import * as httpMocks from "node-mocks-http";
 
 const mockGetFamilyMember = jest.fn();
 const mockGetFamilyMembers = jest.fn();
+const mockGetPaymentPercentages = jest.fn();
+const mockUpdateMemberPercentage = jest.fn();
+const mockGetFamily = jest.fn();
 
 jest.mock("@src/services/families/FamiliesDao", () => ({
   FamiliesDao: class {
@@ -21,6 +30,15 @@ jest.mock("@src/services/families/FamiliesDao", () => ({
     public getFamilyMembers() {
       return mockGetFamilyMembers();
     }
+    public getPaymentPercentages() {
+      return mockGetPaymentPercentages();
+    }
+    public updateMemberPercentage() {
+      return mockUpdateMemberPercentage();
+    }
+    public getFamily() {
+      return mockGetFamily();
+    }
   }
 }));
 
@@ -32,6 +50,60 @@ describe("FamiliesService", () => {
   let service: FamiliesService;
   let dao: FamiliesDao;
   let imageLoaderService: ImageManagerService;
+
+  const mockedFamilyMembers: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    createdAt: Date;
+    roles: string[];
+  }[] = [
+    {
+      _id: "userId",
+      firstName: "firstName",
+      lastName: "lastName",
+      createdAt: new Date(),
+      roles: [Roles.Member]
+    }
+  ];
+  const mockedPaymentPercentages: FamilyMemberPaymentPercentage[] = [
+    {
+      userId: "userId-1",
+      paymentPercentage: 10,
+      familyId: "familyId-1",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      userId: "userId-2",
+      paymentPercentage: 90,
+      familyId: "familyId-1",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ];
+  const mockedMember: FamilyMember = {
+    _id: "_id",
+    firstName: "firstName",
+    lastName: "lastName",
+    icon: "",
+    email: "email@gmail.com",
+    roles: ["Admin", "Owner"],
+    paymentPercentage: 10,
+    inactive: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+  const mockedFamily: FamilyView = {
+    _id: "familyId",
+    name: "familtName",
+    icon: "",
+    currency: "USD",
+    equalPayments: true,
+    createdAt: new Date("2020-01-01"),
+    updatedAt: new Date("2020-01-01"),
+    membersCount: 4
+  };
 
   beforeEach(() => {
     // Clear all instances and calls to constructor and all methods:
@@ -55,10 +127,6 @@ describe("FamiliesService", () => {
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
     // tslint:disable-next-line: no-object-literal-type-assertion
-    const mockedFamily: Family = {
-      _id: "mocked family id"
-    } as Family;
-    // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedUser: User = { _id: "mocked user id" } as User;
     const nextSpy = jest.fn();
     const response = httpMocks.createResponse();
@@ -81,10 +149,6 @@ describe("FamiliesService", () => {
     } as FamilyMember;
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
-    // tslint:disable-next-line: no-object-literal-type-assertion
-    const mockedFamily: Family = {
-      _id: "mocked family id"
-    } as Family;
     // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedUser: User = { _id: "mocked user id" } as User;
     const nextSpy = jest.fn();
@@ -110,10 +174,6 @@ describe("FamiliesService", () => {
 
     mockGetFamilyMember.mockReturnValue(mockedFamilyMember);
     // tslint:disable-next-line: no-object-literal-type-assertion
-    const mockedFamily: Family = {
-      _id: "mocked family id"
-    } as Family;
-    // tslint:disable-next-line: no-object-literal-type-assertion
     const mockedUser: User = { _id: "mocked user id" } as User;
     const nextSpy = jest.fn();
     const request = httpMocks.createRequest({
@@ -125,7 +185,17 @@ describe("FamiliesService", () => {
   });
 
   it("createFamilyMember should call dao.createFamilyMember with updated roles list when Member role is missing", async () => {
-    spyOn(dao, "createFamilyMember");
+    spyOn(dao, "createFamilyMember").and.returnValue(
+      Promise.resolve(mockedMember)
+    );
+    spyOn(dao, "getPaymentPercentages").and.returnValue(
+      Promise.resolve(mockedPaymentPercentages)
+    );
+    spyOn(dao, "updateMemberPercentage").and.returnValue(Promise.resolve());
+    spyOn(dao, "getFamily").and.returnValue(Promise.resolve(mockedFamily));
+    spyOn(dao, "getFamilyMembers").and.returnValue(
+      Promise.resolve(mockedFamilyMembers)
+    );
     await service.createFamilyMember("userId", "familyId", [Roles.Owner]);
     expect(dao.createFamilyMember).toBeCalledTimes(1);
     expect(dao.createFamilyMember).toBeCalledWith("familyId", {
@@ -135,7 +205,17 @@ describe("FamiliesService", () => {
   });
 
   it("createFamilyMember should call dao.createFamilyMember with specified roles list", async () => {
-    spyOn(dao, "createFamilyMember");
+    spyOn(dao, "createFamilyMember").and.returnValue(
+      Promise.resolve(mockedMember)
+    );
+    spyOn(dao, "getPaymentPercentages").and.returnValue(
+      Promise.resolve(mockedPaymentPercentages)
+    );
+    spyOn(dao, "updateMemberPercentage").and.returnValue(Promise.resolve());
+    spyOn(dao, "getFamily").and.returnValue(Promise.resolve(mockedFamily));
+    spyOn(dao, "getFamilyMembers").and.returnValue(
+      Promise.resolve(mockedFamilyMembers)
+    );
     await service.createFamilyMember("userId", "familyId", [
       Roles.Admin,
       Roles.Member
@@ -148,21 +228,6 @@ describe("FamiliesService", () => {
   });
 
   it("getFamilyMembers should respond response from dao.getFamilyMembers", async () => {
-    const mockedFamilyMembers: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      createdAt: Date;
-      roles: string[];
-    }[] = [
-      {
-        _id: "userId",
-        firstName: "firstName",
-        lastName: "lastName",
-        createdAt: new Date(),
-        roles: [Roles.Member]
-      }
-    ];
     mockGetFamilyMembers.mockReturnValue(mockedFamilyMembers);
     const members = await service.getFamilyMembers("familyId");
     expect(members).toBe(mockedFamilyMembers);

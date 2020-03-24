@@ -9,7 +9,7 @@ export class PrefixedNumberPipe implements PipeTransform {
 
   transform(value: number | string, currency: string): any {
     const number = Number(value.toString().replace(',', ''));
-    if (isNaN(number) || !number) {
+    if (isNaN(number)) {
       return null;
     }
 

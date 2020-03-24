@@ -8,7 +8,12 @@ import { MemberRole } from '@src/app/types';
   host: { class: 'card' }
 })
 export class FamilyMemberCardComponent implements OnInit {
-  @Input() member: { fullName: string; roles: string[]; icon: string };
+  @Input() member: {
+    fullName: string;
+    roles: string[];
+    icon: string;
+    email: string;
+  };
   @Input() roles: { [roleName: string]: MemberRole };
 
   constructor() {}

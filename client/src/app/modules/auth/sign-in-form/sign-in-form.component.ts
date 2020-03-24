@@ -98,7 +98,11 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           (error: HttpErrorResponse) => {
             this.submittingForm = false;
-            this.serverError = error.error;
+            if (error.error.message) {
+              this.serverError = error.error.message;
+            } else {
+              this.serverError = error.error;
+            }
             setTimeout(() => {
               this.errorMessageBlock.nativeElement.scrollIntoView({
                 behavior: 'smooth',

@@ -87,10 +87,17 @@ export class UsersRouter {
       const verificationToken: VerificationToken = await this.service.generateVerificationToken(
         newUser
       );
-      await this.sendEmailVerificationEmail(
-        user.email,
-        verificationToken.token
-      );
+      try {
+        await this.sendEmailVerificationEmail(
+          user.email,
+          verificationToken.token
+        );
+      } catch (e) {
+        console.log(e);
+        return res
+          .status(400)
+          .json({ message: "Could not send verification email" });
+      }
       return res.status(200).json({
         email: user.email,
         verificationToken: verificationToken.token
@@ -209,10 +216,17 @@ export class UsersRouter {
       if (expectedVerificationToken.token !== body.verificationToken) {
         return res.status(401).json("Invalid verification token");
       }
-      await this.sendEmailVerificationEmail(
-        body.email,
-        expectedVerificationToken.token
-      );
+      try {
+        await this.sendEmailVerificationEmail(
+          body.email,
+          expectedVerificationToken.token
+        );
+      } catch (e) {
+        console.log(e);
+        return res
+          .status(400)
+          .json({ message: "Could not send verification email" });
+      }
       return res.status(200).json(`Link has been sent to email ${user.email}`);
     } catch (err) {
       return res.status(400).json(err);

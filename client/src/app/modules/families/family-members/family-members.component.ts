@@ -32,7 +32,8 @@ export class FamilyMembersComponent implements OnInit {
             member => ({
               fullName: this.userManagerService.getFullName(member),
               roles: member.roles,
-              icon: this.userManagerService.getUserIcon(member) as string
+              icon: this.userManagerService.getUserIcon(member) as string,
+              email: member.email
             }),
             []
           );

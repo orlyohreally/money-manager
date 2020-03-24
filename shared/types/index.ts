@@ -1,4 +1,5 @@
 export * from "./family";
+export * from "./family-view";
 export * from "./family-member";
 export * from "./member";
 export * from "./payment";

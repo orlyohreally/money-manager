@@ -1,4 +1,9 @@
-import { Family, FamilyMember, MemberPaymentPercentage } from "@shared/types";
+import {
+  Family,
+  FamilyMember,
+  FamilyView,
+  MemberPaymentPercentage
+} from "@shared/types";
 import { modelTransformer } from "@src/utils";
 
 import { ObjectId } from "mongodb";
@@ -15,9 +20,7 @@ export class FamiliesDao implements IFamiliesDao {
     return newFamily.toJSON(modelTransformer) as Family;
   }
 
-  public async getFamily(
-    familyId: string
-  ): Promise<Family & { name: string; membersCount: number }> {
+  public async getFamily(familyId: string): Promise<FamilyView> {
     return new Promise((resolve, reject) => {
       FamilyModel.aggregate([
         { $match: { _id: new ObjectId(familyId) } },

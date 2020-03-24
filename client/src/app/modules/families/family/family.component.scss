@@ -4,6 +4,7 @@ $avatar-size: 100px;
 .family-card {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-content: center;
   align-items: center;
@@ -14,14 +15,18 @@ $avatar-size: 100px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.family-card__content {
+  padding: 0 $padding;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .family-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
   align-items: flex-start;
-  padding: 0 $padding;
-  width: calc(100% - #{$avatar-size + 2 * $padding});
 }
 
 .family-info__name {
@@ -35,17 +40,12 @@ $avatar-size: 100px;
   font-weight: 100;
 }
 
-.family-card__actions {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  display: flex;
-  justify-content: flex-end;
-  align-content: center;
-  align-items: center;
-  padding-left: 10px;
-}
+@media (min-width: 960px) {
+  .family-card {
+    flex-direction: row;
+  }
 
-.name-editor {
-  width: 100%;
+  .family-card__content {
+    width: calc(100% - #{$avatar-size});
+  }
 }

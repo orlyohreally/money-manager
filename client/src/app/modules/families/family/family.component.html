@@ -1,41 +1,17 @@
 <div *ngIf="family | async as familyInfo" class="family">
   <div class="family-card">
     <shared-avatar [avatarUrl]="familyInfo | familyIcon"></shared-avatar>
-    <div class="family-info">
-      <div class="family-info__name text text_ellipsis">
-        Family {{ familyInfo.name }}
-      </div>
-      <div class="family-info__members-count">
-        {{ familyInfo.membersCount }}
-        {{ familyInfo.membersCount === 1 ? 'member' : 'members' }}
-      </div>
-    </div>
-    <div class="family-card__actions">
-      <button
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Example icon-button with a menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" class="mat-elevation-z0">
-        <div
-          mat-menu-item
-          [familyEditFamily]="familyInfo"
-          title="Edit family information"
-        >
-          <mat-icon>edit</mat-icon>
-          <span>Edit family</span>
+    <div class="family-card__content">
+      <div class="family-info">
+        <div class="family-info__name text text_ellipsis">
+          Family {{ familyInfo.name }}
         </div>
-        <button mat-menu-item [familyAddMember]="familyInfo">
-          <mat-icon>person_add</mat-icon>
-          <span>Add member</span>
-        </button>
-        <button mat-menu-item [familyDeleteFamily]="familyInfo">
-          <mat-icon>clear</mat-icon>
-          <span>Delete family</span>
-        </button>
-      </mat-menu>
+        <div class="family-info__members-count">
+          {{ familyInfo.membersCount }}
+          {{ familyInfo.membersCount === 1 ? 'member' : 'members' }}
+        </div>
+      </div>
+      <family-actions [familyInfo]="familyInfo"></family-actions>
     </div>
   </div>
   <router-outlet></router-outlet>

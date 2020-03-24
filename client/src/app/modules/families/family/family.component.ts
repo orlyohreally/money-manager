@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
+import { FamilyView } from '@shared/types';
 import { Observable, Subject } from 'rxjs';
 import { catchError, map, takeUntil } from 'rxjs/operators';
 
@@ -15,12 +16,7 @@ import { catchError, map, takeUntil } from 'rxjs/operators';
   }
 })
 export class FamilyComponent implements OnInit, OnDestroy {
-  family: Observable<{
-    _id: string;
-    name: string;
-    icon: string;
-    membersCount: number;
-  }>;
+  family: Observable<FamilyView>;
 
   private familyId: string;
   private destroyed = new Subject<void>();
@@ -46,16 +42,9 @@ export class FamilyComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getFamily(
-    familyId: string
-  ): Observable<{
-    _id: string;
-    name: string;
-    icon: string;
-    membersCount: number;
-  }> {
+  private getFamily(familyId: string): Observable<FamilyView> {
     return this.familiesService.getFamily(familyId).pipe(
-      map((family: { name: string; icon: string; membersCount: number }) => {
+      map(family => {
         return { ...family, _id: familyId };
       }),
       catchError(() => {

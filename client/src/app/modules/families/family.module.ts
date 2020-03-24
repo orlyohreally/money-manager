@@ -28,6 +28,8 @@ import { NewFamilyDialogTriggerDirective } from './directives/new-family-dialog-
 // tslint:disable-next-line: max-line-length
 import { EditFamilyFormComponent } from './edit-family-form/edit-family-form.component';
 import { FamiliesComponent } from './families.component';
+// tslint:disable-next-line: max-line-length
+import { FamilyActionsComponent } from './family-actions/family-actions.component';
 import { FamilyCardComponent } from './family-card/family-card.component';
 import { FamilyFormComponent } from './family-form/family-form.component';
 // tslint:disable-next-line: max-line-length
@@ -55,7 +57,8 @@ import { NewFamilyFormComponent } from './new-family-form/new-family-form.compon
     DeleteFamilyDirective,
     FamilyCardComponent,
     NewFamilyFormComponent,
-    EditFamilyFormComponent
+    EditFamilyFormComponent,
+    FamilyActionsComponent
   ],
   imports: [
     CommonModule,

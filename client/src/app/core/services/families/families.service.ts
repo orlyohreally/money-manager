@@ -1,19 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Family } from '@shared/types';
+import { MemberFamily } from '@shared-client/types';
+import { Family, FamilyView } from '@shared/types';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { MemberFamily } from 'src/app/modules/shared/types/member-family';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 import { PaymentsService } from '../payments/payments.service';
-
-export interface FamilyView {
-  name: string;
-  icon: string;
-  membersCount: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -158,9 +152,7 @@ export class FamiliesService extends DataService {
   }
 
   getFamily(familyId: string): Observable<FamilyView> {
-    return this.get<{ name: string; icon: string; membersCount: number }>(
-      `${this.familyAPIRouter}${familyId}`
-    );
+    return this.get<FamilyView>(`${this.familyAPIRouter}${familyId}`);
   }
 
   getFamilyIcon(family: Family) {

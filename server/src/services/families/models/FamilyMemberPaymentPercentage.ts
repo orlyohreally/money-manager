@@ -18,7 +18,7 @@ const FamilyMemberPaymentPercentageSchema = new Schema<
     paymentPercentage: Number,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 FamilyMemberPaymentPercentageSchema.pre<FamilyMemberPaymentPercentageDocument>(

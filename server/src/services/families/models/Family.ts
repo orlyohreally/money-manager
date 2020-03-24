@@ -13,7 +13,7 @@ const FamilySchema = new Schema<Family>(
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 FamilySchema.pre<FamilyDocument>("save", function(next) {
   if (!this.createdAt) {

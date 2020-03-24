@@ -28,7 +28,7 @@ const UserSchema = new Schema<User>(
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 UserSchema.pre<UserDocument>("save", function(next) {

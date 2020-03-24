@@ -15,7 +15,9 @@ const runServer = async () => {
   if (!port) {
     process.exit(1);
   }
-  await mongoose.connect(process.env.MONGODB_URI as string);
+  const db = await mongoose.connect(process.env.MONGODB_URI as string, {
+    useNewUrlParser: true
+  });
 
   const apiPath = "/api/v1";
   const app: express.Application = express();
@@ -29,7 +31,7 @@ const runServer = async () => {
 
   app.use(apiPath, familiesRouter);
   app.use(apiPath, paymentSubjectsRouter);
-  app.use(apiPath, paymentsRouter);
+  app.use(apiPath, await paymentsRouter(db.connection));
   app.use(apiPath, usersRouter);
 
   if (process.env.NODE_ENV === "production") {

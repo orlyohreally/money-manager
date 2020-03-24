@@ -8,16 +8,20 @@ type PaymentDocument = Payment & Document;
 const PaymentSchema = new Schema<Payment>(
   {
     amount: { type: Number, required: true },
-    familyId: { type: ObjectId, ref: "FamilyModel" },
-    userId: { type: ObjectId, required: true, ref: "UserModel" },
-    subjectId: { type: ObjectId, required: true, ref: "PaymentSubjectModel" },
-    currency: String,
+    familyId: { type: ObjectId, ref: "FamilyModel", index: true },
+    userId: { type: ObjectId, required: true, ref: "UserModel", index: true },
+    subjectId: {
+      type: ObjectId,
+      required: true,
+      ref: "PaymentSubjectModel",
+      index: true
+    },
     receipt: String,
     paidAt: { type: Date, required: true },
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 PaymentSchema.pre<PaymentDocument>("save", function(next) {
   if (!this.createdAt) {

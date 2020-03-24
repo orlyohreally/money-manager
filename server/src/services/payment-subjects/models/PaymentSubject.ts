@@ -7,14 +7,14 @@ type PaymentSubjectDocument = PaymentSubject & Document;
 
 const PaymentSubjectSchema = new Schema<PaymentSubject>(
   {
-    familyId: { type: ObjectId, ref: "FamilyModel" },
-    userId: { type: ObjectId, ref: "UserModel" },
+    familyId: { type: ObjectId, ref: "FamilyModel", index: true },
+    userId: { type: ObjectId, ref: "UserModel", index: true },
     name: { type: String, required: true },
     icon: String,
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 PaymentSubjectSchema.pre<PaymentSubjectDocument>("save", function(next) {

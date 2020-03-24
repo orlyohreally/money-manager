@@ -7,11 +7,11 @@ type VerificationTokenDocument = VerificationToken & Document;
 const VerificationTokenSchema = new Schema<VerificationToken>(
   {
     token: { type: String, required: true, minLength: 16 },
-    userId: { type: ObjectId, required: true, ref: "UserModel" },
+    userId: { type: ObjectId, required: true, ref: "UserModel", index: true },
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 VerificationTokenSchema.pre<VerificationTokenDocument>("save", function(next) {

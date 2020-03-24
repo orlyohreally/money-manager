@@ -16,7 +16,7 @@ const FamilyMemberSchema = new Schema<FamilyMember>(
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 FamilyMemberSchema.pre<FamilyMemberDocument>("save", function(next) {

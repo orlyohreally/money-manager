@@ -1,6 +1,9 @@
 <div *ngIf="family | async as familyInfo" class="family">
   <div class="family-card">
-    <shared-avatar [avatarUrl]="familyInfo | familyIcon"></shared-avatar>
+    <shared-avatar
+      class="family-card__avatar"
+      [avatarUrl]="familyInfo | familyIcon"
+    ></shared-avatar>
     <div class="family-card__content">
       <div class="family-info">
         <div class="family-info__name text text_ellipsis">

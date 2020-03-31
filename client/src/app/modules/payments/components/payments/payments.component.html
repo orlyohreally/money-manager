@@ -25,27 +25,34 @@
       [subjects]="subjects | async"
       (filtersUpdated)="onFiltersUpdated($event)"
     ></payment-payments-filters>
-    <ng-template
-      let-paymentsList="paymentsList"
-      [ngTemplateOutletContext]="{ paymentsList: filteredPayments | async }"
-      [ngTemplateOutlet]="paymentsListTemplate"
-      #paymentsListTemplate
-    >
-      <payment-payment-list
-        [payments]="paymentsList"
-        [currency]="familyCurrency"
+    <ng-container *ngIf="!filteringPayments; else filtering">
+      <ng-template
+        let-paymentsList="paymentsList"
+        [ngTemplateOutletContext]="{ paymentsList: filteredPayments | async }"
+        [ngTemplateOutlet]="paymentsListTemplate"
+        #paymentsListTemplate
       >
-      </payment-payment-list>
-      <payment-payments-calculated-per-member
-        *ngIf="paymentsList?.length"
-        class="payments-calculated-per-member"
-        [payments]="paymentsList"
-      ></payment-payments-calculated-per-member>
-      <payment-member-overpay-and-debt
-        class="member-overpay-and-debt"
-        [familyId]="familyIdValue"
-        [payments]="paymentsList"
-      ></payment-member-overpay-and-debt>
+        <payment-payment-list
+          [payments]="paymentsList"
+          [currency]="familyCurrency"
+        >
+        </payment-payment-list>
+        <payment-payments-calculated-per-member
+          *ngIf="paymentsList?.length"
+          class="payments-calculated-per-member"
+          [payments]="paymentsList"
+        ></payment-payments-calculated-per-member>
+        <payment-member-overpay-and-debt
+          class="member-overpay-and-debt"
+          [familyId]="familyIdValue"
+          [payments]="paymentsList"
+        ></payment-member-overpay-and-debt>
+      </ng-template>
+    </ng-container>
+    <ng-template #filtering>
+      <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+        <shared-loader></shared-loader>
+      </div>
     </ng-template>
   </ng-template>
 </div>

@@ -15,7 +15,7 @@
     selectorLabel="Subject"
     [subjects]="subjects"
     [debounceTime]="filterDebounceTime"
-    (subjectSelected)="onFilterUpdated('subject', $event)"
+    (subjectSelected)="onFilterUpdated('paymentSubject', $event)"
   ></shared-payment-subject-selector>
   <shared-date-selector
     fxFlex="1 1 100%"

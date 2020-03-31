@@ -24,7 +24,6 @@ export class PaymentsComponent implements OnInit {
   filteredPayments: Observable<FamilyPaymentView[]>;
   subjects: Observable<PaymentSubject[]>;
   currency: Observable<string>;
-
   displayedColumns: string[] = [
     'subject',
     'amount',
@@ -34,10 +33,10 @@ export class PaymentsComponent implements OnInit {
     'updatedAt',
     'actions'
   ];
-
   familyId: Observable<string>;
   familyMembers: Observable<FamilyMember[]>;
   filters: PaymentFilters;
+  filteringPayments: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -80,13 +79,13 @@ export class PaymentsComponent implements OnInit {
   }
 
   filterPayments() {
+    this.filteringPayments = true;
     this.filteredPayments = this.payments.pipe(
       map(payments => {
-        return [...payments].filter(payment => {
-          return (
+        return [...payments].filter(
+          payment =>
             !this.filters.member || payment.member._id === this.filters.member
-          );
-        });
+        );
       }),
       map(payments => {
         return payments.filter(payment => {
@@ -100,8 +99,7 @@ export class PaymentsComponent implements OnInit {
         return payments.filter(payment => {
           return (
             !this.filters.startDate ||
-            new Date(payment.paidAt).getTime() >=
-              this.filters.startDate.getTime()
+            new Date(payment.paidAt) >= new Date(this.filters.startDate)
           );
         });
       }),
@@ -109,10 +107,12 @@ export class PaymentsComponent implements OnInit {
         return payments.filter(payment => {
           return (
             !this.filters.endDate ||
-            new Date(payment.paidAt).getTime() < this.filters.endDate.getTime()
+            new Date(payment.paidAt) < new Date(this.filters.endDate)
           );
         });
       })
     );
+
+    this.filteringPayments = false;
   }
 }

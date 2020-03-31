@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FamilyMember, PaymentSubject } from '@shared/types';
-import { PaymentFilters } from '@src/app/modules/shared/types/payment-filters';
+import {
+  PaymentFilter,
+  PaymentFilters
+} from '@src/app/modules/shared/types/payment-filters';
 
 @Component({
   selector: 'payment-payments-filters',
@@ -34,7 +37,7 @@ export class PaymentsFiltersComponent implements OnInit {
 
   ngOnInit() {}
 
-  onFilterUpdated(filterName: string, value: string) {
+  onFilterUpdated(filterName: PaymentFilter, value: string) {
     this.selectedFiltersValues[filterName] = value;
     this.filtersUpdated.emit(this.selectedFiltersValues);
   }

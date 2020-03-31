@@ -33,4 +33,8 @@ export class FamilyFormComponent implements OnInit {
   submitForm() {
     this.formSubmitted.emit();
   }
+
+  onCurrencySelected(selectedCurrency: string) {
+    this.familyForm.get('currency').setValue(selectedCurrency);
+  }
 }

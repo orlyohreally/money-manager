@@ -23,7 +23,8 @@
       >
         <shared-currency-selector
           fxFlex="60"
-          [currencyControl]="familyForm.get('currency')"
+          [defaultCurrency]="familyForm.get('currency').value"
+          (currencySelected)="onCurrencySelected($event)"
         ></shared-currency-selector>
         <mat-form-field
           appearance="outline"

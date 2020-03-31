@@ -17,7 +17,7 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 import { Family } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
 import { of, Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'family-edit-family-form',
@@ -35,6 +35,7 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
     value: AdultMember[];
     valid: boolean;
   };
+  private currencyDebounceTime = 300;
   private destroyed = new Subject<void>();
 
   constructor(
@@ -63,7 +64,10 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
 
     this.form
       .get('currency')
-      .valueChanges.pipe(takeUntil(this.destroyed))
+      .valueChanges.pipe(
+        debounceTime(this.currencyDebounceTime),
+        takeUntil(this.destroyed)
+      )
       .subscribe(value => {
         this.displayExchangeRate = value !== this.family.currency;
       });

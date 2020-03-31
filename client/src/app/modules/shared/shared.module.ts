@@ -15,6 +15,7 @@ import {
   MatSelectModule
 } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { FilterPipe } from './pipes/filter.pipe';
 
@@ -125,6 +126,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     MatIconModule,
     MatSelectModule,
     ImageCropperModule,
+    NgxMatSelectSearchModule,
     CheckListModule,
     MatDatepickerModule
   ],

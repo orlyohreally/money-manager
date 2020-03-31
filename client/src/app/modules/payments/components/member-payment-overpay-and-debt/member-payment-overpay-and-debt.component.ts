@@ -1,33 +1,38 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
+import { Observable } from 'rxjs';
+
 // tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
-import { OverpaidDebtPayment, PaymentDebt } from '@shared-client/types';
-import { Observable } from 'rxjs';
+import { OverpaidDebtPayment, PaymentExpense } from '@shared-client/types';
+import { FamilyPaymentView } from '@src/app/types';
 
 @Component({
   selector: 'payment-member-overpay-and-debt',
   templateUrl: './member-payment-overpay-and-debt.component.html',
   styleUrls: ['./member-payment-overpay-and-debt.component.scss']
 })
-export class MemberPaymentOverpayAndDebtComponent implements OnInit {
+export class MemberPaymentOverpayAndDebtComponent implements OnChanges {
   @Input() familyId: string;
+  @Input() payments: FamilyPaymentView[];
 
   paymentTransactions: Observable<OverpaidDebtPayment[]>;
-  overpaysAndDebtsList: Observable<PaymentDebt[]>;
+  overpaysAndDebtsList: Observable<PaymentExpense[]>;
   showMoreDetailedList = false;
 
   constructor(
     private paymentsCalculationsService: PaymentsCalculationsService
   ) {}
 
-  ngOnInit() {
+  ngOnChanges(): void {
     // tslint:disable-next-line: max-line-length
     this.paymentTransactions = this.paymentsCalculationsService.getPaymentTransactions(
-      this.familyId
+      this.familyId,
+      this.payments || []
     );
     // tslint:disable-next-line: max-line-length
     this.overpaysAndDebtsList = this.paymentsCalculationsService.getOverpayAndDebtsList(
-      this.familyId
+      this.familyId,
+      this.payments || []
     );
   }
 

@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 
 import {
   MemberFamily,
   OverpaidDebtPayment,
-  PaymentDebt
+  PaymentExpense
 } from '@shared-client/types';
+import { FamilyMember } from '@shared/types';
+import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import {
   AuthenticationServiceMock,
   IAuthenticationServiceMock,
@@ -12,18 +15,18 @@ import {
   IPaymentSubjectsServiceMock,
   PaymentServiceMock,
   PaymentSubjectsServiceMock
-} from '@src/app/tests-utils/mocks';
+} from '@tests-utils/mocks';
 import {
   FamiliesServiceMock,
   IFamiliesServiceMock
-} from '@src/app/tests-utils/mocks/families.service.spec';
+} from '@tests-utils/mocks/families.service.spec';
 // tslint:disable-next-line: max-line-length
 import {
   IMembersServiceMock,
   MembersServiceMock
-} from '@src/app/tests-utils/mocks/members.service.spec';
-import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
-import { of } from 'rxjs';
+} from '@tests-utils/mocks/members.service.spec';
+import { take } from 'rxjs/operators';
+import { TestScheduler } from 'rxjs/testing';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FamiliesService } from '../families/families.service';
@@ -33,7 +36,7 @@ import { PaymentSubjectsService } from '../payment-subject/payment-subjects.serv
 import { PaymentsCalculationsService } from './payments-calculations.service';
 import { PaymentsService } from './payments.service';
 
-describe('PaymentsCalculationsService', () => {
+fdescribe('PaymentsCalculationsService', () => {
   let service: PaymentsCalculationsService;
   let paymentSubjectsServiceSpy: jasmine.SpyObj<PaymentSubjectsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
@@ -196,7 +199,8 @@ describe('PaymentsCalculationsService', () => {
 
   it('getPaymentTransactions should return payment calculations', () => {
     const mockedFamilyId = 'familyId-1';
-
+    const mockedPaymentsList: FamilyPaymentView[] =
+      paymentsServiceMock.familyPayments;
     const expectedResponse: OverpaidDebtPayment[] = [
       {
         debt: 0,
@@ -238,7 +242,7 @@ describe('PaymentsCalculationsService', () => {
       }
     ];
     service
-      .getPaymentTransactions(mockedFamilyId)
+      .getPaymentTransactions(mockedFamilyId, mockedPaymentsList)
       .subscribe((payments: OverpaidDebtPayment[]) => {
         expect(payments).toEqual(expectedResponse);
       });
@@ -246,23 +250,129 @@ describe('PaymentsCalculationsService', () => {
 
   it('getOverpayAndDebtsList should return debts and overpaid values', () => {
     const mockedFamilyId = 'familyId-1';
-
-    const expectedResponse: PaymentDebt[] = [
+    const mockedPaymentsList: FamilyPaymentView[] =
+      paymentsServiceMock.familyPayments;
+    const expectedResponse: PaymentExpense[] = [
       {
-        amount: 1,
-        user: membersServiceMock.membersList[1],
+        amount: 7,
+        member: membersServiceMock.membersList[0],
         currency: 'USD'
       },
       {
-        amount: -1,
-        user: membersServiceMock.membersList[0],
+        amount: -7,
+        member: membersServiceMock.membersList[1],
         currency: 'USD'
       }
     ];
-    service
-      .getOverpayAndDebtsList(mockedFamilyId)
-      .subscribe((payments: PaymentDebt[]) => {
-        expect(payments).toEqual(expectedResponse);
+
+    const scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
+    scheduler.run(({ expectObservable }) => {
+      expectObservable(
+        service
+          .getOverpayAndDebtsList(mockedFamilyId, mockedPaymentsList)
+          .pipe(take(1))
+      ).toBe('3ms (a|)', {
+        a: expectedResponse
       });
+    });
   });
+
+  it(
+    'getTotalExpensesPerMember should calculate' +
+      ' how much each member spent',
+    () => {
+      const mockedPaymentsList: FamilyPaymentView[] = [
+        {
+          _id: 'paymentId-1',
+          amount: 10,
+          receipt: 'receipt-1.png',
+          subject: PaymentSubjectsServiceMock().paymentSubjectsList[0],
+          paidAt: new Date('2020-01-02').toString(),
+          member: {
+            _id: 'userId-1',
+            firstName: 'firstName-1',
+            lastName: 'lastName-1'
+          } as FamilyMember,
+          currency: 'USD',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-01').toString(),
+          updatedAt: new Date('2020-10-02').toString()
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          receipt: 'receipt-2.png',
+          subject: PaymentSubjectsServiceMock().paymentSubjectsList[1],
+          paidAt: new Date('2020-01-04').toString(),
+          member: {
+            _id: 'userId-2',
+            firstName: 'firstName-1',
+            lastName: 'lastName-2'
+          } as FamilyMember,
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-02').toString(),
+          updatedAt: new Date('2020-10-02').toString(),
+          currency: 'USD'
+        },
+        {
+          _id: 'paymentId-3',
+          amount: 25,
+          receipt: 'receipt-2.png',
+          subject: PaymentSubjectsServiceMock().paymentSubjectsList[1],
+          paidAt: new Date('2020-01-03').toString(),
+          member: {
+            _id: 'userId-2',
+            firstName: 'firstName-1',
+            lastName: 'lastName-2'
+          } as FamilyMember,
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-03').toString(),
+          updatedAt: new Date('2020-10-03').toString(),
+          currency: 'USD'
+        },
+        {
+          _id: 'paymentId-4',
+          amount: 100,
+          receipt: 'receipt-1.png',
+          subject: PaymentSubjectsServiceMock().paymentSubjectsList[0],
+          paidAt: new Date('2020-01-05').toString(),
+          member: {
+            _id: 'userId-1',
+            firstName: 'firstName-1',
+            lastName: 'lastName-1'
+          } as FamilyMember,
+          currency: 'USD',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-05').toString(),
+          updatedAt: new Date('2020-10-05').toString()
+        }
+      ];
+      const expectedResponse: PaymentExpense[] = [
+        {
+          amount: 110,
+          currency: 'USD',
+          member: {
+            _id: 'userId-1',
+            firstName: 'firstName-1',
+            lastName: 'lastName-1'
+          } as FamilyMember
+        },
+        {
+          amount: 45,
+          currency: 'USD',
+          member: {
+            _id: 'userId-2',
+            firstName: 'firstName-1',
+            lastName: 'lastName-2'
+          } as FamilyMember
+        }
+      ];
+
+      expect(service.getTotalExpensesPerMember(mockedPaymentsList)).toEqual(
+        expectedResponse
+      );
+    }
+  );
 });

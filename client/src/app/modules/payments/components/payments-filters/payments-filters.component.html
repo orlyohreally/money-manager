@@ -1,0 +1,41 @@
+<div fxLayout="row wrap" class="payments-filters" fxLayoutGap.gt-xs="10px grid">
+  <shared-member-selector
+    fxFlex="1 1 100%"
+    fxFlex.gt-xs="1 1 50%"
+    fxFlex.gt-sm="1 1 25%"
+    [members]="members"
+    selectorLabel="Member"
+    [debounceTime]="filterDebounceTime"
+    (memberSelected)="onFilterUpdated('member', $event)"
+  ></shared-member-selector>
+  <shared-payment-subject-selector
+    fxFlex="1 1 100%"
+    fxFlex.gt-xs="1 1 50%"
+    fxFlex.gt-sm="1 1 25%"
+    selectorLabel="Subject"
+    [subjects]="subjects"
+    [debounceTime]="filterDebounceTime"
+    (subjectSelected)="onFilterUpdated('subject', $event)"
+  ></shared-payment-subject-selector>
+  <shared-date-selector
+    fxFlex="1 1 100%"
+    fxFlex.gt-xs="1 1 50%"
+    fxFlex.gt-sm="1 1 25%"
+    selectorLabel="Paid after"
+    [defaultDate]="defaultStartDate"
+    [required]="true"
+    [debounceTime]="filterDebounceTime"
+    (dateSelected)="onStartDateUpdated($event)"
+  ></shared-date-selector>
+  <shared-date-selector
+    fxFlex="1 1 100%"
+    fxFlex.gt-xs="1 1 50%"
+    fxFlex.gt-sm="1 1 25%"
+    selectorLabel="Paid before"
+    [defaultDate]="defaultEndDate"
+    [required]="true"
+    [minDate]="selectedStartDate"
+    [debounceTime]="filterDebounceTime"
+    (dateSelected)="onFilterUpdated('endDate', $event)"
+  ></shared-date-selector>
+</div>

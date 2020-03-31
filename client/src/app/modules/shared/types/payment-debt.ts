@@ -1,7 +1,7 @@
 import { FamilyMember } from '@shared/types';
 
-export interface PaymentDebt {
-  user: FamilyMember;
+export interface PaymentExpense {
+  member: FamilyMember;
   amount: number;
   currency: string;
 }

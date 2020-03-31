@@ -20,10 +20,14 @@
         New payment
       </button>
     </div>
-
+    <payment-payments-filters
+      [members]="familyMembers | async"
+      [subjects]="subjects | async"
+      (filtersUpdated)="onFiltersUpdated($event)"
+    ></payment-payments-filters>
     <ng-template
       let-paymentsList="paymentsList"
-      [ngTemplateOutletContext]="{ paymentsList: payments | async }"
+      [ngTemplateOutletContext]="{ paymentsList: filteredPayments | async }"
       [ngTemplateOutlet]="paymentsListTemplate"
       #paymentsListTemplate
     >
@@ -40,6 +44,7 @@
       <payment-member-overpay-and-debt
         class="member-overpay-and-debt"
         [familyId]="familyIdValue"
+        [payments]="paymentsList"
       ></payment-member-overpay-and-debt>
     </ng-template>
   </ng-template>

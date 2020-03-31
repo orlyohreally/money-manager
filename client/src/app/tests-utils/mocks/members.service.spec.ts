@@ -55,7 +55,7 @@ function getMembersServiceSpy() {
   );
 
   familiesServiceSpy.getMembers.and.returnValue(
-    cold('--a', { a: mockedFamilyMembersList })
+    cold('3ms a', { a: mockedFamilyMembersList })
   );
   return familiesServiceSpy;
 }

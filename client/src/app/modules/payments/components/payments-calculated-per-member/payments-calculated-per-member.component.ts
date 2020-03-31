@@ -12,9 +12,11 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
+// tslint:disable-next-line: max-line-length
+import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 import { compare } from '@shared-client/functions';
 import { UserFullNamePipe } from '@shared-client/pipes/user-full-name.pipe';
-import { FamilyMember } from '@shared/types';
+import { PaymentExpense } from '@src/app/modules/shared/types';
 import { FamilyPaymentView } from '@src/app/types';
 
 @Component({
@@ -29,22 +31,17 @@ import { FamilyPaymentView } from '@src/app/types';
 export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   @Input() payments: FamilyPaymentView[];
 
-  calculatedPayments: {
-    member: FamilyMember;
-    amount: number;
-    currency: string;
-  }[];
+  expenses: PaymentExpense[];
   displayedColumns: string[] = ['memberFullName', 'amount'];
-  dataSource: MatTableDataSource<{
-    member: FamilyMember;
-    amount: number;
-    currency: string;
-  }>;
+  dataSource: MatTableDataSource<PaymentExpense>;
 
   private paginator: MatPaginator;
   private sort: MatSort;
 
-  constructor(private userFullNamePipe: UserFullNamePipe) {}
+  constructor(
+    private userFullNamePipe: UserFullNamePipe,
+    private paymentsCalculationsService: PaymentsCalculationsService
+  ) {}
 
   ngOnInit() {}
 
@@ -59,23 +56,10 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (!this.payments) {
-      return;
-    }
-    const aggregatedPayments = this.aggregatePayments();
-    this.calculatedPayments = Object.keys(aggregatedPayments)
-      .map((memberId: string) => ({
-        amount: aggregatedPayments[memberId].amount,
-        currency: aggregatedPayments[memberId].currency,
-        member: aggregatedPayments[memberId].member
-      }))
-      .reduce((acc, val) => acc.concat(val), []);
-
-    this.dataSource = new MatTableDataSource<{
-      member: FamilyMember;
-      amount: number;
-      currency: string;
-    }>(this.calculatedPayments);
+    this.expenses = this.paymentsCalculationsService.getTotalExpensesPerMember(
+      this.payments
+    );
+    this.dataSource = new MatTableDataSource<PaymentExpense>(this.expenses);
     this.setDataSourceAttributes();
     if (this.sort) {
       this.sortData(this.sort);
@@ -116,47 +100,5 @@ export class PaymentsCalculatedPerMemberComponent implements OnInit, OnChanges {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  private aggregatePayments(): {
-    [memberId: string]: {
-      amount: number;
-      currency: string;
-      member: FamilyMember;
-    };
-  } {
-    return (this.payments || []).reduce(
-      (
-        res: {
-          [memberId: string]: {
-            member: FamilyMember;
-            amount: number;
-            currency: string;
-          };
-        },
-        payment: FamilyPaymentView
-      ) => {
-        if (!res[payment.member._id]) {
-          return {
-            ...res,
-            // tslint:disable-next-line: max-line-length
-            [payment.member._id]: {
-              member: payment.member,
-              amount: payment.amount,
-              currency: payment.currency
-            }
-          };
-        }
-        return {
-          ...res,
-          [payment.member._id]: {
-            member: payment.member,
-            amount: res[payment.member._id].amount + payment.amount,
-            currency: payment.currency
-          }
-        };
-      },
-      {}
-    );
   }
 }

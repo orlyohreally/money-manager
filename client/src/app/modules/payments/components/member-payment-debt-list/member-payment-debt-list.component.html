@@ -20,12 +20,12 @@
         </div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="user">
-      <th mat-sort-header="user" mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="member">
+      <th mat-sort-header="member" mat-header-cell *matHeaderCellDef>
         Member
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.user | sharedUserFullName }}
+        {{ element.member | sharedUserFullName }}
       </td>
     </ng-container>
 

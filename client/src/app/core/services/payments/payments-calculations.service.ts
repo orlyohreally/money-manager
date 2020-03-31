@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FamilyMember, Payment, User } from '@shared/types';
-import { compare } from '@src/app/modules/shared/functions';
-import {
-  OverpaidDebtPayment,
-  PaymentDebt
-} from '@src/app/modules/shared/types';
-import { PaymentView } from '@src/app/modules/shared/types/payment-view';
-import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { combineLatest, from, Observable, of } from 'rxjs';
+
+import { compare } from '@shared-client/functions';
+import { OverpaidDebtPayment, PaymentExpense } from '@shared-client/types';
+import { PaymentView } from '@shared-client/types/payment-view';
+import { FamilyMember, Payment, User } from '@shared/types';
+import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { concatMap, map, mergeMap, toArray } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -135,32 +133,20 @@ export class PaymentsCalculationsService {
     );
   }
 
-  getPaymentTransactions(familyId: string): Observable<OverpaidDebtPayment[]> {
-    return combineLatest([
-      this.membersService.getMembers(familyId),
-      this.paymentsService.getPayments(familyId),
-      this.familiesService.getFamilyCurrency(familyId)
-    ]).pipe(
-      map(
-        ([members, payments, currency]: [
-          FamilyMember[],
-          Payment[],
-          string
-        ]) => {
-          if (!payments.length) {
-            return [];
-          }
-          const calc = payments
-            .map(payment =>
-              this.calcForDifferentPercentages(
-                { ...payment, currency },
-                members
-              )
-            )
-            .reduce((acc, val) => acc.concat(val), []);
-          return calc;
+  getPaymentTransactions(
+    familyId: string,
+    paymentsList: FamilyPaymentView[]
+  ): Observable<OverpaidDebtPayment[]> {
+    return this.membersService.getMembers(familyId).pipe(
+      map((members: FamilyMember[]) => {
+        if (!paymentsList.length) {
+          return [];
         }
-      ),
+        const calc = paymentsList
+          .map(payment => this.calcForDifferentPercentages(payment, members))
+          .reduce((acc, val) => acc.concat(val), []);
+        return calc;
+      }),
       map(payments => {
         return payments.sort((a, b) => {
           const compareByCreatedAt = compare(a.paidAt, b.paidAt, true);
@@ -173,8 +159,11 @@ export class PaymentsCalculationsService {
     );
   }
 
-  getOverpayAndDebtsList(familyId: string): Observable<PaymentDebt[]> {
-    return this.getPaymentTransactions(familyId).pipe(
+  getOverpayAndDebtsList(
+    familyId: string,
+    paymentsList: FamilyPaymentView[]
+  ): Observable<PaymentExpense[]> {
+    return this.getPaymentTransactions(familyId, paymentsList).pipe(
       map(payments => {
         if (!payments.length) {
           return {};
@@ -185,7 +174,7 @@ export class PaymentsCalculationsService {
               ...res,
               [payment.user._id]: {
                 ...res[payment.user._id],
-                user: payment.user,
+                member: payment.user,
                 amount:
                   res[payment.user._id].amount +
                   payment.overpaid -
@@ -200,7 +189,7 @@ export class PaymentsCalculationsService {
             ...res,
             [payment.user._id]: {
               ...res[payment.user._id],
-              user: payment.user,
+              member: payment.user,
               currency: payment.currency,
               amount: payment.overpaid - payment.debt
             }
@@ -210,39 +199,83 @@ export class PaymentsCalculationsService {
       map(debts => {
         return Object.keys(debts)
           .map((userId: string) => ({
-            user: debts[userId].user,
+            member: debts[userId].member,
             currency: debts[userId].currency,
             amount: debts[userId].amount
           }))
           .reduce((acc, val) => acc.concat(val), []);
       }),
-      map(payments => {
+      map((payments: PaymentExpense[]) => {
         return payments.sort((a, b) => compare(a.amount, b.amount, false));
       })
     );
   }
 
+  getTotalExpensesPerMember(
+    paymentsList: FamilyPaymentView[]
+  ): PaymentExpense[] {
+    const calculatedExpenses: {
+      [memberId: string]: PaymentExpense;
+    } = (paymentsList || []).reduce(
+      (
+        res: {
+          [memberId: string]: PaymentExpense;
+        },
+        payment: FamilyPaymentView
+      ) => {
+        if (!res[payment.member._id]) {
+          return {
+            ...res,
+            [payment.member._id]: {
+              member: payment.member,
+              amount: payment.amount,
+              currency: payment.currency
+            }
+          };
+        }
+        return {
+          ...res,
+          [payment.member._id]: {
+            member: payment.member,
+            amount: res[payment.member._id].amount + payment.amount,
+            currency: payment.currency
+          }
+        };
+      },
+      {}
+    );
+
+    return Object.keys(calculatedExpenses)
+      .map((memberId: string) => ({
+        amount: calculatedExpenses[memberId].amount,
+        currency: calculatedExpenses[memberId].currency,
+        member: calculatedExpenses[memberId].member
+      }))
+      .reduce((acc, val) => acc.concat(val), []);
+  }
+
   private calcForDifferentPercentages(
-    payment: Payment & { currency: string },
+    payment: FamilyPaymentView,
     members: FamilyMember[]
   ): OverpaidDebtPayment[] {
     return payment.paymentPercentages
       .map(percentage => {
-        const user = members.filter(member => member._id === payment.userId)[0];
         const percentageUser = members.filter(
           member => member._id === percentage.userId
         )[0];
         const debt =
-          user._id === percentageUser._id
+          payment.member._id === percentageUser._id
             ? 0
             : (payment.amount * percentage.paymentPercentage) / 100;
         const overpaid =
-          user._id === percentageUser._id
+          payment.member._id === percentageUser._id
             ? (payment.amount * (100 - percentage.paymentPercentage)) / 100
             : 0;
         return {
           user: percentageUser,
-          ...(user._id !== percentageUser._id && { toUser: user }),
+          ...(payment.member._id !== percentageUser._id && {
+            toUser: payment.member
+          }),
           debt,
           overpaid,
           currency: payment.currency,

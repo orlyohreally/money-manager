@@ -98,12 +98,16 @@ export class MemberPaymentOverpayAndDebtListComponent
         }
         case 'toUser': {
           const comparisonByLastName = compare(
-            a.toUser.lastName,
-            b.toUser.lastName,
+            a.toUser ? a.toUser.lastName : '',
+            b.toUser ? b.toUser.lastName : '',
             isAsc
           );
           return !comparisonByLastName
-            ? compare(a.toUser.firstName, b.toUser.firstName, isAsc)
+            ? compare(
+                a.toUser ? a.toUser.firstName : '',
+                b.toUser ? b.toUser.firstName : '',
+                isAsc
+              )
             : comparisonByLastName;
         }
         case 'debt':

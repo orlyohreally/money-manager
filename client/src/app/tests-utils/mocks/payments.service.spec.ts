@@ -1,7 +1,10 @@
+import { cold, initTestScheduler } from 'jasmine-marbles';
+
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
-import { MemberPaymentPercentage, Payment } from '@shared/types';
-import { cold, initTestScheduler } from 'jasmine-marbles';
+import { FamilyMember, MemberPaymentPercentage, Payment } from '@shared/types';
+import { FamilyPaymentView } from '@src/app/types';
+import { PaymentSubjectsServiceMock } from '.';
 
 const paymentPercentageMock: MemberPaymentPercentage[] = [
   {
@@ -54,6 +57,41 @@ const paymentsListMock: Payment[] = [
   }
 ];
 
+const familyPaymentsListMock: FamilyPaymentView[] = [
+  {
+    _id: 'paymentId-1',
+    amount: 10,
+    receipt: 'receipt-1.png',
+    subject: PaymentSubjectsServiceMock().paymentSubjectsList[0],
+    paidAt: new Date('2020-01-02').toString(),
+    member: {
+      _id: 'userId-1',
+      firstName: 'firstName-1',
+      lastName: 'lastName-1'
+    } as FamilyMember,
+    currency: 'USD',
+    paymentPercentages: paymentPercentageMock,
+    createdAt: new Date('2020-10-01').toString(),
+    updatedAt: new Date('2020-10-02').toString()
+  },
+  {
+    _id: 'paymentId-2',
+    amount: 20,
+    receipt: 'receipt-2.png',
+    subject: PaymentSubjectsServiceMock().paymentSubjectsList[1],
+    paidAt: new Date('2020-01-04').toString(),
+    member: {
+      _id: 'userId-2',
+      firstName: 'firstName-1',
+      lastName: 'lastName-2'
+    } as FamilyMember,
+    paymentPercentages: paymentPercentageMock,
+    createdAt: new Date('2020-10-02').toString(),
+    updatedAt: new Date('2020-10-02').toString(),
+    currency: 'USD'
+  }
+];
+
 const userPaymentsListMock: Payment[] = [
   {
     _id: 'paymentId-1',
@@ -85,6 +123,7 @@ export interface IPaymentServiceMock {
   payment: Payment;
   payments: Payment[];
   userPayments: Payment[];
+  familyPayments: FamilyPaymentView[];
   paymentPercentage: MemberPaymentPercentage[];
 }
 
@@ -111,5 +150,6 @@ export const PaymentServiceMock: () => IPaymentServiceMock = () => ({
   payments: paymentsListMock,
   payment: paymentMock,
   userPayments: userPaymentsListMock,
+  familyPayments: familyPaymentsListMock,
   paymentPercentage: paymentPercentageMock
 });

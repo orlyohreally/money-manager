@@ -55,9 +55,9 @@
           formControlName="subjectId"
         >
           <mat-option *ngFor="let subject of subjects" [value]="subject._id">
-            <payment-payment-subject
+            <shared-payment-subject
               [paymentSubject]="subject"
-            ></payment-payment-subject>
+            ></shared-payment-subject>
           </mat-option>
         </mat-select>
       </mat-form-field>

@@ -10,7 +10,7 @@ import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
 })
 export class PaymentFormComponent extends FormComponent<Payment>
   implements OnInit {
-  @Input() payment: Payment;
+  @Input() payment: Payment & { currency: string };
   @Input() adminView: boolean;
   @Input() subjects: PaymentSubject[];
   @Input() defaultPayer: User;

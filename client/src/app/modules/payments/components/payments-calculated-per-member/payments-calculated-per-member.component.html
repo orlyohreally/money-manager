@@ -1,6 +1,6 @@
 <div class="mat-h3">Calculated expenses per family member</div>
-<div *ngIf="calculatedPayments; else loading">
-  <div *ngIf="calculatedPayments.length">
+<div *ngIf="expenses; else loading">
+  <div *ngIf="expenses.length">
     <div sharedScrollableContent>
       <table
         mat-table
@@ -36,7 +36,7 @@
       </table>
     </div>
     <mat-paginator
-      *ngIf="calculatedPayments.length > 10"
+      *ngIf="expenses.length > 10"
       [pageSize]="10"
       [pageSizeOptions]="[10, 25, 100]"
     ></mat-paginator>

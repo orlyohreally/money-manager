@@ -36,9 +36,9 @@ import { PaymentFormComponent } from './components/payment-form/payment-form.com
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectFormComponent } from './components/payment-subject-form/payment-subject-form.component';
 // tslint:disable-next-line: max-line-length
-import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
-// tslint:disable-next-line: max-line-length
 import { PaymentsCalculatedPerMemberComponent } from './components/payments-calculated-per-member/payments-calculated-per-member.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentsFiltersComponent } from './components/payments-filters/payments-filters.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsListComponent } from './components/user-payment-list/user-payment-list.component';
@@ -56,7 +56,6 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PayerComponent,
     PaymentFormComponent,
     PaymentListComponent,
-    PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
     PaymentsComponent,
@@ -68,7 +67,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     UserPaymentsCalculatedPerMemberComponent,
     MemberPaymentOverpayAndDebtComponent,
     MemberPaymentOverpayAndDebtListComponent,
-    MemberPaymentDebtListComponent
+    MemberPaymentDebtListComponent,
+    PaymentsFiltersComponent
   ],
   imports: [
     CommonModule,
@@ -97,7 +97,6 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PayerComponent,
     PaymentFormComponent,
     PaymentListComponent,
-    PaymentSubjectComponent,
     PaymentSubjectFormComponent,
     MoneyAmountComponent,
     UserPaymentsComponent

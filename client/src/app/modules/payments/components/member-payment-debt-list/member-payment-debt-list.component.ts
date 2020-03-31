@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatSort, MatTableDataSource, Sort } from '@angular/material';
 import { compare } from '@src/app/modules/shared/functions';
-import { PaymentDebt } from '@src/app/modules/shared/types';
+import { PaymentExpense } from '@src/app/modules/shared/types';
 
 @Component({
   selector: 'payment-member-debt-list',
@@ -17,12 +17,12 @@ import { PaymentDebt } from '@src/app/modules/shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MemberPaymentDebtListComponent implements OnInit, OnChanges {
-  @Input() debts: PaymentDebt[];
+  @Input() debts: PaymentExpense[];
 
-  displayedColumns = ['user', 'amount'];
+  displayedColumns = ['member', 'amount'];
 
   constructor() {}
-  dataSource: MatTableDataSource<PaymentDebt>;
+  dataSource: MatTableDataSource<PaymentExpense>;
 
   private sort: MatSort;
 
@@ -34,7 +34,7 @@ export class MemberPaymentDebtListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.dataSource = new MatTableDataSource<PaymentDebt>(this.debts);
+    this.dataSource = new MatTableDataSource<PaymentExpense>(this.debts);
     this.setDataSourceAttributes();
     if (this.sort) {
       this.sortData(this.sort);
@@ -59,14 +59,14 @@ export class MemberPaymentDebtListComponent implements OnInit, OnChanges {
       switch (sort.active) {
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
-        case 'user': {
+        case 'member': {
           const comparisonByLastName = compare(
-            a.user.lastName,
-            b.user.lastName,
+            a.member.lastName,
+            b.member.lastName,
             isAsc
           );
           return !comparisonByLastName
-            ? compare(a.user.firstName, b.user.firstName, isAsc)
+            ? compare(a.member.firstName, b.member.firstName, isAsc)
             : comparisonByLastName;
         }
         default:

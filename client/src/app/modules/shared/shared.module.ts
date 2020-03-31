@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import {
   MatButtonModule,
+  MatDatepickerModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -31,6 +32,8 @@ import { ContentWithLoaderComponent } from './components/content-with-loader/con
 // tslint:disable-next-line: max-line-length
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
 // tslint:disable-next-line: max-line-length
+import { DateSelectorComponent } from './components/date-selector/date-selector.component';
+// tslint:disable-next-line: max-line-length
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { FormComponent } from './components/form/form.component';
 // tslint:disable-next-line: max-line-length
@@ -44,9 +47,14 @@ import { ImageWithPreviewComponent } from './components/image-with-preview/image
 import { ImageComponent } from './components/image/image.component';
 import { LoaderComponent } from './components/loader/loader.component';
 // tslint:disable-next-line: max-line-length
+import { MemberSelectorComponent } from './components/member-selector/member-selector.component';
+// tslint:disable-next-line: max-line-length
 import { MenuEntryComponent } from './components/menu/menu-entry/menu-entry.component';
 import { MenuComponent } from './components/menu/menu.component';
 // tslint:disable-next-line: max-line-length
+import { PaymentSubjectSelectorComponent } from './components/payment-subject-selector/payment-subject-selector.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
 // tslint:disable-next-line: max-line-length
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
 import { BadgeDirective } from './directives/badge.directive';
@@ -94,7 +102,11 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     ContentWithLoaderComponent,
     ColoredNumberDirective,
     UserFullNamePipe,
-    BypassSecurityTrustUrlPipe
+    BypassSecurityTrustUrlPipe,
+    MemberSelectorComponent,
+    PaymentSubjectSelectorComponent,
+    PaymentSubjectComponent,
+    DateSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -113,7 +125,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     MatIconModule,
     MatSelectModule,
     ImageCropperModule,
-    CheckListModule
+    CheckListModule,
+    MatDatepickerModule
   ],
   exports: [
     FilterPipe,
@@ -142,8 +155,12 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     ScrollableContentDirective,
     ContentWithLoaderComponent,
     ColoredNumberDirective,
+    MemberSelectorComponent,
     UserFullNamePipe,
-    BypassSecurityTrustUrlPipe
+    BypassSecurityTrustUrlPipe,
+    PaymentSubjectSelectorComponent,
+    PaymentSubjectComponent,
+    DateSelectorComponent
   ],
   providers: [CurrencySymbolPipe, UserFullNamePipe],
   entryComponents: [

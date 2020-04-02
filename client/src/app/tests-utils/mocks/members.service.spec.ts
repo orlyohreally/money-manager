@@ -1,5 +1,5 @@
 import { MembersService } from '@core-client/services/members/members.service';
-import { FamilyMember } from '@shared/types';
+import { FamilyMember, Roles } from '@shared/types';
 import { cold, initTestScheduler } from 'jasmine-marbles';
 
 const mockedFamilyMember: FamilyMember = {
@@ -42,22 +42,48 @@ const mockedFamilyMembersList: FamilyMember[] = [
   }
 ];
 
+const roles = [
+  {
+    name: Roles.Member,
+    description: 'Member role',
+    default: false
+  },
+  {
+    name: Roles.Admin,
+    description: 'Admin role',
+    default: false
+  }
+];
+
 function getMembersServiceSpy() {
   initTestScheduler();
 
   // tslint:disable-next-line: max-line-length
-  const familiesServiceSpy: jasmine.SpyObj<MembersService> = jasmine.createSpyObj(
+  const membersServiceSpy: jasmine.SpyObj<MembersService> = jasmine.createSpyObj(
     'MembersService',
-    ['getFamilyMemberById', 'getMembers']
+    [
+      'getFamilyMemberById',
+      'getMembers',
+      'getRoles',
+      'userIsFamilyAdmin',
+      'familyMemberCanManageFamilyPayments'
+    ]
   );
-  familiesServiceSpy.getFamilyMemberById.and.returnValue(
+  membersServiceSpy.getFamilyMemberById.and.returnValue(
     cold('--a', { a: mockedFamilyMember })
   );
 
-  familiesServiceSpy.getMembers.and.returnValue(
+  membersServiceSpy.getMembers.and.returnValue(
     cold('3ms a', { a: mockedFamilyMembersList })
   );
-  return familiesServiceSpy;
+
+  membersServiceSpy.userIsFamilyAdmin.and.returnValue(cold('-a', { a: true }));
+
+  membersServiceSpy.getRoles.and.returnValue(cold('-a', { a: roles }));
+
+  membersServiceSpy.familyMemberCanManageFamilyPayments.and.returnValue(true);
+
+  return membersServiceSpy;
 }
 export interface IMembersServiceMock {
   service: jasmine.SpyObj<MembersService>;

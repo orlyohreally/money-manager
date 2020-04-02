@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MemberFamily } from '@shared-client/types';
-import { Family, FamilyView } from '@shared/types';
+import { Family } from '@shared/types';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { DataService } from '../data.service';
@@ -61,7 +61,7 @@ export class FamiliesService extends DataService {
     return this.familyStore.asObservable();
   }
 
-  setCurrentFamily(familyId: string) {
+  setCurrentFamily(familyId: string): void {
     const selectedFamily = this.familyStore
       .getValue()
       .families.filter((family: MemberFamily) => family._id === familyId)[0];
@@ -149,10 +149,6 @@ export class FamiliesService extends DataService {
         return throwError(error);
       })
     );
-  }
-
-  getFamily(familyId: string): Observable<FamilyView> {
-    return this.get<FamilyView>(`${this.familyAPIRouter}${familyId}`);
   }
 
   getFamilyIcon(family: Family) {

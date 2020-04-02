@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -23,8 +22,6 @@ import { UserPaymentView } from '@src/app/types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserPaymentsListComponent implements OnInit, OnChanges {
-  @HostBinding('style.width') width = '100%';
-
   @Input() payments: UserPaymentView[];
 
   dataSource: MatTableDataSource<UserPaymentView>;

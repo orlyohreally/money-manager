@@ -7,11 +7,12 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
-import { MemberFamily } from '../../shared/types';
+import { MemberFamily } from '@shared-client/types';
 
 @Component({
   selector: 'family-new-family-form',

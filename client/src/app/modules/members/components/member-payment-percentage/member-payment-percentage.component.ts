@@ -7,12 +7,12 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./member-payment-percentage.component.scss']
 })
 export class MemberPaymentPercentageComponent implements OnInit {
+  // TODO: should change fullName to member
   @Input() adultMember: {
     fullName: string;
     memberId: { familyId: string; userId: string };
-    paymentPercentage: number;
+    paymentPercentage: number; // TODO: why this value?
   };
-
   @Input() adultMemberPercentageForm: FormGroup;
 
   constructor() {}

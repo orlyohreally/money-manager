@@ -20,6 +20,5 @@ export class UserMenuComponent implements OnChanges {
   ngOnChanges(): void {
     const userIcon = this.userManagerService.getUserIcon(this.user);
     this.backgroundImg = `url('${userIcon}')`;
-    this.fullName = this.userManagerService.getFullName(this.user);
   }
 }

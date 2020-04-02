@@ -11,9 +11,9 @@ import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import {
   AuthenticationServiceMock,
   IAuthenticationServiceMock,
-  IPaymentServiceMock,
+  IPaymentsServiceMock,
   IPaymentSubjectsServiceMock,
-  PaymentServiceMock,
+  PaymentsServiceMock,
   PaymentSubjectsServiceMock
 } from '@tests-utils/mocks';
 import {
@@ -36,7 +36,7 @@ import { PaymentSubjectsService } from '../payment-subject/payment-subjects.serv
 import { PaymentsCalculationsService } from './payments-calculations.service';
 import { PaymentsService } from './payments.service';
 
-fdescribe('PaymentsCalculationsService', () => {
+describe('PaymentsCalculationsService', () => {
   let service: PaymentsCalculationsService;
   let paymentSubjectsServiceSpy: jasmine.SpyObj<PaymentSubjectsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
@@ -44,7 +44,7 @@ fdescribe('PaymentsCalculationsService', () => {
   let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
   let familiesServiceMock: IFamiliesServiceMock;
   let membersServiceMock: IMembersServiceMock;
-  let paymentsServiceMock: IPaymentServiceMock;
+  let paymentsServiceMock: IPaymentsServiceMock;
   let paymentSubjectsServiceMock: IPaymentSubjectsServiceMock;
   let paymentsServiceSpy: jasmine.SpyObj<PaymentsService>;
   let authenticationServiceMock: IAuthenticationServiceMock;
@@ -56,7 +56,7 @@ fdescribe('PaymentsCalculationsService', () => {
     familiesServiceSpy = familiesServiceMock.service;
     membersServiceMock = MembersServiceMock();
     membersServiceSpy = membersServiceMock.service;
-    paymentsServiceMock = PaymentServiceMock();
+    paymentsServiceMock = PaymentsServiceMock();
     paymentsServiceSpy = paymentsServiceMock.service;
     authenticationServiceMock = AuthenticationServiceMock();
     authenticationServiceSpy = authenticationServiceMock.service;

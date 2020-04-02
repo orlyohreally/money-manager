@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { RegistrationBannerComponent } from './registration-banner.component';
 
 describe('RegistrationBannerComponent', () => {
@@ -7,7 +9,8 @@ describe('RegistrationBannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RegistrationBannerComponent]
+      declarations: [RegistrationBannerComponent],
+      imports: [RouterTestingModule]
     }).compileComponents();
   }));
 

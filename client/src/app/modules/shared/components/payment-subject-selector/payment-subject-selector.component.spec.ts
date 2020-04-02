@@ -1,5 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule, MatSelectModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
 
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectComponent } from '../payment-subject/payment-subject.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectSelectorComponent } from './payment-subject-selector.component';
 
@@ -9,7 +15,16 @@ describe('PaymentSubjectSelectorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PaymentSubjectSelectorComponent]
+      declarations: [
+        PaymentSubjectSelectorComponent,
+        MockComponent(PaymentSubjectComponent)
+      ],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        NoopAnimationsModule
+      ]
     }).compileComponents();
   }));
 

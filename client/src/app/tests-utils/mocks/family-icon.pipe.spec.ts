@@ -8,6 +8,6 @@ export class FamilyIconPipeMock implements PipeTransform {
   constructor() {}
 
   transform(family: Family): string {
-    return `icon for ${family.name} family`;
+    return `icon for ${family ? family.name : 'undefined'} family`;
   }
 }

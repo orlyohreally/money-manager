@@ -42,8 +42,6 @@ export class CurrencySelectorComponent implements OnInit, OnDestroy {
     this.currencyList = this.currencyService.getCurrencies();
     this.currencyControl = new FormControl(this.defaultCurrency);
 
-    // this.filteredCurrencies.next([...this.currencyList]);
-
     this.filteredCurrencies = this.searchKeyWord.valueChanges.pipe(
       startWith(this.searchKeyWord.value),
       takeUntil(this.destroyed),

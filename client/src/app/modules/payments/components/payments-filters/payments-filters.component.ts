@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FamilyMember, PaymentSubject } from '@shared/types';
+
 import {
   PaymentFilter,
   PaymentFilters
-} from '@src/app/modules/shared/types/payment-filters';
+} from '@shared-client/types/payment-filters';
+import { FamilyMember, PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'payment-payments-filters',

@@ -30,7 +30,6 @@ import { MemberPaymentOverpayAndDebtComponent } from './components/member-paymen
 import { MoneyAmountComponent } from './components/money-amount/money-amount.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentFormComponent } from './components/new-payment-form/new-payment-form.component';
-import { PayerComponent } from './components/payer/payer.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './components/payment-form/payment-form.component';
 // tslint:disable-next-line: max-line-length
@@ -53,7 +52,6 @@ import { PaymentRoutingModule } from './payment-routing.module';
 
 @NgModule({
   declarations: [
-    PayerComponent,
     PaymentFormComponent,
     PaymentListComponent,
     PaymentSubjectFormComponent,
@@ -94,7 +92,6 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PaymentRoutingModule
   ],
   exports: [
-    PayerComponent,
     PaymentFormComponent,
     PaymentListComponent,
     PaymentSubjectFormComponent,

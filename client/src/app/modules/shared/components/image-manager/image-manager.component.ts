@@ -8,7 +8,7 @@ export interface ImageManagerData {
 }
 
 @Component({
-  selector: 'app-image-loader',
+  selector: 'shared-image-loader',
   templateUrl: './image-manager.component.html',
   styleUrls: ['./image-manager.component.scss']
 })

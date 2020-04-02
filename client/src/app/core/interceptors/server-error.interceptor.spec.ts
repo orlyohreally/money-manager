@@ -9,7 +9,9 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { ServerErrorInterceptor } from './server-error.interceptor';
@@ -18,6 +20,7 @@ describe('ServerErrorInterceptor', () => {
   let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
   let http: HttpClient;
   let httpTestingController: HttpTestingController;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   const mockedError = {
     status: 400,
@@ -49,6 +52,7 @@ describe('ServerErrorInterceptor', () => {
       mockedRequest
     );
     authenticationServiceSpy.requestRefreshToken.and.returnValue(of(undefined));
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -58,7 +62,8 @@ describe('ServerErrorInterceptor', () => {
           useClass: ServerErrorInterceptor,
           multi: true
         },
-        { provide: AuthenticationService, useValue: authenticationServiceSpy }
+        { provide: AuthenticationService, useValue: authenticationServiceSpy },
+        { provide: Router, useValue: routerSpy }
       ]
     });
     http = TestBed.get(HttpClient);

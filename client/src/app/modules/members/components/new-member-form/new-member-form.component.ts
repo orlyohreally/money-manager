@@ -8,6 +8,9 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+
 import {
   Member,
   MembersService
@@ -19,8 +22,6 @@ import { emailValidatorFn } from '@shared-client/directives/email-validator/emai
 import { FamilyMember } from '@shared/types';
 import { MemberFamily } from '@src/app/modules/shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
-import { Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'member-new-member-form',

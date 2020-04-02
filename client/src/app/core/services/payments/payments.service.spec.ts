@@ -9,9 +9,9 @@ import {
   AuthenticationServiceMock,
   getGlobalVariablesServiceSpy,
   IAuthenticationServiceMock,
-  IPaymentServiceMock,
+  IPaymentsServiceMock,
   IPaymentSubjectsServiceMock,
-  PaymentServiceMock,
+  PaymentsServiceMock,
   PaymentSubjectsServiceMock
 } from '@src/app/tests-utils/mocks';
 import {
@@ -44,7 +44,7 @@ describe('PaymentsService', () => {
   let httpTestingController: HttpTestingController;
   let familiesServiceMock: IFamiliesServiceMock;
   let membersServiceMock: IMembersServiceMock;
-  let paymentsServiceMock: IPaymentServiceMock;
+  let paymentsServiceMock: IPaymentsServiceMock;
   let paymentSubjectsServiceMock: IPaymentSubjectsServiceMock;
   let authenticationServiceMock: IAuthenticationServiceMock;
 
@@ -61,7 +61,7 @@ describe('PaymentsService', () => {
     membersServiceSpy = membersServiceMock.service;
     authenticationServiceMock = AuthenticationServiceMock();
     authenticationServiceSpy = authenticationServiceMock.service;
-    paymentsServiceMock = PaymentServiceMock();
+    paymentsServiceMock = PaymentsServiceMock();
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],

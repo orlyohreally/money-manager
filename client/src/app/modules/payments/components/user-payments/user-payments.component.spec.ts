@@ -1,18 +1,43 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PaymentsComponent } from '../payments/payments.component';
+import { MockComponent } from 'ng-mocks';
 
-describe('PaymentsComponent', () => {
-  let component: PaymentsComponent;
-  let fixture: ComponentFixture<PaymentsComponent>;
+// tslint:disable-next-line: max-line-length
+import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
+import { PaymentsCalculationsServiceMock } from '@src/app/tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsListComponent } from '../user-payment-list/user-payment-list.component';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsCalculatedPerMemberComponent } from '../user-payments-calculated-per-member/user-payments-calculated-per-member.component';
+import { UserPaymentsComponent } from './user-payments.component';
+
+describe('UserPaymentsComponent', () => {
+  let component: UserPaymentsComponent;
+  let fixture: ComponentFixture<UserPaymentsComponent>;
+  // tslint:disable-next-line: max-line-length
+  let paymentsCalculationsServiceSpy: jasmine.SpyObj<PaymentsCalculationsService>;
+
+  const paymentsCalculationsServiceMock = PaymentsCalculationsServiceMock();
 
   beforeEach(async(() => {
+    paymentsCalculationsServiceSpy = paymentsCalculationsServiceMock.service;
+
     TestBed.configureTestingModule({
-      declarations: [PaymentsComponent]
+      declarations: [
+        UserPaymentsComponent,
+        MockComponent(UserPaymentsListComponent),
+        MockComponent(UserPaymentsCalculatedPerMemberComponent)
+      ],
+      providers: [
+        {
+          provide: PaymentsCalculationsService,
+          useValue: paymentsCalculationsServiceSpy
+        }
+      ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaymentsComponent);
+    fixture = TestBed.createComponent(UserPaymentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

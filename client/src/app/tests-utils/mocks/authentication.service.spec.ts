@@ -19,9 +19,12 @@ function getAuthenticationServiceSpy() {
   // tslint:disable-next-line: max-line-length
   const authenticationServiceSpy: jasmine.SpyObj<AuthenticationService> = jasmine.createSpyObj(
     'AuthenticationService',
-    ['getUser']
+    ['getUser', 'isAuthenticated']
   );
   authenticationServiceSpy.getUser.and.returnValue(cold('--a', { a: user }));
+  authenticationServiceSpy.isAuthenticated.and.returnValue(
+    cold('--a', { a: true })
+  );
 
   return authenticationServiceSpy;
 }

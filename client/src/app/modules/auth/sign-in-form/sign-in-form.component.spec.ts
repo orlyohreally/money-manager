@@ -1,7 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HttpErrorResponse } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -16,14 +15,16 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AppRoutingModule } from '@src/app/app-routing.module';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MockComponent, MockDirective, MockHelper } from 'ng-mocks';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
-import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
-import { AppRoutingModule } from '@src/app/app-routing.module';
-import { cold, getTestScheduler } from 'jasmine-marbles';
-import { MockDirective } from 'ng-mocks';
+import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
 import { SignInFormComponent } from './sign-in-form.component';
 
 describe('SignInFormComponent', () => {
@@ -46,7 +47,8 @@ describe('SignInFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SignInFormComponent,
-        MockDirective(NotificationBlockDirective)
+        MockDirective(NotificationBlockDirective),
+        MockComponent(ContentWithLoaderComponent)
       ],
       providers: [{ provide: AuthenticationService, useValue: authServiceSpy }],
       imports: [
@@ -253,7 +255,11 @@ describe('SignInFormComponent', () => {
         By.directive(NotificationBlockDirective)
       );
       expect(errorEl.nativeElement.textContent.trim()).toBe('error message');
-      expect(errorEl.componentInstance.type).toBe('error');
+      const messageDirective = MockHelper.getDirective(
+        fixture.debugElement.query(By.directive(NotificationBlockDirective)),
+        NotificationBlockDirective
+      );
+      expect(messageDirective.sharedNotificationBlock).toBe('error');
     }
   );
 

@@ -1,12 +1,22 @@
 import { TestBed } from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material';
 
 import { NotificationsService } from './notifications.service';
 
 describe('NotificationsService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let service: NotificationsService;
+  let matSnackBarSpy: jasmine.SpyObj<MatSnackBar>;
+
+  beforeEach(() => {
+    matSnackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+    TestBed.configureTestingModule({
+      providers: [{ provide: MatSnackBar, useValue: matSnackBarSpy }]
+    });
+
+    service = TestBed.get(NotificationsService);
+  });
 
   it('should be created', () => {
-    const service: NotificationsService = TestBed.get(NotificationsService);
     expect(service).toBeTruthy();
   });
 });

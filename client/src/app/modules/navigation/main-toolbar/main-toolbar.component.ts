@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
 import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { User } from '@shared/types';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'nav-main-toolbar',

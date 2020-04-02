@@ -1,19 +1,34 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-// tslint:disable-next-line: max-line-length
-import { PaymentsCalculatedPerMemberComponent } from '../payments-calculated-per-member/payments-calculated-per-member.component';
+import {
+  MatPaginatorModule,
+  MatSortModule,
+  MatTableModule
+} from '@angular/material';
+import { MockComponent } from 'ng-mocks';
 
-describe('PaymentsCalculatedPerMemberComponent', () => {
-  let component: PaymentsCalculatedPerMemberComponent;
-  let fixture: ComponentFixture<PaymentsCalculatedPerMemberComponent>;
+// tslint:disable-next-line: max-line-length
+import { LoaderComponent } from '@shared-client/components/loader/loader.component';
+import { PrefixedNumberPipeMock } from '@tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsCalculatedPerMemberComponent } from './user-payments-calculated-per-member.component';
+
+describe('UserPaymentsCalculatedPerMemberComponent', () => {
+  let component: UserPaymentsCalculatedPerMemberComponent;
+  let fixture: ComponentFixture<UserPaymentsCalculatedPerMemberComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PaymentsCalculatedPerMemberComponent]
+      declarations: [
+        UserPaymentsCalculatedPerMemberComponent,
+        PrefixedNumberPipeMock,
+        MockComponent(LoaderComponent)
+      ],
+      imports: [MatTableModule, MatSortModule, MatPaginatorModule]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaymentsCalculatedPerMemberComponent);
+    fixture = TestBed.createComponent(UserPaymentsCalculatedPerMemberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

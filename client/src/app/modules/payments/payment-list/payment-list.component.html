@@ -1,5 +1,5 @@
-<div *ngIf="payments; else loading">
-  <div *ngIf="payments.length; else noData">
+<div *ngIf="dataSource?.data; else loading">
+  <div *ngIf="dataSource?.data?.length; else noData">
     <div sharedScrollableContent>
       <table
         mat-table

@@ -26,7 +26,7 @@
                 [src]="payer | familyMemberIcon"
               />
               <div class="select-option__title">
-                {{ payer.firstName }} {{ payer.lastName }}
+                {{ payer | sharedUserFullName }}
               </div>
             </div>
           </mat-option>

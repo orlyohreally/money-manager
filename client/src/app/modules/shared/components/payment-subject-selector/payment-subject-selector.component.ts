@@ -8,9 +8,10 @@ import {
   Output
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { PaymentSubject } from '@shared/types';
 import { EMPTY, Subject, timer } from 'rxjs';
 import { debounce, startWith, takeUntil } from 'rxjs/operators';
+
+import { PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'shared-payment-subject-selector',

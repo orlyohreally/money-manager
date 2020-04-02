@@ -1,8 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HttpErrorResponse } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -11,33 +10,34 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MockComponent, MockHelper } from 'ng-mocks';
+
 import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 // tslint:disable-next-line: max-line-length
-import { CheckboxComponent } from '@shared-client/check-list/components/checkbox/checkbox.component';
-// tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+import { SharedModule } from '@shared-client/shared.module';
+import { expectTextContentToBe } from '@tests-utils/functions';
+import { FamiliesServiceMock, getNotificationsSpy } from '@tests-utils/mocks';
+import { MemberRolesComponent } from '../member-roles/member-roles.component';
 // tslint:disable-next-line: max-line-length
-import { SharedModule } from '@src/app/modules/shared/shared.module';
-import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
-import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MembersPaymentPercentageComponent } from '../members-payment-percentage/members-payment-percentage.component';
 import { NewFamilyMemberFormComponent } from './new-member-form.component';
-// tslint:disable-next-line: max-line-length
 
-describe('MemberFormComponent', () => {
+describe('NewFamilyMemberFormComponent', () => {
   let component: NewFamilyMemberFormComponent;
   let fixture: ComponentFixture<NewFamilyMemberFormComponent>;
   let dialogRefSpy: jasmine.SpyObj<MatDialogRef<NewFamilyMemberFormComponent>>;
   let notificationsServiceSpy: jasmine.SpyObj<NotificationsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
 
+  const familiesServiceMock = FamiliesServiceMock();
+
   beforeEach(async(() => {
     dialogRefSpy = jasmine.createSpyObj('MetDialogRef', ['close']);
-
-    notificationsServiceSpy = jasmine.createSpyObj('NotificationsService', [
-      'showNotification'
-    ]);
+    notificationsServiceSpy = getNotificationsSpy();
     membersServiceSpy = jasmine.createSpyObj('MembersService', [
       'addFamilyMember',
       'getRoles'
@@ -55,9 +55,12 @@ describe('MemberFormComponent', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [NewFamilyMemberFormComponent],
+      declarations: [
+        NewFamilyMemberFormComponent,
+        MockComponent(MemberRolesComponent),
+        MockComponent(MembersPaymentPercentageComponent)
+      ],
       imports: [
-        FormsModule,
         ReactiveFormsModule,
         SharedModule,
         MatInputModule,
@@ -67,7 +70,7 @@ describe('MemberFormComponent', () => {
       providers: [
         {
           provide: MAT_DIALOG_DATA,
-          useValue: { familyId: 'familyId', member: {} }
+          useValue: { family: familiesServiceMock.family, member: {} }
         },
         { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: MembersService, useValue: membersServiceSpy },
@@ -110,7 +113,7 @@ describe('MemberFormComponent', () => {
       submitButton.click();
       expect(membersServiceSpy.addFamilyMember).toHaveBeenCalledTimes(1);
       expect(membersServiceSpy.addFamilyMember).toHaveBeenCalledWith(
-        'familyId',
+        familiesServiceMock.family._id,
         {
           email: 'email@gmail.com',
           roles: ['Admin', 'Member']
@@ -164,10 +167,11 @@ describe('MemberFormComponent', () => {
         By.directive(NotificationBlockDirective)
       );
       expectTextContentToBe(errorMessage.nativeElement, 'error message');
-      expect(
-        (errorMessage.componentInstance as NotificationBlockDirective)
-          .sharedNotificationBlock
-      ).toBe('error');
+      const messageDirective = MockHelper.getDirective(
+        fixture.debugElement.query(By.directive(NotificationBlockDirective)),
+        NotificationBlockDirective
+      );
+      expect(messageDirective.sharedNotificationBlock).toBe('error');
     }
   );
 
@@ -178,12 +182,19 @@ describe('MemberFormComponent', () => {
   }
 
   async function selectRoles() {
-    const roles: CheckboxComponent[] = fixture.debugElement
-      .queryAll(By.directive(CheckboxComponent))
-      .map((checkListItem: DebugElement) => checkListItem.componentInstance);
-    roles[0].changedValue.emit(true);
-    roles[1].changedValue.emit(true);
+    const memberRoles: MemberRolesComponent = fixture.debugElement.query(
+      By.directive(MemberRolesComponent)
+    ).componentInstance;
+    memberRoles.initialized.emit();
+    memberRoles.rolesUpdated.emit(['Admin', 'Member']);
     fixture.detectChanges();
     await fixture.whenStable();
+    // const roles: CheckboxComponent[] = fixture.debugElement
+    //   .queryAll(By.directive(CheckboxComponent))
+    //   .map((checkListItem: DebugElement) => checkListItem.componentInstance);
+    // roles[0].changedValue.emit(true);
+    // roles[1].changedValue.emit(true);
+    // fixture.detectChanges();
+    // await fixture.whenStable();
   }
 });

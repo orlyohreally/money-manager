@@ -1,5 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatMenuModule } from '@angular/material';
+import { MockDirective } from 'ng-mocks';
 
+// tslint:disable-next-line: max-line-length
+import { AddMemberDirective } from '../../members/directives/add-member/add-member.directive';
+// tslint:disable-next-line: max-line-length
+import { DeleteFamilyDirective } from '../directives/delete-family/delete-family.directive';
+// tslint:disable-next-line: max-line-length
+import { EditFamilyDialogTriggerDirective } from '../directives/edit-family-dialog-trigger/edit-family-dialog-trigger.directive';
 import { FamilyActionsComponent } from './family-actions.component';
 
 describe('FamilyActionsComponent', () => {
@@ -8,9 +16,14 @@ describe('FamilyActionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FamilyActionsComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        FamilyActionsComponent,
+        MockDirective(AddMemberDirective),
+        MockDirective(EditFamilyDialogTriggerDirective),
+        MockDirective(DeleteFamilyDirective)
+      ],
+      imports: [MatMenuModule, MatIconModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

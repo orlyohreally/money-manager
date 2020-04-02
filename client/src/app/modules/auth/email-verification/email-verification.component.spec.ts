@@ -1,17 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+import { expectTextContentToBe } from '@tests-utils/functions';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MockHelper } from 'ng-mocks';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
-// tslint:disable-next-line: max-line-length
 import { SharedModule } from '@shared-client/shared.module';
-import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
-import { cold, getTestScheduler } from 'jasmine-marbles';
 import { EmailVerificationComponent } from './email-verification.component';
 
 describe('EmailVerificationComponent', () => {
@@ -100,17 +100,21 @@ describe('EmailVerificationComponent', () => {
 
       it(
         'should display error message' +
-          'if authService.verifyEmail call returns error',
+          ' if authService.verifyEmail call returns error',
         () => {
           getTestScheduler().flush();
           fixture.detectChanges();
-          const errorEl: DebugElement = fixture.debugElement.query(
+          const errorEl: HTMLElement = fixture.debugElement.query(
             By.directive(NotificationBlockDirective)
+          ).nativeElement;
+          expectTextContentToBe(errorEl, 'Error message');
+          const messageDirective = MockHelper.getDirective(
+            fixture.debugElement.query(
+              By.directive(NotificationBlockDirective)
+            ),
+            NotificationBlockDirective
           );
-          const errorElComponent: NotificationBlockDirective =
-            errorEl.componentInstance;
-          expect(errorElComponent.sharedNotificationBlock).toBe('error');
-          expectTextContentToBe(errorEl.nativeElement, 'Error message');
+          expect(messageDirective.sharedNotificationBlock).toBe('error');
         }
       );
     });

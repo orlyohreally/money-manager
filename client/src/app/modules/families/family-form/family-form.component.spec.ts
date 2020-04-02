@@ -1,5 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material';
+import { MockComponent } from 'ng-mocks';
 
+// tslint:disable-next-line: max-line-length
+import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
+// tslint:disable-next-line: max-line-length
+import { CurrencySelectorComponent } from '@shared-client/components/currency-selector/currency-selector.component';
+// tslint:disable-next-line: max-line-length
+import { ImageWithPreviewComponent } from '@shared-client/components/image-with-preview/image-with-preview.component';
 import { FamilyFormComponent } from './family-form.component';
 
 describe('FamilyFormComponent', () => {
@@ -8,9 +17,14 @@ describe('FamilyFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FamilyFormComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        FamilyFormComponent,
+        MockComponent(ImageWithPreviewComponent),
+        MockComponent(CurrencySelectorComponent),
+        MockComponent(ContentWithLoaderComponent)
+      ],
+      imports: [ReactiveFormsModule, MatFormFieldModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

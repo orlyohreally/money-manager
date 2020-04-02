@@ -2,8 +2,14 @@ import { cold, initTestScheduler } from 'jasmine-marbles';
 
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
-import { FamilyMember, MemberPaymentPercentage, Payment } from '@shared/types';
-import { FamilyPaymentView } from '@src/app/types';
+import { MemberFamily } from '@shared-client/types';
+import {
+  FamilyMember,
+  MemberPaymentPercentage,
+  Payment,
+  PaymentSubject
+} from '@shared/types';
+import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { PaymentSubjectsServiceMock } from '.';
 
 const paymentPercentageMock: MemberPaymentPercentage[] = [
@@ -118,14 +124,31 @@ const userPaymentsListMock: Payment[] = [
     updatedAt: new Date('2020-10-02')
   }
 ];
-export interface IPaymentServiceMock {
-  service: jasmine.SpyObj<PaymentsService>;
-  payment: Payment;
-  payments: Payment[];
-  userPayments: Payment[];
-  familyPayments: FamilyPaymentView[];
-  paymentPercentage: MemberPaymentPercentage[];
-}
+
+const userAggregatedPaymentsListMock: UserPaymentView[] = [
+  {
+    _id: 'paymentId-1',
+    amount: 10,
+    receipt: 'receipt-1.png',
+    paidAt: new Date('2020-01-02').toString(),
+    subject: { _id: 'subjectId-1' } as PaymentSubject,
+    family: { _id: 'familyId-1', roles: ['Admin', 'Member'] } as MemberFamily,
+    currency: 'USD',
+    createdAt: new Date('2020-10-01').toString(),
+    updatedAt: new Date('2020-10-02').toString()
+  },
+  {
+    _id: 'paymentId-2',
+    amount: 20,
+    receipt: 'receipt-2.png',
+    subject: { _id: 'subjectId-2' } as PaymentSubject,
+    paidAt: new Date('2020-01-04').toString(),
+    family: { _id: 'familyId-2', roles: ['Member'] } as MemberFamily,
+    currency: 'USD',
+    createdAt: new Date('2020-10-02').toString(),
+    updatedAt: new Date('2020-10-02').toString()
+  }
+];
 
 function getPaymentsServiceSpy() {
   initTestScheduler();
@@ -145,11 +168,22 @@ function getPaymentsServiceSpy() {
   return paymentsServiceSpy;
 }
 
-export const PaymentServiceMock: () => IPaymentServiceMock = () => ({
+export interface IPaymentsServiceMock {
+  service: jasmine.SpyObj<PaymentsService>;
+  payment: Payment;
+  payments: Payment[];
+  userPayments: Payment[];
+  userAggregatedPayments: UserPaymentView[];
+  familyPayments: FamilyPaymentView[];
+  paymentPercentage: MemberPaymentPercentage[];
+}
+
+export const PaymentsServiceMock: () => IPaymentsServiceMock = () => ({
   service: getPaymentsServiceSpy(),
   payments: paymentsListMock,
   payment: paymentMock,
   userPayments: userPaymentsListMock,
+  userAggregatedPayments: userAggregatedPaymentsListMock,
   familyPayments: familyPaymentsListMock,
   paymentPercentage: paymentPercentageMock
 });

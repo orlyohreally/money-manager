@@ -43,7 +43,7 @@ export class FamilyComponent implements OnInit, OnDestroy {
   }
 
   private getFamily(familyId: string): Observable<FamilyView> {
-    return this.familiesService.getFamily(familyId).pipe(
+    return this.familiesService.getFamilyById(familyId).pipe(
       map(family => {
         return { ...family, _id: familyId };
       }),

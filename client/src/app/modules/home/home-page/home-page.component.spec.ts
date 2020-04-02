@@ -1,5 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent, MockDirective } from 'ng-mocks';
 
+// tslint:disable-next-line: max-line-length
+import { NewFamilyDialogTriggerDirective } from '../../families/directives/new-family-dialog-trigger/new-family-dialog-trigger.directive';
+// tslint:disable-next-line: max-line-length
+import { RegistrationBannerComponent } from '../registration-banner/registration-banner.component';
 import { HomePageComponent } from './home-page.component';
 
 describe('HomePageComponent', () => {
@@ -8,9 +13,12 @@ describe('HomePageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomePageComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        HomePageComponent,
+        MockComponent(RegistrationBannerComponent),
+        MockDirective(NewFamilyDialogTriggerDirective)
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

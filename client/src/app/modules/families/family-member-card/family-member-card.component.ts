@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+
+import { FamilyMember } from '@shared/types';
 import { MemberRole } from '@src/app/types';
 
 @Component({
@@ -8,12 +10,7 @@ import { MemberRole } from '@src/app/types';
   host: { class: 'card' }
 })
 export class FamilyMemberCardComponent implements OnInit {
-  @Input() member: {
-    fullName: string;
-    roles: string[];
-    icon: string;
-    email: string;
-  };
+  @Input() member: FamilyMember;
   @Input() roles: { [roleName: string]: MemberRole };
 
   constructor() {}

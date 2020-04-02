@@ -1,14 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Observable } from 'rxjs';
 
 // tslint:disable-next-line: max-line-length
 import { ImageAssetService } from '@core-client/services/image-asset/image-asset.service';
-
-import { Family, ImageAsset, PaymentSubject } from '@shared/types';
-
 import { HtmlElementRepresentation } from '@shared-client/types/html-element';
-import { Observable } from 'rxjs';
+import { Family, ImageAsset, PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'payment-payment-subject-form',
@@ -21,9 +19,11 @@ export class PaymentSubjectFormComponent implements OnInit {
     private imageAssetService: ImageAssetService,
     @Inject(MAT_DIALOG_DATA) public data: PaymentSubject
   ) {}
+
   subjectForm: FormGroup;
   families: Observable<Family[]>;
   subjectIcons: HtmlElementRepresentation[];
+
   ngOnInit() {
     this.getFamilies();
     this.getIcons();

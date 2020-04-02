@@ -1,6 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
@@ -13,8 +16,6 @@ import { PaymentSubjectsService } from '@core-client/services/payment-subject/pa
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-payment-form',

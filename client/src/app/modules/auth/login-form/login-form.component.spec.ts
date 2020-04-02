@@ -16,15 +16,18 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AppRoutingModule } from '@src/app/app-routing.module';
+import { cold, getTestScheduler } from 'jasmine-marbles';
+import { MockComponent } from 'ng-mocks';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { User } from '@shared/types';
-import { AppRoutingModule } from '@src/app/app-routing.module';
-import { cold, getTestScheduler } from 'jasmine-marbles';
-import { MockComponent } from 'ng-mocks';
 import { LoginFormComponent } from './login-form.component';
 
 describe('LoginFormComponent', () => {
@@ -45,7 +48,8 @@ describe('LoginFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         LoginFormComponent,
-        MockComponent(NotificationBlockDirective)
+        MockComponent(NotificationBlockDirective),
+        MockComponent(ContentWithLoaderComponent)
       ],
       providers: [
         { provide: AuthenticationService, useValue: authServiceSpy },

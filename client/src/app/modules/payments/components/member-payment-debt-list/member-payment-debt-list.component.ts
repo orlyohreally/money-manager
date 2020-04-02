@@ -7,6 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort, MatTableDataSource, Sort } from '@angular/material';
+
 import { compare } from '@src/app/modules/shared/functions';
 import { PaymentExpense } from '@src/app/modules/shared/types';
 

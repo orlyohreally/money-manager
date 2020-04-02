@@ -1,11 +1,4 @@
-import {
-  Component,
-  HostBinding,
-  Input,
-  OnChanges,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import {
   MatPaginator,
   MatSort,
@@ -21,8 +14,6 @@ import { compare } from '../../shared/functions';
   styleUrls: ['./payment-list.component.scss']
 })
 export class PaymentListComponent implements OnInit, OnChanges {
-  @HostBinding('style.width') width = '100%';
-
   @Input() payments: FamilyPaymentView[];
   @Input() currency: string;
 
@@ -52,7 +43,9 @@ export class PaymentListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.dataSource = new MatTableDataSource<FamilyPaymentView>(this.payments);
+    this.dataSource = new MatTableDataSource<FamilyPaymentView>(
+      this.payments || []
+    );
     this.setDataSourceAttributes();
     if (this.sort) {
       this.sortData(this.sort);
@@ -60,6 +53,9 @@ export class PaymentListComponent implements OnInit, OnChanges {
   }
 
   sortData(sort: Sort) {
+    if (!this.dataSource.data) {
+      return;
+    }
     const data = [...this.dataSource.data];
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;

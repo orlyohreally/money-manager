@@ -1,16 +1,37 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef
+} from '@angular/material';
 
+import { ConfirmationDialogData } from '../../types/confirmation-dialog-data';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmationDialogComponent;
   let fixture: ComponentFixture<ConfirmationDialogComponent>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<ConfirmationDialogComponent>>;
 
   beforeEach(async(() => {
+    dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+
     TestBed.configureTestingModule({
-      declarations: [ ConfirmationDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ConfirmationDialogComponent],
+      imports: [MatDialogModule],
+      providers: [
+        { provide: MatDialogRef, useValue: dialogRefSpy },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            title: 'message title',
+            message: 'message text',
+            cancelLabel: 'cancel',
+            okayLabel: 'Okay'
+          } as ConfirmationDialogData
+        }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -17,7 +17,10 @@ import { catchError, map, takeUntil } from 'rxjs/operators';
 })
 export class FamilyComponent implements OnInit, OnDestroy {
   family: Observable<FamilyView>;
-
+  memberCountMapping: { [k: string]: string } = {
+    '=1': '1 member',
+    other: '# members'
+  };
   private familyId: string;
   private destroyed = new Subject<void>();
 

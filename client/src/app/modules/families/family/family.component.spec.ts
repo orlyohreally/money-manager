@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
@@ -32,7 +33,7 @@ describe('FamilyComponent', () => {
         MockComponent(FamilyActionsComponent),
         MockComponent(AvatarComponent)
       ],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, MatIconModule],
       providers: [
         {
           provide: FamiliesService,

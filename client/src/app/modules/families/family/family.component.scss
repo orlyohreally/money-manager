@@ -39,9 +39,21 @@ $avatar-size: 100px;
   line-height: normal;
 }
 
-.family-info__members-count {
+.family-info__stats {
   font-size: 14px;
   font-weight: 100;
+  margin: 5px 0;
+}
+
+.family-info__stats .mat-icon {
+  margin-right: 5px;
+  height: 18px;
+  width: 18px;
+  font-size: 18px;
+}
+
+.family-info__user-role {
+  margin-right: 5px;
 }
 
 @media (min-width: 960px) {

@@ -12,5 +12,6 @@ export * from './payments-calculations.service.spec';
 export * from './payments.service.spec';
 export * from './prefixed-number.pipe.spec';
 export * from './router.spec';
+export * from './sort-by.pipe.spec';
 export * from './user-full-name.pipe.spec';
 export * from './user-manager.service.spec';

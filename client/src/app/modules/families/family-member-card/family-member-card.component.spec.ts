@@ -6,6 +6,10 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+  FamilyMemberIconPipeMock,
+  SortByPipeMock
+} from '@src/app/tests-utils/mocks';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
@@ -40,7 +44,9 @@ describe('FamilyMemberCardComponent', () => {
         FamilyMemberCardComponent,
         ParentComponent,
         MockComponent(AvatarComponent),
-        UserFullNamePipeMock
+        UserFullNamePipeMock,
+        FamilyMemberIconPipeMock,
+        SortByPipeMock
       ],
       imports: [
         MatIconModule,

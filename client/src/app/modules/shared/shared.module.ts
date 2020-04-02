@@ -71,6 +71,7 @@ import { CurrencySymbolPipe } from './pipes/currency-symbol.pipe';
 import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
+import { SortByPipe } from './pipes/sort-by.pipe';
 import { UserFullNamePipe } from './pipes/user-full-name.pipe';
 
 @NgModule({
@@ -107,7 +108,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     MemberSelectorComponent,
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
-    DateSelectorComponent
+    DateSelectorComponent,
+    SortByPipe
   ],
   imports: [
     CommonModule,
@@ -162,7 +164,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     BypassSecurityTrustUrlPipe,
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
-    DateSelectorComponent
+    DateSelectorComponent,
+    SortByPipe
   ],
   providers: [CurrencySymbolPipe, UserFullNamePipe],
   entryComponents: [

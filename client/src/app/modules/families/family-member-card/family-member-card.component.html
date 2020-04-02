@@ -36,7 +36,7 @@
       mat-raised-button
       color="primary"
       class="role"
-      *ngFor="let role of member.roles"
+      *ngFor="let role of member.roles | sharedSortBy"
       [matTooltip]="this.roles ? this.roles[role]?.description : null"
     >
       {{ role }}

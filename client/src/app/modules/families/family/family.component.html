@@ -9,9 +9,28 @@
         <div class="family-info__name text text_ellipsis">
           {{ familyInfo.name }} family
         </div>
-        <div class="family-info__members-count">
-          {{ familyInfo.membersCount }}
-          {{ familyInfo.membersCount === 1 ? 'member' : 'members' }}
+        <div
+          class="family-info__stats"
+          fxLayout="row"
+          fxLayoutAlign="start start"
+        >
+          <mat-icon>people_alt</mat-icon>
+          <div>
+            {{ familyInfo.membersCount | i18nPlural: memberCountMapping }}
+          </div>
+        </div>
+        <div
+          class="family-info__stats"
+          fxLayout="row wrap"
+          fxLayoutAlign="start start"
+        >
+          <mat-icon matTooltip="Your roles in this family">bookmark</mat-icon>
+          <div
+            class="family-info__user-role"
+            *ngFor="let userRole of familyInfo.userRoles | sharedSortBy"
+          >
+            {{ userRole }}
+          </div>
         </div>
       </div>
       <family-actions [familyInfo]="familyInfo"></family-actions>

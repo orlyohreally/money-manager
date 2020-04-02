@@ -203,6 +203,14 @@ export class FamiliesDao implements IFamiliesDao {
         },
         { $unwind: "$family" },
         {
+          $lookup: {
+            from: "familymembermodels",
+            localField: "family._id",
+            foreignField: "_id.familyId",
+            as: "members"
+          }
+        },
+        {
           $project: {
             _id: "$family._id",
             userId: "$_id.userId",
@@ -212,7 +220,8 @@ export class FamiliesDao implements IFamiliesDao {
             icon: "$family.icon",
             currency: "$family.currency",
             equalPayments: "$family.equalPayments",
-            userRoles: "$roles"
+            userRoles: "$roles",
+            membersCount: { $size: "$members" }
           }
         }
       ]

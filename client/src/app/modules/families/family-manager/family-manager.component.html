@@ -38,9 +38,9 @@
         <a
           mat-button
           class="mat-button_stretched nav-block__link"
-          routerLinkActive="nav-block__link_active"
+          sharedDynamicActiveRouterLink="nav-block__link_active"
           routerLink="/families/{{ family._id }}/payments"
-          [routerLinkActiveOptions]="{ exact: true }"
+          [linkInstructions]="['/families/', family._id, 'payments']"
         >
           <div class="menu-item">
             <mat-icon class="menu-item__icon">payment</mat-icon>

@@ -6,11 +6,12 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-
 import { FormControl } from '@angular/forms';
-import { FamilyMember } from '@shared/types';
+import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Subject, timer } from 'rxjs';
 import { debounce, startWith, takeUntil } from 'rxjs/operators';
+
+import { FamilyMember } from '@shared/types';
 
 @Component({
   selector: 'shared-member-selector',
@@ -30,7 +31,7 @@ export class MemberSelectorComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject<void>();
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.selectedMember = new FormControl(this.defaultMemberId);
@@ -45,6 +46,13 @@ export class MemberSelectorComponent implements OnInit, OnDestroy {
           this.memberSelected.emit(this.selectedMember.value);
         }
       });
+
+    this.route.queryParamMap.subscribe(params => {
+      const member = params.get('memberId');
+      if (member) {
+        this.selectedMember.setValue(member);
+      }
+    });
   }
 
   ngOnDestroy(): void {

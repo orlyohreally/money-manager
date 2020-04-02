@@ -47,7 +47,8 @@
       mat-icon-button
       class="card__link"
       color="primary"
-      routerLink="payments"
+      routerLink="../payments/"
+      [queryParams]="{ memberId: member._id }"
       matTooltip="Go to payments"
     >
       <mat-icon>receipt</mat-icon>
@@ -56,6 +57,8 @@
       mat-icon-button
       class="card__link"
       color="primary"
+      routerLink="../reports/"
+      [queryParams]="{ memberId: member._id }"
       matTooltip="Go to reports"
     >
       <mat-icon>assignment</mat-icon>

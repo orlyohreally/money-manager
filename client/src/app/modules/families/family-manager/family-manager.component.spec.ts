@@ -11,6 +11,8 @@ import { AccordionComponent } from '@shared-client/components/accordion/accordio
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 import { BadgeDirective } from '@shared-client/directives/badge.directive';
 import { FamiliesServiceMock } from '@tests-utils/mocks/families.service.spec';
+// tslint:disable-next-line: max-line-length
+import { DynamicActiveRouterLinkDirective } from '../../shared/directives/dynamic-active-router-link/dynamic-active-router-link.directive';
 import { FamilyManagerComponent } from './family-manager.component';
 
 describe('FamilyManagerComponent', () => {
@@ -25,7 +27,8 @@ describe('FamilyManagerComponent', () => {
         FamilyManagerComponent,
         MockComponent(AccordionComponent),
         MockDirective(BadgeDirective),
-        MockComponent(LoaderComponent)
+        MockComponent(LoaderComponent),
+        MockDirective(DynamicActiveRouterLinkDirective)
       ],
       imports: [MatListModule, MatIconModule, RouterTestingModule],
       providers: [

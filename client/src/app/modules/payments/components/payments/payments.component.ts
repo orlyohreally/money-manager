@@ -20,7 +20,6 @@ import { FamilyPaymentView } from '@src/app/types';
   styleUrls: ['./payments.component.scss']
 })
 export class PaymentsComponent implements OnInit {
-  payments: Observable<FamilyPaymentView[]>;
   filteredPayments: Observable<FamilyPaymentView[]>;
   subjects: Observable<PaymentSubject[]>;
   currency: Observable<string>;
@@ -35,8 +34,10 @@ export class PaymentsComponent implements OnInit {
   ];
   familyId: Observable<string>;
   familyMembers: Observable<FamilyMember[]>;
-  filters: PaymentFilters;
   filteringPayments: boolean;
+
+  private filters: PaymentFilters;
+  private payments: Observable<FamilyPaymentView[]>;
 
   constructor(
     private route: ActivatedRoute,

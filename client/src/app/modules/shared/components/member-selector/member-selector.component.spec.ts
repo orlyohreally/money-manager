@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { of } from 'rxjs';
 
 import { FamilyMember } from '@shared/types';
 // tslint:disable-next-line: max-line-length
@@ -79,6 +81,12 @@ describe('MemberSelectorComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { queryParamMap: of(convertToParamMap({})) }
+        }
       ]
     }).compileComponents();
   }));

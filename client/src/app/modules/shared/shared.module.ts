@@ -62,6 +62,8 @@ import { BadgeDirective } from './directives/badge.directive';
 // tslint:disable-next-line: max-line-length
 import { ColoredNumberDirective } from './directives/colored-number/colored-number.directive';
 // tslint:disable-next-line: max-line-length
+import { DynamicActiveRouterLinkDirective } from './directives/dynamic-active-router-link/dynamic-active-router-link.directive';
+// tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from './directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { ScrollableContentDirective } from './directives/scrollable-content.directive';
@@ -109,7 +111,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
     DateSelectorComponent,
-    SortByPipe
+    SortByPipe,
+    DynamicActiveRouterLinkDirective
   ],
   imports: [
     CommonModule,
@@ -165,7 +168,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
     DateSelectorComponent,
-    SortByPipe
+    SortByPipe,
+    DynamicActiveRouterLinkDirective
   ],
   providers: [CurrencySymbolPipe, UserFullNamePipe],
   entryComponents: [

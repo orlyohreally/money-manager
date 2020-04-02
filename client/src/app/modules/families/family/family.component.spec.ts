@@ -9,6 +9,7 @@ import { of } from 'rxjs';
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
 import { AvatarComponent } from '@shared-client/components/avatar/avatar.component';
+import { SortByPipeMock } from '@src/app/tests-utils/mocks';
 import { FamiliesServiceMock } from '@tests-utils/mocks/families.service.spec';
 // tslint:disable-next-line: max-line-length
 import { FamilyIconPipeMock } from '@tests-utils/mocks/family-icon.pipe.spec';
@@ -30,6 +31,7 @@ describe('FamilyComponent', () => {
       declarations: [
         FamilyComponent,
         FamilyIconPipeMock,
+        SortByPipeMock,
         MockComponent(FamilyActionsComponent),
         MockComponent(AvatarComponent)
       ],

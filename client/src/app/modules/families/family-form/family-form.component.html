@@ -17,19 +17,22 @@
         </mat-error>
       </mat-form-field>
       <div
-        fxLayoutAlign="column"
-        fxLayoutAlign.gt-md="row"
-        fxLayoutGap="10px grid"
+        fxLayout.gt-sm="row"
+        fxLayout="column"
+        fxLayoutGap.gt-sm="10px grid"
+        class="family-form__currency"
       >
         <shared-currency-selector
-          fxFlex="60"
+          fxFlex="100"
+          fxFlex.gt-sm="60"
           [defaultCurrency]="familyForm.get('currency').value"
           (currencySelected)="onCurrencySelected($event)"
         ></shared-currency-selector>
         <mat-form-field
           appearance="outline"
           *ngIf="displayExchangeRate"
-          fxFlex="40"
+          fxFlex="100"
+          fxFlex.gt-sm="40"
         >
           <mat-label>Exchange rate</mat-label>
           <input

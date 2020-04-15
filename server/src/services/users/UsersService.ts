@@ -1,12 +1,16 @@
 import { ValidationResult } from "@hapi/joi";
-import { User, VerificationToken } from "@shared/types";
 import { NextFunction, Request, Response } from "express";
+
+import { User, VerificationToken } from "@shared/types";
+// tslint:disable-next-line: max-line-length
+import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
 
 export interface IUsersDao {
   createUser(user: User): Promise<User>;
-  validateUser(user: User): ValidationResult;
+  validateUser(user: User, validatePassword: boolean): ValidationResult;
   getUser(key: string, value: string): Promise<User>;
   registerUser(user: User): Promise<User>;
+  updateUser(userId: string, user: User): Promise<User>;
   authUser(user: User): Promise<User>;
   generateAuthToken(user: User): string;
   generateRefreshToken(user: User): string;
@@ -21,17 +25,28 @@ export interface IUsersDao {
 
 export class UsersService {
   private dao: IUsersDao;
+  private imageLoaderService: ImageManagerService;
 
-  constructor({ dao }: { dao: IUsersDao }) {
+  constructor({
+    dao,
+    imageLoaderService
+  }: {
+    dao: IUsersDao;
+    imageLoaderService: ImageManagerService;
+  }) {
     this.dao = dao;
+    this.imageLoaderService = imageLoaderService;
   }
 
   public async createUser(user: User): Promise<User> {
     return this.dao.createUser(user);
   }
 
-  public validateUser(user: User): ValidationResult {
-    return this.dao.validateUser(user);
+  public validateUser(
+    user: User,
+    validatePassword: boolean = true
+  ): ValidationResult {
+    return this.dao.validateUser(user, validatePassword);
   }
 
   public getUser(key: string, value: string): Promise<User> {
@@ -40,6 +55,28 @@ export class UsersService {
 
   public registerUser(user: User): Promise<User> {
     return this.dao.registerUser(user);
+  }
+
+  public async updateUser(userId: string, user: User): Promise<User> {
+    const registeredUser: User = await this.getUser("_id", userId);
+    let userIcon = user.icon;
+    if (user.icon && user.icon !== registeredUser.icon) {
+      this.imageLoaderService.validateImageForLoading(user.icon);
+
+      if (userIcon) {
+        userIcon = await this.imageLoaderService.loadImage(
+          user.icon,
+          `users/${userId}`
+        );
+      }
+    }
+
+    return this.dao.updateUser(userId, {
+      ...user,
+      firstName: user.firstName.trim(),
+      lastName: user.lastName.trim(),
+      icon: user.icon ? userIcon || registeredUser.icon : ""
+    });
   }
 
   public authUser(user: User): Promise<User> {

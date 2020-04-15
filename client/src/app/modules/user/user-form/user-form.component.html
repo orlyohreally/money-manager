@@ -1,0 +1,67 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <shared-image-with-preview
+    class="user-form__avatar-preview"
+    [imageUrl]="form.get('icon').value"
+    (selectedImage)="familyIconLoaded($event)"
+  ></shared-image-with-preview>
+  <div fxLayout.gt-xs="row" fxLayout="column" fxLayoutGap.gt-xs="10px grid">
+    <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-xs="50">
+      <mat-label>First name</mat-label>
+      <input type="text" required matInput formControlName="firstName" />
+      <mat-error *ngIf="firstName.hasError('required')">
+        Field is required
+      </mat-error>
+      <mat-error *ngIf="firstName.hasError('minlength')">
+        First name is too short
+      </mat-error>
+      <mat-error *ngIf="firstName.hasError('maxlength')">
+        First name is too long
+      </mat-error>
+      <mat-error *ngIf="firstName.hasError('pattern')">
+        First name must have only letters, spaces or dashes
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-xs="50">
+      <mat-label>Last name</mat-label>
+      <input type="text" required matInput formControlName="lastName" />
+      <mat-error *ngIf="lastName.hasError('required')">
+        Field is required
+      </mat-error>
+      <mat-error *ngIf="lastName.hasError('minlength')">
+        Last name is too short
+      </mat-error>
+      <mat-error *ngIf="lastName.hasError('maxlength')">
+        Last name is too long
+      </mat-error>
+      <mat-error *ngIf="lastName.hasError('pattern')">
+        Name must have only letters, spaces or dashes
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input type="email" matInput formControlName="email" />
+    <mat-error *ngIf="lastName.hasError('required')">
+      Field is required
+    </mat-error>
+    <mat-error *ngIf="lastName.hasError('email')">
+      Invalid email
+    </mat-error>
+  </mat-form-field>
+  <shared-currency-selector
+    [defaultCurrency]="form.get('currency').value"
+    selectorLabel="Payments currency"
+    (currencySelected)="onCurrencySelected($event)"
+    [required]="true"
+  ></shared-currency-selector>
+  <div sharedNotificationBlock="error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+  <div class="action-buttons">
+    <shared-content-with-loader [showLoader]="submittingForm">
+      <button mat-raised-button class="button" color="primary" type="submit">
+        Save
+      </button>
+    </shared-content-with-loader>
+  </div>
+</form>

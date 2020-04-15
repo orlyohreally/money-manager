@@ -14,5 +14,10 @@ export const paymentSubjectsService = new PaymentSubjectsService({
 });
 export const paymentSubjectsRouter = new PaymentSubjectsRouter({
   service: paymentSubjectsService,
-  usersService: new UsersService({ dao: new UsersDao() })
+  usersService: new UsersService({
+    dao: new UsersDao(),
+    imageLoaderService: new ImageManagerService({
+      dao: new ImageManagerDao()
+    })
+  })
 }).router;

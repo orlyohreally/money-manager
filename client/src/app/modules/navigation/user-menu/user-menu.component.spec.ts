@@ -3,12 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatMenuModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
-// tslint:disable-next-line: max-line-length
-import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 import { User } from '@shared/types';
 import {
   AuthenticationServiceMock,
-  UserManagerServiceMock
+  FamilyMemberIconPipeMock
 } from '@tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { UserFullNamePipeMock } from '@tests-utils/mocks/user-full-name.pipe.spec';
@@ -28,19 +26,16 @@ describe('UserMenuComponent', () => {
   let component: UserMenuComponent;
   let parentComponent: ParentComponent;
   let fixture: ComponentFixture<ParentComponent>;
-  let userManagerServiceSpy: jasmine.SpyObj<UserManagerService>;
-
-  const userManagerServiceMock = UserManagerServiceMock();
 
   beforeEach(async(() => {
-    userManagerServiceSpy = userManagerServiceMock.service;
-
     TestBed.configureTestingModule({
-      declarations: [UserMenuComponent, ParentComponent, UserFullNamePipeMock],
-      imports: [MatMenuModule, MatIconModule, RouterTestingModule],
-      providers: [
-        { provide: UserManagerService, useValue: userManagerServiceSpy }
-      ]
+      declarations: [
+        UserMenuComponent,
+        ParentComponent,
+        UserFullNamePipeMock,
+        FamilyMemberIconPipeMock
+      ],
+      imports: [MatMenuModule, MatIconModule, RouterTestingModule]
     }).compileComponents();
   }));
 

@@ -26,6 +26,7 @@
           fxFlex="100"
           fxFlex.gt-sm="60"
           [defaultCurrency]="familyForm.get('currency').value"
+          selectorLabel="Family currency"
           (currencySelected)="onCurrencySelected($event)"
         ></shared-currency-selector>
         <mat-form-field

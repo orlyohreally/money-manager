@@ -22,7 +22,12 @@ export const paymentsService = async (db: Connection) => {
 export const paymentsRouter = async (db: Connection) => {
   return new PaymentsRouter({
     service: await paymentsService(db),
-    usersService: new UsersService({ dao: new UsersDao() }),
+    usersService: new UsersService({
+      dao: new UsersDao(),
+      imageLoaderService: new ImageManagerService({
+        dao: new ImageManagerDao()
+      })
+    }),
     familiesService: new FamiliesService({
       dao: new FamiliesDao(),
       imageLoaderService: new ImageManagerService({

@@ -15,11 +15,16 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-// tslint:disable-next-line: max-line-length
-import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
-import { User } from '@shared/types';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
+// tslint:disable-next-line: max-line-length
+import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
+import { User } from '@shared/types';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -118,18 +123,10 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.signInForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
-        Validators.minLength(3)
+        userNameValidatorFn
       ]),
-      lastName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3)
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern(
-          '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)'
-        )
-      ]),
+      lastName: new FormControl('', [Validators.required, userNameValidatorFn]),
+      email: new FormControl('', [Validators.required, emailValidatorFn]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),

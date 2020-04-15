@@ -34,6 +34,7 @@ export class UsersRouter {
     );
     this.router.post("/users/login", asyncWrap(this.loginUser));
     this.router.post("/users/signin", asyncWrap(this.registerUser));
+    this.router.put("/users/update/:userId", asyncWrap(this.updateUser));
     this.router.post("/users/refresh-token", asyncWrap(this.refreshToken));
     this.router.post("/users/verify", asyncWrap(this.verifyUser));
     this.router.post(
@@ -53,14 +54,12 @@ export class UsersRouter {
         const token = this.service.generateAuthToken(registeredUser);
         const refreshToken = this.service.generateRefreshToken(registeredUser);
         await this.redisService.set(`refreshTokens.${token}`, refreshToken);
+        const { password, ...userSettings } = registeredUser;
         return res
           .header("Authorization", token)
           .status(200)
           .json({
-            _id: registeredUser._id,
-            firstName: registeredUser.firstName,
-            lastName: registeredUser.lastName,
-            email: registeredUser.email,
+            user: userSettings,
             refreshToken
           });
       } catch (er) {
@@ -101,6 +100,32 @@ export class UsersRouter {
       return res.status(200).json({
         email: user.email,
         verificationToken: verificationToken.token
+      });
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
+
+  private updateUser = async (req: Request, res: Response) => {
+    try {
+      const user = (req.body as { userSettings: User }).userSettings;
+      const userId = (req.params as { userId: string }).userId;
+
+      const { error } = this.service.validateUser(user, false);
+      if (error) {
+        return res.status(400).send(error.details[0].message);
+      }
+      const registeredUser = await this.service.getUser("_id", userId);
+      if (!registeredUser) {
+        return res.status(400).send("User is not registered.");
+      }
+      // "updateUser" method should not be used to update user's email
+      const updatedUser = await this.service.updateUser(userId, {
+        ...user,
+        email: registeredUser.email
+      });
+      return res.status(200).json({
+        user: updatedUser
       });
     } catch (err) {
       return res.status(400).json(err);

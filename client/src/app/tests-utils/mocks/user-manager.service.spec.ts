@@ -21,7 +21,7 @@ function getUserManagerSpy() {
   // tslint:disable-next-line: max-line-length
   const userManagerServiceSpy: jasmine.SpyObj<UserManagerService> = jasmine.createSpyObj(
     'UserManager',
-    ['loadUser', 'getFullName', 'getUserIcon']
+    ['loadUser', 'getFullName']
   );
   userManagerServiceSpy.loadUser.and.returnValue(
     cold('--a', { a: mockedUser })
@@ -29,10 +29,6 @@ function getUserManagerSpy() {
 
   userManagerServiceSpy.getFullName.and.returnValue(
     cold('3ms a', { a: `${mockedUser.lastName} ${mockedUser.firstName}` })
-  );
-
-  userManagerServiceSpy.getUserIcon.and.returnValue(
-    cold('-a', { a: mockedUser.icon })
   );
 
   return userManagerServiceSpy;

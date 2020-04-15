@@ -112,8 +112,12 @@ export class MembersService extends DataService {
     );
   }
 
-  getMemberIcon(user: FamilyMember): SafeResourceUrl {
-    return user.icon || this.defaultIcon;
+  getMemberIcon(
+    user: FamilyMember,
+    asImageBackground: boolean = false
+  ): SafeResourceUrl {
+    const icon = user.icon || this.defaultIcon;
+    return asImageBackground ? `url(${icon})` : icon;
   }
 
   updateMembersPaymentPercentages(

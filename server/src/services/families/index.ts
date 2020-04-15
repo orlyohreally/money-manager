@@ -26,7 +26,12 @@ export const familiesService = async (db: Connection) => {
 export const familiesRouter = async (db: Connection) => {
   return new FamiliesRouter({
     service: await familiesService(db),
-    usersService: new UsersService({ dao: new UsersDao() }),
+    usersService: new UsersService({
+      dao: new UsersDao(),
+      imageLoaderService: new ImageManagerService({
+        dao: new ImageManagerDao()
+      })
+    }),
     emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() }),
     paymentsService: new PaymentsService({
       dao: new PaymentsDao(),

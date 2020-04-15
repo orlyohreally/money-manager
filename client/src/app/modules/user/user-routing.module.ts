@@ -5,6 +5,7 @@ import { FamiliesComponent } from '../families/families.component';
 import { UserPaymentsComponent } from '../payments/components/user-payments/user-payments.component';
 // tslint:disable-next-line: max-line-length
 import { UserDashboardComponent } from '../user/user-dashboard/user-dashboard.component';
+import { ManagerComponent } from './manager/manager.component';
 import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
@@ -22,11 +23,15 @@ const routes: Routes = [
         component: FamiliesComponent,
         data: { title: 'My families' }
       },
-
       {
         path: 'payments',
         component: UserPaymentsComponent,
         data: { title: 'My payments' }
+      },
+      {
+        path: 'manage-account',
+        component: ManagerComponent,
+        data: { title: 'Manage account' }
       },
       {
         path: '**',

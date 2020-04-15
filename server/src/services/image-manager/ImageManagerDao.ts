@@ -1,5 +1,6 @@
 import * as cloudinary from "cloudinary";
 import * as dotenv from "dotenv";
+
 import { IImageLoaderDao } from "./ImageManagerService";
 
 export class ImageManagerDao implements IImageLoaderDao {
@@ -7,22 +8,16 @@ export class ImageManagerDao implements IImageLoaderDao {
     this.configCloudinary();
   }
 
-  public loadImage(image: string, path: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      cloudinary.v2.uploader.upload(
-        image,
-        { public_id: path, overwrite: true },
-        (error: Error, result: { secure_url: string; url: string }) => {
-          if (error) {
-            reject(error);
-          }
-          if (!result) {
-            reject("Something went wrong");
-          }
-          resolve(result.secure_url || result.url);
-        }
-      );
-    });
+  public async loadImage(image: string, path: string): Promise<string> {
+    return cloudinary.v2.uploader
+      .upload(image, { public_id: path, overwrite: true })
+      .then(result => {
+        return result.secure_url || result.url;
+      })
+      .catch(e => {
+        console.log("error", e);
+        return "";
+      });
   }
 
   public deleteImage(imageURL: string): Promise<void> {

@@ -52,6 +52,15 @@ a {
   margin-right: 8px !important;
 }
 
+mat-form-field .mat-form-field-underline {
+  position: relative;
+  bottom: auto;
+}
+
+mat-form-field .mat-form-field-subscript-wrapper {
+  position: static;
+}
+
 .page-content__header {
   display: flex;
   justify-content: space-between;

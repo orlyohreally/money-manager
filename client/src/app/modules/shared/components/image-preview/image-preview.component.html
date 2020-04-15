@@ -1,4 +1,4 @@
-<div class="image-preview">
+<div class="image-preview" *ngIf="imageUrl">
   <img
     [hidden]="!imageLoaded"
     (load)="onPreviewLoaded()"

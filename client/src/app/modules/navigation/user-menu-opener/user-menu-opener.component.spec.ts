@@ -1,9 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatIconModule,
-  MatMenuModule,
-  MatToolbarModule
-} from '@angular/material';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
@@ -11,42 +6,42 @@ import { AuthenticationService } from '@core-client/services/authentication/auth
 // tslint:disable-next-line: max-line-length
 import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
 // tslint:disable-next-line: max-line-length
+import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 import {
   AuthenticationServiceMock,
   UserManagerServiceMock
 } from '@tests-utils/mocks';
-// tslint:disable-next-line: max-line-length
-import { UserMenuOpenerComponent } from '../user-menu-opener/user-menu-opener.component';
-import { MainToolbarComponent } from './main-toolbar.component';
+import { UserMenuComponent } from '../user-menu/user-menu.component';
+import { UserMenuOpenerComponent } from './user-menu-opener.component';
 
-describe('MainToolbarComponent', () => {
-  let component: MainToolbarComponent;
-  let fixture: ComponentFixture<MainToolbarComponent>;
-  let authenticationServiceSpy: jasmine.SpyObj<AuthenticationService>;
+describe('UserMenuOpenerComponent', () => {
+  let component: UserMenuOpenerComponent;
+  let fixture: ComponentFixture<UserMenuOpenerComponent>;
   let userManagerServiceSpy: jasmine.SpyObj<UserManagerService>;
+  let authServiceSpy: jasmine.SpyObj<AuthenticationService>;
 
-  const authenticationServiceMock = AuthenticationServiceMock();
   const userManagerServiceMock = UserManagerServiceMock();
+  const authServiceMock = AuthenticationServiceMock();
 
   beforeEach(async(() => {
-    authenticationServiceSpy = authenticationServiceMock.service;
     userManagerServiceSpy = userManagerServiceMock.service;
+    authServiceSpy = authServiceMock.service;
 
     TestBed.configureTestingModule({
       declarations: [
-        MainToolbarComponent,
-        MockComponent(UserMenuOpenerComponent)
+        UserMenuOpenerComponent,
+        MockComponent(UserMenuComponent),
+        MockComponent(LoaderComponent)
       ],
-      imports: [MatIconModule, MatToolbarModule, MatMenuModule],
       providers: [
-        { provide: AuthenticationService, useValue: authenticationServiceSpy },
-        { provide: UserManagerService, useValue: userManagerServiceSpy }
+        { provide: UserManagerService, useValue: userManagerServiceSpy },
+        { provide: AuthenticationService, useValue: authServiceSpy }
       ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainToolbarComponent);
+    fixture = TestBed.createComponent(UserMenuOpenerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

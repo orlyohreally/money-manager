@@ -47,7 +47,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input required formControlName="email" type="email" matInput />
-        <mat-error *ngIf="signInForm.get('email').hasError('pattern')">
+        <mat-error *ngIf="signInForm.get('email').hasError('email')">
           Invalid email
         </mat-error>
         <mat-error *ngIf="signInForm.get('email').hasError('required')">

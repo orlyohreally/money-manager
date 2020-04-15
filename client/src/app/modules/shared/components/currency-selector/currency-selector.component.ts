@@ -23,6 +23,7 @@ import { CurrencySymbolPipe } from '../../pipes/currency-symbol.pipe';
 export class CurrencySelectorComponent implements OnInit, OnDestroy {
   @Input() defaultCurrency: string;
   @Input() required: boolean;
+  @Input() selectorLabel: string;
 
   @Output() currencySelected = new EventEmitter<string>();
 

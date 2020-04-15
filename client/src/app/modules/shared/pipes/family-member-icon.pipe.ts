@@ -9,7 +9,10 @@ import { FamilyMember } from '@shared/types';
 export class FamilyMemberIconPipe implements PipeTransform {
   constructor(private membersService: MembersService) {}
 
-  transform(member: FamilyMember): SafeResourceUrl {
-    return this.membersService.getMemberIcon(member);
+  transform(
+    member: FamilyMember,
+    asImageBackground: boolean = false
+  ): SafeResourceUrl {
+    return this.membersService.getMemberIcon(member, asImageBackground);
   }
 }

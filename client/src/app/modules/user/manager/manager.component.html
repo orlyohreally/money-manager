@@ -1,0 +1,15 @@
+<div>
+  <h1 mat-dialog-title>
+    Manage account
+  </h1>
+  <ng-container *ngIf="user | async as activeUser; else loading">
+    <user-form
+      [user]="activeUser"
+      (formSubmitted)="onFormSubmitted($event)"
+      [errorMessage]="errorMessage"
+    ></user-form>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <shared-loader></shared-loader>
+</ng-template>

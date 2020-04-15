@@ -26,6 +26,8 @@ import { SideNavToolbarComponent } from './side-nav-toolbar/side-nav-toolbar.com
 // tslint:disable-next-line: max-line-length
 import { SideNavUnauthenticatedUserComponent } from './side-nav-unauthenticated-user/side-nav-unauthenticated-user.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
+// tslint:disable-next-line: max-line-length
+import { UserMenuOpenerComponent } from './user-menu-opener/user-menu-opener.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
@@ -36,7 +38,8 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
     SideNavToolbarComponent,
     SideNavAuthenticatedUserComponent,
     SideNavUnauthenticatedUserComponent,
-    UserMenuComponent
+    UserMenuComponent,
+    UserMenuOpenerComponent
   ],
   imports: [
     CommonModule,

@@ -206,14 +206,13 @@ describe('AuthenticationService', () => {
   it('login should return Observable of response from api/users/login', () => {
     createService();
     const mockedResponse = {
-      firstName: 'firstNameMock',
-      lastName: 'lastNameMock'
-    } as User;
+      user: { ...mockedUser }
+    };
 
     service
       .login({ email: mockedUser.email, password: 'passwordMock' })
-      .subscribe((user: User) => {
-        expect(user).toBe(mockedResponse);
+      .subscribe(response => {
+        expect(response).toBe(mockedResponse.user);
       });
 
     const mockReq = httpTestingController.expectOne('apiURL/users/login');
@@ -226,10 +225,7 @@ describe('AuthenticationService', () => {
       ' after login response has Authorization header',
     () => {
       createService();
-      const mockedResponse = {
-        firstName: 'firstNameMock',
-        lastName: 'lastNameMock'
-      } as User;
+      const mockedResponse = { user: { ...mockedUser } };
       service
         .login({ email: mockedUser.email, password: 'passwordMock' })
         .subscribe(() => {

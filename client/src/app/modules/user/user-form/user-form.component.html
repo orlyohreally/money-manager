@@ -5,7 +5,12 @@
     (selectedImage)="familyIconLoaded($event)"
   ></shared-image-with-preview>
   <div fxLayout.gt-xs="row" fxLayout="column" fxLayoutGap.gt-xs="10px grid">
-    <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-xs="50">
+    <mat-form-field
+      class="multi-line-error"
+      appearance="outline"
+      fxFlex="100"
+      fxFlex.gt-xs="50"
+    >
       <mat-label>First name</mat-label>
       <input type="text" required matInput formControlName="firstName" />
       <mat-error *ngIf="firstName.hasError('required')">
@@ -21,7 +26,12 @@
         First name must have only letters, spaces or dashes
       </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-xs="50">
+    <mat-form-field
+      class="multi-line-error"
+      appearance="outline"
+      fxFlex="100"
+      fxFlex.gt-xs="50"
+    >
       <mat-label>Last name</mat-label>
       <input type="text" required matInput formControlName="lastName" />
       <mat-error *ngIf="lastName.hasError('required')">

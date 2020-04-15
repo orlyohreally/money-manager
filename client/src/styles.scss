@@ -52,12 +52,12 @@ a {
   margin-right: 8px !important;
 }
 
-mat-form-field .mat-form-field-underline {
+.mat-form-field.multi-line-error .mat-form-field-underline {
   position: relative;
   bottom: auto;
 }
 
-mat-form-field .mat-form-field-subscript-wrapper {
+.mat-form-field.multi-line-error .mat-form-field-subscript-wrapper {
   position: static;
 }
 

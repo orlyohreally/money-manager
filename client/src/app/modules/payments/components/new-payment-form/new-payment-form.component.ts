@@ -84,7 +84,8 @@ export class NewPaymentFormComponent implements OnInit {
           if (user._id === payment.userId) {
             this.familiesService.updateMemberFamilySpentAmount(
               this.data.familyId,
-              payment.amount
+              payment.amount,
+              '+'
             );
           }
         },

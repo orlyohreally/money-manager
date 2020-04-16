@@ -6,29 +6,22 @@ import { TestBed } from '@angular/core/testing';
 import { first, switchMap } from 'rxjs/operators';
 
 import { FamilyView } from '@shared/types';
-import {
-  FamiliesServiceMock,
-  IPaymentsServiceMock,
-  PaymentsServiceMock
-} from '@tests-utils/mocks';
+import { FamiliesServiceMock } from '@tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
-import { PaymentsService } from '../payments/payments.service';
 import { FamiliesService } from './families.service';
 
 describe('FamiliesService', () => {
   let service: FamiliesService;
   let httpTestingController: HttpTestingController;
 
-  const paymentsServiceMock: IPaymentsServiceMock = PaymentsServiceMock();
   const familiesServiceMock = FamiliesServiceMock();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: GlobalVariablesService, useValue: { apiURL: 'apiURL' } },
-        { provide: PaymentsService, useValue: paymentsServiceMock.service }
+        { provide: GlobalVariablesService, useValue: { apiURL: 'apiURL' } }
       ]
     });
     service = TestBed.get(FamiliesService);
@@ -67,7 +60,8 @@ describe('FamiliesService', () => {
           switchMap(() => {
             service.updateMemberFamilySpentAmount(
               familiesServiceMock.memberFamilies[0]._id,
-              mockedAmount
+              mockedAmount,
+              '+'
             );
             return service.familiesInfo;
           })
@@ -77,6 +71,49 @@ describe('FamiliesService', () => {
             const updatedFamily: FamilyView = {
               ...familiesServiceMock.memberFamilies[0],
               spent: familiesServiceMock.memberFamilies[0].spent + mockedAmount
+            };
+            expect(families).toEqual({
+              families: [
+                updatedFamily,
+                { ...familiesServiceMock.memberFamilies[1] }
+              ],
+              currentFamily: updatedFamily
+            });
+          }
+        );
+
+      const req = httpTestingController.expectOne({
+        url: 'apiURL/families/',
+        method: 'GET'
+      });
+
+      req.flush(familiesServiceMock.memberFamilies.slice(0, 2));
+    }
+  );
+
+  it(
+    'updateMemberFamilySpentAmount should increase how much member' +
+      ' has spent for set family when exchange rate is set for currency change',
+    () => {
+      const mockedExchangeRate = 2;
+      service
+        .loadFamilies()
+        .pipe(
+          switchMap(() => {
+            service.updateMemberFamilySpentAmount(
+              familiesServiceMock.memberFamilies[0]._id,
+              mockedExchangeRate,
+              '*'
+            );
+            return service.familiesInfo;
+          })
+        )
+        .subscribe(
+          (families: { families: FamilyView[]; currentFamily: FamilyView }) => {
+            const updatedFamily: FamilyView = {
+              ...familiesServiceMock.memberFamilies[0],
+              spent:
+                familiesServiceMock.memberFamilies[0].spent * mockedExchangeRate
             };
             expect(families).toEqual({
               families: [

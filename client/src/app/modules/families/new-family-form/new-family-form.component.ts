@@ -3,7 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { FamiliesService, NotificationsService } from '@core-client/services';
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@core-client/services/families/families.service';
+// tslint:disable-next-line: max-line-length
+import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 // tslint:disable-next-line: max-line-length
 import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
 import { MemberFamily } from '@shared-client/types';

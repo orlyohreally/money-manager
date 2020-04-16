@@ -3,12 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 import { findById } from '@shared-client/functions/find-by-id';
 import { Family, FamilyView } from '@shared/types';
 import { DataService } from '../data.service';
-// tslint:disable-next-line: max-line-length
-import { GlobalVariablesService } from '../global-variables/global-variables.service';
-import { PaymentsService } from '../payments/payments.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +24,7 @@ export class FamiliesService extends DataService {
 
   constructor(
     http: HttpClient,
-    globalVariablesService: GlobalVariablesService,
-    private paymentsService: PaymentsService
+    globalVariablesService: GlobalVariablesService
   ) {
     super(http, globalVariablesService);
   }
@@ -119,9 +117,10 @@ export class FamiliesService extends DataService {
       }),
       switchMap(updatedFamily => {
         if (exchangeRate) {
-          return this.paymentsService
-            .updatePaymentsByExchangeRate(family._id, exchangeRate)
-            .pipe(map(() => updatedFamily));
+          if (!exchangeRate || exchangeRate === 1) {
+            return of(undefined);
+          }
+          this.updateMemberFamilySpentAmount(family._id, exchangeRate, '*');
         }
         return of(updatedFamily);
       }),
@@ -180,18 +179,20 @@ export class FamiliesService extends DataService {
       .pipe();
   }
 
-  updateMemberFamilySpentAmount(familyId: string, amount: number) {
+  updateMemberFamilySpentAmount(familyId: string, k: number, type: '+' | '*') {
+    const updateAmount = (amount: number) =>
+      type === '+' ? amount + k : amount * k;
     const families = this.familyStore
       .getValue()
       .families.map(f =>
-        f._id === familyId ? { ...f, spent: f.spent + amount } : f
+        f._id === familyId ? { ...f, spent: updateAmount(f.spent) } : f
       );
     const currentFamily = this.familyStore.getValue().currentFamily;
     this.familyStore.next({
       families,
       currentFamily:
         currentFamily._id === familyId
-          ? { ...currentFamily, spent: currentFamily.spent + amount }
+          ? { ...currentFamily, spent: updateAmount(currentFamily.spent) }
           : currentFamily
     });
   }

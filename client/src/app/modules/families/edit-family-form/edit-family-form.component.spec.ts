@@ -13,16 +13,20 @@ import { FamiliesService } from '@core-client/services/families/families.service
 import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { Family } from '@shared/types';
 import {
   FamiliesServiceMock,
-  IFamiliesServiceMock
-} from '@src/app/tests-utils/mocks/families.service.spec';
-import {
+  IFamiliesServiceMock,
   IMembersServiceMock,
   MembersServiceMock
-} from '@src/app/tests-utils/mocks/members.service.spec';
-import { getNotificationsSpy } from '@tests-utils/mocks';
+} from '@tests-utils/mocks';
+import {
+  getNotificationsSpy,
+  IPaymentsServiceMock,
+  PaymentsServiceMock
+} from '@tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { MembersPaymentPercentageComponent } from '../../members/components/members-payment-percentage/members-payment-percentage.component';
 import { FamilyFormComponent } from '../family-form/family-form.component';
@@ -33,14 +37,17 @@ describe('EditFamilyFormComponent', () => {
   let fixture: ComponentFixture<EditFamilyFormComponent>;
   let dialogRefSpy: jasmine.SpyObj<MatDialogRef<EditFamilyFormComponent>>;
   let notificationsServiceSpy: jasmine.SpyObj<NotificationsService>;
+  let paymentsServiceSpy: jasmine.SpyObj<PaymentsService>;
 
   const mockedFamily: Family = { name: 'familyName' } as Family;
   const familiesServiceMock: IFamiliesServiceMock = FamiliesServiceMock();
   const membersServiceMock: IMembersServiceMock = MembersServiceMock();
+  const paymentsServiceMock: IPaymentsServiceMock = PaymentsServiceMock();
 
   beforeEach(async(() => {
     dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
     notificationsServiceSpy = getNotificationsSpy();
+    paymentsServiceSpy = paymentsServiceMock.service;
 
     TestBed.configureTestingModule({
       declarations: [
@@ -54,7 +61,8 @@ describe('EditFamilyFormComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: mockedFamily },
         { provide: FamiliesService, useValue: familiesServiceMock.service },
         { provide: MembersService, useValue: membersServiceMock.service },
-        { provide: NotificationsService, useValue: notificationsServiceSpy }
+        { provide: NotificationsService, useValue: notificationsServiceSpy },
+        { provide: PaymentsService, useValue: paymentsServiceSpy }
       ]
     }).compileComponents();
   }));

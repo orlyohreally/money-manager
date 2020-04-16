@@ -11,6 +11,7 @@ export class FamilyFormComponent implements OnInit {
   @Input() familyForm: FormGroup;
   @Input() submittingForm: boolean;
   @Input() displayExchangeRate: boolean;
+  @Input() errorMessage: string;
 
   @Output() formSubmitted = new EventEmitter<void>();
 
@@ -31,10 +32,18 @@ export class FamilyFormComponent implements OnInit {
   }
 
   submitForm() {
+    if (!this.familyForm.valid) {
+      this.familyForm.markAsTouched();
+      return;
+    }
     this.formSubmitted.emit();
   }
 
   onCurrencySelected(selectedCurrency: string) {
     this.familyForm.get('currency').setValue(selectedCurrency);
+  }
+
+  get familyName() {
+    return this.familyForm.get('name');
   }
 }

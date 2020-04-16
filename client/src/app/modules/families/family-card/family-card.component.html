@@ -23,7 +23,7 @@
 <div class="card__content" fxLayout="column" fxLayoutAlign="center center">
   <div class="card__title">
     <span class="text text_ellipsis">
-      {{ family?.name }}
+      {{ family.name }}
     </span>
   </div>
   <div>
@@ -32,7 +32,7 @@
         mat-icon-button
         class="card__link"
         color="primary"
-        routerLink="/families/{{ family?._id }}"
+        routerLink="/families/{{ family._id }}"
         matTooltip="Go to family details"
       >
         <mat-icon>ballot</mat-icon>
@@ -44,9 +44,11 @@
     <div class="payment-statistics">
       <div class="payment-statistics__item">
         <div class="payment-statistics__title">Spent:</div>
-        <div class="payment-statistics_value">₪300000</div>
+        <div class="payment-statistics_value">
+          {{ family.spent | sharedPrefixedNumber: family.currency }}
+        </div>
       </div>
-      <div class="payment-statistics__item">
+      <div class="payment-statistics__item" *ngIf="isDevMode">
         <div class="payment-statistics__title">Debt:</div>
         <div class="payment-statistics_value">₪300000</div>
       </div>

@@ -8,7 +8,7 @@ const FamilySchema = new Schema<Family>(
   {
     name: { type: String, required: true },
     icon: String,
-    currency: String,
+    currency: { type: String, required: true },
     equalPayments: Boolean,
     createdAt: Date,
     updatedAt: Date

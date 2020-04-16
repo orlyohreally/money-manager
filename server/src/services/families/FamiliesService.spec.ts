@@ -103,7 +103,8 @@ describe("FamiliesService", () => {
     createdAt: new Date("2020-01-01"),
     updatedAt: new Date("2020-01-01"),
     membersCount: 4,
-    userRoles: ["Member", "Owner"]
+    userRoles: ["Member", "Owner"],
+    spent: 100
   };
 
   beforeEach(() => {

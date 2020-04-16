@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { concatMap, map, take } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
@@ -68,19 +68,34 @@ export class NewPaymentFormComponent implements OnInit {
 
   createPayment(payment: Partial<Payment>) {
     this.submittingForm = true;
-    this.paymentsService.createPayment(payment, this.data.familyId).subscribe(
-      result => {
-        this.submittingForm = false;
-        this.dialogRef.close(result);
-        this.notificationsService.showNotification('Payment has been added');
-      },
-      (error: HttpErrorResponse) => {
-        this.submittingForm = false;
-        this.errorMessage = error.error.message
-          ? error.error.message
-          : error.statusText;
-      }
-    );
+    this.paymentsService
+      .createPayment(payment, this.data.familyId)
+      .pipe(
+        concatMap(result => {
+          this.submittingForm = false;
+          this.dialogRef.close(result);
+          this.notificationsService.showNotification('Payment has been added');
+
+          return this.authService.getUser().pipe(take(1));
+        })
+      )
+      .subscribe(
+        user => {
+          if (user._id === payment.userId) {
+            this.familiesService.updateMemberFamilySpentAmount(
+              this.data.familyId,
+              payment.amount,
+              '+'
+            );
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.errorMessage = error.error.message
+            ? error.error.message
+            : error.statusText;
+        }
+      );
   }
 
   private createDefaultFamilyPayment(): Observable<Partial<Payment>> {

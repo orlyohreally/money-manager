@@ -12,8 +12,17 @@
       <mat-form-field appearance="outline">
         <mat-label>Family name</mat-label>
         <input type="text" required matInput formControlName="name" />
-        <mat-error *ngIf="familyForm.get('name').hasError('required')">
+        <mat-error *ngIf="familyName.hasError('required')">
           Select family name
+        </mat-error>
+        <mat-error *ngIf="familyName.hasError('minlength')">
+          Name is too short
+        </mat-error>
+        <mat-error *ngIf="familyName.hasError('maxlength')">
+          Name is too long
+        </mat-error>
+        <mat-error *ngIf="familyName.hasError('pattern')">
+          Name must have only letters, spaces or dashes
         </mat-error>
       </mat-form-field>
       <div
@@ -27,6 +36,7 @@
           fxFlex.gt-sm="60"
           [defaultCurrency]="familyForm.get('currency').value"
           selectorLabel="Family currency"
+          [required]="true"
           (currencySelected)="onCurrencySelected($event)"
         ></shared-currency-selector>
         <mat-form-field
@@ -54,6 +64,9 @@
         </mat-form-field>
       </div>
       <ng-content></ng-content>
+      <div sharedNotificationBlock="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
       <div class="action-buttons" fxLayout="row" fxLayoutAlign="center">
         <shared-content-with-loader [showLoader]="submittingForm">
           <button mat-raised-button class="button" color="accent" type="submit">

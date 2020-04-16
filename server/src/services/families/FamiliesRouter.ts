@@ -152,7 +152,8 @@ export class FamiliesRouter {
 
       const updatedFamily = await this.service.updateFamily(
         familyId,
-        body.family
+        body.family,
+        body.user._id
       );
       if (body.exchangeRate && body.exchangeRate !== 1) {
         await this.paymentsService.updatePaymentsAmountByRate(

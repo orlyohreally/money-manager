@@ -33,12 +33,24 @@ export class FamiliesDao implements IFamiliesDao {
       throw new Error("Server error");
     }
 
-    return (
-      await this.db
-        .collection("AggregatedFamilies")
-        .find({ _id: new ObjectId(familyId) })
-        .toArray()
-    )[0] as FamilyView;
+    return (await this.db
+      .collection("AggregatedFamilies")
+      .find({ _id: new ObjectId(familyId) })
+      .toArray())[0] as FamilyView;
+  }
+
+  public async getMemberFamily(
+    familyId: string,
+    userId: string
+  ): Promise<FamilyView> {
+    if (!this.db) {
+      throw new Error("Server error");
+    }
+
+    return (await this.db
+      .collection("AggregatedMemberFamilies")
+      .find({ _id: new ObjectId(familyId), userId: new ObjectId(userId) })
+      .toArray())[0] as FamilyView;
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
@@ -94,9 +106,7 @@ export class FamiliesDao implements IFamiliesDao {
     }) as FamilyMember;
   }
 
-  public async getMemberFamilies(
-    userId: string
-  ): Promise<{ family: Family; roles: string[] }[]> {
+  public async getMemberFamilies(userId: string): Promise<FamilyView[]> {
     if (!this.db) {
       throw new Error("Server error");
     }
@@ -204,6 +214,25 @@ export class FamiliesDao implements IFamiliesDao {
         { $unwind: "$family" },
         {
           $lookup: {
+            let: { userId: "$_id.userId", familyId: "$_id.familyId" },
+            from: "paymentmodels",
+            as: "payments",
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$userId", "$$userId"] },
+                      { $eq: ["$familyId", "$$familyId"] }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          $lookup: {
             from: "familymembermodels",
             localField: "family._id",
             foreignField: "_id.familyId",
@@ -221,7 +250,8 @@ export class FamiliesDao implements IFamiliesDao {
             currency: "$family.currency",
             equalPayments: "$family.equalPayments",
             userRoles: "$roles",
-            membersCount: { $size: "$members" }
+            membersCount: { $size: "$members" },
+            spent: { $sum: "$payments.amount" }
           }
         }
       ]

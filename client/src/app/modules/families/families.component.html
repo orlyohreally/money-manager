@@ -11,10 +11,10 @@
 </div>
 <ng-container *ngIf="families | async as familiesList; else loading">
   <div class="card-list" *ngIf="familiesList.length; else noFamilies">
-    <family-family-card
+    <family-card
       *ngFor="let family of familiesList"
       [family]="family"
-    ></family-family-card>
+    ></family-card>
   </div>
 </ng-container>
 <ng-template #loading>

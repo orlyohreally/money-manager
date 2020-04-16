@@ -2,7 +2,7 @@
   <shared-accordion
     *ngFor="let family of familiesData.families"
     [toggleLabel]="family.name"
-    [collapsed]="familiesData.currentFamily !== family"
+    [collapsed]="familiesData.currentFamily._id !== family._id"
   >
     <mat-list role="list" class="nav-block__list">
       <mat-list-item role="listitem">

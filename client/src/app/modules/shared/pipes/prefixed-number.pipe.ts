@@ -1,13 +1,23 @@
+import { DecimalPipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { CurrencySymbolPipe } from './currency-symbol.pipe';
 
 @Pipe({
   name: 'sharedPrefixedNumber'
 })
 export class PrefixedNumberPipe implements PipeTransform {
-  constructor(private currencySymbolPipe: CurrencySymbolPipe) {}
+  constructor(
+    private currencySymbolPipe: CurrencySymbolPipe,
+    private numberPipe: DecimalPipe
+  ) {}
 
-  transform(value: number | string, currency: string): string {
+  transform(
+    value: number | string,
+    currency: string,
+    digitsInfo?: string,
+    locale?: string
+  ): string {
     const number = Number(value.toString().replace(',', ''));
     if (isNaN(number)) {
       return null;
@@ -38,6 +48,6 @@ export class PrefixedNumberPipe implements PipeTransform {
 
     return `${isNegative ? '-' : ''}${
       currency ? this.currencySymbolPipe.transform(currency) : ''
-    }${abs}${key}`;
+    }${this.numberPipe.transform(abs, digitsInfo, locale)}${key}`;
   }
 }

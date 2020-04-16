@@ -9,15 +9,18 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { of, Subject } from 'rxjs';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { Family } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
-import { of, Subject } from 'rxjs';
-import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'family-edit-family-form',
@@ -42,6 +45,7 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<EditFamilyFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public family: Family,
     private familiesService: FamiliesService,
+    private paymentsService: PaymentsService,
     private membersService: MembersService,
     private notificationsService: NotificationsService
   ) {}
@@ -97,6 +101,12 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
         this.displayExchangeRate ? exchangeRate : undefined
       )
       .pipe(
+        switchMap(() => {
+          return this.paymentsService.updatePaymentsByExchangeRate(
+            this.family._id,
+            exchangeRate
+          );
+        }),
         switchMap(() => {
           if (this.form.value.equalPayments) {
             return of(undefined);

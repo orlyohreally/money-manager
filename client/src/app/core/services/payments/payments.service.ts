@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Payment, User } from '@shared/types';
-import { compare } from '@src/app/modules/shared/functions';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
-import { AuthenticationService } from '../authentication/authentication.service';
-import { DataService } from '../data.service';
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { DataService } from '@core-client/services/data.service';
 // tslint:disable-next-line: max-line-length
-import { GlobalVariablesService } from '../global-variables/global-variables.service';
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
+import { Payment, User } from '@shared/types';
+import { compare } from '@src/app/modules/shared/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -118,6 +119,10 @@ export class PaymentsService extends DataService {
     familyId: string,
     exchangeRate: number
   ): Observable<void> {
+    // no need to update payments if they are not loaded yet
+    if (!this.paymentsList.getValue()[familyId]) {
+      return of(undefined);
+    }
     return this.getPayments(familyId).pipe(
       take(1),
       map(payments => {

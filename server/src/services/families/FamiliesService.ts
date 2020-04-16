@@ -17,10 +17,9 @@ export interface IFamiliesDao {
     familyMember: Partial<FamilyMember>
   ): Promise<FamilyMember>;
   getFamilyMembers(familyId: string): Promise<FamilyMember[]>;
-  getMemberFamilies(
-    userId: string
-  ): Promise<{ family: Family; roles: string[] }[]>;
+  getMemberFamilies(userId: string): Promise<FamilyView[]>;
   getFamily(familyId: string): Promise<FamilyView>;
+  getMemberFamily(familyId: string, userId: string): Promise<FamilyView>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
   removeFamily(familyId: string): Promise<void>;
@@ -75,10 +74,14 @@ export class FamiliesService {
         paymentPercentage: 100
       }
     ]);
-    return savedFamily;
+    return this.getMemberFamily(savedFamily._id, userId);
   }
 
-  public async updateFamily(familyId: string, family: Family): Promise<Family> {
+  public async updateFamily(
+    familyId: string,
+    family: Family,
+    userId: string
+  ): Promise<Family> {
     const currentIcon = (await this.getFamily(familyId)).icon;
     if (family.icon && currentIcon !== family.icon) {
       const newIcon = await this.imageLoaderService.loadImage(
@@ -87,16 +90,22 @@ export class FamiliesService {
       );
       family.icon = newIcon;
     }
-    return this.dao.updateFamily(familyId, family);
+    await this.dao.updateFamily(familyId, family);
+    return this.getMemberFamily(familyId, userId);
   }
 
   public async getFamily(familyId: string): Promise<FamilyView> {
     return this.dao.getFamily(familyId);
   }
 
-  public async getMemberFamilies(
+  public async getMemberFamily(
+    familyId: string,
     userId: string
-  ): Promise<{ family: Family; roles: string[] }[]> {
+  ): Promise<FamilyView> {
+    return this.dao.getMemberFamily(familyId, userId);
+  }
+
+  public async getMemberFamilies(userId: string): Promise<FamilyView[]> {
     return this.dao.getMemberFamilies(userId);
   }
 

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -171,7 +171,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective
   ],
-  providers: [CurrencySymbolPipe, UserFullNamePipe],
+  providers: [CurrencySymbolPipe, DecimalPipe, UserFullNamePipe],
   entryComponents: [
     ImageManagerComponent,
     ImagePreviewComponent,

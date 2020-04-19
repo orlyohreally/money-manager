@@ -9,8 +9,10 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@core-client/services/families/families.service';
 import {
   Member,
   MembersService
@@ -19,8 +21,7 @@ import {
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 // tslint:disable-next-line: max-line-length
 import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
-import { FamilyMember } from '@shared/types';
-import { MemberFamily } from '@src/app/modules/shared/types';
+import { FamilyMember, FamilyView } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
 
 @Component({
@@ -44,9 +45,10 @@ export class NewFamilyMemberFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NewFamilyMemberFormComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { family: MemberFamily; member: Member },
+    public data: { family: FamilyView; member: Member },
     private notificationsService: NotificationsService,
-    private membersService: MembersService
+    private membersService: MembersService,
+    private familiesService: FamiliesService
   ) {}
 
   ngOnInit() {
@@ -93,6 +95,12 @@ export class NewFamilyMemberFormComponent implements OnInit {
             return this.updatePercentages(newMember);
           }
           return of(undefined);
+        }),
+        map(() => {
+          this.familiesService.updateFamilyMemberCount(
+            this.data.family._id,
+            this.data.family.membersCount + 1
+          );
         })
       )
       .subscribe(

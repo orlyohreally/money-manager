@@ -18,7 +18,15 @@ export interface IFamiliesDao {
   ): Promise<FamilyMember>;
   getFamilyMembers(familyId: string): Promise<FamilyMember[]>;
   getMemberFamilies(userId: string): Promise<FamilyView[]>;
-  getFamily(familyId: string): Promise<FamilyView>;
+  getFamily(
+    familyId: string
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  >;
   getMemberFamily(familyId: string, userId: string): Promise<FamilyView>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
@@ -94,7 +102,15 @@ export class FamiliesService {
     return this.getMemberFamily(familyId, userId);
   }
 
-  public async getFamily(familyId: string): Promise<FamilyView> {
+  public async getFamily(
+    familyId: string
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  > {
     return this.dao.getFamily(familyId);
   }
 

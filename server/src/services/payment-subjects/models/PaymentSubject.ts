@@ -3,7 +3,7 @@ import { Document, model, Schema } from "mongoose";
 
 import { PaymentSubject } from "@shared/types";
 
-type PaymentSubjectDocument = PaymentSubject & Document;
+type PaymentSubjectDocument = Document & PaymentSubject<ObjectId>;
 
 const PaymentSubjectSchema = new Schema<PaymentSubject>(
   {

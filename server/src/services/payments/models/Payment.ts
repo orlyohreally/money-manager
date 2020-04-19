@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
-import { Document, model, Schema } from "mongoose";
+import { connection, Document, model, Schema } from "mongoose";
 
 import { Payment } from "@shared/types";
 
-type PaymentDocument = Payment & Document;
+type PaymentDocument = Document & Payment<ObjectId>;
 
 const PaymentSchema = new Schema<Payment>(
   {
@@ -38,3 +38,51 @@ export const PaymentModel = model<PaymentDocument>(
   "PaymentModel",
   PaymentSchema
 );
+
+export const getPaymentsView = async () => {
+  return connection.createCollection("AggregatedPayments", {
+    viewOn: "paymentmodels",
+    pipeline: [
+      {
+        $lookup: {
+          let: {
+            familyId: "$familyId",
+            paymentCreatedAt: "$createdAt"
+          },
+          from: "familymemberpaymentpercentagemodels",
+          as: "paymentPercentages",
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id.familyId", "$$familyId"] },
+                    { $lt: ["$_id.createdAt", "$$paymentCreatedAt"] }
+                  ]
+                }
+              }
+            },
+            {
+              $sort: {
+                "_id.createdAt": -1
+              }
+            },
+            {
+              $group: {
+                _id: "$_id.userId",
+                paymentPercentage: { $first: "$paymentPercentage" }
+              }
+            },
+            {
+              $project: {
+                userId: "$_id",
+                _id: false,
+                paymentPercentage: true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  });
+};

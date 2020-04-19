@@ -6,7 +6,6 @@ import { asyncWrap } from "@src/utils";
 import { Family, MemberPaymentPercentage, User } from "@shared/types";
 // tslint:disable-next-line: max-line-length
 import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
-import { PaymentsService } from "@src/services/payments/PaymentsService";
 import { UsersService } from "@src/services/users/UsersService";
 import { FamiliesService } from "./FamiliesService";
 
@@ -15,24 +14,20 @@ export class FamiliesRouter {
   private service: FamiliesService;
   private usersService: UsersService;
   private emailSenderService: EmailSenderService;
-  private paymentsService: PaymentsService;
 
   constructor({
     service,
     usersService,
-    emailSenderService,
-    paymentsService
+    emailSenderService
   }: {
     service: FamiliesService;
     usersService: UsersService;
     emailSenderService: EmailSenderService;
-    paymentsService: PaymentsService;
   }) {
     this.router = Router();
     this.service = service;
     this.usersService = usersService;
     this.emailSenderService = emailSenderService;
-    this.paymentsService = paymentsService;
 
     this.router.get(
       "/families",
@@ -136,14 +131,7 @@ export class FamiliesRouter {
       const body = req.body as {
         family: Family;
         user: User;
-        exchangeRate: number;
       };
-      if (body.exchangeRate <= 0) {
-        res
-          .status(406)
-          .json({ message: "Exchange rate should be a value bigger then 0" });
-        return;
-      }
       const familyId = (req.params as { familyId: string }).familyId;
       if (!body.family) {
         res.status(404).json({ message: "New values are missing" });
@@ -155,12 +143,6 @@ export class FamiliesRouter {
         body.family,
         body.user._id
       );
-      if (body.exchangeRate && body.exchangeRate !== 1) {
-        await this.paymentsService.updatePaymentsAmountByRate(
-          familyId,
-          body.exchangeRate
-        );
-      }
       res.status(200).json(updatedFamily);
     } catch (err) {
       res.status(404).json(err);

@@ -15,7 +15,7 @@ const runServer = async () => {
   if (!port) {
     process.exit(1);
   }
-  const db = await mongoose.connect(process.env.MONGODB_URI as string, {
+  await mongoose.connect(process.env.MONGODB_URI as string, {
     useNewUrlParser: true
   });
 
@@ -29,10 +29,10 @@ const runServer = async () => {
   app.use(bodyParser.json({ limit: "10mb" }));
   app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
-  app.use(apiPath, await familiesRouter(db.connection));
-  app.use(apiPath, paymentSubjectsRouter);
-  app.use(apiPath, await paymentsRouter(db.connection));
   app.use(apiPath, usersRouter);
+  app.use(apiPath, paymentSubjectsRouter);
+  app.use(apiPath, familiesRouter);
+  app.use(apiPath, paymentsRouter);
 
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${__dirname}/assets/frontend`));

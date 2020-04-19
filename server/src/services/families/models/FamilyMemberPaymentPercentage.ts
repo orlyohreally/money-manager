@@ -3,8 +3,8 @@ import { Document, model, Schema } from "mongoose";
 import { FamilyMemberPaymentPercentage } from "@shared/types";
 import { ObjectId } from "mongodb";
 
-type FamilyMemberPaymentPercentageDocument = FamilyMemberPaymentPercentage &
-  Document;
+type FamilyMemberPaymentPercentageDocument = Document &
+  FamilyMemberPaymentPercentage<ObjectId>;
 
 const FamilyMemberPaymentPercentageSchema = new Schema<
   FamilyMemberPaymentPercentage

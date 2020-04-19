@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
 import { Document, model, Schema } from "mongoose";
 
 import { User } from "@shared/types";
 
-type UserDocument = User & Document;
+type UserDocument = Document & User<ObjectId>;
 
 const UserSchema = new Schema<User>(
   {

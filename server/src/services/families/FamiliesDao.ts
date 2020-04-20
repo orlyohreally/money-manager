@@ -1,17 +1,11 @@
-import { Collection, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
-import {
-  Family,
-  FamilyMember,
-  FamilyView,
-  MemberPaymentPercentage
-} from "@shared/types";
+import { Family, FamilyMember, FamilyView } from "@shared/types";
 import { modelTransformer } from "@src/utils";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel, getFamiliesView, getMemberFamiliesView } from "./models";
 import { FamilyMemberModel, getFamilyMembersView } from "./models/FamilyMember";
 // tslint:disable-next-line: max-line-length
-import { FamilyMemberPaymentPercentageModel } from "./models/FamilyMemberPaymentPercentage";
 
 export class FamiliesDao implements IFamiliesDao {
   public async createFamily(family: Partial<Family>): Promise<Family> {
@@ -39,9 +33,7 @@ export class FamiliesDao implements IFamiliesDao {
     familyId: string,
     userId: string
   ): Promise<FamilyView> {
-    const memberFamiliesView: Collection<
-      FamilyView
-    > = await getMemberFamiliesView();
+    const memberFamiliesView = await getMemberFamiliesView();
     return (await memberFamiliesView
       .find({ _id: new ObjectId(familyId), userId: new ObjectId(userId) })
       .toArray())[0];
@@ -97,9 +89,7 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getMemberFamilies(userId: string): Promise<FamilyView[]> {
-    const memberFamiliesView: Collection<
-      FamilyView
-    > = await getMemberFamiliesView();
+    const memberFamiliesView = await getMemberFamiliesView();
     return memberFamiliesView.find({ userId: new ObjectId(userId) }).toArray();
   }
 
@@ -108,8 +98,8 @@ export class FamiliesDao implements IFamiliesDao {
     familyId: string
   ): Promise<FamilyMember> {
     return FamilyMemberModel.findOne({
-      "_id.familyId": familyId,
-      "_id.userId": userId
+      "_id.familyId": new ObjectId(familyId),
+      "_id.userId": new ObjectId(userId)
     })
       .lean()
       .exec();
@@ -118,37 +108,15 @@ export class FamiliesDao implements IFamiliesDao {
   public async updateMemberPercentage(
     memberId: { userId: string; familyId: string },
     paymentPercentage: number
-  ) {
-    const memberPaymentPercentage = new FamilyMemberPaymentPercentageModel({
-      _id: { familyId: memberId.familyId, userId: memberId.userId },
-      paymentPercentage
-    });
-    await memberPaymentPercentage.save();
-  }
-
-  public async getPaymentPercentages(
-    familyId: string
-  ): Promise<MemberPaymentPercentage[]> {
-    return FamilyMemberPaymentPercentageModel.aggregate([
-      { $match: { "_id.familyId": new ObjectId(familyId) } },
+  ): Promise<void> {
+    return FamilyMemberModel.findOneAndUpdate(
       {
-        $sort: {
-          "_id.createdAt": -1
-        }
+        "_id.userId": new ObjectId(memberId.userId),
+        "_id.familyId": new ObjectId(memberId.familyId)
       },
-      {
-        $group: {
-          _id: "$_id.userId",
-          paymentPercentage: { $first: "$paymentPercentage" }
-        }
-      },
-      {
-        $project: {
-          _id: false,
-          paymentPercentage: true,
-          userId: "$_id"
-        }
-      }
-    ]);
+      { paymentPercentage }
+    )
+      .lean()
+      .exec();
   }
 }

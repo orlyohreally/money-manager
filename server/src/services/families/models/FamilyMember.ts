@@ -14,7 +14,8 @@ const FamilyMemberSchema = new Schema<FamilyMember>(
     roles: { type: [String], required: true },
     inactive: Boolean,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    paymentPercentage: Number
   },
   { versionKey: false, autoIndex: true }
 );
@@ -50,52 +51,6 @@ export const getFamilyMembersView = async (): Promise<
         }
       },
       {
-        $lookup: {
-          let: {
-            userId: "$_id.userId",
-            familyId: "$_id.familyId"
-          },
-          from: "familymemberpaymentpercentagemodels",
-          as: "paymentPercentage",
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ["$_id.familyId", "$$familyId"] },
-                    { $eq: ["$_id.userId", "$$userId"] }
-                  ]
-                }
-              }
-            },
-            {
-              $sort: {
-                "_id.createdAt": -1
-              }
-            },
-            {
-              $group: {
-                _id: "$_id.userId",
-                paymentPercentage: { $first: "$paymentPercentage" }
-              }
-            },
-            {
-              $project: {
-                _id: false,
-                userId: "$_id",
-                paymentPercentage: true
-              }
-            }
-          ]
-        }
-      },
-      {
-        $unwind: {
-          path: "$paymentPercentage",
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
         $unwind: "$user"
       },
       {
@@ -108,7 +63,7 @@ export const getFamilyMembersView = async (): Promise<
           "member.roles": "$roles",
           "member.icon": "$icon",
           "member.createdAt": "$_id.createAt",
-          "member.paymentPercentage": "$paymentPercentage.paymentPercentage"
+          "member.paymentPercentage": "$paymentPercentage"
         }
       },
       { $replaceRoot: { newRoot: "$member" } }

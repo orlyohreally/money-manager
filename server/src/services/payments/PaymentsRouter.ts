@@ -68,17 +68,7 @@ export class PaymentsRouter {
 
   private getPayments = async (req: Request, res: Response) => {
     try {
-      const body = req.body as { user: User };
       const familyId: string = (req.params as { familyId: string }).familyId;
-      const updateIsAllowed =
-        familyId &&
-        (await this.familiesService.userCanCreatePayment(
-          body.user._id,
-          familyId
-        ));
-      if (!updateIsAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
-      }
 
       const payments: Payment[] = await this.service.getFamilyPayments(
         familyId
@@ -93,15 +83,6 @@ export class PaymentsRouter {
     try {
       const body = req.body as { payment: Payment; user: User };
       const familyId = (req.params as { familyId: string }).familyId;
-      const updateIsAllowed =
-        familyId &&
-        (await this.familiesService.userCanCreatePayment(
-          body.user._id,
-          familyId
-        ));
-      if (!updateIsAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
-      }
 
       const error = this.service.validatePayment(body.payment);
       if (error) {
@@ -111,18 +92,29 @@ export class PaymentsRouter {
         body.user._id,
         familyId
       );
+      const familyMembers = await this.familiesService.getFamilyMembers(
+        familyId
+      );
+      const percentages = [
+        ...familyMembers.map(member => ({
+          userId: member._id,
+          paymentPercentage: member.paymentPercentage
+        }))
+      ];
       let payment: Payment;
       if (!body.payment._id) {
         if (isFamilyAdmin) {
           payment = await this.service.createPayment({
             ...body.payment,
-            familyId
+            familyId,
+            paymentPercentages: percentages
           });
         } else {
           payment = await this.service.createPayment({
             ...body.payment,
             userId: body.user._id,
-            familyId
+            familyId,
+            paymentPercentages: percentages
           });
         }
         return res.status(200).json(payment);

@@ -1,7 +1,22 @@
 import { ObjectId } from "mongodb";
 import { connection, Document, model, Schema } from "mongoose";
 
-import { Payment } from "@shared/types";
+import { FamilyMemberPaymentPercentage, Payment } from "@shared/types";
+
+const FamilyMemberPaymentPercentageSchema = new Schema<
+  FamilyMemberPaymentPercentage
+>(
+  {
+    userId: {
+      type: ObjectId,
+      required: true,
+      ref: "UserModel",
+      index: true
+    },
+    paymentPercentage: { type: Number, required: true }
+  },
+  { versionKey: false, autoIndex: true, _id: false }
+);
 
 type PaymentDocument = Document & Payment<ObjectId>;
 
@@ -19,7 +34,8 @@ const PaymentSchema = new Schema<Payment>(
     receipt: String,
     paidAt: { type: Date, required: true },
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    paymentPercentages: [FamilyMemberPaymentPercentageSchema]
   },
   { versionKey: false, autoIndex: true }
 );
@@ -41,48 +57,6 @@ export const PaymentModel = model<PaymentDocument>(
 
 export const getPaymentsView = async () => {
   return connection.createCollection("AggregatedPayments", {
-    viewOn: "paymentmodels",
-    pipeline: [
-      {
-        $lookup: {
-          let: {
-            familyId: "$familyId",
-            paymentCreatedAt: "$createdAt"
-          },
-          from: "familymemberpaymentpercentagemodels",
-          as: "paymentPercentages",
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ["$_id.familyId", "$$familyId"] },
-                    { $lt: ["$_id.createdAt", "$$paymentCreatedAt"] }
-                  ]
-                }
-              }
-            },
-            {
-              $sort: {
-                "_id.createdAt": -1
-              }
-            },
-            {
-              $group: {
-                _id: "$_id.userId",
-                paymentPercentage: { $first: "$paymentPercentage" }
-              }
-            },
-            {
-              $project: {
-                userId: "$_id",
-                _id: false,
-                paymentPercentage: true
-              }
-            }
-          ]
-        }
-      }
-    ]
+    viewOn: "paymentmodels"
   });
 };

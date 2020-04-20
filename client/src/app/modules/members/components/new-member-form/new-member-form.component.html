@@ -30,7 +30,7 @@
         *ngIf="!data.family.equalPayments"
         class="members-payment-percentage"
         [familyId]="data.family._id"
-        [newFamilyMemberRoles]="this.memberForm.get('roles').value"
+        [newFamilyMember]="true"
         (valueUpdated)="onPercentagesSet($event)"
       ></member-members-payment-percentage>
       <div

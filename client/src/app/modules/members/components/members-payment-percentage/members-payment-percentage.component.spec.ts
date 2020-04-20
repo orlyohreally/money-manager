@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
+import { getTestScheduler } from 'jasmine-marbles';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
@@ -54,9 +55,84 @@ describe('MembersPaymentPercentageComponent', () => {
     fixture = TestBed.createComponent(MembersPaymentPercentageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    getTestScheduler().flush();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it(
+    'form should be invalid' +
+      ' when paymentPercentage are valid float numbers',
+    () => {
+      component.paymentsPercentagesList.controls[0]
+        .get('paymentPercentage')
+        .setValue('40,23');
+      component.paymentsPercentagesList.controls[1]
+        .get('paymentPercentage')
+        .setValue('59.77');
+      expect(component.paymentsPercentagesForm.valid).toBe(false);
+      expect(component.paymentsPercentagesList.controls[0].valid).toEqual(
+        false
+      );
+      expect(
+        component.paymentsPercentagesList.controls[0]
+          .get('paymentPercentage')
+          .hasError('invalid-percent')
+      ).toEqual(true);
+    }
+  );
+
+  it(
+    'form should be valid' +
+      ' when paymentPercentage are valid float percent values',
+    () => {
+      component.paymentsPercentagesList.controls[0]
+        .get('paymentPercentage')
+        .setValue('40.23');
+      component.paymentsPercentagesList.controls[1]
+        .get('paymentPercentage')
+        .setValue('59.77');
+      expect(component.paymentsPercentagesForm.valid).toBe(true);
+      expect(component.paymentsPercentagesList.controls[0].valid).toEqual(true);
+      expect(
+        component.paymentsPercentagesList.controls[0]
+          .get('paymentPercentage')
+          .hasError('invalid-percent')
+      ).toEqual(false);
+    }
+  );
+
+  it(
+    'form should be invalid' +
+      ' when paymentPercentages together not equal 100',
+    () => {
+      component.paymentsPercentagesList.controls[0]
+        .get('paymentPercentage')
+        .setValue('41.23');
+      component.paymentsPercentagesList.controls[1]
+        .get('paymentPercentage')
+        .setValue('59.77');
+      expect(component.paymentsPercentagesForm.valid).toBe(false);
+      expect(
+        component.paymentsPercentagesForm
+          .get('paymentsPercentages')
+          .hasError('total-percentage')
+      ).toBe(true);
+    }
+  );
+
+  it(
+    'form should be valid' + ' when paymentPercentages together equal 100',
+    () => {
+      component.paymentsPercentagesList.controls[0]
+        .get('paymentPercentage')
+        .setValue('40.23');
+      component.paymentsPercentagesList.controls[1]
+        .get('paymentPercentage')
+        .setValue('59.77');
+      expect(component.paymentsPercentagesForm.valid).toBe(true);
+    }
+  );
 });

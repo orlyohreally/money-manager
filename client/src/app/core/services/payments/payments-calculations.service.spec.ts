@@ -25,8 +25,8 @@ import {
   IMembersServiceMock,
   MembersServiceMock
 } from '@tests-utils/mocks/members.service.spec';
-import { take } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { first } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../authentication/authentication.service';
 import { FamiliesService } from '../families/families.service';
@@ -204,29 +204,29 @@ describe('PaymentsCalculationsService', () => {
     const expectedResponse: OverpaidDebtPayment[] = [
       {
         debt: 0,
-        overpaid: 10,
+        overpaid: 2,
         user: membersServiceMock.membersList[1],
         currency: 'USD',
         paidAt: new Date('2020-01-04').toString(),
-        createdAt: new Date('2020-10-03').toString(),
-        updatedAt: new Date('2020-10-04').toString()
+        createdAt: new Date('2020-10-02').toString(),
+        updatedAt: new Date('2020-10-02').toString()
       },
       {
-        debt: 10,
+        debt: 2,
         overpaid: 0,
         user: membersServiceMock.membersList[0],
         toUser: membersServiceMock.membersList[1],
         currency: 'USD',
-        paidAt: new Date('2020-01-02').toString(),
-        createdAt: new Date('2020-10-03').toString(),
-        updatedAt: new Date('2020-10-04').toString()
+        paidAt: new Date('2020-01-04').toString(),
+        createdAt: new Date('2020-10-02').toString(),
+        updatedAt: new Date('2020-10-02').toString()
       },
       {
         debt: 0,
         overpaid: 9,
         user: membersServiceMock.membersList[0],
         currency: 'USD',
-        paidAt: new Date('2020-01-04').toString(),
+        paidAt: new Date('2020-01-02').toString(),
         createdAt: new Date('2020-10-01').toString(),
         updatedAt: new Date('2020-10-02').toString()
       },
@@ -243,6 +243,7 @@ describe('PaymentsCalculationsService', () => {
     ];
     service
       .getPaymentTransactions(mockedFamilyId, mockedPaymentsList)
+      .pipe(first())
       .subscribe((payments: OverpaidDebtPayment[]) => {
         expect(payments).toEqual(expectedResponse);
       });
@@ -265,18 +266,12 @@ describe('PaymentsCalculationsService', () => {
       }
     ];
 
-    const scheduler = new TestScheduler((actual, expected) => {
-      expect(actual).toEqual(expected);
-    });
-    scheduler.run(({ expectObservable }) => {
-      expectObservable(
-        service
-          .getOverpayAndDebtsList(mockedFamilyId, mockedPaymentsList)
-          .pipe(take(1))
-      ).toBe('3ms (a|)', {
-        a: expectedResponse
+    service
+      .getOverpayAndDebtsList(mockedFamilyId, mockedPaymentsList)
+      .pipe(first())
+      .subscribe(result => {
+        expect(result).toEqual(expectedResponse);
       });
-    });
   });
 
   it(

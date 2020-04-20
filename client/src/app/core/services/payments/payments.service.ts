@@ -119,20 +119,26 @@ export class PaymentsService extends DataService {
     familyId: string,
     exchangeRate: number
   ): Observable<void> {
-    // no need to update payments if they are not loaded yet
-    if (!this.paymentsList.getValue()[familyId]) {
-      return of(undefined);
-    }
-    return this.getPayments(familyId).pipe(
-      take(1),
-      map(payments => {
-        this.paymentsList.next({
-          ...this.paymentsList.getValue(),
-          [familyId]: payments.map(payment => ({
-            ...payment,
-            amount: payment.amount * exchangeRate
-          }))
-        });
+    return this.put(`${this.paymentsApiUrl}/${familyId}/update-exchange-rate`, {
+      exchangeRate
+    }).pipe(
+      switchMap(() => {
+        // no need to update payments if they are not loaded yet
+        if (!this.paymentsList.getValue()[familyId]) {
+          return of(undefined);
+        }
+        return this.getPayments(familyId).pipe(
+          take(1),
+          map(payments => {
+            this.paymentsList.next({
+              ...this.paymentsList.getValue(),
+              [familyId]: payments.map(payment => ({
+                ...payment,
+                amount: payment.amount * exchangeRate
+              }))
+            });
+          })
+        );
       })
     );
   }

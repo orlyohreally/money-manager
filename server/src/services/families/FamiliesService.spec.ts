@@ -1,10 +1,4 @@
-import {
-  FamilyMember,
-  FamilyMemberPaymentPercentage,
-  FamilyView,
-  Roles,
-  User
-} from "@shared/types";
+import { FamilyMember, FamilyView, Roles, User } from "@shared/types";
 import { FamiliesDao } from "@src/services/families/FamiliesDao";
 import { FamiliesService } from "@src/services/families/FamiliesService";
 import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
@@ -66,22 +60,7 @@ describe("FamiliesService", () => {
       roles: [Roles.Member]
     }
   ];
-  const mockedPaymentPercentages: FamilyMemberPaymentPercentage[] = [
-    {
-      userId: "userId-1",
-      paymentPercentage: 10,
-      familyId: "familyId-1",
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      userId: "userId-2",
-      paymentPercentage: 90,
-      familyId: "familyId-1",
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ];
+
   const mockedMember: FamilyMember = {
     _id: "_id",
     firstName: "firstName",
@@ -190,9 +169,9 @@ describe("FamiliesService", () => {
     spyOn(dao, "createFamilyMember").and.returnValue(
       Promise.resolve(mockedMember)
     );
-    spyOn(dao, "getPaymentPercentages").and.returnValue(
-      Promise.resolve(mockedPaymentPercentages)
-    );
+    // spyOn(dao, "getPaymentPercentages").and.returnValue(
+    //   Promise.resolve(mockedPaymentPercentages)
+    // );
     spyOn(dao, "updateMemberPercentage").and.returnValue(Promise.resolve());
     spyOn(dao, "getFamily").and.returnValue(Promise.resolve(mockedFamily));
     spyOn(dao, "getFamilyMembers").and.returnValue(
@@ -210,9 +189,9 @@ describe("FamiliesService", () => {
     spyOn(dao, "createFamilyMember").and.returnValue(
       Promise.resolve(mockedMember)
     );
-    spyOn(dao, "getPaymentPercentages").and.returnValue(
-      Promise.resolve(mockedPaymentPercentages)
-    );
+    // spyOn(dao, "getPaymentPercentages").and.returnValue(
+    //   Promise.resolve(mockedPaymentPercentages)
+    // );
     spyOn(dao, "updateMemberPercentage").and.returnValue(Promise.resolve());
     spyOn(dao, "getFamily").and.returnValue(Promise.resolve(mockedFamily));
     spyOn(dao, "getFamilyMembers").and.returnValue(

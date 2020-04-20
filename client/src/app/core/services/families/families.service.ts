@@ -196,4 +196,18 @@ export class FamiliesService extends DataService {
           : currentFamily
     });
   }
+
+  updateFamilyMemberCount(familyId: string, membersCount: number): void {
+    const families = this.familyStore
+      .getValue()
+      .families.map(f => (f._id === familyId ? { ...f, membersCount } : f));
+    const currentFamily = this.familyStore.getValue().currentFamily;
+    this.familyStore.next({
+      families,
+      currentFamily:
+        currentFamily._id === familyId
+          ? { ...currentFamily, membersCount }
+          : currentFamily
+    });
+  }
 }

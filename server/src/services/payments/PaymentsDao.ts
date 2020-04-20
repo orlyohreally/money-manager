@@ -1,28 +1,18 @@
 import { Payment } from "@shared/types";
-import { ObjectId } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 
 import { AggregatedPayment } from "@shared/types/payment-view";
-import { Connection } from "mongoose";
-import { PaymentModel } from "./models";
+import { modelTransformer } from "@src/utils";
+import { getPaymentsView, PaymentModel } from "./models";
 import { IPaymentsDao } from "./PaymentsService";
 
 export class PaymentsDao implements IPaymentsDao {
-  private db: Connection | null;
-
-  constructor() {
-    // tslint:disable-next-line: no-null-keyword
-    this.db = null;
-  }
-
   public async getFamilyPayments(
     familyId: string
   ): Promise<AggregatedPayment[]> {
-    if (!this.db) {
-      throw new Error("Server error");
-    }
+    const paymentsView: Collection<AggregatedPayment> = await getPaymentsView();
 
-    return this.db
-      .collection("AggregatedPayments")
+    return paymentsView
       .find({
         familyId: new ObjectId(familyId)
       })
@@ -30,12 +20,8 @@ export class PaymentsDao implements IPaymentsDao {
   }
 
   public async getUserPayments(userId: string): Promise<AggregatedPayment[]> {
-    if (!this.db) {
-      throw new Error("Server error");
-    }
-
-    return this.db
-      .collection("AggregatedPayments")
+    const paymentsView: Collection<AggregatedPayment> = await getPaymentsView();
+    return paymentsView
       .find({
         userId: new ObjectId(userId)
       })
@@ -43,19 +29,9 @@ export class PaymentsDao implements IPaymentsDao {
   }
 
   public async createPayment(payment: Partial<Payment>): Promise<Payment> {
-    if (!this.db) {
-      throw new Error("Server error");
-    }
-
     const newPayment = new PaymentModel(payment);
     await newPayment.save();
-    const createdPayment = (await this.db
-      .collection("AggregatedPayments")
-      .find({
-        _id: new ObjectId(newPayment._id as string)
-      })
-      .toArray()) as AggregatedPayment[];
-    return createdPayment[0];
+    return newPayment.toJSON(modelTransformer) as Payment;
   }
 
   public async updatePayment(payment: Partial<Payment>): Promise<Payment> {
@@ -76,54 +52,5 @@ export class PaymentsDao implements IPaymentsDao {
       { familyId: new ObjectId(familyId) },
       { $mul: { amount: exchangeRate } }
     );
-  }
-
-  public async initView(db: Connection): Promise<void> {
-    this.db = db;
-    await db.createCollection("AggregatedPayments", {
-      viewOn: "paymentmodels",
-      pipeline: [
-        {
-          $lookup: {
-            let: {
-              familyId: "$familyId",
-              paymentCreatedAt: "$createdAt"
-            },
-            from: "familymemberpaymentpercentagemodels",
-            as: "paymentPercentages",
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $and: [
-                      { $eq: ["$_id.familyId", "$$familyId"] },
-                      { $lt: ["$_id.createdAt", "$$paymentCreatedAt"] }
-                    ]
-                  }
-                }
-              },
-              {
-                $sort: {
-                  "_id.createdAt": -1
-                }
-              },
-              {
-                $group: {
-                  _id: "$_id.userId",
-                  paymentPercentage: { $first: "$paymentPercentage" }
-                }
-              },
-              {
-                $project: {
-                  userId: "$_id",
-                  _id: false,
-                  paymentPercentage: true
-                }
-              }
-            ]
-          }
-        }
-      ]
-    });
   }
 }

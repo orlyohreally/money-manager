@@ -4,13 +4,13 @@ import { cold, initTestScheduler } from 'jasmine-marbles';
 import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { MemberFamily } from '@shared-client/types';
 import {
-  FamilyMember,
   MemberPaymentPercentage,
   Payment,
   PaymentSubject
 } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { PaymentSubjectsServiceMock } from '.';
+import { MembersServiceMock } from './members.service.spec';
 
 const paymentPercentageMock: MemberPaymentPercentage[] = [
   {
@@ -70,11 +70,7 @@ const familyPaymentsListMock: FamilyPaymentView[] = [
     receipt: 'receipt-1.png',
     subject: PaymentSubjectsServiceMock().paymentSubjectsList[0],
     paidAt: new Date('2020-01-02').toString(),
-    member: {
-      _id: 'userId-1',
-      firstName: 'firstName-1',
-      lastName: 'lastName-1'
-    } as FamilyMember,
+    member: MembersServiceMock().membersList[0],
     currency: 'USD',
     paymentPercentages: paymentPercentageMock,
     createdAt: new Date('2020-10-01').toString(),
@@ -86,11 +82,7 @@ const familyPaymentsListMock: FamilyPaymentView[] = [
     receipt: 'receipt-2.png',
     subject: PaymentSubjectsServiceMock().paymentSubjectsList[1],
     paidAt: new Date('2020-01-04').toString(),
-    member: {
-      _id: 'userId-2',
-      firstName: 'firstName-1',
-      lastName: 'lastName-2'
-    } as FamilyMember,
+    member: MembersServiceMock().membersList[1],
     paymentPercentages: paymentPercentageMock,
     createdAt: new Date('2020-10-02').toString(),
     updatedAt: new Date('2020-10-02').toString(),

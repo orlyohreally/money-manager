@@ -1,43 +1,17 @@
-// tslint:disable-next-line: max-line-length
-import { EmailSenderDao } from "@src/services/email-sender/EmailSenderDao";
-// tslint:disable-next-line: max-line-length
-import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
-import { ImageManagerDao } from "@src/services/image-manager/ImageManagerDao";
-// tslint:disable-next-line: max-line-length
-import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
-import { PaymentsDao } from "@src/services/payments/PaymentsDao";
-import { PaymentsService } from "@src/services/payments/PaymentsService";
-import { UsersDao } from "@src/services/users/UsersDao";
-import { UsersService } from "@src/services/users/UsersService";
-import { Connection } from "mongoose";
+import { emailSenderService } from "@src/services/email-sender";
+import { imageManagerService } from "@src/services/image-manager";
+import { usersService } from "@src/services/users";
 import { FamiliesDao } from "./FamiliesDao";
 import { FamiliesRouter } from "./FamiliesRouter";
 import { FamiliesService } from "./FamiliesService";
 
-export const familiesService = async (db: Connection) => {
-  const familiesDao = new FamiliesDao();
-  await familiesDao.initViews(db);
-  return new FamiliesService({
-    dao: familiesDao,
-    imageLoaderService: new ImageManagerService({ dao: new ImageManagerDao() })
-  });
-};
+export const familiesService = new FamiliesService({
+  dao: new FamiliesDao(),
+  imageLoaderService: imageManagerService
+});
 
-export const familiesRouter = async (db: Connection) => {
-  return new FamiliesRouter({
-    service: await familiesService(db),
-    usersService: new UsersService({
-      dao: new UsersDao(),
-      imageLoaderService: new ImageManagerService({
-        dao: new ImageManagerDao()
-      })
-    }),
-    emailSenderService: new EmailSenderService({ dao: new EmailSenderDao() }),
-    paymentsService: new PaymentsService({
-      dao: new PaymentsDao(),
-      imageLoaderService: new ImageManagerService({
-        dao: new ImageManagerDao()
-      })
-    })
-  }).router;
-};
+export const familiesRouter = new FamiliesRouter({
+  service: familiesService,
+  usersService: usersService,
+  emailSenderService: emailSenderService
+}).router;

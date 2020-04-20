@@ -1,6 +1,6 @@
 import { MembersService } from '@core-client/services/members/members.service';
 import { FamilyMember, Roles } from '@shared/types';
-import { cold, initTestScheduler } from 'jasmine-marbles';
+import { cold, hot, initTestScheduler } from 'jasmine-marbles';
 
 const mockedFamilyMember: FamilyMember = {
   _id: 'userId-1',
@@ -73,8 +73,8 @@ function getMembersServiceSpy() {
     cold('--a', { a: mockedFamilyMember })
   );
 
-  membersServiceSpy.getMembers.and.returnValue(
-    cold('3ms a', { a: mockedFamilyMembersList })
+  membersServiceSpy.getMembers.and.callFake(() =>
+    hot('3ms a|', { a: mockedFamilyMembersList })
   );
 
   membersServiceSpy.userIsFamilyAdmin.and.returnValue(cold('-a', { a: true }));

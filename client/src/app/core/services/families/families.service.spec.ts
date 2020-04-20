@@ -189,4 +189,34 @@ describe('FamiliesService', () => {
 
     req.flush(familiesServiceMock.memberFamilies);
   });
+
+  it('updateFamilyMemberCount should set member count for set family', () => {
+    const newMembersCount = 4;
+
+    const updatedFamily = familiesServiceMock.memberFamilies[1];
+    service
+      .loadFamilies()
+      .pipe(
+        switchMap(() => {
+          service.updateFamilyMemberCount(updatedFamily._id, newMembersCount);
+          return service.familiesInfo.pipe(first());
+        })
+      )
+      .subscribe(familiesInfo => {
+        expect(familiesInfo).toEqual({
+          families: [
+            familiesServiceMock.memberFamilies[0],
+            { ...updatedFamily, membersCount: newMembersCount }
+          ],
+          currentFamily: familiesServiceMock.memberFamilies[0]
+        });
+      });
+
+    const req = httpTestingController.expectOne({
+      url: 'apiURL/families/',
+      method: 'GET'
+    });
+
+    req.flush(familiesServiceMock.memberFamilies.slice(0, 2));
+  });
 });

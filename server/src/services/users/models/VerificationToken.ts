@@ -1,8 +1,9 @@
-import { VerificationToken } from "@shared/types";
 import { ObjectId } from "mongodb";
 import { Document, model, Schema } from "mongoose";
 
-type VerificationTokenDocument = VerificationToken & Document;
+import { VerificationToken } from "@shared/types";
+
+type VerificationTokenDocument = Document & VerificationToken<ObjectId>;
 
 const VerificationTokenSchema = new Schema<VerificationToken>(
   {

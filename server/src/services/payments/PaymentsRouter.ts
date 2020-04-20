@@ -1,7 +1,6 @@
+import { asyncWrap } from "@src/utils";
 import { Request, Response, Router } from "express";
 import { IRouter } from "express-serve-static-core";
-
-import { asyncWrap } from "@src/utils";
 
 import { Payment, User } from "@shared/types";
 import { FamiliesService } from "@src/services/families/FamiliesService";
@@ -48,6 +47,11 @@ export class PaymentsRouter {
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.postPayment)
     );
+    this.router.put(
+      "/payments/:familyId/update-exchange-rate",
+      this.usersService.validateToken.bind(usersService),
+      asyncWrap(this.updatePaymentsByExchangeRate)
+    );
   }
 
   private getUserPayments = async (req: Request, res: Response) => {
@@ -64,17 +68,7 @@ export class PaymentsRouter {
 
   private getPayments = async (req: Request, res: Response) => {
     try {
-      const body = req.body as { user: User };
       const familyId: string = (req.params as { familyId: string }).familyId;
-      const updateIsAllowed =
-        familyId &&
-        (await this.familiesService.userCanCreatePayment(
-          body.user._id,
-          familyId
-        ));
-      if (!updateIsAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
-      }
 
       const payments: Payment[] = await this.service.getFamilyPayments(
         familyId
@@ -89,15 +83,6 @@ export class PaymentsRouter {
     try {
       const body = req.body as { payment: Payment; user: User };
       const familyId = (req.params as { familyId: string }).familyId;
-      const updateIsAllowed =
-        familyId &&
-        (await this.familiesService.userCanCreatePayment(
-          body.user._id,
-          familyId
-        ));
-      if (!updateIsAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
-      }
 
       const error = this.service.validatePayment(body.payment);
       if (error) {
@@ -107,18 +92,29 @@ export class PaymentsRouter {
         body.user._id,
         familyId
       );
+      const familyMembers = await this.familiesService.getFamilyMembers(
+        familyId
+      );
+      const percentages = [
+        ...familyMembers.map(member => ({
+          userId: member._id,
+          paymentPercentage: member.paymentPercentage
+        }))
+      ];
       let payment: Payment;
       if (!body.payment._id) {
         if (isFamilyAdmin) {
           payment = await this.service.createPayment({
             ...body.payment,
-            familyId
+            familyId,
+            paymentPercentages: percentages
           });
         } else {
           payment = await this.service.createPayment({
             ...body.payment,
             userId: body.user._id,
-            familyId
+            familyId,
+            paymentPercentages: percentages
           });
         }
         return res.status(200).json(payment);
@@ -135,9 +131,51 @@ export class PaymentsRouter {
       }
       return res.status(200).json(payment);
     } catch (err) {
-      return res.status(400).json({ message: err });
+      console.log(err);
+      return res.status(400).json(err);
     }
   };
+  private updatePaymentsByExchangeRate = async (
+    req: Request,
+    res: Response
+  ) => {
+    try {
+      const { exchangeRate, user } = req.body as {
+        exchangeRate: number;
+        user: User;
+      };
+      const familyId = (req.params as { familyId: string }).familyId;
+      if (!exchangeRate || exchangeRate <= 0) {
+        res
+          .status(406)
+          .json({ message: "Exchange rate should be a value bigger then 0" });
+        return;
+      }
+
+      if (exchangeRate === 1) {
+        return res
+          .status(200)
+          .json({ message: "Successfully updated payments" });
+      }
+
+      const updateIsAllowed =
+        familyId &&
+        (await this.familiesService.userCanUpdateFamily(user._id, familyId));
+      if (!updateIsAllowed) {
+        return res.status(403).json({ message: "Unathorized access" });
+      }
+
+      if (exchangeRate !== 1) {
+        await this.service.updatePaymentsAmountByRate(familyId, exchangeRate);
+      }
+
+      return res.status(200).json({ message: "Successfully updated payments" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err);
+    }
+  };
+
   private postUserPayment = async (req: Request, res: Response) => {
     try {
       const body = req.body as { payment: Payment; user: User };

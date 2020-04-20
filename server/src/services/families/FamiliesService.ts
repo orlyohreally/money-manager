@@ -18,7 +18,15 @@ export interface IFamiliesDao {
   ): Promise<FamilyMember>;
   getFamilyMembers(familyId: string): Promise<FamilyMember[]>;
   getMemberFamilies(userId: string): Promise<FamilyView[]>;
-  getFamily(familyId: string): Promise<FamilyView>;
+  getFamily(
+    familyId: string
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  >;
   getMemberFamily(familyId: string, userId: string): Promise<FamilyView>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
@@ -27,7 +35,6 @@ export interface IFamiliesDao {
     memberId: { userId: string; familyId: string },
     percentage: number
   ): Promise<void>;
-  getPaymentPercentages(familyId: string): Promise<MemberPaymentPercentage[]>;
 }
 
 export class FamiliesService {
@@ -81,9 +88,9 @@ export class FamiliesService {
     familyId: string,
     family: Family,
     userId: string
-  ): Promise<Family> {
-    const currentIcon = (await this.getFamily(familyId)).icon;
-    if (family.icon && currentIcon !== family.icon) {
+  ): Promise<FamilyView> {
+    const currentFamily = await this.getFamily(familyId);
+    if (family.icon && currentFamily.icon !== family.icon) {
       const newIcon = await this.imageLoaderService.loadImage(
         family.icon,
         `families/${family._id}`
@@ -91,10 +98,22 @@ export class FamiliesService {
       family.icon = newIcon;
     }
     await this.dao.updateFamily(familyId, family);
+    if (!currentFamily.equalPayments && family.equalPayments) {
+      const members = await this.getFamilyMembers(familyId);
+      await this.setPaymentPercentageEqually(familyId, members);
+    }
     return this.getMemberFamily(familyId, userId);
   }
 
-  public async getFamily(familyId: string): Promise<FamilyView> {
+  public async getFamily(
+    familyId: string
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  > {
     return this.dao.getFamily(familyId);
   }
 
@@ -118,27 +137,17 @@ export class FamiliesService {
       _id: userId,
       roles: roles.indexOf(Roles.Member) > -1 ? roles : [...roles, Roles.Member]
     });
-    if (this.isAdultMember(newMember)) {
-      const family = await this.getFamily(familyId);
-      const paymentPercentages = await this.getPaymentPercentages(familyId);
-      if (!family.equalPayments) {
-        await this.updateMembersPercentages(familyId, [
-          ...paymentPercentages,
-          { userId: newMember._id, paymentPercentage: 0 }
-        ]);
-      } else {
-        const members = (await this.getFamilyMembers(familyId)).filter(member =>
-          this.isAdultMember(member)
-        );
-        const paymentPercentage = 100 / members.length;
-        await this.updateMembersPercentages(familyId, [
-          ...paymentPercentages.map(percentage => ({
-            userId: percentage.userId,
-            paymentPercentage
-          })),
-          { userId: newMember._id, paymentPercentage }
-        ]);
-      }
+
+    const family = await this.getFamily(familyId);
+    if (!family.equalPayments) {
+      await this.updateMemberPaymentPercentage(familyId, {
+        userId: newMember._id,
+        paymentPercentage: 0
+      });
+    } else {
+      const currentMembers = await this.getFamilyMembers(familyId);
+      const members = [...currentMembers, newMember];
+      await this.setPaymentPercentageEqually(familyId, members);
     }
 
     return newMember;
@@ -189,6 +198,16 @@ export class FamiliesService {
     ];
   }
 
+  public async updateMemberPaymentPercentage(
+    familyId: string,
+    percentage: MemberPaymentPercentage
+  ): Promise<void> {
+    await this.dao.updateMemberPercentage(
+      { familyId, userId: percentage.userId },
+      percentage.paymentPercentage
+    );
+  }
+
   public async updateMembersPercentages(
     familyId: string,
     percentages: MemberPaymentPercentage[]
@@ -225,9 +244,8 @@ export class FamiliesService {
       {}
     );
     return (
-      (await this.getFamilyMembers(familyId))
-        .filter(this.isAdultMember)
-        .reduce((res: number, member: FamilyMember) => {
+      (await this.getFamilyMembers(familyId)).reduce(
+        (res: number, member: FamilyMember) => {
           if (
             percentagesNormalized[member._id] &&
             percentagesNormalized[member._id].paymentPercentage !== undefined &&
@@ -236,7 +254,9 @@ export class FamiliesService {
             return res + percentagesNormalized[member._id].paymentPercentage;
           }
           return res + member.paymentPercentage;
-        }, 0) === 100
+        },
+        0
+      ) === 100
     );
   }
 
@@ -271,29 +291,21 @@ export class FamiliesService {
     );
   }
 
-  public async userCanCreatePayment(
-    userId: string,
-    familyId: string
-  ): Promise<boolean> {
-    const familyMember = await this.dao.getFamilyMember(userId, familyId);
-    return familyMember && this.isAdultMember(familyMember);
-  }
-
   public async isFamilyAdmin(userId: string, familyId: string) {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
     return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
   }
 
-  public getPaymentPercentages(
-    familyId: string
-  ): Promise<MemberPaymentPercentage[]> {
-    return this.dao.getPaymentPercentages(familyId);
-  }
-
-  private isAdultMember(member: FamilyMember) {
-    return (
-      member.roles.indexOf(Roles.Admin) > -1 ||
-      member.roles.indexOf(Roles.Owner) > -1
-    );
+  private setPaymentPercentageEqually(
+    familyId: string,
+    members: FamilyMember[]
+  ): Promise<void> {
+    const paymentPercentage = 100 / members.length;
+    return this.updateMembersPercentages(familyId, [
+      ...members.map(member => ({
+        userId: member._id,
+        paymentPercentage
+      }))
+    ]);
   }
 }

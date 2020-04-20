@@ -70,7 +70,8 @@ export class NewFamilyMemberFormComponent implements OnInit {
     });
   }
 
-  onRolesLoad() {
+  async onRolesLoad() {
+    await Promise.resolve();
     this.rolesLoaded = true;
   }
 

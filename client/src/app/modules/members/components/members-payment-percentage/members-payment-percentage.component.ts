@@ -2,11 +2,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges
+  Output
 } from '@angular/core';
 import {
   FormArray,
@@ -29,10 +27,9 @@ import { startWith, take, takeUntil } from 'rxjs/operators';
   templateUrl: './members-payment-percentage.component.html',
   styleUrls: ['./members-payment-percentage.component.scss']
 })
-export class MembersPaymentPercentageComponent
-  implements OnInit, OnChanges, OnDestroy {
+export class MembersPaymentPercentageComponent implements OnInit, OnDestroy {
   @Input() familyId: string;
-  @Input() newFamilyMemberRoles: boolean;
+  @Input() newFamilyMember: boolean;
 
   @Output() valueUpdated = new EventEmitter<{
     value: AdultMember[];
@@ -55,35 +52,13 @@ export class MembersPaymentPercentageComponent
       .getMembers(this.familyId)
       .pipe(take(1))
       .subscribe((members: FamilyMember[]) => {
-        this.adultMembers = members
-          .filter(member => this.membersService.memberIsAdult(member.roles))
-          .map(member => ({
-            fullName: this.userManagerService.getFullName(member),
-            userId: member._id,
-            paymentPercentage: member.paymentPercentage
-          }));
+        this.adultMembers = members.map(member => ({
+          fullName: this.userManagerService.getFullName(member),
+          userId: member._id,
+          paymentPercentage: member.paymentPercentage
+        }));
         this.initForm(this.adultMembers);
       });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.newFamilyMemberRoles || !this.paymentsPercentages) {
-      return;
-    }
-    const memberIsAdult = this.membersService.memberIsAdult(
-      changes.newFamilyMemberRoles.currentValue
-    );
-    const memberWasAdult = this.membersService.memberIsAdult(
-      changes.newFamilyMemberRoles.previousValue
-    );
-    if (memberIsAdult === memberWasAdult) {
-      return;
-    }
-    if (memberIsAdult) {
-      this.addAdultMember();
-      return;
-    }
-    this.removeNewAdultMember();
   }
 
   get paymentsPercentagesList(): FormArray {
@@ -108,6 +83,9 @@ export class MembersPaymentPercentageComponent
         this.totalHundredValidation()
       ])
     });
+    if (this.newFamilyMember) {
+      this.addAdultMember();
+    }
 
     this.paymentsPercentages.valueChanges
       .pipe(
@@ -164,13 +142,6 @@ export class MembersPaymentPercentageComponent
     this.adultMembers = [...this.adultMembers, newAdultMember];
     this.paymentsPercentagesList.push(
       this.createPercentageFormGroup(newAdultMember)
-    );
-  }
-
-  private removeNewAdultMember() {
-    this.adultMembers.splice(this.adultMembers.length - 1);
-    this.paymentsPercentagesList.removeAt(
-      this.paymentsPercentagesList.length - 1
     );
   }
 

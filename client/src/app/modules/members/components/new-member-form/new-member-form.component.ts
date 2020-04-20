@@ -88,10 +88,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
       .addFamilyMember(this.data.family._id, this.memberForm.value)
       .pipe(
         mergeMap((newMember: FamilyMember) => {
-          if (
-            !this.data.family.equalPayments &&
-            this.membersService.memberIsAdult(newMember.roles)
-          ) {
+          if (!this.data.family.equalPayments) {
             return this.updatePercentages(newMember);
           }
           return of(undefined);

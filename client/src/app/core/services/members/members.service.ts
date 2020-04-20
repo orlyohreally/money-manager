@@ -87,13 +87,6 @@ export class MembersService extends DataService {
     );
   }
 
-  memberIsAdult(memberRoles: string[]) {
-    return (
-      memberRoles.indexOf(Roles.Admin) > -1 ||
-      memberRoles.indexOf(Roles.Owner) > -1
-    );
-  }
-
   familyMemberCanManageFamilyPayments(member: FamilyMember) {
     return (
       member.roles.indexOf(Roles.Admin) > -1 ||

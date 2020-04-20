@@ -1,6 +1,6 @@
 <div class="page-content__header">
   <div class="page-content__title-section">
-    <div class="mat-h2">Adult members payments percentages</div>
+    <div class="mat-h2">Members payments percentages</div>
     <div class="mat-caption">
       Set payment percentages for members if some of them are not paying equally
     </div>
@@ -13,8 +13,8 @@
     <mat-icon>info</mat-icon>
   </a>
 </div>
-<ng-container *ngIf="adultMembers; else loading">
-  <form [formGroup]="paymentsPercentages">
+<ng-container *ngIf="members | async as payers; else loading">
+  <form [formGroup]="paymentsPercentagesForm">
     <div formArrayName="paymentsPercentages" fxLayout="row wrap">
       <member-payment-percentage
         class="member-payment-percentage"
@@ -23,14 +23,14 @@
           let i = index;
           trackBy: trackByFn
         "
-        [adultMemberPercentageForm]="paymentPercentage"
-        [adultMember]="adultMembers[i]"
+        [memberPercentageForm]="paymentPercentage"
+        [member]="payers[i]"
       >
       </member-payment-percentage>
     </div>
     <div
       sharedNotificationBlock="error"
-      *ngIf="paymentsPercentagesList.hasError('totalPercentage')"
+      *ngIf="paymentsPercentagesList.hasError('total-percentage')"
     >
       Values should add up to 100%
     </div>

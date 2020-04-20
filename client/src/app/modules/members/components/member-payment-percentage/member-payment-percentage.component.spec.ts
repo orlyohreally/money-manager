@@ -8,14 +8,15 @@ import {
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+import { UserFullNamePipeMock } from '@tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { MemberPaymentPercentageComponent } from './member-payment-percentage.component';
 
 @Component({
   template: `
     <member-payment-percentage
-      [adultMember]="adultMember"
-      [adultMemberPercentageForm]="adultMemberPercentageForm"
+      [member]="adultMember"
+      [memberPercentageForm]="adultMemberPercentageForm"
     ></member-payment-percentage>
   `
 })
@@ -38,7 +39,11 @@ describe('MemberPaymentPercentageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MemberPaymentPercentageComponent, ParentComponent],
+      declarations: [
+        MemberPaymentPercentageComponent,
+        ParentComponent,
+        UserFullNamePipeMock
+      ],
       imports: [
         ReactiveFormsModule,
         MatInputModule,

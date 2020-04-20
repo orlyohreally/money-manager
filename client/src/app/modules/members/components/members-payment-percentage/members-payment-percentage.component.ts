@@ -14,13 +14,12 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-// tslint:disable-next-line: max-line-length
-import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
+import { Observable, of, Subject } from 'rxjs';
+import { startWith, switchMap, take, takeUntil } from 'rxjs/operators';
+
+import { MembersService } from '@core-client/services/members/members.service';
 import { FamilyMember } from '@shared/types';
-import { MembersService } from '@src/app/core/services/members/members.service';
 import { AdultMember } from '@src/app/types/adult-member';
-import { Subject } from 'rxjs';
-import { startWith, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'member-members-payment-percentage',
@@ -36,40 +35,42 @@ export class MembersPaymentPercentageComponent implements OnInit, OnDestroy {
     valid: boolean;
   }>();
 
-  adultMembers: AdultMember[];
-  paymentsPercentages: FormGroup;
+  members: Observable<FamilyMember[]>;
+  paymentsPercentagesForm: FormGroup;
 
   private destroyed = new Subject<void>();
 
   constructor(
     private membersService: MembersService,
-    private userManagerService: UserManagerService,
     private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
-    this.membersService
-      .getMembers(this.familyId)
-      .pipe(take(1))
-      .subscribe((members: FamilyMember[]) => {
-        this.adultMembers = members.map(member => ({
-          fullName: this.userManagerService.getFullName(member),
-          userId: member._id,
-          paymentPercentage: member.paymentPercentage
-        }));
-        this.initForm(this.adultMembers);
-      });
+    this.members = this.membersService.getMembers(this.familyId).pipe(
+      take(1),
+      switchMap(members => {
+        const newMember = {
+          _id: '',
+          firstName: 'new member',
+          lastName: '',
+          paymentPercentage: 0
+        } as FamilyMember;
+        const payers = this.newFamilyMember ? [...members, newMember] : members;
+        this.initForm(payers);
+        return of(payers);
+      })
+    );
   }
 
   get paymentsPercentagesList(): FormArray {
-    return this.paymentsPercentages.get('paymentsPercentages') as FormArray;
+    return this.paymentsPercentagesForm.get('paymentsPercentages') as FormArray;
   }
 
   trackByFn(index: any) {
     return index;
   }
 
-  private initForm(members: AdultMember[]) {
+  private initForm(members: FamilyMember[]) {
     const percentages: FormGroup[] = members.reduce(
       (res: FormGroup[], member) => [
         ...res,
@@ -77,32 +78,28 @@ export class MembersPaymentPercentageComponent implements OnInit, OnDestroy {
       ],
       []
     );
-    this.paymentsPercentages = this.formBuilder.group({
+    this.paymentsPercentagesForm = this.formBuilder.group({
       paymentsPercentages: this.formBuilder.array(percentages, [
         Validators.required,
         this.totalHundredValidation()
       ])
     });
-    if (this.newFamilyMember) {
-      this.addAdultMember();
-    }
-
-    this.paymentsPercentages.valueChanges
+    this.paymentsPercentagesForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        startWith(this.paymentsPercentages.getRawValue())
+        startWith(this.paymentsPercentagesForm.getRawValue())
       )
       .subscribe(currentValue => {
         this.valueUpdated.emit({
           value: currentValue.paymentsPercentages,
-          valid: this.paymentsPercentages.valid
+          valid: this.paymentsPercentagesForm.valid
         });
       });
   }
 
-  private createPercentageFormGroup(member: AdultMember): FormGroup {
+  private createPercentageFormGroup(member: FamilyMember): FormGroup {
     return this.formBuilder.group({
-      userId: new FormControl(member.userId),
+      userId: new FormControl(member._id),
       paymentPercentage: new FormControl(member.paymentPercentage, [
         this.percentValidation()
       ])
@@ -110,39 +107,26 @@ export class MembersPaymentPercentageComponent implements OnInit, OnDestroy {
   }
 
   private totalHundredValidation(): ValidatorFn {
-    return (formArray: FormArray): { [key: string]: any } | null => {
+    return (formArray: FormArray): { 'total-percentage': boolean } | null => {
       const totalPercentage = formArray.controls.reduce((res, control) => {
-        const currentValue = control.get('paymentPercentage').value
-          ? parseInt(control.get('paymentPercentage').value, 10)
-          : 0;
+        const currentValue = parseFloat(
+          control.get('paymentPercentage').value || 0
+        );
         return res + currentValue;
       }, 0);
-      return totalPercentage === 100 ? null : { totalPercentage: true };
+      return totalPercentage === 100 ? null : { 'total-percentage': true };
     };
   }
 
   private percentValidation(): ValidatorFn {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const parsedValue = parseInt(control.value, 10);
+    return (control: FormControl): { 'invalid-percent': boolean } | null => {
+      const parsedValue = parseFloat(control.value);
       const invalidPercentValue =
         parsedValue.toString() !== (control.value || 0).toString() ||
         parsedValue > 100 ||
         parsedValue < 0;
-
       return invalidPercentValue ? { 'invalid-percent': true } : null;
     };
-  }
-
-  private addAdultMember() {
-    const newAdultMember = {
-      fullName: 'new member',
-      userId: '',
-      paymentPercentage: 0
-    };
-    this.adultMembers = [...this.adultMembers, newAdultMember];
-    this.paymentsPercentagesList.push(
-      this.createPercentageFormGroup(newAdultMember)
-    );
   }
 
   ngOnDestroy(): void {

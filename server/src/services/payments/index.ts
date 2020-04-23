@@ -7,7 +7,8 @@ import { PaymentsService } from "./PaymentsService";
 
 export const paymentsService = new PaymentsService({
   dao: new PaymentsDao(),
-  imageLoaderService: imageManagerService
+  imageLoaderService: imageManagerService,
+  familiesService: familiesService
 });
 
 export const paymentsRouter = new PaymentsRouter({

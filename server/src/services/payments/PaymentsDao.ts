@@ -19,6 +19,20 @@ export class PaymentsDao implements IPaymentsDao {
       .toArray();
   }
 
+  public async getPayment(
+    paymentId: string,
+    familyId?: string
+  ): Promise<AggregatedPayment> {
+    const paymentsView: Collection<AggregatedPayment> = await getPaymentsView();
+
+    return (await paymentsView
+      .find({
+        _id: new ObjectId(paymentId),
+        ...(familyId && { familyId: new ObjectId(familyId) })
+      })
+      .toArray())[0];
+  }
+
   public async getUserPayments(userId: string): Promise<AggregatedPayment[]> {
     const paymentsView: Collection<AggregatedPayment> = await getPaymentsView();
     return paymentsView
@@ -34,14 +48,16 @@ export class PaymentsDao implements IPaymentsDao {
     return newPayment.toJSON(modelTransformer) as Payment;
   }
 
-  public async updatePayment(payment: Partial<Payment>): Promise<Payment> {
-    return PaymentModel.updateOne(
-      { _id: payment._id },
-      { payment },
-      { multi: true }
+  public async updatePayment(
+    payment: Partial<Payment> & { _id: string }
+  ): Promise<Payment> {
+    await PaymentModel.findOneAndUpdate(
+      { _id: new ObjectId(payment._id) },
+      payment
     )
       .lean()
       .exec();
+    return this.getPayment(payment._id, payment.familyId);
   }
 
   public async updatePaymentsAmountByRate(

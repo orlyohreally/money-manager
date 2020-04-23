@@ -43,7 +43,7 @@ export class FamiliesRouter {
       "/families/:familyId",
       [
         this.usersService.validateToken.bind(usersService),
-        this.service.userCanEditFamily.bind(service)
+        this.service.isUpdateFamilyAllowedMW.bind(service)
       ],
       asyncWrap(this.putFamily)
     );
@@ -56,7 +56,7 @@ export class FamiliesRouter {
       "/families/:familyId",
       [
         this.usersService.validateToken.bind(usersService),
-        this.service.userCanEditFamily.bind(service)
+        this.service.isUpdateFamilyAllowedMW.bind(service)
       ],
       asyncWrap(this.deleteFamily)
     );
@@ -64,7 +64,7 @@ export class FamiliesRouter {
       "/families/:familyId/members",
       [
         this.usersService.validateToken.bind(usersService),
-        this.service.userCanEditFamily.bind(service)
+        this.service.isUpdateFamilyAllowedMW.bind(service)
       ],
       asyncWrap(this.postFamilyMember)
     );
@@ -82,7 +82,7 @@ export class FamiliesRouter {
       "/families/:familyId/members/payment-percentages",
       [
         this.usersService.validateToken.bind(usersService),
-        this.service.userCanEditFamily.bind(service)
+        this.service.isUpdateFamilyAllowedMW.bind(service)
       ],
       asyncWrap(this.putMembersPaymentsPercentages)
     );

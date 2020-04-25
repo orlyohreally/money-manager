@@ -32,7 +32,7 @@ describe('FamilyMembersComponent', () => {
             parent: { params: of({}) }
           }
         },
-        { provide: MembersService, useValue: membersServiceMock.service }
+        { provide: MembersService, useValue: membersServiceMock.getService() }
       ]
     }).compileComponents();
   }));

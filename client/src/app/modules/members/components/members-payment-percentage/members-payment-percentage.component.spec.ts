@@ -33,7 +33,7 @@ describe('MembersPaymentPercentageComponent', () => {
   const userManagerServiceMock: IUserManagerServiceMock = UserManagerServiceMock();
 
   beforeEach(async(() => {
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
     userManagerServiceSpy = userManagerServiceMock.service;
 
     TestBed.configureTestingModule({

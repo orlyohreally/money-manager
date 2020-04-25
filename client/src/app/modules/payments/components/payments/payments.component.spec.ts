@@ -47,7 +47,7 @@ describe('PaymentsComponent', () => {
   beforeEach(async(() => {
     paymentsCalculationsServiceSpy = paymentsCalculationsServiceMock.service;
     familiesServiceSpy = familiesServiceMock.service;
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
     paymentSubjectsServiceSpy = paymentSubjectsServiceMock.service;
 
     TestBed.configureTestingModule({

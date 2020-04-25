@@ -127,7 +127,8 @@ const userAggregatedPaymentsListMock: UserPaymentView[] = [
     family: { _id: 'familyId-1', roles: ['Admin', 'Member'] } as MemberFamily,
     currency: 'USD',
     createdAt: new Date('2020-10-01').toString(),
-    updatedAt: new Date('2020-10-02').toString()
+    updatedAt: new Date('2020-10-02').toString(),
+    paymentPercentages: paymentPercentageMock
   },
   {
     _id: 'paymentId-2',
@@ -138,7 +139,8 @@ const userAggregatedPaymentsListMock: UserPaymentView[] = [
     family: { _id: 'familyId-2', roles: ['Member'] } as MemberFamily,
     currency: 'USD',
     createdAt: new Date('2020-10-02').toString(),
-    updatedAt: new Date('2020-10-02').toString()
+    updatedAt: new Date('2020-10-02').toString(),
+    paymentPercentages: paymentPercentageMock
   }
 ];
 

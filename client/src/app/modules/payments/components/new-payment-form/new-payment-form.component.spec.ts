@@ -45,10 +45,10 @@ describe('NewPaymentFormComponent', () => {
     dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
     paymentsServiceSpy = paymentsServiceMock.service;
     paymentSubjectsServiceSpy = paymentSubjectsServiceMock.service;
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
     familiesServiceSpy = familiesServiceMock.service;
     notificationServiceSpy = getNotificationsSpy();
-    authenticationServiceSpy = authenticationServiceMock.service;
+    authenticationServiceSpy = authenticationServiceMock.getService();
 
     TestBed.configureTestingModule({
       declarations: [

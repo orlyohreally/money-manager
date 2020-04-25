@@ -25,7 +25,7 @@ describe('UserMenuOpenerComponent', () => {
 
   beforeEach(async(() => {
     userManagerServiceSpy = userManagerServiceMock.service;
-    authServiceSpy = authServiceMock.service;
+    authServiceSpy = authServiceMock.getService();
 
     TestBed.configureTestingModule({
       declarations: [

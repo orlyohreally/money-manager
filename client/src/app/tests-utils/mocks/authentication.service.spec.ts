@@ -1,7 +1,7 @@
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { User } from '@shared/types';
-import { cold } from 'jasmine-marbles';
+import { cold, hot } from 'jasmine-marbles';
 
 const user: User = {
   _id: 'userId-1',
@@ -21,7 +21,7 @@ function getAuthenticationServiceSpy() {
     'AuthenticationService',
     ['getUser', 'isAuthenticated', 'tokenLoadedFromStorage']
   );
-  authenticationServiceSpy.getUser.and.returnValue(cold('--a', { a: user }));
+  authenticationServiceSpy.getUser.and.returnValue(hot('--a---', { a: user }));
   authenticationServiceSpy.isAuthenticated.and.returnValue(
     cold('--a', { a: true })
   );
@@ -33,12 +33,12 @@ function getAuthenticationServiceSpy() {
 }
 
 export interface IAuthenticationServiceMock {
-  service: jasmine.SpyObj<AuthenticationService>;
+  getService: () => jasmine.SpyObj<AuthenticationService>;
   user: User;
 }
 
 // tslint:disable-next-line: max-line-length
 export const AuthenticationServiceMock: () => IAuthenticationServiceMock = () => ({
-  service: getAuthenticationServiceSpy(),
+  getService: getAuthenticationServiceSpy,
   user
 });

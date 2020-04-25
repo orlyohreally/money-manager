@@ -22,7 +22,7 @@ describe('MemberRolesComponent', () => {
   const membersServiceMock = MembersServiceMock();
 
   beforeEach(async(() => {
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
 
     TestBed.configureTestingModule({
       declarations: [

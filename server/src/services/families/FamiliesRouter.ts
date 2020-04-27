@@ -128,13 +128,21 @@ export class FamiliesRouter {
 
   private putFamily = async (req: Request, res: Response) => {
     try {
-      const family = (req.body as { family: Family; user: User }).family;
+      const body = req.body as {
+        family: Family;
+        user: User;
+      };
       const familyId = (req.params as { familyId: string }).familyId;
-      if (!family) {
+      if (!body.family) {
         res.status(404).json({ message: "New values are missing" });
         return;
       }
-      const updatedFamily = await this.service.updateFamily(familyId, family);
+
+      const updatedFamily = await this.service.updateFamily(
+        familyId,
+        body.family,
+        body.user._id
+      );
       res.status(200).json(updatedFamily);
     } catch (err) {
       res.status(404).json(err);
@@ -220,12 +228,12 @@ export class FamiliesRouter {
         body.roles
       );
       await this.emailSenderService.sendEmail(
-        process.env.member_was_added_to_family_email_template as string,
+        process.env.MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE as string,
         user.email,
         {
           adderFullName: `${body.user.firstName} ${body.user.lastName}`,
           familyName: family.name,
-          familiesUrl: `${process.env.front_end_url}/families`
+          familiesUrl: `${process.env.FRONT_END_URL}/families`
         }
       );
       return res.status(200).json(member);

@@ -4,21 +4,26 @@
   fxLayout="row"
   fxLayoutAlign="space-between center"
 >
-  <div class="user-avatar" [style.background-image]="backgroundImg"></div>
-  <div class="user-name">{{ fullName }}</div>
+  <div
+    class="user-avatar"
+    [style.background-image]="user | familyMemberIcon: true"
+  ></div>
+  <div fxHide.lt-sm class="user-name text_ellipsis">
+    {{ user | sharedUserFullName }}
+  </div>
   <div class="arrow-icon">
     <mat-icon class="arrow-icon__icon">keyboard_arrow_down</mat-icon>
   </div>
 </div>
 <mat-menu #userMenu="matMenu">
-  <a mat-menu-item routerLink="profile">
+  <a mat-menu-item routerLink="/user/manage-account">
     <mat-icon>person</mat-icon>
     Manage account
   </a>
-  <a mat-menu-item routerLink="profile/settings">
+  <!-- <a mat-menu-item routerLink="profile/settings">
     <mat-icon>build</mat-icon>
     Settings
-  </a>
+  </a> -->
   <a mat-menu-item routerLink="auth/logout">
     <mat-icon>exit_to_app</mat-icon>
     Log out

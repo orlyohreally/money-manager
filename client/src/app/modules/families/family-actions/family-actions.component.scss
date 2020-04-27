@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  margin: 10px 0;
+}
+
+.family-card-action {
+  padding: 5px;
+  min-height: unset;
+  line-height: normal;
+  margin-right: 5px;
+}
+
+.family-card-action:last-child {
+  margin-right: 0;
+}
+
+.family-card-action .mat-icon {
+  height: 18px;
+  width: 18px;
+  font-size: 18px;
+  margin-right: 5px;
+}

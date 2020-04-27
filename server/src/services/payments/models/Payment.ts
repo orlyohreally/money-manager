@@ -1,23 +1,43 @@
 import { ObjectId } from "mongodb";
-import { Document, model, Schema } from "mongoose";
+import { connection, Document, model, Schema } from "mongoose";
 
-import { Payment } from "@shared/types";
+import { FamilyMemberPaymentPercentage, Payment } from "@shared/types";
 
-type PaymentDocument = Payment & Document;
+const FamilyMemberPaymentPercentageSchema = new Schema<
+  FamilyMemberPaymentPercentage
+>(
+  {
+    userId: {
+      type: ObjectId,
+      required: true,
+      ref: "UserModel",
+      index: true
+    },
+    paymentPercentage: { type: Number, required: true }
+  },
+  { versionKey: false, autoIndex: true, _id: false }
+);
+
+type PaymentDocument = Document & Payment<ObjectId>;
 
 const PaymentSchema = new Schema<Payment>(
   {
     amount: { type: Number, required: true },
-    familyId: { type: ObjectId, ref: "FamilyModel" },
-    userId: { type: ObjectId, required: true, ref: "UserModel" },
-    subjectId: { type: ObjectId, required: true, ref: "PaymentSubjectModel" },
-    currency: String,
+    familyId: { type: ObjectId, ref: "FamilyModel", index: true },
+    userId: { type: ObjectId, required: true, ref: "UserModel", index: true },
+    subjectId: {
+      type: ObjectId,
+      required: true,
+      ref: "PaymentSubjectModel",
+      index: true
+    },
     receipt: String,
     paidAt: { type: Date, required: true },
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    paymentPercentages: [FamilyMemberPaymentPercentageSchema]
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 PaymentSchema.pre<PaymentDocument>("save", function(next) {
   if (!this.createdAt) {
@@ -34,3 +54,9 @@ export const PaymentModel = model<PaymentDocument>(
   "PaymentModel",
   PaymentSchema
 );
+
+export const getPaymentsView = async () => {
+  return connection.createCollection("AggregatedPayments", {
+    viewOn: "paymentmodels"
+  });
+};

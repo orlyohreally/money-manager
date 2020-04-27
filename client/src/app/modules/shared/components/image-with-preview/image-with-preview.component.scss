@@ -1,0 +1,28 @@
+.image-preview__default-image {
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.image-preview {
+  position: relative;
+}
+
+.image-preview__icon {
+  font-size: 30px;
+  color: #ffffff;
+}
+
+.shade {
+  display: none;
+}
+
+.image-preview:hover {
+  cursor: pointer;
+}
+
+.image-preview:hover .shade {
+  display: flex;
+}

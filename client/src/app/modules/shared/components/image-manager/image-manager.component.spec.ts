@@ -1,14 +1,39 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MockComponent } from 'ng-mocks';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
-import { ImageManagerComponent } from './image-manager.component';
+// tslint:disable-next-line: max-line-length
+import { ImagePreviewComponent } from '../image-preview/image-preview.component';
+import {
+  ImageManagerComponent,
+  ImageManagerData
+} from './image-manager.component';
 
 describe('ImageManagerComponent', () => {
   let component: ImageManagerComponent;
   let fixture: ComponentFixture<ImageManagerComponent>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<ImageManagerComponent>>;
 
   beforeEach(async(() => {
+    dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+
     TestBed.configureTestingModule({
-      declarations: [ImageManagerComponent]
+      declarations: [
+        ImageManagerComponent,
+        MockComponent(ImagePreviewComponent)
+      ],
+      imports: [ImageCropperModule],
+      providers: [
+        { provide: MatDialogRef, useValue: dialogRefSpy },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            imageUrl: 'image.png',
+            toLoadImage: true
+          } as ImageManagerData
+        }
+      ]
     }).compileComponents();
   }));
 

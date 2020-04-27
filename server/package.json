@@ -40,12 +40,8 @@
   },
   "homepage": "https://github.com/orlyohreally/money-manager#readme",
   "devDependencies": {
-    "@types/express": "^4.16.1",
-    "@types/jest": "^23.3.13",
-    "@types/lodash": "^4.14.130",
     "concurrently": "^4.1.0",
     "jest": "^23.6.0",
-    "node-mocks-http": "^1.8.1",
     "nodemon": "^1.18.10",
     "prettier-config-trucknet-io": "^2.0.1",
     "rimraf": "^2.6.3",
@@ -85,6 +81,10 @@
     "npm": "^6.9.0",
     "redis": "^2.8.0",
     "ts-node": "^8.1.0",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "@types/express": "^4.16.1",
+    "@types/jest": "^23.3.13",
+    "@types/lodash": "^4.14.130",
+    "node-mocks-http": "^1.8.1"
   }
 }

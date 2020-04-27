@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -13,18 +12,8 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
-
-export interface UserPaymentView {
-  amount: number;
-  paidAt: string;
-  createdAt: string;
-  familyName: string;
-  familyId: string;
-  updatedAt: string;
-  subjectName: string;
-  subjectIcon: string;
-  currency: string;
-}
+import { compare } from '@shared-client/functions';
+import { UserPaymentView } from '@src/app/types';
 
 @Component({
   selector: 'payment-user-payment-list',
@@ -33,18 +22,10 @@ export interface UserPaymentView {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserPaymentsListComponent implements OnInit, OnChanges {
-  @HostBinding('style.width') width = '100%';
-
   @Input() payments: UserPaymentView[];
+
   dataSource: MatTableDataSource<UserPaymentView>;
-  displayedColumns: string[] = [
-    'subject',
-    'amount',
-    'familyName',
-    'paidAt',
-    'createdAt',
-    'updatedAt'
-  ];
+  displayedColumns: string[] = ['subject', 'amount', 'family', 'paidAt'];
 
   private paginator: MatPaginator;
   private sort: MatSort;
@@ -77,7 +58,7 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.data.slice();
+    const data = [...this.dataSource.data];
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;
       return;
@@ -86,26 +67,22 @@ export class UserPaymentsListComponent implements OnInit, OnChanges {
     this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'amount':
-          return compare(a.amount, b.amount, isAsc);
+        case 'amount': {
+          const compareByCurrency = compare(a.currency, b.currency, true);
+          return compareByCurrency === 0
+            ? compare(a.amount, b.amount, isAsc)
+            : compareByCurrency;
+        }
         case 'subject':
-          return compare(a.subjectName, b.subjectName, isAsc);
-        case 'familyName':
-          return compare(a.familyName, b.familyName, isAsc);
+          return compare(a.subject.name, b.subject.name, isAsc);
+        case 'family':
+          return compare(a.family.name, b.family.name, isAsc);
         case 'paidAt':
           return compare(a.paidAt, b.paidAt, isAsc);
-        case 'createdAt':
-          return compare(a.createdAt, b.createdAt, isAsc);
-        case 'updatedAt':
-          return compare(a.updatedAt, b.updatedAt, isAsc);
-        default:
-          return 0;
       }
     });
-    this.dataSource.paginator.firstPage();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

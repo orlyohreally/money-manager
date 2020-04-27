@@ -1,30 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Family, MemberPaymentPercentage } from '@shared/types';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { MemberFamily } from 'src/app/modules/shared/types/member-family';
-import { DataService } from '../data.service';
-// tslint:disable-next-line: max-line-length
-import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
-export interface FamilyView {
-  name: string;
-  icon: string;
-  membersCount: number;
-}
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
+import { findById } from '@shared-client/functions/find-by-id';
+import { Family, FamilyView } from '@shared/types';
+import { DataService } from '../data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FamiliesService extends DataService {
   private familyStore = new BehaviorSubject<{
-    families: MemberFamily[];
-    currentFamily: MemberFamily;
-  }>({ families: [], currentFamily: null });
+    families: FamilyView[];
+    currentFamily: FamilyView;
+  }>({ families: [], currentFamily: undefined });
 
   private familyAPIRouter = 'families/';
   private familyDefaultIcon = '/assets/images/family-icon.png';
+  private loadedFamilies = new BehaviorSubject<boolean>(false);
 
   constructor(
     http: HttpClient,
@@ -33,42 +29,44 @@ export class FamiliesService extends DataService {
     super(http, globalVariablesService);
   }
 
-  loadFamilies(): Observable<MemberFamily[]> {
+  loadFamilies(): Observable<FamilyView[]> {
     return this.get(this.familyAPIRouter).pipe(
-      map((families: MemberFamily[]) => {
+      map((families: FamilyView[]) => {
         this.familyStore.next({ families, currentFamily: families[0] });
+        this.loadedFamilies.next(true);
         return families;
       })
     );
   }
 
-  getFamilyById(familyId: string): Observable<MemberFamily> {
-    if (this.familyStore.getValue().families) {
-      return of(
-        this.familyStore
-          .getValue()
-          .families.filter(family => family._id === familyId)[0]
-      );
+  getFamilyById(familyId: string): Observable<FamilyView> {
+    if (this.loadedFamilies.getValue()) {
+      return of(findById(this.familyStore.getValue().families, familyId));
     }
-
     return this.loadFamilies().pipe(
       switchMap(families => {
-        return of(families.filter(family => family._id === familyId)[0]);
+        return of(findById(families, familyId));
       })
     );
   }
 
   get familiesInfo(): Observable<{
-    families: MemberFamily[];
-    currentFamily: MemberFamily;
+    families: FamilyView[];
+    currentFamily: FamilyView;
   }> {
-    return this.familyStore.asObservable();
+    if (this.loadedFamilies.getValue()) {
+      return this.familyStore.asObservable();
+    }
+    return this.loadFamilies().pipe(
+      switchMap(() => this.familyStore.asObservable())
+    );
   }
 
-  setCurrentFamily(familyId: string) {
-    const selectedFamily = this.familyStore
-      .getValue()
-      .families.filter((family: MemberFamily) => family._id === familyId)[0];
+  setCurrentFamily(familyId: string): void {
+    const selectedFamily = findById(
+      this.familyStore.getValue().families,
+      familyId
+    );
     if (selectedFamily) {
       this.familyStore.next({
         families: this.familyStore.getValue().families,
@@ -80,38 +78,50 @@ export class FamiliesService extends DataService {
   createFamily(
     family: Partial<Family>,
     roles: string[]
-  ): Observable<MemberFamily> {
+  ): Observable<FamilyView> {
     return this.post(this.familyAPIRouter, {
       family,
       roles
     }).pipe(
-      switchMap((newFamily: MemberFamily) => {
+      switchMap((newFamily: FamilyView) => {
         const families = this.familyStore.getValue().families;
         this.familyStore.next({
           families: [...families, newFamily],
           currentFamily: this.familyStore.getValue().currentFamily
         });
         return of(newFamily);
-      }),
-      catchError(error => {
-        return throwError(error);
       })
     );
   }
 
-  updateFamily(family: Partial<MemberFamily>): Observable<MemberFamily> {
-    return this.put(`${this.familyAPIRouter}${family._id}`, { family }).pipe(
-      switchMap((updatedFamily: MemberFamily) => {
-        const families = this.familyStore.getValue().families;
-        let oldFamilyValue = families.filter(
-          (currentFamily: MemberFamily) =>
-            currentFamily._id === updatedFamily._id
-        )[0];
-        oldFamilyValue = Object.assign(oldFamilyValue, updatedFamily);
+  updateFamily(
+    family: Partial<FamilyView>,
+    exchangeRate?: number
+  ): Observable<FamilyView> {
+    return this.put(`${this.familyAPIRouter}${family._id}`, {
+      ...{ family },
+      ...(exchangeRate && { exchangeRate })
+    }).pipe(
+      switchMap((updatedFamily: FamilyView) => {
+        const families = this.familyStore
+          .getValue()
+          .families.map(f => (f._id === family._id ? updatedFamily : f));
+        const currentFamily = this.familyStore.getValue().currentFamily;
+
         this.familyStore.next({
           families,
-          currentFamily: this.familyStore.getValue().currentFamily
+          currentFamily:
+            currentFamily._id === family._id ? updatedFamily : currentFamily
         });
+        return of(updatedFamily);
+      }),
+      switchMap(updatedFamily => {
+        if (exchangeRate) {
+          if (!exchangeRate || exchangeRate === 1) {
+            return of(undefined);
+          }
+          this.updateMemberFamilySpentAmount(family._id, exchangeRate, '*');
+        }
         return of(updatedFamily);
       }),
       catchError(error => {
@@ -125,7 +135,7 @@ export class FamiliesService extends DataService {
       switchMap(() => {
         const families = this.familyStore.getValue().families;
         const index = families.findIndex(
-          (familyIterator: MemberFamily) => familyIterator._id === family._id
+          (familyIterator: FamilyView) => familyIterator._id === family._id
         );
         families.splice(index, 1);
 
@@ -141,22 +151,16 @@ export class FamiliesService extends DataService {
     );
   }
 
-  getFamily(familyId: string): Observable<FamilyView> {
-    return this.get<{ name: string; icon: string; membersCount: number }>(
-      `${this.familyAPIRouter}${familyId}`
-    );
-  }
-
   getFamilyIcon(family: Family) {
     return family.icon ? family.icon : this.familyDefaultIcon;
   }
 
-  getFamiliesList(): Observable<Family[]> {
+  getFamiliesList(): Observable<FamilyView[]> {
     return this.familiesInfo.pipe(
       map(
         (familiesInfo: {
-          families: MemberFamily[];
-          currentFamily: MemberFamily;
+          families: FamilyView[];
+          currentFamily: FamilyView;
         }) => {
           return familiesInfo.families;
         }
@@ -168,25 +172,42 @@ export class FamiliesService extends DataService {
     return this.getFamiliesList()
       .pipe(
         map((families: Family[]) => {
-          const foundFamily = families.filter(
-            family => family._id === familyId
-          );
-          return foundFamily.length ? foundFamily[0].currency : null;
+          const foundFamily = findById(families, familyId);
+          return foundFamily ? foundFamily.currency : undefined;
         })
       )
       .pipe();
   }
 
-  updateMembersPaymentPercentages(
-    familyId: string,
-    percentages: MemberPaymentPercentage[]
-  ): Observable<void> {
-    return this.put(
-      `${this.familyAPIRouter}${familyId}/members/payment-percentages`,
-      {
-        familyId,
-        percentages
-      }
-    );
+  updateMemberFamilySpentAmount(familyId: string, k: number, type: '+' | '*') {
+    const updateAmount = (amount: number) =>
+      type === '+' ? amount + k : amount * k;
+    const families = this.familyStore
+      .getValue()
+      .families.map(f =>
+        f._id === familyId ? { ...f, spent: updateAmount(f.spent) } : f
+      );
+    const currentFamily = this.familyStore.getValue().currentFamily;
+    this.familyStore.next({
+      families,
+      currentFamily:
+        currentFamily._id === familyId
+          ? { ...currentFamily, spent: updateAmount(currentFamily.spent) }
+          : currentFamily
+    });
+  }
+
+  updateFamilyMemberCount(familyId: string, membersCount: number): void {
+    const families = this.familyStore
+      .getValue()
+      .families.map(f => (f._id === familyId ? { ...f, membersCount } : f));
+    const currentFamily = this.familyStore.getValue().currentFamily;
+    this.familyStore.next({
+      families,
+      currentFamily:
+        currentFamily._id === familyId
+          ? { ...currentFamily, membersCount }
+          : currentFamily
+    });
   }
 }

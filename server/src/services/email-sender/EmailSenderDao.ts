@@ -34,6 +34,6 @@ export class EmailSenderDao implements IEmailSenderDao {
   }
 
   private configSendGrid() {
-    sgMail.setApiKey(process.env.sendgrid_api_key as string);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
   }
 }

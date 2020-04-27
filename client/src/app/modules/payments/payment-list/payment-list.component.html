@@ -1,47 +1,49 @@
-<div *ngIf="payments; else loading">
-  <div *ngIf="payments.length; else noData">
+<div *ngIf="dataSource?.data; else loading">
+  <div *ngIf="dataSource?.data?.length; else noData">
     <div sharedScrollableContent>
-      <table mat-table [dataSource]="payments">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        [matSortDisableClear]="true"
+        (matSortChange)="sortData($event)"
+      >
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <th mat-sort-header="amount" mat-header-cell *matHeaderCellDef>
+            Amount
+          </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.amount | sharedPrefixedNumber: element.currency }}
+            {{ element.amount | sharedPrefixedNumber: currency }}
           </td>
         </ng-container>
         <ng-container matColumnDef="subject">
-          <th mat-header-cell *matHeaderCellDef>Subject</th>
+          <th mat-sort-header="subject" mat-header-cell *matHeaderCellDef>
+            Subject
+          </th>
           <td mat-cell *matCellDef="let element">
             <div fxLayout="row" fxLayoutAlign="center center">
               <img
                 class="subject__icon"
-                [src]="element.subjectIcon"
-                [matTooltip]="element.subjectName"
+                [src]="element.subject.icon"
+                [matTooltip]="element.subject.name"
               />
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="memberFullName">
-          <th mat-header-cell *matHeaderCellDef>Member</th>
+        <ng-container matColumnDef="member">
+          <th mat-sort-header="member" mat-header-cell *matHeaderCellDef>
+            Member
+          </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.memberFullName }}
+            {{ element.member | sharedUserFullName }}
           </td>
         </ng-container>
         <ng-container matColumnDef="paidAt">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <th mat-sort-header="paidAt" mat-header-cell *matHeaderCellDef>
+            Payment Date
+          </th>
           <td mat-cell *matCellDef="let element">
-            {{ element.paidAt | date: 'short' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Created</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.createdAt | date: 'short' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="updatedAt">
-          <th mat-header-cell *matHeaderCellDef>Updated</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.updatedAt | date: 'short' }}
+            {{ element.paidAt | date: 'dd.MM.yy HH:mm:ss' }}
           </td>
         </ng-container>
 
@@ -51,8 +53,9 @@
     </div>
 
     <mat-paginator
+      *ngIf="payments.length > 10"
       [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSizeOptions]="[10, 25, 100]"
     ></mat-paginator>
   </div>
 </div>

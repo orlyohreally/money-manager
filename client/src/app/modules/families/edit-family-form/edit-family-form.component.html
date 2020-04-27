@@ -1,4 +1,12 @@
-<family-family-form [familyForm]="form" (formSubmitted)="submitForm()">
+<family-family-form
+  [displayExchangeRate]="displayExchangeRate"
+  [familyForm]="form"
+  [submittingForm]="submittingForm"
+  (formSubmitted)="submitForm()"
+>
+  <mat-checkbox [formControl]="form.get('equalPayments')">
+    All adult members pay equally
+  </mat-checkbox>
   <member-members-payment-percentage
     *ngIf="!form.get('equalPayments').value"
     class="members-payment-percentage"

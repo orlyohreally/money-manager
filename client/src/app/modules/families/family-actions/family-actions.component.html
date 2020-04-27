@@ -1,0 +1,23 @@
+<button mat-button [familyEditFamily]="familyInfo" class="family-card-action">
+  <mat-icon>edit</mat-icon>
+  <span>Edit family</span>
+</button>
+<button mat-button [familyAddMember]="familyInfo" class="family-card-action">
+  <mat-icon>person_add</mat-icon>
+  <span>Add member</span>
+</button>
+<button
+  mat-button
+  [matMenuTriggerFor]="menu"
+  aria-label="More actions"
+  class="family-card-action"
+>
+  <mat-icon>arrow_drop_down</mat-icon>
+  <span>More actions </span>
+</button>
+<mat-menu #menu="matMenu" class="mat-elevation-z0">
+  <button mat-menu-item [familyDeleteFamily]="familyInfo">
+    <mat-icon>clear</mat-icon>
+    <span>Delete family</span>
+  </button>
+</mat-menu>

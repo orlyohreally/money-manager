@@ -1,0 +1,6 @@
+<ng-container *ngIf="loggedInUser | async as user; else loading">
+  <nav-user-menu [user]="user"></nav-user-menu>
+</ng-container>
+<ng-template #loading>
+  <shared-loader [diameter]="20"></shared-loader>
+</ng-template>

@@ -23,8 +23,9 @@ export class AuthenticationService extends DataService {
 
   private authenticated = new BehaviorSubject<boolean>(false);
   private refreshToken: string;
-  private user = new ReplaySubject<User>(1);
+  private user = new BehaviorSubject<User>(null);
   private token: string;
+  private _tokenLoadedFromStorage = new ReplaySubject<void>();
 
   constructor(
     http: HttpClient,
@@ -40,6 +41,7 @@ export class AuthenticationService extends DataService {
       this.token = tokens.token;
       this.refreshToken = tokens.refreshToken;
       this.authenticated.next(!!this.token);
+      this._tokenLoadedFromStorage.next();
     }
   }
 
@@ -49,6 +51,10 @@ export class AuthenticationService extends DataService {
 
   getUser(): Observable<User> {
     return this.user.asObservable();
+  }
+
+  tokenLoadedFromStorage(): Observable<void> {
+    return this._tokenLoadedFromStorage.asObservable();
   }
 
   isAuthenticated(): Observable<boolean> {
@@ -75,10 +81,10 @@ export class AuthenticationService extends DataService {
     return this.post(this.authEndpoints.login, user, {
       observe: 'response'
     }).pipe(
-      map((response: HttpResponse<User & { refreshToken: string }>) => {
+      map((response: HttpResponse<{ user: User; refreshToken: string }>) => {
         this.updateTokens(response);
-        this.user.next(response.body);
-        return response.body;
+        this.user.next(response.body.user);
+        return response.body.user;
       })
     );
   }

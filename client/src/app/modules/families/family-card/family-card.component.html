@@ -2,7 +2,7 @@
   <shared-avatar
     avatarSize="80px"
     class="card__avatar"
-    [avatarUrl]="family.icon"
+    [avatarUrl]="family | familyIcon"
   ></shared-avatar>
   <div class="card-extra-action">
     <button
@@ -44,9 +44,11 @@
     <div class="payment-statistics">
       <div class="payment-statistics__item">
         <div class="payment-statistics__title">Spent:</div>
-        <div class="payment-statistics_value">₪300000</div>
+        <div class="payment-statistics_value">
+          {{ family.spent | sharedPrefixedNumber: family.currency }}
+        </div>
       </div>
-      <div class="payment-statistics__item">
+      <div class="payment-statistics__item" *ngIf="isDevMode">
         <div class="payment-statistics__title">Debt:</div>
         <div class="payment-statistics_value">₪300000</div>
       </div>

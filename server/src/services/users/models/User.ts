@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
 import { Document, model, Schema } from "mongoose";
 
 import { User } from "@shared/types";
 
-type UserDocument = User & Document;
+type UserDocument = Document & User<ObjectId>;
 
 const UserSchema = new Schema<User>(
   {
@@ -24,11 +25,11 @@ const UserSchema = new Schema<User>(
     colorScheme: { type: String, required: true, default: "primary" },
     icon: String,
     isVerified: { type: Boolean, default: false },
-    currency: { type: String, default: "US" },
+    currency: { type: String, required: true, default: "USD" },
     createdAt: Date,
     updatedAt: Date
   },
-  { versionKey: false }
+  { versionKey: false, autoIndex: true }
 );
 
 UserSchema.pre<UserDocument>("save", function(next) {

@@ -12,7 +12,7 @@ export class ImageWithPreviewComponent implements OnInit {
   @Input() imageUrl: string;
   @Output() selectedImage = new EventEmitter<string>();
 
-  defaultImageUrl = '/assets/images/family-icon.png';
+  defaultImageUrl = '/assets/images/no-image.png';
 
   constructor(public dialog: MatDialog) {}
 

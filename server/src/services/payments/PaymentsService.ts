@@ -4,9 +4,13 @@ import { ImageManagerService } from "@src/services/image-manager/ImageManagerSer
 
 export interface IPaymentsDao {
   getUserPayments(userId: string): Promise<Payment[]>;
-  getFamilyPayments(userId: string, familyId?: string): Promise<Payment[]>;
+  getFamilyPayments(familyId: string): Promise<Payment[]>;
   createPayment(payment: Partial<Payment>): Promise<Payment>;
   updatePayment(payment: Partial<Payment>): Promise<Payment>;
+  updatePaymentsAmountByRate(
+    familyId: string,
+    exchangeRate: number
+  ): Promise<void>;
 }
 
 export class PaymentsService {
@@ -23,11 +27,8 @@ export class PaymentsService {
     // this.imageLoaderService = imageLoaderService;
   }
 
-  public async getFamilyPayments(
-    userId: string,
-    familyId: string
-  ): Promise<Payment[]> {
-    return this.dao.getFamilyPayments(userId, familyId);
+  public async getFamilyPayments(familyId: string): Promise<Payment[]> {
+    return this.dao.getFamilyPayments(familyId);
   }
 
   public async getUserPayments(userId: string): Promise<Payment[]> {
@@ -55,5 +56,12 @@ export class PaymentsService {
     }
     // tslint:disable-next-line: no-null-keyword
     return null;
+  }
+
+  public async updatePaymentsAmountByRate(
+    familyId: string,
+    exchangeRate: number
+  ): Promise<void> {
+    return this.dao.updatePaymentsAmountByRate(familyId, exchangeRate);
   }
 }

@@ -3,7 +3,7 @@
   width: auto;
 }
 
-form {
+.login-form {
   width: 100%;
   max-width: 500px;
 }
@@ -17,8 +17,19 @@ form {
 
 .account-note {
   margin: 5px 0 15px 0;
+  text-align: center;
 }
 
 .account-note__link {
   margin: 0 5px;
+}
+
+.account-note__text,
+.account-note__link {
+  display: inline-block;
+}
+
+.mat-form-field {
+  width: 500px;
+  max-width: 80%;
 }

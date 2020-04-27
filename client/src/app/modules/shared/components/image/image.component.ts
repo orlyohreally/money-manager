@@ -15,7 +15,7 @@ export class ImageComponent implements OnInit {
   ngOnInit() {}
   public getImageStyles(): { [property: string]: string } {
     const styles = {
-      'background-image': `url(${this.imageUrl})`,
+      ...(this.imageUrl && { 'background-image': `url(${this.imageUrl})` }),
       height: this.height || '100px',
       width: this.width || '100px'
     };

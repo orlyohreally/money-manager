@@ -6,5 +6,6 @@
   [payment]="payment | async"
   [payersList]="familyMembers | async"
   [errorMessage]="errorMessage"
+  [submittingForm]="submittingForm"
   (formSubmitted)="createPayment($event)"
 ></payment-form>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
+import { MatSidenav } from '@angular/material';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -19,6 +20,8 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   pageIsLoading = true;
+
+  @ViewChild('sidenav') sideNavEl: MatSidenav;
 
   private appName = 'Money Manager';
 
@@ -60,6 +63,9 @@ export class AppComponent implements OnInit {
       .subscribe((data: { title: string; hideMenu: boolean }) => {
         const title = data ? data.title : '';
         this.titleService.setTitle(`${title} | ${this.appName}`);
+        if (this.sideNavEl.mode !== 'side') {
+          this.sideNavEl.close();
+        }
       });
   }
 

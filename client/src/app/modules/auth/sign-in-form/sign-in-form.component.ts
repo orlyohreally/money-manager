@@ -15,11 +15,16 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-// tslint:disable-next-line: max-line-length
-import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
-import { User } from '@shared/types';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
+// tslint:disable-next-line: max-line-length
+import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
+import { User } from '@shared/types';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -37,8 +42,10 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   signInForm: FormGroup;
   serverError: string;
   showPassword = false;
-  errorMessageBlock: ElementRef;
-  destroyed = new Subject<void>();
+  submittingForm = false;
+
+  private errorMessageBlock: ElementRef;
+  private destroyed = new Subject<void>();
 
   ngOnInit() {
     this.authService.logout();
@@ -76,15 +83,17 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   register() {
     this.serverError = null;
     if (this.signInForm.valid) {
+      this.submittingForm = true;
       this.authService
         .register({
           email: this.email.value,
-          password: this.password.value,
           firstName: this.firstName.value,
-          lastName: this.lastName.value
+          lastName: this.lastName.value,
+          password: this.password.value
         } as User)
         .subscribe(
           response => {
+            this.submittingForm = false;
             this.router.navigate(['/auth/email-verification-request'], {
               queryParams: {
                 email: response.email,
@@ -93,7 +102,12 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           },
           (error: HttpErrorResponse) => {
-            this.serverError = error.error;
+            this.submittingForm = false;
+            if (error.error.message) {
+              this.serverError = error.error.message;
+            } else {
+              this.serverError = error.error;
+            }
             setTimeout(() => {
               this.errorMessageBlock.nativeElement.scrollIntoView({
                 behavior: 'smooth',
@@ -109,18 +123,10 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.signInForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
-        Validators.minLength(3)
+        userNameValidatorFn
       ]),
-      lastName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3)
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern(
-          '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)'
-        )
-      ]),
+      lastName: new FormControl('', [Validators.required, userNameValidatorFn]),
+      email: new FormControl('', [Validators.required, emailValidatorFn]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),

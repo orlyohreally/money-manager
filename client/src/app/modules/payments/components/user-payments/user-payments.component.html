@@ -2,7 +2,7 @@
   <div class="page-content__header">
     <div class="mat-h1">Payments</div>
     <button
-      [paymentNewPayment]="familyId | async"
+      paymentNewPayment
       class="button button_lg"
       mat-raised-button
       color="primary"
@@ -10,6 +10,19 @@
       New payment
     </button>
   </div>
-  <payment-user-payment-list [payments]="payments | async">
-  </payment-user-payment-list>
+
+  <ng-template
+    let-paymentsList="paymentsList"
+    [ngTemplateOutletContext]="{ paymentsList: payments | async }"
+    [ngTemplateOutlet]="paymentsListTemplate"
+    #paymentsListTemplate
+  >
+    <payment-user-payment-list [payments]="paymentsList">
+    </payment-user-payment-list>
+    <payment-user-payments-calculated-per-member
+      *ngIf="paymentsList?.length"
+      class="payments-calculated-per-member"
+      [payments]="paymentsList"
+    ></payment-user-payments-calculated-per-member>
+  </ng-template>
 </div>

@@ -7,6 +7,7 @@
 @import 'mm-badge';
 @import 'navigation';
 @import 'notifications';
+@import 'scrollbar';
 
 body,
 html {
@@ -49,6 +50,15 @@ a {
 
 .mat-menu-item .mat-icon {
   margin-right: 8px !important;
+}
+
+.mat-form-field.multi-line-error .mat-form-field-underline {
+  position: relative;
+  bottom: auto;
+}
+
+.mat-form-field.multi-line-error .mat-form-field-subscript-wrapper {
+  position: static;
 }
 
 .page-content__header {
@@ -109,4 +119,8 @@ $table-border-radius: 6px;
 
 .mat-row:last-child .mat-cell:last-child {
   border-bottom-right-radius: $table-border-radius;
+}
+
+.mat-paginator {
+  border-radius: 6px;
 }

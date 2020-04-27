@@ -9,12 +9,17 @@
     Add family
   </button>
 </div>
-<div class="card-list" *ngIf="families | async as familiesList; else loading">
-  <family-family-card
-    *ngFor="let family of familiesList"
-    [family]="family"
-  ></family-family-card>
-</div>
+<ng-container *ngIf="families | async as familiesList; else loading">
+  <div class="card-list" *ngIf="familiesList.length; else noFamilies">
+    <family-card
+      *ngFor="let family of familiesList"
+      [family]="family"
+    ></family-card>
+  </div>
+</ng-container>
 <ng-template #loading>
   <shared-loader></shared-loader>
+</ng-template>
+<ng-template #noFamilies>
+  <div fxLayoutAlign="center center">No families added yet...</div>
 </ng-template>

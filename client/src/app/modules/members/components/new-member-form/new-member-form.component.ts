@@ -8,6 +8,9 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Observable, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 import {
@@ -18,11 +21,8 @@ import {
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 // tslint:disable-next-line: max-line-length
 import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
-import { FamilyMember } from '@shared/types';
-import { MemberFamily } from '@src/app/modules/shared/types';
+import { FamilyMember, FamilyView } from '@shared/types';
 import { AdultMember } from '@src/app/types/adult-member';
-import { Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'member-new-member-form',
@@ -33,6 +33,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
   memberForm: FormGroup;
   rolesLoaded: boolean;
   errorMessage: string;
+  submittingForm = false;
 
   @ViewChild('emailField') emailField: ElementRef;
 
@@ -44,7 +45,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NewFamilyMemberFormComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { family: MemberFamily; member: Member },
+    public data: { family: FamilyView; member: Member },
     private notificationsService: NotificationsService,
     private membersService: MembersService,
     private familiesService: FamiliesService
@@ -69,7 +70,8 @@ export class NewFamilyMemberFormComponent implements OnInit {
     });
   }
 
-  onRolesLoad() {
+  async onRolesLoad() {
+    await Promise.resolve();
     this.rolesLoaded = true;
   }
 
@@ -82,27 +84,34 @@ export class NewFamilyMemberFormComponent implements OnInit {
       this.memberForm.markAsTouched();
       return;
     }
+    this.submittingForm = true;
     this.membersService
       .addFamilyMember(this.data.family._id, this.memberForm.value)
       .pipe(
         mergeMap((newMember: FamilyMember) => {
-          if (
-            !this.data.family.equalPayments &&
-            this.membersService.memberIsAdult(newMember.roles)
-          ) {
+          if (!this.data.family.equalPayments) {
             return this.updatePercentages(newMember);
           }
           return of(undefined);
+        }),
+        map(() => {
+          this.familiesService.updateFamilyMemberCount(
+            this.data.family._id,
+            this.data.family.membersCount + 1
+          );
         })
       )
       .subscribe(
         () => {
+          this.submittingForm = false;
           this.notificationsService.showNotification(
             'New member has been added'
           );
           this.dialogRef.close();
         },
         (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+
           if (error.error && error.error.email) {
             this.memberForm
               .get('email')
@@ -129,7 +138,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
         paymentPercentage: adult.paymentPercentage
       };
     });
-    return this.familiesService.updateMembersPaymentPercentages(
+    return this.membersService.updateMembersPaymentPercentages(
       this.data.family._id,
       percentages
     );

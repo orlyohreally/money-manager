@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 
 import { AccordionComponent } from './accordion.component';
 
@@ -8,7 +9,8 @@ describe('AccordionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AccordionComponent]
+      declarations: [AccordionComponent],
+      imports: [MatIconModule]
     }).compileComponents();
   }));
 

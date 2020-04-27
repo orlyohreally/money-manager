@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 import { ImagePreviewComponent } from './image-preview.component';
 
@@ -8,9 +9,9 @@ describe('ImagePreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImagePreviewComponent ]
-    })
-    .compileComponents();
+      declarations: [ImagePreviewComponent],
+      imports: [MatProgressSpinnerModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

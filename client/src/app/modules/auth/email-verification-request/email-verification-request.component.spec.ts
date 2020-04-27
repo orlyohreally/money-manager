@@ -5,6 +5,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { MockHelper } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
 import { DebugElement } from '@angular/core';
@@ -20,7 +21,7 @@ import { NotificationBlockDirective } from '@shared-client/directives/notificati
 import { SharedModule } from '@shared-client/shared.module';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '@src/app/core/services/global-variables/global-variables.service';
-import { expectTextContentToBe } from '@src/app/tests-utils/index.spec';
+import { expectTextContentToBe } from '@tests-utils/functions';
 import { cold, getTestScheduler } from 'jasmine-marbles';
 // tslint:disable-next-line: max-line-length
 import { EmailVerificationRequestComponent } from './email-verification-request.component';
@@ -182,7 +183,11 @@ describe('EmailVerificationRequestComponent', () => {
             'your Spam or Bulk E-Mail folder just in case' +
             ' the confirmation email got delivered there instead of your inbox.'
         );
-        expect(messageEl.componentInstance.type).toBe('success');
+        const messageDirective = MockHelper.getDirective(
+          fixture.debugElement.query(By.directive(NotificationBlockDirective)),
+          NotificationBlockDirective
+        );
+        expect(messageDirective.sharedNotificationBlock).toBe('success');
       }
     );
 
@@ -206,7 +211,11 @@ describe('EmailVerificationRequestComponent', () => {
             ' just in case the confirmation ' +
             'email got delivered there instead of your inbox.'
         );
-        expect(messageEl.componentInstance.type).toBe('success');
+        const messageDirective = MockHelper.getDirective(
+          fixture.debugElement.query(By.directive(NotificationBlockDirective)),
+          NotificationBlockDirective
+        );
+        expect(messageDirective.sharedNotificationBlock).toBe('success');
       }
     );
 
@@ -262,14 +271,18 @@ describe('EmailVerificationRequestComponent', () => {
         const messageEl: DebugElement = fixture.debugElement.queryAll(
           By.directive(NotificationBlockDirective)
         )[1];
-        const messageElComponent: NotificationBlockDirective =
-          messageEl.componentInstance;
         expectTextContentToBe(
           messageEl.nativeElement,
           'If you still have not received email,' +
             ' contact us at support-email@gmail.com'
         );
-        expect(messageElComponent.sharedNotificationBlock).toBe('error');
+        const messageDirective = MockHelper.getDirective(
+          fixture.debugElement.queryAll(
+            By.directive(NotificationBlockDirective)
+          )[1],
+          NotificationBlockDirective
+        );
+        expect(messageDirective.sharedNotificationBlock).toBe('error');
       })
     );
 

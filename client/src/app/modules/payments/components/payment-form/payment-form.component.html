@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>
     Payment
   </h1>
-  <div *ngIf="subjects; else loading" mat-dialog-content>
+  <ng-container *ngIf="subjects; else loading">
     <form [formGroup]="form" (ngSubmit)="submitForm()">
       <mat-form-field
         appearance="outline"
@@ -26,7 +26,7 @@
                 [src]="payer | familyMemberIcon"
               />
               <div class="select-option__title">
-                {{ payer.firstName }} {{ payer.lastName }}
+                {{ payer | sharedUserFullName }}
               </div>
             </div>
           </mat-option>
@@ -55,9 +55,9 @@
           formControlName="subjectId"
         >
           <mat-option *ngFor="let subject of subjects" [value]="subject._id">
-            <payment-payment-subject
+            <shared-payment-subject
               [paymentSubject]="subject"
-            ></payment-payment-subject>
+            ></shared-payment-subject>
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -77,12 +77,19 @@
         {{ errorMessage }}
       </div>
       <div class="action-buttons">
-        <button mat-raised-button class="button" color="primary" type="submit">
-          Save
-        </button>
+        <shared-content-with-loader [showLoader]="submittingForm">
+          <button
+            mat-raised-button
+            class="button"
+            color="primary"
+            type="submit"
+          >
+            Save
+          </button>
+        </shared-content-with-loader>
       </div>
     </form>
-  </div>
+  </ng-container>
 </div>
 <ng-template #loading>
   <shared-loader></shared-loader>

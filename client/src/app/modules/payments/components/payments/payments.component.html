@@ -1,14 +1,58 @@
 <div class="payments" fxLayout="column" fxLayoutAlign="center start">
-  <div class="page-content__header">
-    <div class="mat-h1">Payments</div>
-    <button
-      [paymentNewPayment]="familyId | async"
-      class="button button_lg"
-      mat-raised-button
-      color="primary"
-    >
-      New payment
-    </button>
-  </div>
-  <payment-payment-list [payments]="payments | async"> </payment-payment-list>
+  <ng-template
+    let-familyIdValue="familyIdValue"
+    let-familyCurrency="familyCurrency"
+    [ngTemplateOutletContext]="{
+      familyIdValue: familyId | async,
+      familyCurrency: currency | async
+    }"
+    [ngTemplateOutlet]="familyIdValueTemplate"
+    #familyIdValueTemplate
+  >
+    <div class="page-content__header">
+      <div class="mat-h1">Payments</div>
+      <button
+        [paymentNewPayment]="familyIdValue"
+        class="button button_lg"
+        mat-raised-button
+        color="primary"
+      >
+        New payment
+      </button>
+    </div>
+    <payment-payments-filters
+      [members]="familyMembers | async"
+      [subjects]="subjects | async"
+      (filtersUpdated)="onFiltersUpdated($event)"
+    ></payment-payments-filters>
+    <ng-container *ngIf="!filteringPayments; else filtering">
+      <ng-template
+        let-paymentsList="paymentsList"
+        [ngTemplateOutletContext]="{ paymentsList: filteredPayments | async }"
+        [ngTemplateOutlet]="paymentsListTemplate"
+        #paymentsListTemplate
+      >
+        <payment-payment-list
+          [payments]="paymentsList"
+          [currency]="familyCurrency"
+        >
+        </payment-payment-list>
+        <payment-payments-calculated-per-member
+          *ngIf="paymentsList?.length"
+          class="payments-calculated-per-member"
+          [payments]="paymentsList"
+        ></payment-payments-calculated-per-member>
+        <payment-member-overpay-and-debt
+          class="member-overpay-and-debt"
+          [familyId]="familyIdValue"
+          [payments]="paymentsList"
+        ></payment-member-overpay-and-debt>
+      </ng-template>
+    </ng-container>
+    <ng-template #filtering>
+      <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+        <shared-loader></shared-loader>
+      </div>
+    </ng-template>
+  </ng-template>
 </div>

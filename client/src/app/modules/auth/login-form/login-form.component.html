@@ -1,9 +1,9 @@
-<div class="log-in-form" fxLayout="column" fxLayoutAlign="center center">
+<div fxLayout="column" fxLayoutAlign="center center">
   <div class="mat-h1">
     Log In
   </div>
   <div
-    class="form"
+    class="full-width"
     fxLayout="column"
     fxLayout.lt-sm="column"
     fxLayoutAlign="center center"
@@ -17,7 +17,13 @@
         Create an account
       </a>
     </div>
-    <form [formGroup]="loginForm" (ngSubmit)="login($event)">
+    <form
+      class="login-form"
+      [formGroup]="loginForm"
+      (ngSubmit)="login($event)"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
       <div *ngIf="serverError" sharedNotificationBlock="error">
         {{ serverError }}
       </div>
@@ -55,7 +61,10 @@
           Password is required
         </mat-error>
       </mat-form-field>
-      <div class="action-buttons">
+      <shared-content-with-loader
+        class="action-buttons"
+        [showLoader]="submittingForm"
+      >
         <button
           mat-raised-button
           class="button"
@@ -65,7 +74,7 @@
         >
           Log In
         </button>
-      </div>
+      </shared-content-with-loader>
     </form>
   </div>
 </div>

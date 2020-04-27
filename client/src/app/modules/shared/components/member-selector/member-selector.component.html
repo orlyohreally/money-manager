@@ -1,0 +1,17 @@
+<mat-form-field appearance="outline" class="member-selector">
+  <mat-label>{{ selectorLabel }}</mat-label>
+  <mat-select [required]="required" [formControl]="selectedMember">
+    <mat-option [value]="null">Any member</mat-option>
+    <mat-option *ngFor="let member of members" [value]="member._id">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <img class="member__icon" [src]="member | familyMemberIcon" />
+        <div>
+          {{ member | sharedUserFullName }}
+        </div>
+      </div>
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="selectedMember.hasError('required')">
+    Required field
+  </mat-error>
+</mat-form-field>

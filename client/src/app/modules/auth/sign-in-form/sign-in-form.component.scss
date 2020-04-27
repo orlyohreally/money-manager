@@ -5,13 +5,18 @@
   width: auto;
 }
 
-form {
+.signin-form {
   width: 100%;
   max-width: 500px;
 }
 
 .account-note {
   margin: 5px 0 15px 0;
+}
+
+.account-note__text,
+.account-note__link {
+  display: inline-block;
 }
 
 .action-buttons {
@@ -56,4 +61,20 @@ form {
 .privacy-policy-note {
   margin: 10px 0;
   text-align: center;
+}
+
+.account-note {
+  text-align: center;
+}
+
+.account-note__link {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.signin-form__description {
+  max-width: 500px;
+  width: 80%;
+  text-align: center;
+  padding: 16px;
 }

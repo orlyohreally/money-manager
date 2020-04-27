@@ -50,7 +50,7 @@ describe('AuthGuard', () => {
         .subscribe((response: boolean) => {
           expect(response).toBe(false);
           expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
-          expect(routerSpy.navigate).toHaveBeenCalledWith(['auth/login'], {
+          expect(routerSpy.navigate).toHaveBeenCalledWith(['/auth/login'], {
             queryParams: { returnUrl: 'current-page' }
           });
         });

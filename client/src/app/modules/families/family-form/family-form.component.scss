@@ -1,4 +1,4 @@
-::ng-deep .family-form__avatar-preview .card__avatar {
+::ng-deep .family-form__avatar-preview .image-preview {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -12,4 +12,8 @@
 .members-payment-percentage {
   display: block;
   margin: 16px 0;
+}
+
+.family-form__currency {
+  margin-bottom: 10px !important;
 }

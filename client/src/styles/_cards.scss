@@ -52,24 +52,6 @@
   width: 100%;
 }
 
-.card__avatar_with-preview {
-  .shade {
-    display: none;
-  }
-
-  &:hover {
-    cursor: pointer;
-    .shade {
-      display: flex;
-    }
-  }
-}
-
-.avatar__preview-icon {
-  font-size: 30px;
-  color: #ffffff;
-}
-
 .card__link {
   color: #757575 !important;
 }

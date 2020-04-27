@@ -1,6 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  MatPaginatorModule,
+  MatSortModule,
+  MatTableModule,
+  MatTooltipModule
+} from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponent } from 'ng-mocks';
 
-import { UserPaymentsListComponent } from './user-payments-list.component';
+// tslint:disable-next-line: max-line-length
+import { LoaderComponent } from '@shared-client/components/loader/loader.component';
+import { PrefixedNumberPipeMock } from '@tests-utils/mocks';
+import { UserPaymentsListComponent } from './user-payment-list.component';
 
 describe('UserPaymentsListComponent', () => {
   let component: UserPaymentsListComponent;
@@ -8,9 +19,19 @@ describe('UserPaymentsListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserPaymentsListComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        UserPaymentsListComponent,
+        PrefixedNumberPipeMock,
+        MockComponent(LoaderComponent)
+      ],
+      imports: [
+        MatPaginatorModule,
+        MatSortModule,
+        MatTableModule,
+        MatTooltipModule,
+        RouterTestingModule
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

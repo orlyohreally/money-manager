@@ -1,11 +1,6 @@
-import { Family } from ".";
-import { FamilyMember } from "./family-member";
-import { PaymentSubject } from "./payment-subject";
-
 export interface Payment<Id = string> {
   _id: Id;
   amount: number;
-  currency: string;
   receipt?: string;
   subjectId: Id;
   paidAt: Date;
@@ -13,19 +8,7 @@ export interface Payment<Id = string> {
   familyId?: Id;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-export interface PaymentView<Id = string> {
-  _id: Id;
-  amount: number;
-  currency: string;
-  receipt?: string;
-  subject: PaymentSubject;
-  paidAt: Date;
-  user?: FamilyMember;
-  family?: Family;
-  createdAt: Date;
-  updatedAt: Date;
+  paymentPercentages: { userId: Id; paymentPercentage: number }[];
 }
 
 // /families/:id

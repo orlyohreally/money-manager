@@ -1,33 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-// tslint:disable-next-line: max-line-length
-import { PaymentsService } from '@core-client/services/payments/payments.service';
-// tslint:disable-next-line: max-line-length
-// tslint:disable-next-line: max-line-length
-import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
-import { PaymentView } from '@shared/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@core-client/services/families/families.service';
+import { MembersService } from '@core-client/services/members/members.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
+import { PaymentFilters } from '@shared-client/types/payment-filters';
+import { FamilyMember, PaymentSubject } from '@shared/types';
+import { FamilyPaymentView } from '@src/app/types';
+
 @Component({
-  selector: 'app-payments',
+  selector: 'payment-payments',
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.scss']
 })
 export class PaymentsComponent implements OnInit {
-  payments: Observable<
-    {
-      amount: number;
-      paidAt: Date;
-      currency: string;
-      memberFullName: string;
-      subjectName: string;
-      subjectIcon: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[]
-  >;
-
+  filteredPayments: Observable<FamilyPaymentView[]>;
+  subjects: Observable<PaymentSubject[]>;
+  currency: Observable<string>;
   displayedColumns: string[] = [
     'subject',
     'amount',
@@ -37,102 +32,85 @@ export class PaymentsComponent implements OnInit {
     'updatedAt',
     'actions'
   ];
-
   familyId: Observable<string>;
+  familyMembers: Observable<FamilyMember[]>;
+  filteringPayments: boolean;
+
+  private filters: PaymentFilters;
+  private payments: Observable<FamilyPaymentView[]>;
 
   constructor(
     private route: ActivatedRoute,
-    private paymentsService: PaymentsService,
-    private userManagerService: UserManagerService
+    private paymentsCalculationsService: PaymentsCalculationsService,
+    private familiesService: FamiliesService,
+    private membersService: MembersService,
+    private paymentSubjectsService: PaymentSubjectsService
   ) {}
 
   ngOnInit() {
     this.familyId = this.route.parent.paramMap.pipe(
       map((params: ParamMap) => {
         const familyId = params.get('familyId');
+        this.currency = this.familiesService.getFamilyCurrency(familyId);
+        this.filters = {
+          member: null,
+          paymentSubject: null,
+          startDate: null,
+          endDate: null
+        };
         this.getPayments(familyId);
+        this.familyMembers = this.membersService.getMembers(familyId);
+        this.subjects = this.paymentSubjectsService.getSubjects(familyId);
         return familyId;
       })
     );
   }
 
-  private getPayments(familyId?: string) {
-    this.payments = this.paymentsService.getAggregatedPayments(familyId).pipe(
-      map((payments: PaymentView[]) =>
-        payments.map((payment: PaymentView) => {
-          return {
-            amount: payment.amount,
-            paidAt: payment.paidAt,
-            createdAt: payment.createdAt,
-            memberFullName: this.userManagerService.getFullName(payment.user),
-            updatedAt: payment.updatedAt,
-            subjectName: payment.subject ? payment.subject.name : '',
-            subjectIcon: payment.subject ? payment.subject.icon : '',
-            currency: payment.currency
-          };
-        })
-      )
-    );
+  onFiltersUpdated(filterUpdate: PaymentFilters) {
+    this.filters = filterUpdate;
+    this.filterPayments();
   }
 
-  // private calculateTotal() {
-  //   this.paymentAmounts = aggregateAmountsByMember(
-  //     this.payments,
-  //     this.payers.map(member => member._id)
-  //   );
-  //   this.paymentAmounts.sum = getTotalPaymentAmount(
-  //     unnormalizeArray(this.payments)
-  //   );
-  // }
-  // public calcDischargedTotal() {
-  //   this.paymentAmounts = {};
-  //   this.paymentAmounts = getDischargedTotal(
-  //     this.payments,
-  //     this.payers.map(member => member._id)
-  //   );
-  //   this.paymentAmounts.sum = getTotalPaymentAmount(
-  //     unnormalizeArray(this.payments)
-  //   );
-  // }
+  filterPayments() {
+    this.filteringPayments = true;
+    this.filteredPayments = this.payments.pipe(
+      map(payments =>
+        [...(payments || [])].filter(
+          payment =>
+            !this.filters.member || payment.member._id === this.filters.member
+        )
+      ),
+      map(payments =>
+        payments.filter(
+          payment =>
+            !this.filters.paymentSubject ||
+            payment.subject._id === this.filters.paymentSubject
+        )
+      ),
+      map(payments =>
+        payments.filter(
+          payment =>
+            !this.filters.startDate ||
+            new Date(payment.paidAt) >= new Date(this.filters.startDate)
+        )
+      ),
+      map(payments =>
+        payments.filter(
+          payment =>
+            !this.filters.endDate ||
+            new Date(payment.paidAt) < new Date(this.filters.endDate)
+        )
+      )
+    );
 
-  // public editPayment(payment: Payment) {
-  //   this.openForm(payment);
-  // }
-  // public openForm(payment: Payment): void {
-  //   const dialogRef = this.paymentForm.open(PaymentFormComponent, {
-  //     width: '300px',
-  //     restoreFocus: false,
-  //     data: payment
-  //   });
+    this.filteringPayments = false;
+  }
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     this.calculateTotal();
-  //   });
-  // }
-  // public removePayment(payment: Payment) {
-  //   this.paymentsService.removePayment(payment).subscribe(
-  //     result => {
-  //       if (result.status === 'success') {
-  //         this.snackBar.open(
-  // tslint:disable-next-line: max-line-length
-  //           `Payment for ₪ ${payment.amount} by ${payment.memberId} was deleted`,
-  //           null,
-  //           {
-  //             duration: 2000
-  //           }
-  //         );
-
-  //         this.calculateTotal();
-  //       } else {
-  //         this.snackBar.open(result.msg, null, {
-  //           duration: 2000
-  //         });
-  //       }
-  //     },
-  //     error => {
-  //       // TODO: add handling
-  //       // console.log(error);
-  //     }
-  //   );
-  // }
+  private getPayments(familyId?: string) {
+    // tslint:disable-next-line: max-line-length
+    this.payments = this.paymentsCalculationsService.getAggregatedPayments(
+      familyId
+    );
+    this.filterPayments();
+  }
 }

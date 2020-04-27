@@ -1,20 +1,16 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit
-} from '@angular/core';
-import { MemberFamily } from '@shared-client/types/member-family';
+import { Component, Input, isDevMode, OnInit } from '@angular/core';
+import { FamilyView } from '@shared/types';
 
 @Component({
-  selector: 'family-family-card',
+  selector: 'family-card',
   templateUrl: './family-card.component.html',
   styleUrls: ['./family-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'card' }
 })
 export class FamilyCardComponent implements OnInit {
-  @Input() family: MemberFamily;
+  @Input() family: FamilyView;
+
+  isDevMode = isDevMode();
 
   constructor() {}
 

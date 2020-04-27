@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
-import { FamiliesService } from '../../../core/services/families/families.service';
-import { MemberFamily } from '../../shared/types/member-family';
+import { FamiliesService } from '@core-client/services/families/families.service';
+import { FamilyView } from '@shared/types';
 
 @Component({
   selector: 'family-family-manager',
@@ -12,17 +12,13 @@ import { MemberFamily } from '../../shared/types/member-family';
 })
 export class FamilyManagerComponent implements OnInit {
   public familiesInfo: Observable<{
-    families: MemberFamily[];
-    currentFamily: MemberFamily;
+    families: FamilyView[];
+    currentFamily: FamilyView;
   }>;
 
   constructor(private familiesService: FamiliesService) {}
 
   ngOnInit() {
-    this.familiesInfo = this.familiesService.loadFamilies().pipe(
-      switchMap(() => {
-        return this.familiesService.familiesInfo;
-      })
-    );
+    this.familiesInfo = this.familiesService.familiesInfo;
   }
 }

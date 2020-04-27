@@ -1,10 +1,11 @@
-import { Family, FamilyMember } from "@shared/types";
-import { modelTransformer } from "@src/utils";
-
 import { ObjectId } from "mongodb";
+
+import { Family, FamilyMember, FamilyView } from "@shared/types";
+import { modelTransformer } from "@src/utils";
 import { IFamiliesDao } from "./FamiliesService";
-import { FamilyModel } from "./models";
-import { FamilyMemberModel } from "./models/FamilyMember";
+import { FamilyModel, getFamiliesView, getMemberFamiliesView } from "./models";
+import { FamilyMemberModel, getFamilyMembersView } from "./models/FamilyMember";
+// tslint:disable-next-line: max-line-length
 
 export class FamiliesDao implements IFamiliesDao {
   public async createFamily(family: Partial<Family>): Promise<Family> {
@@ -15,47 +16,40 @@ export class FamiliesDao implements IFamiliesDao {
 
   public async getFamily(
     familyId: string
-  ): Promise<{ name: string; membersCount: number }> {
-    return new Promise((resolve, reject) => {
-      FamilyModel.aggregate([
-        { $match: { _id: new ObjectId(familyId) } },
-        {
-          $lookup: {
-            from: "familymembermodels",
-            localField: "_id",
-            foreignField: "_id.familyId",
-            as: "members"
-          }
-        },
-        {
-          $project: {
-            name: true,
-            icon: true,
-            _id: true,
-            currency: true,
-            equalPayments: true,
-            membersCount: { $size: "$members" }
-          }
-        }
-      ]).exec(
-        (err: Error, families: { name: string; membersCount: number }[]) => {
-          if (families) {
-            resolve(families[0]);
-          } else {
-            reject(err);
-          }
-        }
-      );
-    });
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  > {
+    const familiesView = await getFamiliesView();
+    return (await familiesView
+      .find({ _id: new ObjectId(familyId) })
+      .toArray())[0];
+  }
+
+  public async getMemberFamily(
+    familyId: string,
+    userId: string
+  ): Promise<FamilyView> {
+    const memberFamiliesView = await getMemberFamiliesView();
+    return (await memberFamiliesView
+      .find({ _id: new ObjectId(familyId), userId: new ObjectId(userId) })
+      .toArray())[0];
   }
 
   public async updateFamily(familyId: string, family: Family): Promise<Family> {
     if (family._id) {
       delete family._id;
     }
-    return FamilyModel.findOneAndUpdate({ _id: familyId }, family, {
-      new: true
-    })
+    return FamilyModel.findOneAndUpdate(
+      { _id: new ObjectId(familyId) },
+      family,
+      {
+        new: true
+      }
+    )
       .lean()
       .exec();
   }
@@ -67,32 +61,10 @@ export class FamiliesDao implements IFamiliesDao {
   }
 
   public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
-    return FamilyMemberModel.aggregate([
-      { $match: { "_id.familyId": new ObjectId(familyId) } },
-      {
-        $lookup: {
-          from: "usermodels",
-          localField: "_id.userId",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      {
-        $unwind: "$user"
-      },
-      {
-        $project: {
-          "member._id": "$user._id",
-          "member.firstName": "$user.firstName",
-          "member.lastName": "$user.lastName",
-          "member.roles": "$roles",
-          "member.icon": "$icon",
-          "member.paymentPercentage": "$paymentPercentage",
-          "member.createdAt": "$_id.createAt"
-        }
-      },
-      { $replaceRoot: { newRoot: "$member" } }
-    ]);
+    const familyMembersView = await getFamilyMembersView();
+    return familyMembersView
+      .find({ familyId: new ObjectId(familyId) })
+      .toArray();
   }
 
   public async createFamilyMember(
@@ -116,33 +88,9 @@ export class FamiliesDao implements IFamiliesDao {
     }) as FamilyMember;
   }
 
-  public async getMemberFamilies(
-    userId: string
-  ): Promise<{ family: Family; roles: string[] }[]> {
-    return FamilyMemberModel.aggregate([
-      { $match: { "_id.userId": new ObjectId(userId) } },
-      {
-        $lookup: {
-          from: "familymodels",
-          localField: "_id.familyId",
-          foreignField: "_id",
-          as: "family"
-        }
-      },
-      { $unwind: "$family" },
-      {
-        $project: {
-          _id: "$family._id",
-          name: "$family.name",
-          createdAt: "$family.createdAt",
-          updatedAt: "$family.updatedAt",
-          icon: "$family.icon",
-          currency: "$family.currency",
-          equalPayments: "$family.equalPayments",
-          userRoles: "$roles"
-        }
-      }
-    ]);
+  public async getMemberFamilies(userId: string): Promise<FamilyView[]> {
+    const memberFamiliesView = await getMemberFamiliesView();
+    return memberFamiliesView.find({ userId: new ObjectId(userId) }).toArray();
   }
 
   public async getFamilyMember(
@@ -150,8 +98,8 @@ export class FamiliesDao implements IFamiliesDao {
     familyId: string
   ): Promise<FamilyMember> {
     return FamilyMemberModel.findOne({
-      "_id.familyId": familyId,
-      "_id.userId": userId
+      "_id.familyId": new ObjectId(familyId),
+      "_id.userId": new ObjectId(userId)
     })
       .lean()
       .exec();
@@ -160,11 +108,13 @@ export class FamiliesDao implements IFamiliesDao {
   public async updateMemberPercentage(
     memberId: { userId: string; familyId: string },
     paymentPercentage: number
-  ) {
-    return FamilyMemberModel.updateOne(
-      { "_id.familyId": memberId.familyId, "_id.userId": memberId.userId },
-      { paymentPercentage },
-      { multi: true }
+  ): Promise<void> {
+    return FamilyMemberModel.findOneAndUpdate(
+      {
+        "_id.userId": new ObjectId(memberId.userId),
+        "_id.familyId": new ObjectId(memberId.familyId)
+      },
+      { paymentPercentage }
     )
       .lean()
       .exec();

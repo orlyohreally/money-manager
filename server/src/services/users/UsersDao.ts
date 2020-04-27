@@ -1,10 +1,12 @@
 import * as Joi from "@hapi/joi";
-import { User, VerificationToken } from "@shared/types";
 // tslint:disable-next-line: no-require-imports
 import atob = require("atob");
 import * as bcrypt from "bcrypt";
 import * as cryptoRandomString from "crypto-random-string";
 import * as jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
+
+import { User, VerificationToken } from "@shared/types";
 import { UserModel, VerificationModel } from "./models";
 import { IUsersDao } from "./UsersService";
 
@@ -12,8 +14,8 @@ export class UsersDao implements IUsersDao {
   private tokenHash: string;
   private refreshTokenHash: string;
   constructor() {
-    this.tokenHash = process.env.JWT_hash as string;
-    this.refreshTokenHash = process.env.JWT_refresh_hash as string;
+    this.tokenHash = process.env.JWT_HASH as string;
+    this.refreshTokenHash = process.env.JWT_REFRESH_HASH as string;
     if (!this.tokenHash || !this.refreshTokenHash) {
       process.exit(1);
     }
@@ -25,8 +27,12 @@ export class UsersDao implements IUsersDao {
     return newUser.toJSON() as User;
   }
 
-  public validateUser(user: User): Joi.ValidationResult {
+  public validateUser(
+    user: User,
+    validatePassword: boolean
+  ): Joi.ValidationResult {
     const schema = Joi.object({
+      _id: Joi.string().optional(),
       firstName: Joi.string()
         .min(3)
         .max(50)
@@ -35,16 +41,24 @@ export class UsersDao implements IUsersDao {
         .min(3)
         .max(50)
         .required(),
+
       email: Joi.string()
         .min(5)
         .max(255)
         .required()
         .email(),
-      password: Joi.string()
-        .required()
-        .pattern(
-          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-        )
+      ...(validatePassword && {
+        password: Joi.string()
+          .required()
+          .pattern(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+          )
+      }),
+      icon: Joi.string()
+        .optional()
+        // tslint:disable-next-line: no-null-keyword
+        .allow(null),
+      currency: Joi.string()
     });
     return schema.validate(user);
   }
@@ -64,15 +78,26 @@ export class UsersDao implements IUsersDao {
       password: user.password,
       email: user.email
     });
-    newUser.password = this.hashPassword(user.password);
+    newUser.password = this.hashPassword(user.password as string);
     return newUser.save();
+  }
+
+  public async updateUser(userId: string, user: User): Promise<User> {
+    if (user._id) {
+      delete user._id;
+    }
+    return UserModel.findOneAndUpdate({ _id: new ObjectId(userId) }, user, {
+      new: true
+    })
+      .lean()
+      .exec();
   }
 
   public async authUser(user: User): Promise<User> {
     const registeredUser: User = await this.getUser("email", user.email);
     const correctPassword = await this.comparePasswords(
-      user.password,
-      registeredUser.password
+      user.password as string,
+      registeredUser.password as string
     );
     if (correctPassword) {
       return registeredUser;
@@ -168,7 +193,7 @@ export class UsersDao implements IUsersDao {
   }
 
   private hashPassword(password: string): string {
-    const saltRounds: number = parseInt(process.env.salt_rounds as string, 10);
+    const saltRounds: number = parseInt(process.env.SALT_ROUNDS as string, 10);
     const salt = bcrypt.genSaltSync(saltRounds);
     return bcrypt.hashSync(password, salt);
   }

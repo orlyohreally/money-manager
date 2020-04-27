@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MembersService } from '@core-client/services/members/members.service';
-// tslint:disable-next-line: max-line-length
-import { UserManagerService } from '@core-client/services/user-manager/user-manager.service';
-import { FamilyMember } from '@shared/types';
-import { MemberRole } from '@src/app/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { MembersService } from '@core-client/services/members/members.service';
+import { FamilyMember } from '@shared/types';
+import { MemberRole } from '@src/app/types';
 
 @Component({
   selector: 'family-members',
@@ -14,30 +13,18 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./family-members.component.scss']
 })
 export class FamilyMembersComponent implements OnInit {
-  members: Observable<{ fullName: string; roles: string[]; icon: string }[]>;
+  members: Observable<FamilyMember[]>;
   roles: Observable<{ [roleName: string]: MemberRole }>;
 
   constructor(
     private route: ActivatedRoute,
-    private membersService: MembersService,
-    private userManagerService: UserManagerService
+    private membersService: MembersService
   ) {}
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
       const familyId = params.familyId;
-      this.members = this.membersService.getMembers(familyId).pipe(
-        map((members: FamilyMember[]) => {
-          return members.map(
-            member => ({
-              fullName: this.userManagerService.getFullName(member),
-              roles: member.roles,
-              icon: this.userManagerService.getUserIcon(member) as string
-            }),
-            []
-          );
-        })
-      );
+      this.members = this.membersService.getMembers(familyId);
       this.roles = this.membersService.getRoles(familyId).pipe(
         map((roles: MemberRole[]) => {
           return roles.reduce(

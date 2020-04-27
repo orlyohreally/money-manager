@@ -1,23 +1,28 @@
-<div class="sign-in-form" fxLayout="column" fxLayoutAlign="center center">
+<div fxLayout="column" fxLayoutAlign="center center">
   <div class="mat-h1">
     Sign up
   </div>
   <div
-    class="form"
+    class="full-width"
     fxLayout="column"
     fxLayout.lt-sm="column"
     fxLayoutAlign="center center"
   >
-    <a href="https://www.freepik.com/free-photos-vectors/computer">
+    <!-- <a href="https://www.freepik.com/free-photos-vectors/computer">
       <img class="icon" src="/assets/images/form.jpg" />
-    </a>
+    </a> -->
+    <div class="mat-h4 signin-form__description">
+      Create a family and all your family members to track how much you spend.
+      Add payments and get reports on how much you have spent during specific
+      period and on what exactly.
+    </div>
     <div class="account-note">
       <span class="account-note__text">
         Already have a Money Manager account?
       </span>
       <a class="account-note__link" [routerLink]="['/auth/login']">Log in</a>
     </div>
-    <form [formGroup]="signInForm" (ngSubmit)="register()">
+    <form [formGroup]="signInForm" (ngSubmit)="register()" class="signin-form">
       <div
         #errorMessageBlock
         sharedNotificationBlock="error"
@@ -42,7 +47,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input required formControlName="email" type="email" matInput />
-        <mat-error *ngIf="signInForm.get('email').hasError('pattern')">
+        <mat-error *ngIf="signInForm.get('email').hasError('email')">
           Invalid email
         </mat-error>
         <mat-error *ngIf="signInForm.get('email').hasError('required')">
@@ -147,15 +152,17 @@
           By clicking "Sign in" button you agree to Money Manager Terms of
           Service and Privacy Policy
         </div>
-        <button
-          mat-raised-button
-          class="button"
-          color="primary"
-          [disabled]="signInForm.invalid"
-          type="submit"
-        >
-          Sign in
-        </button>
+        <shared-content-with-loader [showLoader]="submittingForm">
+          <button
+            mat-raised-button
+            class="button"
+            color="primary"
+            [disabled]="signInForm.invalid"
+            type="submit"
+          >
+            Sign in
+          </button>
+        </shared-content-with-loader>
       </div>
     </form>
   </div>

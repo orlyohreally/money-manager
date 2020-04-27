@@ -34,22 +34,10 @@
   background: rgba(0, 0, 0, 0.1) !important;
 }
 
-.block_scrollable,
-.block__child_scrollable div {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
+.full-width {
+  width: 100%;
+}
 
-  &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #2e6eb7;
-    border-radius: 30px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #1565c0;
-  }
+.display_block {
+  display: block;
 }

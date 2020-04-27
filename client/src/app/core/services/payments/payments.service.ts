@@ -1,22 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Payment, PaymentView } from '@shared/types';
-import { BehaviorSubject, combineLatest, from, Observable, of } from 'rxjs';
-import {
-  concatMap,
-  map,
-  mergeMap,
-  switchMap,
-  take,
-  toArray
-} from 'rxjs/operators';
-import { DataService } from '../data.service';
-import { FamiliesService } from '../families/families.service';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
-import { GlobalVariablesService } from '../global-variables/global-variables.service';
-import { MembersService } from '../members/members.service';
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { DataService } from '@core-client/services/data.service';
 // tslint:disable-next-line: max-line-length
-import { PaymentSubjectsService } from '../payment-subject/payment-subjects.service';
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
+import { Payment, User } from '@shared/types';
+import { compare } from '@src/app/modules/shared/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -30,17 +23,136 @@ export class PaymentsService extends DataService {
   constructor(
     http: HttpClient,
     globalVariablesService: GlobalVariablesService,
-    private paymentSubjectsService: PaymentSubjectsService,
-    private familiesService: FamiliesService,
-    private membersService: MembersService
+    private authenticationService: AuthenticationService
   ) {
     super(http, globalVariablesService);
+    authenticationService.getUser().subscribe(user => {
+      if (!user) {
+        this.paymentsList.next({});
+      }
+    });
   }
 
-  loadPayments(familyId?: string): Observable<Payment[]> {
-    const paymentsUrl = familyId
-      ? `${this.paymentsApiUrl}/${familyId}`
-      : this.paymentsApiUrl;
+  getPayments(familyId: string): Observable<Payment[]> {
+    const familyIdPrefix = familyId ? familyId : 'user';
+    return this.paymentsList.asObservable().pipe(
+      switchMap(payments => {
+        if (!payments[familyIdPrefix]) {
+          return this.loadPayments(familyId).pipe(
+            map(() => this.paymentsList.getValue()[familyIdPrefix])
+          );
+        }
+        return of(payments[familyIdPrefix]);
+      }),
+      map(payments =>
+        payments.sort((a, b) => compare(a.paidAt, b.paidAt, true))
+      )
+    );
+  }
+
+  getUserPayments(): Observable<Payment[]> {
+    return this.paymentsList.asObservable().pipe(
+      switchMap(payments => {
+        if (!payments['user']) {
+          return this.loadPayments().pipe(
+            map(() =>
+              Object.values(this.paymentsList.getValue()['user']).reduce(
+                (acc, val) => acc.concat(val),
+                []
+              )
+            )
+          );
+        }
+        return of(payments['user']);
+      }),
+      map(payments =>
+        payments.sort((a, b) => compare(a.paidAt, b.paidAt, true))
+      )
+    );
+  }
+
+  createPayment(
+    payment: Partial<Payment>,
+    familyId?: string
+  ): Observable<Payment> {
+    return this.post(`${this.paymentsApiUrl}/${familyId ? familyId : ''}`, {
+      payment
+    }).pipe(
+      switchMap((createdPayment: Payment) => {
+        return combineLatest([
+          this.authenticationService.getUser(),
+          this.paymentsList.asObservable()
+        ]).pipe(
+          take(1),
+          switchMap(
+            ([user, payments]: [
+              User,
+              { [familyId: string]: Payment<string>[] }
+            ]) => {
+              const familyPrefix = familyId ? familyId : 'user';
+              const familyPayments: Payment[] = payments[familyPrefix] || [];
+              this.paymentsList.next({
+                ...payments,
+                [familyPrefix]: [...familyPayments, createdPayment],
+                ...(!!familyId &&
+                  createdPayment.userId === user._id && {
+                    user: [...(payments['user'] || []), createdPayment]
+                  })
+              });
+              return of(createdPayment);
+            }
+          )
+        );
+      })
+    );
+  }
+
+  updatePayment() {
+    // this.payments[payment._id] = payment;
+    return of({
+      status: 'success',
+      msg: null
+    });
+  }
+
+  updatePaymentsByExchangeRate(
+    familyId: string,
+    exchangeRate: number
+  ): Observable<void> {
+    return this.put(`${this.paymentsApiUrl}/${familyId}/update-exchange-rate`, {
+      exchangeRate
+    }).pipe(
+      switchMap(() => {
+        // no need to update payments if they are not loaded yet
+        if (!this.paymentsList.getValue()[familyId]) {
+          return of(undefined);
+        }
+        return this.getPayments(familyId).pipe(
+          take(1),
+          map(payments => {
+            this.paymentsList.next({
+              ...this.paymentsList.getValue(),
+              [familyId]: payments.map(payment => ({
+                ...payment,
+                amount: payment.amount * exchangeRate
+              }))
+            });
+          })
+        );
+      })
+    );
+  }
+
+  removePayment() {
+    // delete this.payments[payment._id];
+    return of({
+      status: 'success',
+      msg: null
+    });
+  }
+
+  private loadPayments(familyId?: string): Observable<Payment[]> {
+    const paymentsUrl = `${this.paymentsApiUrl}/${familyId ? familyId : ''}`;
     return this.get(paymentsUrl).pipe(
       map((payments: Payment[]) => {
         this.paymentsList.next({
@@ -50,128 +162,5 @@ export class PaymentsService extends DataService {
         return payments;
       })
     );
-  }
-
-  getPayments(familyId?: string): Observable<Payment[]> {
-    return this.paymentsList.asObservable().pipe(
-      switchMap(payments => {
-        if (!payments[familyId ? familyId : 'user']) {
-          return this.loadPayments(familyId).pipe(
-            map(
-              () => this.paymentsList.getValue()[familyId ? familyId : 'user']
-            )
-          );
-        }
-        return of(payments[familyId ? familyId : 'user']);
-      })
-    );
-  }
-
-  getAggregatedUserPayments(familyId?: string): Observable<PaymentView[]> {
-    return this.getPayments(familyId).pipe(
-      mergeMap((payments: Payment[]) => {
-        return from(payments).pipe(
-          concatMap(payment =>
-            combineLatest([
-              this.paymentSubjectsService.getSubjectById(
-                payment.subjectId,
-                familyId
-              ),
-              payment.familyId
-                ? this.familiesService.getFamilyById(payment.familyId)
-                : of(undefined)
-            ]).pipe(
-              map(([subject, family]) => ({
-                _id: payment._id,
-                amount: payment.amount,
-                currency: payment.currency,
-                receipt: payment.receipt,
-                subject,
-                paidAt: payment.paidAt,
-                family,
-                createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt
-              }))
-            )
-          ),
-          toArray()
-        );
-      })
-    );
-  }
-
-  getAggregatedPayments(familyId?: string): Observable<PaymentView[]> {
-    return this.getPayments(familyId).pipe(
-      mergeMap((payments: Payment[]) => {
-        return from(payments).pipe(
-          mergeMap(payment =>
-            combineLatest([
-              this.paymentSubjectsService.getSubjectById(
-                payment.subjectId,
-                familyId
-              ),
-              this.membersService.getFamilyMemberById(familyId, payment.userId)
-            ]).pipe(
-              map(([subject, user]) => ({
-                _id: payment._id,
-                amount: payment.amount,
-                currency: payment.currency,
-                receipt: payment.receipt,
-                subject,
-                paidAt: payment.paidAt,
-                user,
-                familyId: payment.familyId,
-                createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt
-              }))
-            )
-          ),
-          toArray()
-        );
-      })
-    );
-  }
-
-  public createPayment(
-    familyId: string,
-    payment: Partial<Payment>
-  ): Observable<Payment> {
-    return this.post(`${this.paymentsApiUrl}/${familyId ? familyId : ''}`, {
-      payment
-    }).pipe(
-      switchMap((createdPayment: Payment) => {
-        return this.paymentsList.asObservable().pipe(
-          take(1),
-          switchMap((payments: { [familyId: string]: Payment<string>[] }) => {
-            const familyPayments: Payment[] =
-              payments[familyId ? familyId : 'user'];
-            this.paymentsList.next({
-              ...payments,
-              [familyId ? familyId : 'user']: [
-                ...familyPayments,
-                createdPayment
-              ]
-            });
-            return of(createdPayment);
-          })
-        );
-      })
-    );
-  }
-
-  public updatePayment() {
-    // this.payments[payment._id] = payment;
-    return of({
-      status: 'success',
-      msg: null
-    });
-  }
-
-  public removePayment() {
-    // delete this.payments[payment._id];
-    return of({
-      status: 'success',
-      msg: null
-    });
   }
 }

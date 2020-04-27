@@ -1,5 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Observable } from 'rxjs';
+import { concatMap, map, take } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
@@ -12,8 +16,6 @@ import { PaymentSubjectsService } from '@core-client/services/payment-subject/pa
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-payment-form',
@@ -27,6 +29,7 @@ export class NewPaymentFormComponent implements OnInit {
   familyMembers: Observable<FamilyMember[]>;
   errorMessage: string;
   paymentCurrency: string;
+  submittingForm = false;
 
   constructor(
     private dialogRef: MatDialogRef<NewPaymentFormComponent>,
@@ -41,9 +44,7 @@ export class NewPaymentFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.subjects = this.paymentSubjectsService.loadSubjects(
-      this.data.familyId
-    );
+    this.subjects = this.paymentSubjectsService.getSubjects(this.data.familyId);
 
     if (this.data.familyId) {
       this.adminView = this.membersService.userIsFamilyAdmin(
@@ -66,18 +67,33 @@ export class NewPaymentFormComponent implements OnInit {
   }
 
   createPayment(payment: Partial<Payment>) {
+    this.submittingForm = true;
     this.paymentsService
-      .createPayment(this.data.familyId, {
-        ...payment,
-        currency: this.paymentCurrency
-      })
-      .subscribe(
-        result => {
+      .createPayment(payment, this.data.familyId)
+      .pipe(
+        concatMap(result => {
+          this.submittingForm = false;
           this.dialogRef.close(result);
           this.notificationsService.showNotification('Payment has been added');
+
+          return this.authService.getUser().pipe(take(1));
+        })
+      )
+      .subscribe(
+        user => {
+          if (user._id === payment.userId) {
+            this.familiesService.updateMemberFamilySpentAmount(
+              this.data.familyId,
+              payment.amount,
+              '+'
+            );
+          }
         },
-        error => {
-          this.errorMessage = error.error.message;
+        (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.errorMessage = error.error.message
+            ? error.error.message
+            : error.statusText;
         }
       );
   }

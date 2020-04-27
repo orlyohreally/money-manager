@@ -14,6 +14,7 @@ export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
   serverError: string;
   showPassword = false;
+  submittingForm = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -29,6 +30,7 @@ export class LoginFormComponent implements OnInit {
   login(event: Event) {
     event.preventDefault();
     if (this.loginForm.valid) {
+      this.submittingForm = true;
       this.authService
         .login({
           email: this.email.value,
@@ -36,12 +38,14 @@ export class LoginFormComponent implements OnInit {
         })
         .subscribe(
           () => {
+            this.submittingForm = false;
             const returnUrl = this.route.snapshot.queryParamMap.get(
               'returnUrl'
             );
             this.router.navigate([returnUrl || '/']);
           },
           (error: HttpErrorResponse) => {
+            this.submittingForm = false;
             this.serverError = error.error;
           }
         );

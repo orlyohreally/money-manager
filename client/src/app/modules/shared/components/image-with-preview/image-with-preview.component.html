@@ -1,12 +1,17 @@
 <shared-image
-  class="card__avatar card__avatar_with-preview"
-  [imageUrl]="imageUrl || defaultImageUrl"
+  class="image-preview"
+  [imageUrl]="imageUrl"
   height="100px"
   width="100px"
   borderRadius="50%"
   (click)="showPreview()"
 >
+  <img
+    *ngIf="!imageUrl"
+    class="image-preview__default-image"
+    [src]="defaultImageUrl"
+  />
   <div class="shade shade_round">
-    <mat-icon class="avatar__preview-icon">photo_camera</mat-icon>
+    <mat-icon class="image-preview__icon">photo_camera</mat-icon>
   </div>
 </shared-image>

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { FamilyMember } from '@shared/types';
 
 @Component({
   selector: 'member-payment-percentage',
@@ -7,23 +8,18 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./member-payment-percentage.component.scss']
 })
 export class MemberPaymentPercentageComponent implements OnInit {
-  @Input() adultMember: {
-    fullName: string;
-    memberId: { familyId: string; userId: string };
-    paymentPercentage: number;
-  };
-
-  @Input() adultMemberPercentageForm: FormGroup;
+  @Input() member: FamilyMember;
+  @Input() memberPercentageForm: FormGroup;
 
   constructor() {}
 
   ngOnInit() {}
 
   resetPercentage() {
-    this.adultMemberPercentageForm.get('paymentPercentage').setValue(0);
+    this.memberPercentageForm.get('paymentPercentage').setValue(0);
   }
 
   get percentage() {
-    return this.adultMemberPercentageForm.get('paymentPercentage');
+    return this.memberPercentageForm.get('paymentPercentage');
   }
 }

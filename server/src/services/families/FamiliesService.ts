@@ -1,6 +1,7 @@
 import {
   Family,
   FamilyMember,
+  FamilyView,
   MemberPaymentPercentage,
   Roles,
   User
@@ -16,10 +17,17 @@ export interface IFamiliesDao {
     familyMember: Partial<FamilyMember>
   ): Promise<FamilyMember>;
   getFamilyMembers(familyId: string): Promise<FamilyMember[]>;
-  getMemberFamilies(
-    userId: string
-  ): Promise<{ family: Family; roles: string[] }[]>;
-  getFamily(familyId: string): Promise<{ name: string; membersCount: number }>;
+  getMemberFamilies(userId: string): Promise<FamilyView[]>;
+  getFamily(
+    familyId: string
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  >;
+  getMemberFamily(familyId: string, userId: string): Promise<FamilyView>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
   removeFamily(familyId: string): Promise<void>;
@@ -67,29 +75,56 @@ export class FamiliesService {
       savedFamily.icon = newIcon;
       savedFamily = await this.dao.updateFamily(savedFamily._id, savedFamily);
     }
-    return savedFamily;
+    await this.updateMembersPercentages(savedFamily._id, [
+      {
+        userId,
+        paymentPercentage: 100
+      }
+    ]);
+    return this.getMemberFamily(savedFamily._id, userId);
   }
 
-  public async updateFamily(familyId: string, family: Family): Promise<Family> {
-    if (family.icon && family.icon.search(/^http/) === -1) {
+  public async updateFamily(
+    familyId: string,
+    family: Family,
+    userId: string
+  ): Promise<FamilyView> {
+    const currentFamily = await this.getFamily(familyId);
+    if (family.icon && currentFamily.icon !== family.icon) {
       const newIcon = await this.imageLoaderService.loadImage(
         family.icon,
         `families/${family._id}`
       );
       family.icon = newIcon;
     }
-    return this.dao.updateFamily(familyId, family);
+    await this.dao.updateFamily(familyId, family);
+    if (!currentFamily.equalPayments && family.equalPayments) {
+      const members = await this.getFamilyMembers(familyId);
+      await this.setPaymentPercentageEqually(familyId, members);
+    }
+    return this.getMemberFamily(familyId, userId);
   }
 
   public async getFamily(
     familyId: string
-  ): Promise<{ name: string; membersCount: number }> {
+  ): Promise<
+    Family & {
+      membersCount: number;
+      equalPayments: boolean;
+      userRoles: string[];
+    }
+  > {
     return this.dao.getFamily(familyId);
   }
 
-  public async getMemberFamilies(
+  public async getMemberFamily(
+    familyId: string,
     userId: string
-  ): Promise<{ family: Family; roles: string[] }[]> {
+  ): Promise<FamilyView> {
+    return this.dao.getMemberFamily(familyId, userId);
+  }
+
+  public async getMemberFamilies(userId: string): Promise<FamilyView[]> {
     return this.dao.getMemberFamilies(userId);
   }
 
@@ -98,10 +133,24 @@ export class FamiliesService {
     familyId: string,
     roles: string[]
   ): Promise<FamilyMember> {
-    return this.dao.createFamilyMember(familyId, {
+    const newMember = await this.dao.createFamilyMember(familyId, {
       _id: userId,
       roles: roles.indexOf(Roles.Member) > -1 ? roles : [...roles, Roles.Member]
     });
+
+    const family = await this.getFamily(familyId);
+    if (!family.equalPayments) {
+      await this.updateMemberPaymentPercentage(familyId, {
+        userId: newMember._id,
+        paymentPercentage: 0
+      });
+    } else {
+      const currentMembers = await this.getFamilyMembers(familyId);
+      const members = [...currentMembers, newMember];
+      await this.setPaymentPercentageEqually(familyId, members);
+    }
+
+    return newMember;
   }
 
   public async getFamilyMembers(familyId: string): Promise<FamilyMember[]> {
@@ -129,7 +178,8 @@ export class FamiliesService {
     return [
       {
         name: Roles.Member,
-        description: "Can view family members",
+        description:
+          "Can view family members, add and edit own payments in family and view everybody's",
         default: true
       },
       {
@@ -140,23 +190,22 @@ export class FamiliesService {
         default: false
       },
       {
-        name: Roles.Child,
-        description: "Can add and edit payments in family and thier own",
-        default: false
-      },
-      {
-        name: Roles.Adult,
-        description:
-          "Can add and edit own payments in family and view everybody else's",
-        default: false
-      },
-      {
         name: Roles.Admin,
         // tslint:disable-next-line: max-line-length
         description: "Can edit all family members' payments",
         default: false
       }
     ];
+  }
+
+  public async updateMemberPaymentPercentage(
+    familyId: string,
+    percentage: MemberPaymentPercentage
+  ): Promise<void> {
+    await this.dao.updateMemberPercentage(
+      { familyId, userId: percentage.userId },
+      percentage.paymentPercentage
+    );
   }
 
   public async updateMembersPercentages(
@@ -195,9 +244,8 @@ export class FamiliesService {
       {}
     );
     return (
-      (await this.getFamilyMembers(familyId))
-        .filter(this.isAdultMember)
-        .reduce((res: number, member: FamilyMember) => {
+      (await this.getFamilyMembers(familyId)).reduce(
+        (res: number, member: FamilyMember) => {
           if (
             percentagesNormalized[member._id] &&
             percentagesNormalized[member._id].paymentPercentage !== undefined &&
@@ -206,7 +254,9 @@ export class FamiliesService {
             return res + percentagesNormalized[member._id].paymentPercentage;
           }
           return res + member.paymentPercentage;
-        }, 0) === 100
+        },
+        0
+      ) === 100
     );
   }
 
@@ -220,12 +270,12 @@ export class FamiliesService {
       const user = (req.body as { family: Family; user: User }).user;
       const updateAllowed = await this.userCanUpdateFamily(user._id, familyId);
       if (!updateAllowed) {
-        throw new Error("Unathorized access");
+        throw new Error("Unauthorized access");
       }
       next();
       return;
     } catch (error) {
-      return res.status(403).json({ message: "Unathorized access" });
+      return res.status(403).json({ message: "Unauthorized access" });
     }
   }
 
@@ -246,11 +296,16 @@ export class FamiliesService {
     return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
   }
 
-  private isAdultMember(member: FamilyMember) {
-    return (
-      member.roles.indexOf(Roles.Adult) > -1 ||
-      member.roles.indexOf(Roles.Admin) > -1 ||
-      member.roles.indexOf(Roles.Owner) > -1
-    );
+  private setPaymentPercentageEqually(
+    familyId: string,
+    members: FamilyMember[]
+  ): Promise<void> {
+    const paymentPercentage = 100 / members.length;
+    return this.updateMembersPercentages(familyId, [
+      ...members.map(member => ({
+        userId: member._id,
+        paymentPercentage
+      }))
+    ]);
   }
 }

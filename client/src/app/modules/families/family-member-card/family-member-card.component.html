@@ -2,7 +2,7 @@
   <shared-avatar
     avatarSize="80px"
     class="card__avatar"
-    [avatarUrl]="member.icon"
+    [avatarUrl]="member | familyMemberIcon"
   ></shared-avatar>
   <div class="card-extra-action">
     <button
@@ -26,16 +26,17 @@
 </div>
 <div class="card__content" fxLayout="column" fxLayoutAlign="center center">
   <div class="card__title">
-    <span class="text text_ellipsis">
-      {{ member.fullName }}
+    <span class="display_block">
+      {{ member | sharedUserFullName }}
     </span>
+    <span class="display_block mat-caption">{{ member.email }}</span>
   </div>
   <div class="roles">
     <span
       mat-raised-button
       color="primary"
       class="role"
-      *ngFor="let role of member.roles"
+      *ngFor="let role of member.roles | sharedSortBy"
       [matTooltip]="this.roles ? this.roles[role]?.description : null"
     >
       {{ role }}
@@ -46,6 +47,8 @@
       mat-icon-button
       class="card__link"
       color="primary"
+      routerLink="../payments/"
+      [queryParams]="{ memberId: member._id }"
       matTooltip="Go to payments"
     >
       <mat-icon>receipt</mat-icon>
@@ -54,6 +57,8 @@
       mat-icon-button
       class="card__link"
       color="primary"
+      routerLink="../reports/"
+      [queryParams]="{ memberId: member._id }"
       matTooltip="Go to reports"
     >
       <mat-icon>assignment</mat-icon>

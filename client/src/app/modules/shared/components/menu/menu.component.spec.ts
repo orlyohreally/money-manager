@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 
+import { FilterPipeMock } from '@tests-utils/mocks';
+import { MenuEntryComponent } from './menu-entry/menu-entry.component';
 import { MenuComponent } from './menu.component';
 
 describe('MenuComponent', () => {
@@ -8,7 +11,11 @@ describe('MenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MenuComponent]
+      declarations: [
+        MenuComponent,
+        MockComponent(MenuEntryComponent),
+        FilterPipeMock
+      ]
     }).compileComponents();
   }));
 

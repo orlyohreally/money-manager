@@ -7,7 +7,13 @@
   display: block;
 }
 
-.total-payment-amount {
-  display: block;
-  width: 100%;
+.mat-column-actions {
+  min-width: 100px;
+}
+
+@media (min-width: 600px) {
+  .payment:hover td {
+    cursor: pointer;
+    background-color: rgba(188, 189, 189, 0.3);
+  }
 }

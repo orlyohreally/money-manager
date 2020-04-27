@@ -1,0 +1,11 @@
+<payment-form
+  *ngIf="payment"
+  [subjects]="subjects"
+  [defaultPayer]="payment.userId"
+  [adminView]="adminView"
+  [payment]="payment"
+  [payersList]="familyMembers"
+  [errorMessage]="errorMessage"
+  [submittingForm]="submittingForm"
+  (formSubmitted)="updatePayment($event)"
+></payment-form>

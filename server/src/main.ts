@@ -29,8 +29,19 @@ const runServer = async () => {
   });
 
   if (process.env.NODE_ENV === "staging") {
+    const whitelist = ["localhost:4200", process.env.BACK_END_URL];
     const corsOptions = {
-      origin: "localhost:4200",
+      origin: (
+        origin: string | undefined,
+        callback: (err: Error | null, allow?: boolean) => void
+      ) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+          // tslint:disable-next-line: no-null-keyword
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       // some legacy browsers (IE11, various SmartTVs) choke on 204
       optionsSuccessStatus: 200
     };

@@ -35,15 +35,19 @@ const runServer = async () => {
         origin: string | undefined,
         callback: (err: Error | null, allow?: boolean) => void
       ) => {
+        console.log(
+          "origin",
+          origin,
+          whitelist,
+          whitelist.indexOf(origin) !== -1 || !origin
+        );
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           // tslint:disable-next-line: no-null-keyword
           callback(null, true);
         } else {
           callback(new Error("Not allowed by CORS"));
         }
-      },
-      // some legacy browsers (IE11, various SmartTVs) choke on 204
-      optionsSuccessStatus: 200
+      }
     };
     app.use(cors(corsOptions));
   }

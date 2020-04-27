@@ -35,12 +35,6 @@ const runServer = async () => {
         origin: string | undefined,
         callback: (err: Error | null, allow?: boolean) => void
       ) => {
-        console.log(
-          "origin",
-          origin,
-          whitelist,
-          whitelist.indexOf(origin) !== -1 || !origin
-        );
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           // tslint:disable-next-line: no-null-keyword
           callback(null, true);
@@ -60,13 +54,11 @@ const runServer = async () => {
   app.use(apiPath, familiesRouter);
   app.use(apiPath, paymentsRouter);
 
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static(`${__dirname}/assets/frontend`));
+  app.use(express.static(`${__dirname}/assets/frontend`));
 
-    app.get("/*", (req, res) => {
-      res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
-    });
-  }
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
+  });
 };
 console.log("Running server");
 runServer().catch(console.error);

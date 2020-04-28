@@ -29,7 +29,7 @@ const runServer = async () => {
   });
 
   if (process.env.NODE_ENV === "staging") {
-    const whitelist = ["localhost:4200", process.env.BACK_END_URL];
+    const whitelist = ["http://localhost:4200", process.env.BACK_END_URL];
     const corsOptions = {
       origin: (
         origin: string | undefined,

@@ -35,6 +35,12 @@ const runServer = async () => {
         origin: string | undefined,
         callback: (err: Error | null, allow?: boolean) => void
       ) => {
+        console.log(
+          origin,
+          whitelist,
+          whitelist.indexOf(origin),
+          whitelist.indexOf(origin) !== -1 || !origin
+        );
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           // tslint:disable-next-line: no-null-keyword
           callback(null, true);

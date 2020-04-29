@@ -2,9 +2,11 @@
 import "module-alias/register";
 
 import * as bodyParser from "body-parser";
+import * as cors from "cors";
 import * as express from "express";
 import * as mongoose from "mongoose";
 import * as path from "path";
+
 import { familiesRouter } from "./services/families";
 import { paymentSubjectsRouter } from "./services/payment-subjects";
 import { paymentsRouter } from "./services/payments";
@@ -26,6 +28,30 @@ const runServer = async () => {
     console.log(`Example app listening on port ${port}!`);
   });
 
+  if (process.env.NODE_ENV === "staging") {
+    const whitelist = ["http://localhost:4200", process.env.BACK_END_URL];
+    const corsOptions = {
+      origin: (
+        origin: string | undefined,
+        callback: (err: Error | null, allow?: boolean) => void
+      ) => {
+        console.log(
+          origin,
+          whitelist,
+          whitelist.indexOf(origin),
+          whitelist.indexOf(origin) !== -1 || !origin
+        );
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+          // tslint:disable-next-line: no-null-keyword
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      }
+    };
+    app.use(cors(corsOptions));
+  }
+
   app.use(bodyParser.json({ limit: "10mb" }));
   app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
@@ -34,13 +60,11 @@ const runServer = async () => {
   app.use(apiPath, familiesRouter);
   app.use(apiPath, paymentsRouter);
 
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static(`${__dirname}/assets/frontend`));
+  app.use(express.static(`${__dirname}/assets/frontend`));
 
-    app.get("/*", (req, res) => {
-      res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
-    });
-  }
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
+  });
 };
 console.log("Running server");
 runServer().catch(console.error);

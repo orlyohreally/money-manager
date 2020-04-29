@@ -6,10 +6,10 @@ import { User, VerificationToken } from "@shared/types";
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
 
 export interface IUsersDao {
-  createUser(user: User): Promise<User>;
   validateUser(user: User, validatePassword: boolean): ValidationResult;
   getUser(key: string, value: string): Promise<User>;
   registerUser(user: User): Promise<User>;
+  deleteUser(email: string): Promise<void>;
   updateUser(userId: string, user: User): Promise<User>;
   authUser(user: User): Promise<User>;
   generateAuthToken(user: User): string;
@@ -38,10 +38,6 @@ export class UsersService {
     this.imageLoaderService = imageLoaderService;
   }
 
-  public async createUser(user: User): Promise<User> {
-    return this.dao.createUser(user);
-  }
-
   public validateUser(
     user: User,
     validatePassword: boolean = true
@@ -55,6 +51,10 @@ export class UsersService {
 
   public registerUser(user: User): Promise<User> {
     return this.dao.registerUser(user);
+  }
+
+  public deleteUser(email: string): Promise<void> {
+    return this.dao.deleteUser(email);
   }
 
   public async updateUser(userId: string, user: User): Promise<User> {

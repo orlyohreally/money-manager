@@ -1,0 +1,52 @@
+<div>
+  <h1 mat-dialog-title>
+    Payment
+  </h1>
+  <ng-container>
+    <mat-form-field>
+      <mat-label>Payer</mat-label>
+      <input
+        disabled
+        matInput
+        disabled
+        [value]="data.payment.member | sharedUserFullName"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date of payment</mat-label>
+      <input
+        disabled
+        [value]="data.payment.paidAt | date: 'dd.MM.yy HH:mm:ss'"
+        matInput
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Subject of payment</mat-label>
+      <input disabled matInput [value]="data.payment.subject.name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input
+        disabled
+        matInput
+        [value]="data.payment.amount | currency: data.payment.currency"
+      />
+    </mat-form-field>
+    <div *ngIf="data.payment.receipt">
+      <a
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        [href]="data.payment.receipt"
+        target="_blank"
+      >
+        <img class="payment__receipt" [src]="data.payment.receipt" />
+      </a>
+    </div>
+    <div class="actions" fxLayout="row" fxLayoutAlign="center center">
+      <button mat-raised-button color="primary" [mat-dialog-close]>Okay</button>
+    </div>
+  </ng-container>
+</div>

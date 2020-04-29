@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  MatIconModule,
   MatPaginatorModule,
   MatSortModule,
   MatTableModule,
   MatTooltipModule
 } from '@angular/material';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockDirective } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
@@ -13,6 +14,8 @@ import {
   PrefixedNumberPipeMock,
   UserFullNamePipeMock
 } from '@tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { ViewFamilyPaymentDialogTriggerDirective } from '../directives/view-family-payment-dialog-trigger.directive';
 import { PaymentListComponent } from './payment-list.component';
 
 describe('PaymentListComponent', () => {
@@ -23,6 +26,7 @@ describe('PaymentListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         MockComponent(LoaderComponent),
+        MockDirective(ViewFamilyPaymentDialogTriggerDirective),
         PaymentListComponent,
         PrefixedNumberPipeMock,
         UserFullNamePipeMock
@@ -31,7 +35,8 @@ describe('PaymentListComponent', () => {
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatIconModule
       ]
     }).compileComponents();
   }));

@@ -260,7 +260,7 @@ export class FamiliesService {
     );
   }
 
-  public async userCanEditFamily(
+  public async isUpdateFamilyAllowedMW(
     req: Request & { user?: User },
     res: Response,
     next: NextFunction

@@ -18,7 +18,7 @@ describe('SideNavComponent', () => {
   const authenticationServiceMock = AuthenticationServiceMock();
 
   beforeEach(async(() => {
-    authenticationServiceSpy = authenticationServiceMock.service;
+    authenticationServiceSpy = authenticationServiceMock.getService();
 
     TestBed.configureTestingModule({
       declarations: [

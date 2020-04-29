@@ -31,7 +31,9 @@
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
     "jasmine-marbles": "^0.6.0",
+    "lint-staged": "^10.1.7",
     "moment": "^2.24.0",
+    "ng-lint-staged": "^0.1.6",
     "ng-mocks": "^8.1.0",
     "ngx-device-detector": "^1.3.5",
     "ngx-image-cropper": "^1.3.10",
@@ -68,7 +70,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick — staged && ng lint money-manager"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "pretty-quick --staged",
+      "ng-lint-staged lint money-manager --fix --"
+    ]
   }
 }

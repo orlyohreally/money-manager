@@ -44,13 +44,27 @@ export class PaymentsRouter {
     );
     this.router.post(
       "/payments/:familyId",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isEditFamilyPaymentAllowedMW.bind(service)
+      ],
       asyncWrap(this.postPayment)
     );
     this.router.put(
       "/payments/:familyId/update-exchange-rate",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.familiesService.isUpdateFamilyAllowedMW.bind(familiesService)
+      ],
       asyncWrap(this.updatePaymentsByExchangeRate)
+    );
+    this.router.put(
+      "/payments/:familyId/:paymentId",
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isEditFamilyPaymentAllowedMW.bind(service)
+      ],
+      asyncWrap(this.putPayment)
     );
   }
 
@@ -81,17 +95,17 @@ export class PaymentsRouter {
 
   private postPayment = async (req: Request, res: Response) => {
     try {
-      const body = req.body as { payment: Payment; user: User };
-      const familyId = (req.params as { familyId: string }).familyId;
+      const { payment } = req.body as {
+        payment: Omit<Payment, "_id">;
+        user: User;
+      };
+      const { familyId } = req.params as { familyId: string };
 
-      const error = this.service.validatePayment(body.payment);
+      const error = this.service.validatePayment(payment);
       if (error) {
         return res.status(400).json({ message: error });
       }
-      const isFamilyAdmin = this.familiesService.isFamilyAdmin(
-        body.user._id,
-        familyId
-      );
+
       const familyMembers = await this.familiesService.getFamilyMembers(
         familyId
       );
@@ -101,50 +115,55 @@ export class PaymentsRouter {
           paymentPercentage: member.paymentPercentage
         }))
       ];
-      let payment: Payment;
-      if (!body.payment._id) {
-        if (isFamilyAdmin) {
-          payment = await this.service.createPayment({
-            ...body.payment,
-            familyId,
-            paymentPercentages: percentages
-          });
-        } else {
-          payment = await this.service.createPayment({
-            ...body.payment,
-            userId: body.user._id,
-            familyId,
-            paymentPercentages: percentages
-          });
-        }
-        return res.status(200).json(payment);
+      const createdPayment: Payment = await this.service.createPayment({
+        ...payment,
+        familyId,
+        paymentPercentages: percentages
+      });
+
+      return res.status(200).json(createdPayment);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err);
+    }
+  };
+
+  private putPayment = async (req: Request, res: Response) => {
+    try {
+      const body = req.body as { payment: Omit<Payment, "_id">; user: User };
+      const { familyId, paymentId } = req.params as {
+        familyId: string;
+        paymentId: string;
+      };
+
+      const error = this.service.validatePayment(body.payment);
+      if (error) {
+        return res.status(400).json({ message: error });
       }
 
-      if (isFamilyAdmin) {
-        payment = await this.service.updatePayment(body.payment);
-      } else {
-        payment = await this.service.updatePayment({
-          ...body.payment,
-          userId: body.user._id,
-          familyId
-        });
-      }
+      const payment = await this.service.updatePayment({
+        ...body.payment,
+        _id: paymentId,
+        familyId
+      });
+
       return res.status(200).json(payment);
     } catch (err) {
       console.log(err);
       return res.status(400).json(err);
     }
   };
+
   private updatePaymentsByExchangeRate = async (
     req: Request,
     res: Response
   ) => {
     try {
-      const { exchangeRate, user } = req.body as {
+      const { exchangeRate } = req.body as {
         exchangeRate: number;
         user: User;
       };
-      const familyId = (req.params as { familyId: string }).familyId;
+      const { familyId } = req.params as { familyId: string };
       if (!exchangeRate || exchangeRate <= 0) {
         res
           .status(406)
@@ -156,13 +175,6 @@ export class PaymentsRouter {
         return res
           .status(200)
           .json({ message: "Successfully updated payments" });
-      }
-
-      const updateIsAllowed =
-        familyId &&
-        (await this.familiesService.userCanUpdateFamily(user._id, familyId));
-      if (!updateIsAllowed) {
-        return res.status(403).json({ message: "Unathorized access" });
       }
 
       if (exchangeRate !== 1) {

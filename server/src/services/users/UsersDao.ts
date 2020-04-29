@@ -21,12 +21,6 @@ export class UsersDao implements IUsersDao {
     }
   }
 
-  public async createUser(user: User): Promise<User> {
-    const newUser = new UserModel(user);
-    await newUser.save();
-    return newUser.toJSON() as User;
-  }
-
   public validateUser(
     user: User,
     validatePassword: boolean
@@ -80,6 +74,12 @@ export class UsersDao implements IUsersDao {
     });
     newUser.password = this.hashPassword(user.password as string);
     return newUser.save();
+  }
+
+  public async deleteUser(email: string): Promise<void> {
+    return UserModel.deleteOne({ email: email })
+      .lean()
+      .exec();
   }
 
   public async updateUser(userId: string, user: User): Promise<User> {

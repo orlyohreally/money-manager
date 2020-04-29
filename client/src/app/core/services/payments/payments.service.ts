@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
@@ -9,7 +9,7 @@ import { DataService } from '@core-client/services/data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 import { Payment, User } from '@shared/types';
-import { compare } from '@src/app/modules/shared/functions';
+import { compare, updateArrayElement } from '@src/app/modules/shared/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -33,20 +33,23 @@ export class PaymentsService extends DataService {
     });
   }
 
-  getPayments(familyId: string): Observable<Payment[]> {
+  getPayments(familyId?: string): Observable<Payment[]> {
     const familyIdPrefix = familyId ? familyId : 'user';
     return this.paymentsList.asObservable().pipe(
       switchMap(payments => {
         if (!payments[familyIdPrefix]) {
           return this.loadPayments(familyId).pipe(
-            map(() => this.paymentsList.getValue()[familyIdPrefix])
+            switchMap(() => {
+              return this.getPayments(familyId);
+            })
           );
         }
-        return of(payments[familyIdPrefix]);
-      }),
-      map(payments =>
-        payments.sort((a, b) => compare(a.paidAt, b.paidAt, true))
-      )
+        return of(
+          payments[familyIdPrefix].sort((a, b) =>
+            compare(a.paidAt, b.paidAt, true)
+          )
+        );
+      })
     );
   }
 
@@ -83,7 +86,7 @@ export class PaymentsService extends DataService {
           this.authenticationService.getUser(),
           this.paymentsList.asObservable()
         ]).pipe(
-          take(1),
+          first(),
           switchMap(
             ([user, payments]: [
               User,
@@ -107,12 +110,49 @@ export class PaymentsService extends DataService {
     );
   }
 
-  updatePayment() {
-    // this.payments[payment._id] = payment;
-    return of({
-      status: 'success',
-      msg: null
-    });
+  updatePayment(payment: Partial<Payment>, familyId: string): Observable<void> {
+    return this.put(
+      `${this.paymentsApiUrl}${familyId ? `/${familyId}` : ''}/${payment._id}`,
+      {
+        payment
+      }
+    ).pipe(
+      switchMap((updatedPayment: Payment) => {
+        const alreadyLoadedUserPayments = this.paymentsAlreadyLoaded();
+        if (
+          !(!!familyId && this.paymentsAlreadyLoaded(familyId)) &&
+          !alreadyLoadedUserPayments
+        ) {
+          return of(undefined);
+        }
+        return combineLatest([
+          this.authenticationService.getUser(),
+          this.paymentsList.asObservable()
+        ]).pipe(
+          first(),
+          switchMap(([user, payments]) => {
+            const familyPrefix = familyId ? familyId : 'user';
+            const familyPayments: Payment[] = payments[familyPrefix] || [];
+            this.paymentsList.next({
+              ...payments,
+              [familyPrefix]: updateArrayElement(
+                familyPayments,
+                updatedPayment
+              ),
+              ...(!!familyId &&
+                alreadyLoadedUserPayments &&
+                updatedPayment.userId === user._id && {
+                  user: updateArrayElement(
+                    payments['user'] || [],
+                    updatedPayment
+                  )
+                })
+            });
+            return of(undefined);
+          })
+        );
+      })
+    );
   }
 
   updatePaymentsByExchangeRate(
@@ -124,11 +164,11 @@ export class PaymentsService extends DataService {
     }).pipe(
       switchMap(() => {
         // no need to update payments if they are not loaded yet
-        if (!this.paymentsList.getValue()[familyId]) {
+        if (!this.paymentsAlreadyLoaded(familyId)) {
           return of(undefined);
         }
         return this.getPayments(familyId).pipe(
-          take(1),
+          first(),
           map(payments => {
             this.paymentsList.next({
               ...this.paymentsList.getValue(),
@@ -162,5 +202,10 @@ export class PaymentsService extends DataService {
         return payments;
       })
     );
+  }
+
+  private paymentsAlreadyLoaded(familyId?: string): boolean {
+    const familyIdPrefix = familyId ? familyId : 'user';
+    return !!this.paymentsList.getValue()[familyIdPrefix];
   }
 }

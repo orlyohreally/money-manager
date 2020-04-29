@@ -61,8 +61,8 @@ export class PaymentsCalculationsService {
           toArray()
         );
       }),
-      map((payments: (PaymentView & { currency: string })[]) =>
-        payments.map((payment: PaymentView & { currency: string }) => ({
+      map((payments: PaymentView[]) =>
+        payments.map((payment: PaymentView) => ({
           _id: payment._id,
           amount: payment.amount,
           paidAt: payment.paidAt.toString(),
@@ -71,7 +71,8 @@ export class PaymentsCalculationsService {
           receipt: payment.receipt,
           updatedAt: payment.updatedAt.toString(),
           subject: payment.subject,
-          currency: payment.currency
+          currency: payment.currency,
+          paymentPercentages: payment.paymentPercentages
         }))
       ),
       map(payments =>
@@ -123,7 +124,6 @@ export class PaymentsCalculationsService {
             createdAt: payment.createdAt.toString(),
             receipt: payment.receipt,
             member: payment.user,
-            memberEmail: payment.user.email,
             updatedAt: payment.updatedAt.toString(),
             subject: payment.subject,
             paymentPercentages: payment.paymentPercentages

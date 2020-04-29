@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import {
   MatPaginator,
@@ -5,8 +6,11 @@ import {
   MatTableDataSource,
   Sort
 } from '@angular/material';
+import { compare } from '@shared-client/functions';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { FamilyPaymentView } from '@src/app/types';
-import { compare } from '../../shared/functions';
 
 @Component({
   selector: 'payment-payment-list',
@@ -16,14 +20,37 @@ import { compare } from '../../shared/functions';
 export class PaymentListComponent implements OnInit, OnChanges {
   @Input() payments: FamilyPaymentView[];
   @Input() currency: string;
+  @Input() familyId: string;
 
-  displayedColumns: string[] = ['subject', 'amount', 'member', 'paidAt'];
+  displayedColumns: Observable<string[]>;
   dataSource: MatTableDataSource<FamilyPaymentView>;
 
   private paginator: MatPaginator;
   private sort: MatSort;
+  private defaultDisplayedColumns: string[] = [
+    'subject',
+    'amount',
+    'member',
+    'paidAt',
+    'actions'
+  ];
 
-  ngOnInit() {}
+  constructor(private breakpointObserver: BreakpointObserver) {}
+
+  ngOnInit() {
+    this.displayedColumns = this.breakpointObserver
+      .observe(['(min-width: 600px'])
+      .pipe(
+        switchMap((change: BreakpointState) => {
+          return of(
+            this.defaultDisplayedColumns.slice(
+              0,
+              change.matches ? -1 : this.defaultDisplayedColumns.length
+            )
+          );
+        })
+      );
+  }
 
   @ViewChild(MatSort) set matSort(sort: MatSort) {
     this.sort = sort;

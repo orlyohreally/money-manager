@@ -55,11 +55,11 @@ describe('PaymentsCalculationsService', () => {
     familiesServiceMock = FamiliesServiceMock();
     familiesServiceSpy = familiesServiceMock.service;
     membersServiceMock = MembersServiceMock();
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
     paymentsServiceMock = PaymentsServiceMock();
     paymentsServiceSpy = paymentsServiceMock.service;
     authenticationServiceMock = AuthenticationServiceMock();
-    authenticationServiceSpy = authenticationServiceMock.service;
+    authenticationServiceSpy = authenticationServiceMock.getService();
 
     TestBed.configureTestingModule({
       providers: [
@@ -99,7 +99,8 @@ describe('PaymentsCalculationsService', () => {
           family: familiesServiceMock.familyList[0] as MemberFamily,
           createdAt: new Date('2020-10-01').toString(),
           updatedAt: new Date('2020-10-02').toString(),
-          currency: familiesServiceMock.familyList[0].currency
+          currency: familiesServiceMock.familyList[0].currency,
+          paymentPercentages: paymentsServiceMock.paymentPercentage
         },
         {
           _id: 'paymentId-2',
@@ -110,7 +111,8 @@ describe('PaymentsCalculationsService', () => {
           family: familiesServiceMock.familyList[1] as MemberFamily,
           createdAt: new Date('2020-10-02').toString(),
           updatedAt: new Date('2020-10-02').toString(),
-          currency: familiesServiceMock.familyList[1].currency
+          currency: familiesServiceMock.familyList[1].currency,
+          paymentPercentages: paymentsServiceMock.paymentPercentage
         }
       ];
       familiesServiceSpy.getFamilyById.and.callFake((familyId: string) => {

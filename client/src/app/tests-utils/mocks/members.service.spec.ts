@@ -1,6 +1,6 @@
 import { MembersService } from '@core-client/services/members/members.service';
 import { FamilyMember, Roles } from '@shared/types';
-import { cold, hot, initTestScheduler } from 'jasmine-marbles';
+import { cold, hot } from 'jasmine-marbles';
 
 const mockedFamilyMember: FamilyMember = {
   _id: 'userId-1',
@@ -56,8 +56,6 @@ const roles = [
 ];
 
 function getMembersServiceSpy() {
-  initTestScheduler();
-
   // tslint:disable-next-line: max-line-length
   const membersServiceSpy: jasmine.SpyObj<MembersService> = jasmine.createSpyObj(
     'MembersService',
@@ -73,7 +71,7 @@ function getMembersServiceSpy() {
     cold('--a', { a: mockedFamilyMember })
   );
 
-  membersServiceSpy.getMembers.and.callFake(() =>
+  membersServiceSpy.getMembers.and.returnValue(
     hot('3ms a|', { a: mockedFamilyMembersList })
   );
 
@@ -85,14 +83,15 @@ function getMembersServiceSpy() {
 
   return membersServiceSpy;
 }
+
 export interface IMembersServiceMock {
-  service: jasmine.SpyObj<MembersService>;
+  getService: () => jasmine.SpyObj<MembersService>;
   member: FamilyMember;
   membersList: FamilyMember[];
 }
 
 export const MembersServiceMock: () => IMembersServiceMock = () => ({
-  service: getMembersServiceSpy(),
+  getService: getMembersServiceSpy,
   member: mockedFamilyMember,
   membersList: mockedFamilyMembersList
 });

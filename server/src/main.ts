@@ -10,6 +10,7 @@ import * as path from "path";
 import { familiesRouter } from "./services/families";
 import { paymentSubjectsRouter } from "./services/payment-subjects";
 import { paymentsRouter } from "./services/payments";
+import { testingRouter } from "./services/testing";
 import { usersRouter } from "./services/users";
 
 const runServer = async () => {
@@ -59,6 +60,10 @@ const runServer = async () => {
   app.use(apiPath, paymentSubjectsRouter);
   app.use(apiPath, familiesRouter);
   app.use(apiPath, paymentsRouter);
+
+  if (["development", "staging"].indexOf(process.env.NODE_ENV as string) > -1) {
+    app.use(apiPath, testingRouter);
+  }
 
   app.use(express.static(`${__dirname}/assets/frontend`));
 

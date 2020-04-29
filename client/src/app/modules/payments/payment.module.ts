@@ -21,6 +21,10 @@ import {
 } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 // tslint:disable-next-line: max-line-length
+import { EditFamilyPaymentFormComponent } from './components/edit-family-payment-form/edit-family-payment-form.component';
+// tslint:disable-next-line: max-line-length
+import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
+// tslint:disable-next-line: max-line-length
 import { MemberPaymentDebtListComponent } from './components/member-payment-debt-list/member-payment-debt-list.component';
 // tslint:disable-next-line: max-line-length
 import { MemberPaymentOverpayAndDebtListComponent } from './components/member-payment-overpay-and-debt-list/member-payment-overpay-and-debt-list.component';
@@ -30,6 +34,8 @@ import { MemberPaymentOverpayAndDebtComponent } from './components/member-paymen
 import { MoneyAmountComponent } from './components/money-amount/money-amount.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentFormComponent } from './components/new-payment-form/new-payment-form.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './components/payment-form/payment-form.component';
 // tslint:disable-next-line: max-line-length
@@ -47,6 +53,8 @@ import { UserPaymentsCalculatedPerMemberComponent } from './components/user-paym
 import { UserPaymentsComponent } from './components/user-payments/user-payments.component';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
+// tslint:disable-next-line: max-line-length
+import { ViewFamilyPaymentDialogTriggerDirective } from './directives/view-family-payment-dialog-trigger.directive';
 import { PaymentListComponent } from './payment-list/payment-list.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 
@@ -58,6 +66,7 @@ import { PaymentRoutingModule } from './payment-routing.module';
     MoneyAmountComponent,
     PaymentsComponent,
     NewPaymentDialogTriggerDirective,
+    ViewFamilyPaymentDialogTriggerDirective,
     NewPaymentFormComponent,
     UserPaymentsListComponent,
     UserPaymentsComponent,
@@ -66,7 +75,10 @@ import { PaymentRoutingModule } from './payment-routing.module';
     MemberPaymentOverpayAndDebtComponent,
     MemberPaymentOverpayAndDebtListComponent,
     MemberPaymentDebtListComponent,
-    PaymentsFiltersComponent
+    PaymentsFiltersComponent,
+    EditPaymentFormComponent,
+    EditFamilyPaymentFormComponent,
+    PaymentDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -102,6 +114,11 @@ import { PaymentRoutingModule } from './payment-routing.module';
     MatDatepickerModule,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }
   ],
-  entryComponents: [NewPaymentFormComponent, PaymentSubjectFormComponent]
+  entryComponents: [
+    NewPaymentFormComponent,
+    EditPaymentFormComponent,
+    PaymentSubjectFormComponent,
+    PaymentDetailsComponent
+  ]
 })
 export class PaymentModule {}

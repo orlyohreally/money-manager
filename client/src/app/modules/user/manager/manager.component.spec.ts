@@ -29,7 +29,7 @@ describe('ManagerComponent', () => {
   const userManagerServiceMock = UserManagerServiceMock();
 
   beforeEach(async(() => {
-    authServiceSpy = authServiceMock.service;
+    authServiceSpy = authServiceMock.getService();
     userManagerServiceSpy = userManagerServiceMock.service;
     notificationsServiceSpy = getNotificationsSpy();
 

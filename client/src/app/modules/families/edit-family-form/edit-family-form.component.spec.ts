@@ -60,7 +60,7 @@ describe('EditFamilyFormComponent', () => {
         { provide: MatDialogRef, dialogRefSpy },
         { provide: MAT_DIALOG_DATA, useValue: mockedFamily },
         { provide: FamiliesService, useValue: familiesServiceMock.service },
-        { provide: MembersService, useValue: membersServiceMock.service },
+        { provide: MembersService, useValue: membersServiceMock.getService() },
         { provide: NotificationsService, useValue: notificationsServiceSpy },
         { provide: PaymentsService, useValue: paymentsServiceSpy }
       ]

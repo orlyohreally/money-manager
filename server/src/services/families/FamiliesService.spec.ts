@@ -115,7 +115,11 @@ describe("FamiliesService", () => {
       params: { familyId: "familyId" },
       body: { family: mockedFamily, user: mockedUser }
     });
-    await service.userCanEditFamily(request, response as Response, nextSpy);
+    await service.isUpdateFamilyAllowedMW(
+      request,
+      response as Response,
+      nextSpy
+    );
     expect(nextSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -138,7 +142,7 @@ describe("FamiliesService", () => {
       params: { familyId: "familyId" },
       body: { family: mockedFamily, user: mockedUser }
     });
-    await service.userCanEditFamily(request, response, nextSpy);
+    await service.isUpdateFamilyAllowedMW(request, response, nextSpy);
     expect(nextSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -161,7 +165,7 @@ describe("FamiliesService", () => {
       params: { familyId: "familyId" },
       body: { family: mockedFamily, user: mockedUser }
     });
-    await service.userCanEditFamily(request, response, nextSpy);
+    await service.isUpdateFamilyAllowedMW(request, response, nextSpy);
     expect(response.statusCode).toBe(403);
   });
 

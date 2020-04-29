@@ -29,7 +29,7 @@ describe('MainToolbarComponent', () => {
   const userManagerServiceMock = UserManagerServiceMock();
 
   beforeEach(async(() => {
-    authenticationServiceSpy = authenticationServiceMock.service;
+    authenticationServiceSpy = authenticationServiceMock.getService();
     userManagerServiceSpy = userManagerServiceMock.service;
 
     TestBed.configureTestingModule({

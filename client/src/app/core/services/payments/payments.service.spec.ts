@@ -58,9 +58,9 @@ describe('PaymentsService', () => {
     familiesServiceMock = FamiliesServiceMock();
     familiesServiceSpy = familiesServiceMock.service;
     membersServiceMock = MembersServiceMock();
-    membersServiceSpy = membersServiceMock.service;
+    membersServiceSpy = membersServiceMock.getService();
     authenticationServiceMock = AuthenticationServiceMock();
-    authenticationServiceSpy = authenticationServiceMock.service;
+    authenticationServiceSpy = authenticationServiceMock.getService();
     paymentsServiceMock = PaymentsServiceMock();
 
     TestBed.configureTestingModule({

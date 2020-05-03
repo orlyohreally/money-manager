@@ -16,6 +16,7 @@ export interface IPaymentsDao {
     exchangeRate: number
   ): Promise<void>;
   getPayment(paymentId: string, familyId?: string): Promise<Payment>;
+  deleteUserPayments(userId: string): Promise<void>;
 }
 
 export class PaymentsService {
@@ -133,6 +134,10 @@ export class PaymentsService {
       console.log("error", error);
       return res.status(403).json(error);
     }
+  }
+
+  public deleteUserPayments(userId: string): Promise<void> {
+    return this.dao.deleteUserPayments(userId);
   }
 
   private async isEditFamilyPaymentAllowed(

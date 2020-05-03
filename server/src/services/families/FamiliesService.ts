@@ -30,7 +30,7 @@ export interface IFamiliesDao {
   getMemberFamily(familyId: string, userId: string): Promise<FamilyView>;
   getFamilyMember(userId: string, familyId: string): Promise<FamilyMember>;
   updateFamily(familyId: string, family: Family): Promise<Family>;
-  removeFamily(familyId: string): Promise<void>;
+  deleteFamily(familyId: string): Promise<void>;
   updateMemberPercentage(
     memberId: { userId: string; familyId: string },
     percentage: number
@@ -165,9 +165,9 @@ export class FamiliesService {
     return !!familyMember;
   }
 
-  public async removeFamily(familyId: string): Promise<void> {
+  public async deleteFamily(familyId: string): Promise<void> {
     await this.imageLoaderService.deleteImage(`families/${familyId}`);
-    return this.dao.removeFamily(familyId);
+    return this.dao.deleteFamily(familyId);
   }
 
   public getFamilyMemberRoles(): {

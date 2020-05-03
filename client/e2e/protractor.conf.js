@@ -3,6 +3,8 @@
 
 const { SpecReporter } = require('jasmine-spec-reporter');
 const { env } = require('./protractor_env');
+const { HttpClient } = require('protractor-http-client');
+
 require('ts-node/register');
 require('tsconfig-paths/register');
 
@@ -12,7 +14,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-      args: ['--headless', '--lang=en', '--window-size=800,600']
+      args: [/*'--headless',*/ '--lang=en', '--window-size=800,600']
     }
   },
   directConnect: true,
@@ -46,6 +48,15 @@ exports.config = {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
+    var http = new HttpClient(browser.params.backendURL);
+    var testingUsersApi = `/testing/user/ivan-petrov-test@gmail.com`;
+    http.delete(testingUsersApi, {
+      Authorization: browser.params.testingCredentials
+    });
+    testingUsersApi = `/users/signin`;
+    const { testedUser } = require('@src-e2e/shared/tested-user');
+    http.post(testingUsersApi, testedUser);
+
     jasmine
       .getEnv()
       .addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));

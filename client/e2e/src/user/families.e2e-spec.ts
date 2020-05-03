@@ -4,7 +4,8 @@ import {
   escapeRegExp,
   getPageUrl,
   getTextTitle,
-  getTitleText
+  getTitleText,
+  resetTestedUser
 } from '@src-e2e/shared/';
 import { FamiliesPage } from './families.po';
 
@@ -16,6 +17,7 @@ describe('Families Page', () => {
   });
 
   beforeEach(() => {
+    resetTestedUser();
     page.login();
     page.goToPage();
   });

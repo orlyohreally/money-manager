@@ -44,3 +44,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+#e2e tests
+/e2e-tests-results
+/e2e/protractor_env.js
+/reports
+/screenshots

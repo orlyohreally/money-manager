@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "@src/*": ["./src/*"],
+      "@src-e2e/*": ["./e2e/src/*"],
       "@shared/*": ["../shared/*"],
       "@shared-client/*": ["../client/src/app/modules/shared/*"],
       "@core-client/*": ["../client/src/app/core/*"],

@@ -2,27 +2,87 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const { SpecReporter } = require('jasmine-spec-reporter');
+const { env } = require('./protractor_env');
+require('ts-node/register');
+require('tsconfig-paths/register');
 
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: [
-    './src/**/*.e2e-spec.ts'
-  ],
+  specs: ['./src/**/*.e2e-spec.ts'],
   capabilities: {
-    'browserName': 'chrome'
+    browserName: 'chrome',
+    chromeOptions: {
+      args: ['--headless', '--lang=en', '--window-size=800,600']
+    }
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
+  paths: {
+    '@src-e2e/*': ['./src/*']
+  },
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
     print: function() {}
   },
+  params: {
+    backendURL: env.backendUrl,
+    testingCredentials: env.testingCredentials
+  },
+  plugins: [
+    {
+      package: 'jasmine2-protractor-utils',
+      disableHTMLReport: false,
+      outputPath: './e2e-tests-results',
+      disableScreenshot: false,
+      screenshotPath: './e2e-tests-results/screenshots',
+      screenshotOnExpectFailure: false,
+      screenshotOnSpecFailure: true,
+      clearFoldersBeforeTest: true
+    }
+  ],
   onPrepare() {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
-    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    jasmine
+      .getEnv()
+      .addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+    var jasmineReporters = require('jasmine-reporters');
+    jasmine.getEnv().addReporter(
+      new jasmineReporters.JUnitXmlReporter({
+        consolidateAll: true,
+        savePath: './e2e-tests-results/',
+        disableHTMLReport: true,
+        disableScreenshot: true,
+        filePrefix: 'xmlresults'
+      })
+    );
+  },
+  onComplete: function() {
+    var browserName, browserVersion;
+    var capsPromise = browser.getCapabilities();
+
+    capsPromise.then(function(caps) {
+      browserName = caps.get('browserName');
+      browserVersion = caps.get('version');
+      platform = caps.get('platform');
+
+      var HTMLReport = require('protractor-html-reporter-2');
+
+      testConfig = {
+        reportTitle: 'Protractor Test Execution Report',
+        outputPath: './e2e-tests-results/',
+        outputFilename: 'ProtractorTestReport',
+        screenshotPath: './screenshots',
+        testBrowser: browserName,
+        browserVersion: browserVersion,
+        modifiedSuiteName: false,
+        screenshotsOnlyOnFailure: true,
+        testPlatform: platform
+      };
+      new HTMLReport().from('./e2e-tests-results/xmlresults.xml', testConfig);
+    });
   }
 };

@@ -27,17 +27,20 @@ export class RegistrationPage {
     return element(by.className('notification-message'));
   }
 
-  deleteTestedUser() {
+  async deleteTestedUser() {
     // tslint:disable-next-line: max-line-length
     const testingUsersApi = `/testing/user/${testedUser.email}`;
     const deleteResponse = this.http.delete(testingUsersApi, {
       Authorization: browser.params.testingCredentials
     });
-    expect(deleteResponse.statusCode).toEqual(200);
+    expect(
+      [200, 404].indexOf(await deleteResponse.statusCode) > -1
+    ).toBeTruthy();
   }
 
   registerAsTestedUser() {
     this.deleteTestedUser();
+    this.goToPage();
 
     typeInInput('first-name', testedUser.firstName);
     typeInInput('last-name', testedUser.lastName);

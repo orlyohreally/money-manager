@@ -69,4 +69,12 @@ export class PaymentsDao implements IPaymentsDao {
       { $mul: { amount: exchangeRate } }
     );
   }
+
+  public deleteUserPayments(userId: string): Promise<void> {
+    return PaymentModel.deleteMany({
+      userId: new ObjectId(userId)
+    })
+      .lean()
+      .exec();
+  }
 }

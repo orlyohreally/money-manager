@@ -156,7 +156,7 @@ export class FamiliesRouter {
         res.status(404).json({ message: "Values are missing" });
         return;
       }
-      await this.service.removeFamily(familyId);
+      await this.service.deleteFamily(familyId);
       res.status(200).json({
         message: `Family was removed successfully`
       });

@@ -5,6 +5,7 @@ import { modelTransformer } from "@src/utils";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel, getFamiliesView, getMemberFamiliesView } from "./models";
 import { FamilyMemberModel, getFamilyMembersView } from "./models/FamilyMember";
+import { PaymentModel } from "../payments/models";
 // tslint:disable-next-line: max-line-length
 
 export class FamiliesDao implements IFamiliesDao {
@@ -54,8 +55,13 @@ export class FamiliesDao implements IFamiliesDao {
       .exec();
   }
 
-  public async removeFamily(familyId: string): Promise<void> {
-    return FamilyModel.deleteOne({ _id: familyId })
+  public async deleteFamily(familyId: string): Promise<void> {
+    await FamilyMemberModel.deleteMany({
+      "_id.familyId": new ObjectId(familyId)
+    })
+      .lean()
+      .exec();
+    return FamilyModel.deleteOne({ _id: new ObjectId(familyId) })
       .lean()
       .exec();
   }

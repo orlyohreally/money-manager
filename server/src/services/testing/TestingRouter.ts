@@ -37,6 +37,11 @@ export class TestingRouter {
       this.service.validateCredentials.bind(service),
       asyncWrap(this.deleteUser)
     );
+    this.router.delete(
+      "/testing/user-data/:email",
+      this.service.validateCredentials.bind(service),
+      asyncWrap(this.deleteUserData)
+    );
   }
 
   private deleteUser = async (req: Request, res: Response) => {
@@ -56,6 +61,28 @@ export class TestingRouter {
       await this.usersService.deleteUser(email);
       return res.status(200).json({
         message: `Successfully deleted user with email ${email}`
+      });
+    } catch (err) {
+      return res.status(400).json(err);
+    }
+  };
+
+  private deleteUserData = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.params as { email: string };
+      const user = await this.usersService.getUser("email", email);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      await this.paymentsService.deleteUserPayments(user._id.toString());
+      const userFamilies = await this.familiesService.getMemberFamilies(
+        user._id.toString()
+      );
+      userFamilies.forEach(async family => {
+        await this.familiesService.deleteFamily(family._id);
+      });
+      return res.status(200).json({
+        message: `Successfully deleted all user related data for user ${email}`
       });
     } catch (err) {
       return res.status(400).json(err);

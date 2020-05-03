@@ -5,8 +5,6 @@ import { modelTransformer } from "@src/utils";
 import { IFamiliesDao } from "./FamiliesService";
 import { FamilyModel, getFamiliesView, getMemberFamiliesView } from "./models";
 import { FamilyMemberModel, getFamilyMembersView } from "./models/FamilyMember";
-import { PaymentModel } from "../payments/models";
-// tslint:disable-next-line: max-line-length
 
 export class FamiliesDao implements IFamiliesDao {
   public async createFamily(family: Partial<Family>): Promise<Family> {

@@ -28,7 +28,6 @@ export class LoginPage {
   }
 
   registerAsTestedUser() {
-    this.registrationPage.goToPage();
     this.registrationPage.registerAsTestedUser();
   }
 

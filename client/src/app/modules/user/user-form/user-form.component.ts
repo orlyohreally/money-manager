@@ -11,9 +11,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormComponent } from '@shared-client/components/form/form.component';
 // tslint:disable-next-line: max-line-length
 import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
-// tslint:disable-next-line: max-line-length
-import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
 import { User } from '@shared/types';
+import { nameValidatorFn } from '@shared/utils';
 
 @Component({
   selector: 'user-form',
@@ -34,11 +33,11 @@ export class UserFormComponent extends FormComponent<User>
     this.form = new FormGroup({
       firstName: new FormControl(this.user.firstName, [
         Validators.required,
-        userNameValidatorFn
+        control => nameValidatorFn(control.value)
       ]),
       lastName: new FormControl(this.user.lastName, [
         Validators.required,
-        userNameValidatorFn
+        control => nameValidatorFn(control.value)
       ]),
       email: new FormControl({ value: this.user.email, disabled: true }, [
         Validators.required,

@@ -1,3 +1,5 @@
+import { NextFunction, Request, Response } from "express";
+
 import {
   Family,
   FamilyMember,
@@ -6,9 +8,9 @@ import {
   Roles,
   User
 } from "@shared/types";
+import { nameValidatorFn } from "@shared/utils";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
-import { NextFunction, Request, Response } from "express";
 
 export interface IFamiliesDao {
   createFamily(family: Partial<Family>): Promise<Family>;
@@ -294,6 +296,41 @@ export class FamiliesService {
   public async isFamilyAdmin(userId: string, familyId: string) {
     const familyMember = await this.dao.getFamilyMember(userId, familyId);
     return familyMember && familyMember.roles.indexOf(Roles.Admin) > -1;
+  }
+
+  public async validateFamily(family: Family, userId: string) {
+    const errors: string[] = [];
+    if (!family.name) {
+      errors.push("'name' is required.");
+    }
+    if (family.name) {
+      const nameErrors = nameValidatorFn(family.name);
+      if (!!nameErrors) {
+        if (nameErrors.maxlength) {
+          errors.push("'name' is longer than 15 characters");
+        }
+        if (nameErrors.minlength) {
+          errors.push("'name' is shorter than 3 characters");
+        }
+        if (nameErrors.pattern) {
+          errors.push("'name' must contain only letters, spaces or dashes");
+        }
+      }
+    }
+    if (!family.currency) {
+      errors.push("'currency' is required");
+    }
+    const memberFamilies = await this.getMemberFamilies(userId);
+    const nameIsAlreadyTaken =
+      memberFamilies.filter(
+        f =>
+          f.name.toLowerCase() === family.name.toLowerCase() &&
+          f._id.toString() !== family._id
+      ).length > 0;
+    if (nameIsAlreadyTaken) {
+      errors.push(`Member already has a family with name "${family.name}"`);
+    }
+    return errors.join(".");
   }
 
   private setPaymentPercentageEqually(

@@ -20,7 +20,8 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
 import { Family } from '@shared/types';
-import { AdultMember } from '@src/app/types/adult-member';
+import { nameValidatorFn } from '@shared/utils';
+import { AdultMember } from '@src/app/types';
 
 @Component({
   selector: 'family-edit-family-form',
@@ -53,7 +54,8 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = new FormGroup({
       name: new FormControl(this.family ? this.family.name : '', [
-        Validators.required
+        Validators.required,
+        control => nameValidatorFn(control.value)
       ]),
       icon: new FormControl(this.family ? this.family.icon : ''),
       currency: new FormControl(

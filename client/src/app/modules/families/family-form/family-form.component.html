@@ -9,7 +9,7 @@
         [imageUrl]="familyForm.get('icon').value"
         (selectedImage)="familyIconLoaded($event)"
       ></shared-image-with-preview>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="multi-line-error">
         <mat-label>Family name</mat-label>
         <input
           type="text"

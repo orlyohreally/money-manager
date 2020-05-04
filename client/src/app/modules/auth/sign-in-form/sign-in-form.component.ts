@@ -22,9 +22,8 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
 import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
-// tslint:disable-next-line: max-line-length
-import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
 import { User } from '@shared/types';
+import { nameValidatorFn } from '@shared/utils';
 
 @Component({
   selector: 'auth-sign-in-form',
@@ -123,9 +122,12 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.signInForm = new FormGroup({
       firstName: new FormControl('', [
         Validators.required,
-        userNameValidatorFn
+        control => nameValidatorFn(control.value)
       ]),
-      lastName: new FormControl('', [Validators.required, userNameValidatorFn]),
+      lastName: new FormControl('', [
+        Validators.required,
+        control => nameValidatorFn(control.value)
+      ]),
       email: new FormControl('', [Validators.required, emailValidatorFn]),
       password: new FormControl('', [
         Validators.required,

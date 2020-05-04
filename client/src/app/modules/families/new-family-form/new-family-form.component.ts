@@ -7,10 +7,9 @@ import { Router } from '@angular/router';
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
-// tslint:disable-next-line: max-line-length
-import { userNameValidatorFn } from '@shared-client/directives/user-name-validator/user-name-validator';
 import { MemberFamily } from '@shared-client/types';
 import { FamilyView } from '@shared/types';
+import { nameValidatorFn } from '@shared/utils';
 
 @Component({
   selector: 'family-new-family-form',
@@ -33,7 +32,10 @@ export class NewFamilyFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required, userNameValidatorFn]),
+      name: new FormControl('', [
+        Validators.required,
+        control => nameValidatorFn(control.value)
+      ]),
       icon: new FormControl(''),
       currency: new FormControl('', [Validators.required]),
       equalPayments: new FormControl(true)
@@ -48,12 +50,15 @@ export class NewFamilyFormComponent implements OnInit {
     this.createFamily(this.form.value);
   }
 
-  onRolesUpdated(roles: string[]) {
+  async onRolesUpdated(roles: string[]) {
+    await Promise.resolve(true);
     this.memberRoles = roles;
   }
 
   private createFamily(family: MemberFamily) {
     this.submittingForm = true;
+    this.errorMessage = undefined;
+
     this.familiesService.createFamily(family, this.memberRoles).subscribe(
       (response: FamilyView) => {
         this.submittingForm = false;
@@ -74,7 +79,6 @@ export class NewFamilyFormComponent implements OnInit {
             ? error.error.message
             : 'Server Error';
         this.submittingForm = false;
-        this.notificationsService.showNotification('Server Error');
       }
     );
   }

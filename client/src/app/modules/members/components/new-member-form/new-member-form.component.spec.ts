@@ -19,6 +19,8 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
 import { SharedModule } from '@shared-client/shared.module';
+// tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@src/app/core/services/families/families.service';
 import { expectTextContentToBe } from '@tests-utils/functions';
 import { FamiliesServiceMock, getNotificationsSpy } from '@tests-utils/mocks';
 import { MemberRolesComponent } from '../member-roles/member-roles.component';
@@ -32,12 +34,14 @@ describe('NewFamilyMemberFormComponent', () => {
   let dialogRefSpy: jasmine.SpyObj<MatDialogRef<NewFamilyMemberFormComponent>>;
   let notificationsServiceSpy: jasmine.SpyObj<NotificationsService>;
   let membersServiceSpy: jasmine.SpyObj<MembersService>;
+  let familiesServiceSpy: jasmine.SpyObj<FamiliesService>;
 
   const familiesServiceMock = FamiliesServiceMock();
 
   beforeEach(async(() => {
     dialogRefSpy = jasmine.createSpyObj('MetDialogRef', ['close']);
     notificationsServiceSpy = getNotificationsSpy();
+    familiesServiceSpy = FamiliesServiceMock().service;
     membersServiceSpy = jasmine.createSpyObj('MembersService', [
       'addFamilyMember',
       'getRoles'
@@ -74,7 +78,8 @@ describe('NewFamilyMemberFormComponent', () => {
         },
         { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: MembersService, useValue: membersServiceSpy },
-        { provide: NotificationsService, useValue: notificationsServiceSpy }
+        { provide: NotificationsService, useValue: notificationsServiceSpy },
+        { provide: FamiliesService, useValue: familiesServiceSpy }
       ]
     }).compileComponents();
   }));

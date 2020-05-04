@@ -1,9 +1,11 @@
 <div class="card-list" *ngIf="members | async as membersList; else loading">
-  <family-member-card
-    *ngFor="let member of membersList"
-    [member]="member"
-    [roles]="roles | async"
-  ></family-member-card>
+  <ng-container *ngIf="roles | async as memberRolesList">
+    <family-member-card
+      *ngFor="let member of membersList"
+      [member]="member"
+      [roles]="memberRolesList"
+    ></family-member-card>
+  </ng-container>
 </div>
 <ng-template #loading>
   <shared-loader></shared-loader>

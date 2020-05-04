@@ -30,6 +30,7 @@ export class ManagerComponent implements OnInit {
   }
 
   onFormSubmitted(user: User) {
+    this.errorMessage = undefined;
     this.userManagerService.updateUser(user).subscribe(
       () => {
         this.notificationsService.showNotification(

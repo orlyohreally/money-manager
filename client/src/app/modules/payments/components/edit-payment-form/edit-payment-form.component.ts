@@ -46,6 +46,7 @@ export class EditPaymentFormComponent implements OnInit {
 
   onFormSubmitted(payment: Partial<Payment>) {
     this.submittingForm = true;
+    this.errorMessage = undefined;
     this.paymentsService.updatePayment(payment, payment.familyId).subscribe(
       () => {
         this.submittingForm = false;

@@ -49,7 +49,9 @@
       color="primary"
       routerLink="../payments/"
       [queryParams]="{ memberId: member._id }"
-      matTooltip="Go to payments"
+      [matTooltip]="
+        'Go to ' + (member | sharedUserFullName) + '\'s family payments'
+      "
     >
       <mat-icon>receipt</mat-icon>
     </a>

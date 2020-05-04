@@ -11,7 +11,13 @@
       ></shared-image-with-preview>
       <mat-form-field appearance="outline">
         <mat-label>Family name</mat-label>
-        <input type="text" required matInput formControlName="name" />
+        <input
+          type="text"
+          required
+          matInput
+          formControlName="name"
+          name="family-name"
+        />
         <mat-error *ngIf="familyName.hasError('required')">
           Select family name
         </mat-error>
@@ -52,6 +58,7 @@
             required
             matInput
             formControlName="exchangeRate"
+            name="family-exchange-rate"
           />
           <mat-error
             *ngIf="familyForm.get('exchangeRate').hasError('required')"

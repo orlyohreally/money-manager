@@ -33,11 +33,15 @@
         class="card__link"
         color="primary"
         routerLink="/families/{{ family._id }}"
-        matTooltip="Go to family details"
+        matTooltip="Go to family dashboard"
       >
         <mat-icon>ballot</mat-icon>
       </a>
-      <button mat-icon-button [familyEditFamily]="family">
+      <button
+        mat-icon-button
+        [familyEditFamily]="family"
+        matTooltip="Edit family"
+      >
         <mat-icon>create</mat-icon>
       </button>
     </div>

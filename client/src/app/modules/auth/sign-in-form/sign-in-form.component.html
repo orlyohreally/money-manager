@@ -32,21 +32,32 @@
       </div>
       <mat-form-field appearance="outline">
         <mat-label>First Name</mat-label>
-        <input required formControlName="firstName" matInput />
+        <input
+          required
+          formControlName="firstName"
+          matInput
+          name="first-name"
+        />
         <mat-error *ngIf="signInForm.get('firstName').invalid">
           Invalid value
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Last Name</mat-label>
-        <input required formControlName="lastName" matInput />
+        <input required formControlName="lastName" matInput name="last-name" />
         <mat-error *ngIf="signInForm.get('lastName').invalid">
           Invalid value
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input required formControlName="email" type="email" matInput />
+        <input
+          required
+          formControlName="email"
+          type="email"
+          matInput
+          name="email"
+        />
         <mat-error *ngIf="signInForm.get('email').hasError('email')">
           Invalid email
         </mat-error>
@@ -73,6 +84,7 @@
           formControlName="password"
           [type]="showPassword ? 'text' : 'password'"
           matInput
+          name="password"
         />
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -94,6 +106,7 @@
           formControlName="passwordVerification"
           [type]="showPassword ? 'text' : 'password'"
           matInput
+          name="password-again"
         />
         <mat-error *ngIf="passwordVerification.hasError('verification-error')">
           Passwords do not match

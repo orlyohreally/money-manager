@@ -20,7 +20,7 @@
     <form
       class="login-form"
       [formGroup]="loginForm"
-      (ngSubmit)="login($event)"
+      (ngSubmit)="login()"
       fxLayout="column"
       fxLayoutAlign="center center"
     >
@@ -29,7 +29,13 @@
       </div>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input required formControlName="email" type="email" matInput />
+        <input
+          required
+          formControlName="email"
+          type="email"
+          matInput
+          name="email"
+        />
         <mat-error *ngIf="loginForm.get('email').hasError('pattern')">
           Invalid email
         </mat-error>
@@ -56,6 +62,7 @@
           formControlName="password"
           [type]="showPassword ? 'text' : 'password'"
           matInput
+          name="password"
         />
         <mat-error *ngIf="password.hasError('required')">
           Password is required

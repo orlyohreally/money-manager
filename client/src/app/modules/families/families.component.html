@@ -10,11 +10,13 @@
   </button>
 </div>
 <ng-container *ngIf="families | async as familiesList; else loading">
-  <div class="card-list" *ngIf="familiesList.length; else noFamilies">
-    <family-card
-      *ngFor="let family of familiesList"
-      [family]="family"
-    ></family-card>
+  <div class="card-list">
+    <ng-container *ngIf="familiesList.length; else noFamilies">
+      <family-card
+        *ngFor="let family of familiesList"
+        [family]="family"
+      ></family-card>
+    </ng-container>
   </div>
 </ng-container>
 <ng-template #loading>

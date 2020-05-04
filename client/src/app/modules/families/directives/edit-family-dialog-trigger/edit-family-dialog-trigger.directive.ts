@@ -8,7 +8,7 @@ import { EditFamilyFormComponent } from '../../edit-family-form/edit-family-form
   selector: '[familyEditFamily]'
 })
 export class EditFamilyDialogTriggerDirective {
-  @Input() familyEditFamily: MemberFamily;
+  @Input('familyEditFamily') family: MemberFamily;
 
   @HostListener('click', ['$event']) onClick() {
     this.editFamily();
@@ -23,7 +23,7 @@ export class EditFamilyDialogTriggerDirective {
       maxWidth: '700px',
       minWidth: '300px',
       restoreFocus: false,
-      data: this.familyEditFamily,
+      data: this.family,
       panelClass: 'dialog_scrollable'
     });
   }

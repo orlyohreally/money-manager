@@ -5,7 +5,7 @@ import { FamilyMember, MemberPaymentPercentage, Roles } from '@shared/types';
 import { User } from '@shared/types';
 import { MemberRole } from '@src/app/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { first, map, mergeMap, switchMap } from 'rxjs/operators';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -96,6 +96,7 @@ export class MembersService extends DataService {
 
   userIsFamilyAdmin(userId: string, familyId: string): Observable<boolean> {
     return this.getMembers(familyId).pipe(
+      first(),
       map(members => {
         const foundMembers = members.filter(member => member._id === userId);
         return foundMembers.length
@@ -121,7 +122,7 @@ export class MembersService extends DataService {
       familyId,
       percentages
     }).pipe(
-      switchMap(() => this.getMembers(familyId).pipe(take(1))),
+      switchMap(() => this.getMembers(familyId).pipe(first())),
       map(members => {
         const updatedMembers: FamilyMember[] = members.map(member => {
           const foundPercentage = percentages.filter(

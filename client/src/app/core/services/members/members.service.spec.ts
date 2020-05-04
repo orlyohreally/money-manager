@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-
 import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
-import { FamilyMember } from '@shared/types';
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+
+import { FamilyMember } from '@shared/types';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 import { Member, MembersService } from './members.service';

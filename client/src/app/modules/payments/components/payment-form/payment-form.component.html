@@ -76,18 +76,11 @@
       <div sharedNotificationBlock="error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-      <div class="action-buttons">
-        <shared-content-with-loader [showLoader]="submittingForm">
-          <button
-            mat-raised-button
-            class="button"
-            color="primary"
-            type="submit"
-          >
-            Save
-          </button>
-        </shared-content-with-loader>
-      </div>
+      <shared-content-with-loader [showLoader]="submittingForm">
+        <button mat-raised-button class="button" color="primary" type="submit">
+          Save
+        </button>
+      </shared-content-with-loader>
     </form>
   </ng-container>
 </div>

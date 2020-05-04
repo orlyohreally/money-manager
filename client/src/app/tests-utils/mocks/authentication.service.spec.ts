@@ -1,7 +1,8 @@
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 import { User } from '@shared/types';
-import { cold, hot } from 'jasmine-marbles';
+import { cold } from 'jasmine-marbles';
+import { of } from 'rxjs';
 
 const user: User = {
   _id: 'userId-1',
@@ -15,13 +16,14 @@ const user: User = {
   colorScheme: 'light',
   isVerified: true
 };
+
 function getAuthenticationServiceSpy() {
   // tslint:disable-next-line: max-line-length
   const authenticationServiceSpy: jasmine.SpyObj<AuthenticationService> = jasmine.createSpyObj(
     'AuthenticationService',
     ['getUser', 'isAuthenticated', 'tokenLoadedFromStorage']
   );
-  authenticationServiceSpy.getUser.and.returnValue(hot('--a---', { a: user }));
+  authenticationServiceSpy.getUser.and.returnValue(of(user));
   authenticationServiceSpy.isAuthenticated.and.returnValue(
     cold('--a', { a: true })
   );

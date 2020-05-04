@@ -6,12 +6,18 @@ import { TestBed } from '@angular/core/testing';
 import { first, switchMap } from 'rxjs/operators';
 
 import { FamilyView } from '@shared/types';
-import { FamiliesServiceMock } from '@tests-utils/mocks';
+import {
+  AuthenticationServiceMock,
+  FamiliesServiceMock,
+  getGlobalVariablesServiceSpy
+} from '@tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 import { FamiliesService } from './families.service';
 
-describe('FamiliesService', () => {
+fdescribe('FamiliesService', () => {
   let service: FamiliesService;
   let httpTestingController: HttpTestingController;
 
@@ -21,7 +27,14 @@ describe('FamiliesService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: GlobalVariablesService, useValue: { apiURL: 'apiURL' } }
+        {
+          provide: GlobalVariablesService,
+          useValue: getGlobalVariablesServiceSpy()
+        },
+        {
+          provide: AuthenticationService,
+          useValue: AuthenticationServiceMock().getService()
+        }
       ]
     });
     service = TestBed.get(FamiliesService);
@@ -36,34 +49,21 @@ describe('FamiliesService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('loadFamilies should make GET http request' + ' to api/families/', () => {
-    service.loadFamilies().subscribe(families => {
-      expect(families).toEqual(familiesServiceMock.memberFamilies);
-    });
-
-    const req = httpTestingController.expectOne({
-      url: 'apiURL/families/',
-      method: 'GET'
-    });
-
-    req.flush(familiesServiceMock.memberFamilies);
-  });
-
   it(
     'updateMemberFamilySpentAmount should increase how much member' +
       ' has spent for set family',
     () => {
       const mockedAmount = 400;
-      service
-        .loadFamilies()
+      service.familiesInfo
         .pipe(
+          first(),
           switchMap(() => {
             service.updateMemberFamilySpentAmount(
               familiesServiceMock.memberFamilies[0]._id,
               mockedAmount,
               '+'
             );
-            return service.familiesInfo;
+            return service.familiesInfo.pipe(first());
           })
         )
         .subscribe(
@@ -96,16 +96,16 @@ describe('FamiliesService', () => {
       ' has spent for set family when exchange rate is set for currency change',
     () => {
       const mockedExchangeRate = 2;
-      service
-        .loadFamilies()
+      service.familiesInfo
         .pipe(
+          first(),
           switchMap(() => {
             service.updateMemberFamilySpentAmount(
               familiesServiceMock.memberFamilies[0]._id,
               mockedExchangeRate,
               '*'
             );
-            return service.familiesInfo;
+            return service.familiesInfo.pipe(first());
           })
         )
         .subscribe(
@@ -167,9 +167,9 @@ describe('FamiliesService', () => {
 
   it('setCurrentFamily should update current family', () => {
     const newCurrentFamily = familiesServiceMock.memberFamilies[1];
-    service
-      .loadFamilies()
+    service.familiesInfo
       .pipe(
+        first(),
         switchMap(() => {
           service.setCurrentFamily(newCurrentFamily._id);
           return service.familiesInfo.pipe(first());
@@ -194,9 +194,9 @@ describe('FamiliesService', () => {
     const newMembersCount = 4;
 
     const updatedFamily = familiesServiceMock.memberFamilies[1];
-    service
-      .loadFamilies()
+    service.familiesInfo
       .pipe(
+        first(),
         switchMap(() => {
           service.updateFamilyMemberCount(updatedFamily._id, newMembersCount);
           return service.familiesInfo.pipe(first());

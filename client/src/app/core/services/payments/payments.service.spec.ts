@@ -23,7 +23,7 @@ import {
   IMembersServiceMock,
   MembersServiceMock
 } from '@src/app/tests-utils/mocks/members.service.spec';
-import { map, switchMap, take } from 'rxjs/operators';
+import { first, map, switchMap } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -53,14 +53,14 @@ describe('PaymentsService', () => {
   });
 
   beforeEach(() => {
+    authenticationServiceMock = AuthenticationServiceMock();
+    authenticationServiceSpy = authenticationServiceMock.getService();
     paymentSubjectsServiceMock = PaymentSubjectsServiceMock();
     paymentSubjectsServiceSpy = paymentSubjectsServiceMock.service;
     familiesServiceMock = FamiliesServiceMock();
     familiesServiceSpy = familiesServiceMock.service;
     membersServiceMock = MembersServiceMock();
     membersServiceSpy = membersServiceMock.getService();
-    authenticationServiceMock = AuthenticationServiceMock();
-    authenticationServiceSpy = authenticationServiceMock.getService();
     paymentsServiceMock = PaymentsServiceMock();
 
     TestBed.configureTestingModule({
@@ -101,7 +101,7 @@ describe('PaymentsService', () => {
       const familyIdMock = 'familyId-1';
       service
         .getPayments(familyIdMock)
-        .pipe(take(1))
+        .pipe(first())
         .subscribe(payments => {
           expect(payments).toEqual(paymentsServiceMock.payments);
         });
@@ -119,7 +119,7 @@ describe('PaymentsService', () => {
     const familyIdMock = 'familyId-1';
     service
       .getPayments(familyIdMock)
-      .pipe(take(1))
+      .pipe(first())
       .subscribe(() => {
         scheduler.run(({ expectObservable }) => {
           expectObservable(service.getPayments(familyIdMock)).toBe('a', {
@@ -139,7 +139,7 @@ describe('PaymentsService', () => {
   it('getUserPayment should make GET http request to api/payments/', () => {
     service
       .getUserPayments()
-      .pipe(take(1))
+      .pipe(first())
       .subscribe(payments => {
         expect(payments).toEqual(paymentsServiceMock.userPayments);
       });
@@ -197,7 +197,7 @@ describe('PaymentsService', () => {
       .createPayment(familiesServiceMock.family, familyIdMock)
       .pipe(
         map(() => {
-          service.getPayments(familyIdMock).pipe(take(1));
+          service.getPayments(familyIdMock).pipe(first());
         })
       )
       .subscribe(() => {
@@ -254,7 +254,7 @@ describe('PaymentsService', () => {
     service
       .getUserPayments()
       .pipe(
-        take(1),
+        first(),
         switchMap(() => {
           return service.createPayment(familiesServiceMock.family);
         })
@@ -280,4 +280,50 @@ describe('PaymentsService', () => {
 
     req.flush(paymentsServiceMock.payment);
   });
+
+  it(
+    'updatePayment should make http PUT request' +
+      ' to /payments/:familyId/:paymentId and update family payments list',
+    () => {
+      const mockedFamilyId = 'familyId-1';
+      const updatedPayment = paymentsServiceMock.payments[1];
+      const response: Payment = {
+        ...updatedPayment,
+        updatedAt: new Date()
+      };
+      service
+        .getPayments(mockedFamilyId)
+        .pipe(
+          first(),
+          switchMap(() => {
+            service.updatePayment(updatedPayment, mockedFamilyId);
+            return service.updatePayment(updatedPayment, mockedFamilyId);
+          })
+        )
+        .subscribe(() => {
+          scheduler.run(({ expectObservable }) => {
+            expectObservable(service.getPayments(mockedFamilyId)).toBe('a', {
+              a: [paymentsServiceMock.payments[0], response]
+            });
+          });
+        });
+
+      const reqPayments = httpTestingController.expectOne({
+        url: `apiURL/payments/${mockedFamilyId}`,
+        method: 'GET'
+      });
+      reqPayments.flush(paymentsServiceMock.payments.slice(0, 2));
+
+      const req = httpTestingController.expectOne({
+        url: `apiURL/payments/${mockedFamilyId}/${updatedPayment._id}`,
+        method: 'PUT'
+      });
+
+      expect(req.request.body).toEqual({
+        payment: updatedPayment
+      });
+
+      req.flush(response);
+    }
+  );
 });

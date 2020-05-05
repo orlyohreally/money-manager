@@ -1,11 +1,9 @@
-import { RequestResponse } from "request";
-
 export interface IEmailSenderDao {
   sendEmail(
     templateId: string,
     to: string,
     dynamicTemplateData: { [key: string]: string | number }
-  ): Promise<[RequestResponse, {}]>;
+  ): Promise<void>;
 }
 
 export class EmailSenderService {
@@ -19,7 +17,11 @@ export class EmailSenderService {
     templateId: string,
     to: string,
     dynamicTemplateData: { [key: string]: string | number }
-  ): Promise<[RequestResponse, {}]> {
+  ): Promise<void> {
+    const emailingEnabled: boolean = process.env.EMAILING_ENABLED === "true";
+    if (!emailingEnabled) {
+      return Promise.resolve();
+    }
     return this.dao.sendEmail(templateId, to, dynamicTemplateData);
   }
 }

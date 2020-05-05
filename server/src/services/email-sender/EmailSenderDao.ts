@@ -18,11 +18,11 @@ export class EmailSenderDao implements IEmailSenderDao {
     return sgMail.send(msg);
   }
 
-  public sendEmail(
+  public async sendEmail(
     templateId: string,
     to: string,
     dynamicTemplateData: { [key: string]: string | number }
-  ): Promise<[RequestResponse, {}]> {
+  ): Promise<void> {
     const msg = {
       to: to,
       from: "orly.knop@gmail.com",
@@ -30,7 +30,7 @@ export class EmailSenderDao implements IEmailSenderDao {
       dynamic_template_data: dynamicTemplateData
     };
 
-    return sgMail.send(msg);
+    await sgMail.send(msg);
   }
 
   private configSendGrid() {

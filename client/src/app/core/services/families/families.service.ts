@@ -7,6 +7,8 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 import { findById } from '@shared-client/functions/find-by-id';
 import { Family, FamilyView } from '@shared/types';
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '../authentication/authentication.service';
 import { DataService } from '../data.service';
 
 @Injectable({
@@ -24,19 +26,10 @@ export class FamiliesService extends DataService {
 
   constructor(
     http: HttpClient,
-    globalVariablesService: GlobalVariablesService
+    globalVariablesService: GlobalVariablesService,
+    private authenticationService: AuthenticationService
   ) {
     super(http, globalVariablesService);
-  }
-
-  loadFamilies(): Observable<FamilyView[]> {
-    return this.get(this.familyAPIRouter).pipe(
-      map((families: FamilyView[]) => {
-        this.familyStore.next({ families, currentFamily: families[0] });
-        this.loadedFamilies.next(true);
-        return families;
-      })
-    );
   }
 
   getFamilyById(familyId: string): Observable<FamilyView> {
@@ -54,11 +47,23 @@ export class FamiliesService extends DataService {
     families: FamilyView[];
     currentFamily: FamilyView;
   }> {
-    if (this.loadedFamilies.getValue()) {
-      return this.familyStore.asObservable();
-    }
-    return this.loadFamilies().pipe(
-      switchMap(() => this.familyStore.asObservable())
+    return this.authenticationService.getUser().pipe(
+      switchMap(user => {
+        const loadedFamilies = this.loadedFamilies.getValue();
+        if (!user) {
+          this.familyStore.next({ families: [], currentFamily: undefined });
+          if (loadedFamilies) {
+            this.loadedFamilies.next(false);
+          }
+        }
+        if (user && !loadedFamilies) {
+          return this.loadFamilies();
+        }
+        return of(undefined);
+      }),
+      switchMap(() => {
+        return this.familyStore.asObservable();
+      })
     );
   }
 
@@ -209,5 +214,15 @@ export class FamiliesService extends DataService {
           ? { ...currentFamily, membersCount }
           : currentFamily
     });
+  }
+
+  private loadFamilies(): Observable<FamilyView[]> {
+    return this.get(this.familyAPIRouter).pipe(
+      map((families: FamilyView[]) => {
+        this.familyStore.next({ families, currentFamily: families[0] });
+        this.loadedFamilies.next(true);
+        return families;
+      })
+    );
   }
 }

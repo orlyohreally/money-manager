@@ -111,7 +111,7 @@ describe('FamilyComponent', () => {
         fixture.detectChanges();
         tick();
         expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
-        expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/not-found']);
       })
     );
   });

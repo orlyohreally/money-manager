@@ -1,6 +1,10 @@
 <mat-form-field appearance="outline">
   <mat-label>{{ selectorLabel }}</mat-label>
-  <mat-select [formControl]="currencyControl" [required]="required">
+  <mat-select
+    [formControl]="currencyControl"
+    [required]="required"
+    name="currency"
+  >
     <mat-option>
       <ngx-mat-select-search
         [formControl]="searchKeyWord"

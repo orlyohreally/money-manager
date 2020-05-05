@@ -54,7 +54,7 @@ export class FamilyComponent implements OnInit {
           console.log(e);
         }
         this.ngZone.run(() => {
-          this.router.navigate(['/']);
+          this.router.navigate(['/not-found']);
         });
         return of(undefined);
       })

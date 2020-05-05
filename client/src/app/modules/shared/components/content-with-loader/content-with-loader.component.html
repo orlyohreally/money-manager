@@ -1,2 +1,8 @@
-<ng-content></ng-content>
-<shared-loader class="loader" diameter="20" *ngIf="showLoader"></shared-loader>
+<div class="content-with-loader">
+  <ng-content></ng-content>
+  <shared-loader
+    class="loader"
+    diameter="20"
+    *ngIf="showLoader"
+  ></shared-loader>
+</div>

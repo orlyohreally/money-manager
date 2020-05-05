@@ -91,8 +91,8 @@ export class AuthenticationService extends DataService {
 
   logout() {
     this.storageService.remove('user_token', 'money-manager');
-    this.user.next(null);
     this.authenticated.next(false);
+    this.user.next(null);
     this.dialogRef.closeAll();
   }
 

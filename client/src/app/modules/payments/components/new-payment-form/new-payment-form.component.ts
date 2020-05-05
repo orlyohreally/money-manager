@@ -68,6 +68,7 @@ export class NewPaymentFormComponent implements OnInit {
 
   createPayment(payment: Partial<Payment>) {
     this.submittingForm = true;
+    this.errorMessage = undefined;
     this.paymentsService
       .createPayment(payment, this.data.familyId)
       .pipe(

@@ -9,9 +9,15 @@
         [imageUrl]="familyForm.get('icon').value"
         (selectedImage)="familyIconLoaded($event)"
       ></shared-image-with-preview>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="multi-line-error">
         <mat-label>Family name</mat-label>
-        <input type="text" required matInput formControlName="name" />
+        <input
+          type="text"
+          required
+          matInput
+          formControlName="name"
+          name="family-name"
+        />
         <mat-error *ngIf="familyName.hasError('required')">
           Select family name
         </mat-error>
@@ -52,6 +58,7 @@
             required
             matInput
             formControlName="exchangeRate"
+            name="family-exchange-rate"
           />
           <mat-error
             *ngIf="familyForm.get('exchangeRate').hasError('required')"
@@ -68,13 +75,11 @@
       <div sharedNotificationBlock="error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-      <div class="action-buttons" fxLayout="row" fxLayoutAlign="center">
-        <shared-content-with-loader [showLoader]="submittingForm">
-          <button mat-raised-button class="button" color="accent" type="submit">
-            Save
-          </button>
-        </shared-content-with-loader>
-      </div>
+      <shared-content-with-loader [showLoader]="submittingForm">
+        <button mat-raised-button class="button" color="accent" type="submit">
+          Save
+        </button>
+      </shared-content-with-loader>
     </form>
   </div>
 </div>

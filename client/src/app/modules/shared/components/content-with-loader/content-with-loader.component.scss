@@ -11,8 +11,14 @@
 :host {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.content-with-loader {
+  display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  margin: 20px;
+  margin: 20px 40px;
   position: relative;
   align-items: center;
 }

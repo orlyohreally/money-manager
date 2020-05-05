@@ -2,6 +2,9 @@
   "name": "money-manager-shared",
   "version": "1.0.0",
   "description": "Shared code for money-manager project",
+  "scripts": {
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/orlyohreally/money-manager.git"
@@ -13,9 +16,14 @@
   },
   "homepage": "https://github.com/orlyohreally/money-manager#readme",
   "dependencies": {
-    "lodash": "^4.17.13"
+    "lodash": "^4.17.13",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.130"
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "^4.14.130",
+    "jest": "^26.0.0",
+    "ts-jest": "^25.4.0"
   }
 }

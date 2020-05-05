@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 
@@ -27,8 +28,7 @@ export class LoginFormComponent implements OnInit {
     this.initForm();
   }
 
-  login(event: Event) {
-    event.preventDefault();
+  login() {
     if (this.loginForm.valid) {
       this.submittingForm = true;
       this.authService

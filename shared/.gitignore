@@ -1,3 +1,5 @@
 /node_modules
 /types/*.js
 /types/*.js.map
+/utils/*.js
+/utils/*.js.map

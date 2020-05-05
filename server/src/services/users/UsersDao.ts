@@ -51,7 +51,7 @@ export class UsersDao implements IUsersDao {
       icon: Joi.string()
         .optional()
         // tslint:disable-next-line: no-null-keyword
-        .allow(null),
+        .allow(null, ""),
       currency: Joi.string()
     });
     return schema.validate(user);

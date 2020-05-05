@@ -85,6 +85,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
       return;
     }
     this.submittingForm = true;
+    this.errorMessage = undefined;
     this.membersService
       .addFamilyMember(this.data.family._id, this.memberForm.value)
       .pipe(

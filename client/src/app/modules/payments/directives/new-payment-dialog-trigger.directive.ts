@@ -15,7 +15,7 @@ export class NewPaymentDialogTriggerDirective {
     private dialog: MatDialog,
     private authenticationService: AuthenticationService
   ) {}
-  @Input() paymentNewPayment: string;
+  @Input('paymentNewPayment') familyId: string;
 
   @HostListener('click', ['$event']) onClick() {
     this.newPayment();
@@ -48,7 +48,7 @@ export class NewPaymentDialogTriggerDirective {
           panelClass: 'dialog_scrollable',
           data: {
             defaultUserId: user._id,
-            familyId: this.paymentNewPayment
+            familyId: this.familyId
           }
         });
       });

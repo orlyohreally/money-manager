@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import { IRouter } from "express-serve-static-core";
-
-import { asyncWrap } from "@src/utils";
+import { BAD_REQUEST, OK } from "http-status-codes";
 
 import { Family, MemberPaymentPercentage, User } from "@shared/types";
 // tslint:disable-next-line: max-line-length
 import { EmailSenderService } from "@src/services/email-sender/EmailSenderService";
 import { UsersService } from "@src/services/users/UsersService";
+import { asyncWrap } from "@src/utils";
 import { FamiliesService } from "./FamiliesService";
 
 export class FamiliesRouter {
@@ -113,16 +113,26 @@ export class FamiliesRouter {
     try {
       const body = req.body as { family: Family; roles: string[]; user: User };
       if (!body.family) {
-        return res.status(400).json("Values were not provided");
+        return res
+          .status(BAD_REQUEST)
+          .json({ message: "'family' was not provided" });
       }
+      const validationError: string = await this.service.validateFamily(
+        body.family,
+        body.user._id
+      );
+      if (!!validationError) {
+        return res.status(BAD_REQUEST).json({ message: validationError });
+      }
+
       const family = await this.service.createFamily(
         body.user._id,
         body.family,
         body.roles
       );
-      return res.status(200).json(family);
+      return res.status(OK).json(family);
     } catch (err) {
-      return res.status(400).json(err);
+      return res.status(BAD_REQUEST).json(err);
     }
   };
 
@@ -134,8 +144,16 @@ export class FamiliesRouter {
       };
       const familyId = (req.params as { familyId: string }).familyId;
       if (!body.family) {
-        res.status(404).json({ message: "New values are missing" });
-        return;
+        return res
+          .status(BAD_REQUEST)
+          .json({ message: "'family' was not provided" });
+      }
+      const validationError: string = await this.service.validateFamily(
+        body.family,
+        body.user._id.toString()
+      );
+      if (!!validationError) {
+        return res.status(BAD_REQUEST).json({ message: validationError });
       }
 
       const updatedFamily = await this.service.updateFamily(
@@ -143,9 +161,9 @@ export class FamiliesRouter {
         body.family,
         body.user._id
       );
-      res.status(200).json(updatedFamily);
+      return res.status(OK).json(updatedFamily);
     } catch (err) {
-      res.status(404).json(err);
+      return res.status(BAD_REQUEST).json({ err });
     }
   };
 

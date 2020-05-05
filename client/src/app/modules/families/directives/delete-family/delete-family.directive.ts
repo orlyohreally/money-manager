@@ -47,7 +47,7 @@ export class DeleteFamilyDirective {
       this.familiesService.removeFamily(this.familyDeleteFamily).subscribe(
         () => {
           this.notificationsService.showNotification('Family has been removed');
-          this.router.navigate(['/families']);
+          this.router.navigate(['/user/families']);
         },
         error => {
           this.notificationsService.showNotification('Server Error');

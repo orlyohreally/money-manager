@@ -97,10 +97,6 @@ function getFamiliesServiceSpy() {
     return cold('--a', { a: familyId === 'familyId-1' ? 'USD' : 'ILS' });
   });
 
-  familiesServiceSpy.loadFamilies.and.returnValue(
-    cold('---a', { a: memberFamilies })
-  );
-
   return familiesServiceSpy;
 }
 

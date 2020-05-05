@@ -1,8 +1,9 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
-
 const { SpecReporter } = require('jasmine-spec-reporter');
-const { env } = require('./protractor_env');
+const { HttpClient } = require('protractor-http-client');
+
+require('dotenv').config();
 require('ts-node/register');
 require('tsconfig-paths/register');
 
@@ -27,8 +28,8 @@ exports.config = {
     print: function() {}
   },
   params: {
-    backendURL: env.backendUrl,
-    testingCredentials: env.testingCredentials
+    backendURL: process.env.BACKEND_URL,
+    testingCredentials: process.env.TESTING_CREDENTIALS
   },
   plugins: [
     {
@@ -46,6 +47,15 @@ exports.config = {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
+    var http = new HttpClient(browser.params.backendURL);
+    var testingUsersApi = `/testing/user/ivan-petrov-test@gmail.com`;
+    http.delete(testingUsersApi, {
+      Authorization: browser.params.testingCredentials
+    });
+    testingUsersApi = `/users/signin`;
+    const { testedUser } = require('@src-e2e/shared/tested-user');
+    http.post(testingUsersApi, testedUser);
+
     jasmine
       .getEnv()
       .addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));

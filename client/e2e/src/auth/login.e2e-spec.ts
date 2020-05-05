@@ -39,6 +39,16 @@ describe('Login Page', () => {
     expect(getSubmitButton().getText()).toBe('Log In');
   });
 
+  // tslint:disable-next-line: max-line-length
+  it('should not redirect to main page when user is not registered', async () => {
+    page.deleteTestedUser();
+    page.loginAsTestedUser();
+
+    expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
+    expect(getSubmitButton().isDisplayed).toBeTruthy();
+    expect(page.getNotificationBlock().getText()).toBeTruthy();
+  });
+
   it(
     'should redirect to main page' +
       ' when form is valid and user is already registered',
@@ -50,14 +60,4 @@ describe('Login Page', () => {
       expect(currentUrl).toEqual(page.mainPageUrl);
     }
   );
-
-  // tslint:disable-next-line: max-line-length
-  it('should not redirect to main page when user is not registered', async () => {
-    page.deleteTestedUser();
-    page.loginAsTestedUser();
-
-    expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
-    expect(getSubmitButton().isDisplayed).toBeTruthy();
-    expect(page.getNotificationBlock().getText()).toBeTruthy();
-  });
 });

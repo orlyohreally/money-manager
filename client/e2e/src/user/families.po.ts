@@ -17,7 +17,6 @@ export class FamiliesPage {
   login() {
     goToPage('main');
     clearLocalStorage();
-    this.loginPage.registerAsTestedUser();
     this.loginPage.loginAsTestedUser();
   }
 

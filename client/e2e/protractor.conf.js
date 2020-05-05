@@ -1,10 +1,9 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
-
 const { SpecReporter } = require('jasmine-spec-reporter');
-const { env } = require('./protractor_env');
 const { HttpClient } = require('protractor-http-client');
 
+require('dotenv').config();
 require('ts-node/register');
 require('tsconfig-paths/register');
 
@@ -14,7 +13,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-      args: [/*'--headless',*/ '--lang=en', '--window-size=800,600']
+      args: ['--headless', '--lang=en', '--window-size=800,600']
     }
   },
   directConnect: true,
@@ -29,8 +28,8 @@ exports.config = {
     print: function() {}
   },
   params: {
-    backendURL: env.backendUrl,
-    testingCredentials: env.testingCredentials
+    backendURL: process.env.BACKEND_URL,
+    testingCredentials: process.env.TESTING_CREDENTIALS
   },
   plugins: [
     {

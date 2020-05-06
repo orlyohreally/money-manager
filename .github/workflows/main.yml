@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 10.15
@@ -18,21 +18,19 @@ jobs:
         with:
           node-version: "~10.15.3"
       - name: Install dependencies
+        run: npm install
+      - name: Run client unit tests
         run: |
-          google-chrome --version
-          npm install
-      - name: setup-chromedriver
-        uses: nanasess/setup-chromedriver@v1.0.1
-        with:
-          chromedriver-version: "81.0.4044.138"
-      - name: Test client subdirectory
+          cd client
+          npm run test:unit-test
+      - name: Run client e2e tests
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           TESTING_CREDENTIALS: ${{ secrets.TESTING_CREDENTIALS }}
         run: |
           cd client
-          npm run test
-      - name: Test server subdirectory
+          npm run test:e2e
+      - name: Run server tests
         run: |
           cd server
           npm run test

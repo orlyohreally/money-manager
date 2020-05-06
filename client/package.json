@@ -5,9 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "test:unit-test": "ng test --watch=false",
+    "test:e2e": "ng e2e",
+    "test": "npm run test:unit-test && npm run test:e2e",
     "start:dev": "ng serve --proxy-config proxy.conf.json",
     "postinstall": "ng build --aot --prod",
     "precommit": "lint-staged"

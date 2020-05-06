@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - client/**
   pull_request:
-    paths:
-      - client/**
+    branches:
+      - master
 
 jobs:
   build:

@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 10.15
+      - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 10.15
+          node-version: "~10.15.3"
       - name: Install dependencies
         run: npm install
       - name: Test client subdirectory

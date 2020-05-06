@@ -20,8 +20,7 @@ jobs:
         with:
           node-version: "~10.15.3"
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
       - name: Test client subdirectory
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}

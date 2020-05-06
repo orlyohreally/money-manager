@@ -17,9 +17,8 @@
     "lint:prettier": "prettier --write \"{src,test}/**/*.ts*\"",
     "start": "node src/main.js",
     "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
-    "commit": "commit-prompt --no-verify",
-    "precommit": "lint-staged && npm run lint",
     "test": "jest --detectOpenHandles",
+    "precommit": "lint-staged && npm run lint",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
     "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\"",
     "test:ci": "jest --detectOpenHandles --coverage",
@@ -46,7 +45,6 @@
     "prettier-config-trucknet-io": "^2.0.1",
     "rimraf": "^2.6.3",
     "supertest": "^4.0.2",
-    "trucknet-commit": "^1.4.3",
     "ts-jest": "^23.10.3",
     "tslint": "^5.12.1",
     "tslint-config-trucknet-io": "^1.4.0"

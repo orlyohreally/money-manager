@@ -8,7 +8,8 @@
   },
   "scripts": {
     "install": "cd shared && npm install && cd ../client && npm install && cd ../server && npm install && npm run build",
-    "test": "cd server && npm run test && cd ../client && npm run test"
+    "test": "cd server && npm run test && cd ../client && npm run test",
+    "precommit": "lerna run --concurrency 1 --stream precommit --since HEAD"
   },
   "workspaces": [
     "client",
@@ -20,7 +21,11 @@
     "npm": "~6.9.0"
   },
   "dependencies": {
-    "@angular/cli": "~7.3.6"
+    "@angular/cli": "~7.3.6",
+    "lint-staged": "^10.2.2"
+  },
+  "devDependencies": {
+    "lerna": "^3.20.2"
   },
   "author": "Orly Knop",
   "license": "MIT",

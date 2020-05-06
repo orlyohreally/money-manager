@@ -13,7 +13,12 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-      args: ['--headless']
+      args: [
+        '--headless',
+        '--disable-gpu',
+        '--lang=en',
+        '--window-size=800,600'
+      ]
     }
   },
   directConnect: true,

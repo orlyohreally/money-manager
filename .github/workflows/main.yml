@@ -18,7 +18,13 @@ jobs:
         with:
           node-version: "~10.15.3"
       - name: Install dependencies
-        run: npm install
+        run: |
+          google-chrome --version
+          npm install
+      - name: setup-chromedriver
+        uses: nanasess/setup-chromedriver@v1.0.1
+        with:
+          chromedriver-version: "81.0.4044.69"
       - name: Test client subdirectory
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}

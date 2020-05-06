@@ -24,7 +24,7 @@ jobs:
       - name: setup-chromedriver
         uses: nanasess/setup-chromedriver@v1.0.1
         with:
-          chromedriver-version: "81.0.4044.69"
+          chromedriver-version: "81.0.4044.138"
       - name: Test client subdirectory
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}

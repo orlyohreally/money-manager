@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start:dev": "ng serve --proxy-config proxy.conf.json",
-    "postinstall": "ng build --aot --prod"
+    "postinstall": "ng build --aot --prod",
+    "precommit": "lint-staged"
   },
   "private": true,
   "dependencies": {
@@ -74,15 +75,15 @@
     "tslint-angular": "^3.0.2",
     "tslint-config-prettier": "^1.18.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.ts": [
-      "pretty-quick --staged",
+    "**/*.+(js|ts|json|css)": [
+      "pretty-quick --staged"
+    ],
+    "src/**/*.ts": [
       "ng-lint-staged lint money-manager --fix --"
+    ],
+    "e2e/**/*.ts": [
+      "ng-lint-staged lint money-manager-e2e --fix --"
     ]
   }
 }

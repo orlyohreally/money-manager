@@ -12,7 +12,7 @@
     "start:dev": "ng serve --proxy-config proxy.conf.json",
     "postinstall": "ng build --aot --prod",
     "precommit": "lint-staged",
-    "setup-webdriver-manager": "cd ./node_modules/protractor/bin && webdriver-manager update --versions.chrome=81.0.4044.138"
+    "setup-webdriver-manager": "cd ./node_modules/protractor/bin && webdriver-manager update --versions.chrome=80.0.3987.163"
   },
   "private": true,
   "dependencies": {

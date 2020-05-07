@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 10.15
@@ -23,10 +23,16 @@ jobs:
         run: |
           cd client
           npm run test:unit-test
+      - name: Set webdriver version for client e2e testing
+        run: |
+          google-chrome --version
+          cd client
+          npm run setup-webdriver-manager
       - name: Run client e2e tests
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           TESTING_CREDENTIALS: ${{ secrets.TESTING_CREDENTIALS }}
+          CI: "true"
         run: |
           cd client
           npm run test:e2e

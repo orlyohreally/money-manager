@@ -87,13 +87,6 @@ export class MembersService extends DataService {
     );
   }
 
-  familyMemberCanManageFamilyPayments(member: FamilyMember) {
-    return (
-      member.roles.indexOf(Roles.Admin) > -1 ||
-      member.roles.indexOf(Roles.Owner) > -1
-    );
-  }
-
   userIsFamilyAdmin(userId: string, familyId: string): Observable<boolean> {
     return this.getMembers(familyId).pipe(
       first(),

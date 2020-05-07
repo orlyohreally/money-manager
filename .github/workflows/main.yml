@@ -4,31 +4,33 @@ on:
   push:
     branches:
       - master
-    paths:
-      - client/**
   pull_request:
-    paths:
-      - client/**
+    branches:
+      - master
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 10.15
         uses: actions/setup-node@v1
         with:
-          node-version: 10.15
+          node-version: "~10.15.3"
       - name: Install dependencies
         run: npm install
-      - name: Test client subdirectory
+      - name: Run client unit tests
+        run: |
+          cd client
+          npm run test:unit-test
+      - name: Run client e2e tests
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           TESTING_CREDENTIALS: ${{ secrets.TESTING_CREDENTIALS }}
         run: |
           cd client
-          npm run test
-      - name: Test server subdirectory
+          npm run test:e2e
+      - name: Run server tests
         run: |
           cd server
           npm run test

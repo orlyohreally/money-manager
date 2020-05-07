@@ -11,7 +11,8 @@
     "test": "npm run test:unit-test && npm run test:e2e",
     "start:dev": "ng serve --proxy-config proxy.conf.json",
     "postinstall": "ng build --aot --prod",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "setup-webdriver-manager": "cd ./node_modules/protractor/bin && webdriver-manager update --versions.chrome=81.0.4044.138"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +50,7 @@
     "rxjs": "~6.3.3",
     "tslib": "^1.10.0",
     "typescript": "~3.2.2",
+    "webdriver-manager": "^12.1.7",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

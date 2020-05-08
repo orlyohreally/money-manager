@@ -176,7 +176,7 @@ describe('NewFamilyMemberFormComponent', () => {
         fixture.debugElement.query(By.directive(NotificationBlockDirective)),
         NotificationBlockDirective
       );
-      expect(messageDirective.sharedNotificationBlock).toBe('error');
+      expect(messageDirective.type).toBe('error');
     }
   );
 

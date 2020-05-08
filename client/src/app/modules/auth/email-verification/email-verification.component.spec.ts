@@ -114,7 +114,7 @@ describe('EmailVerificationComponent', () => {
             ),
             NotificationBlockDirective
           );
-          expect(messageDirective.sharedNotificationBlock).toBe('error');
+          expect(messageDirective.type).toBe('error');
         }
       );
     });

@@ -5,3 +5,11 @@
 .file-loader__input {
   display: none;
 }
+
+.image-manager__controller {
+  margin-right: 10px;
+}
+
+.image-manager__controller:last-child {
+  margin-right: 0;
+}

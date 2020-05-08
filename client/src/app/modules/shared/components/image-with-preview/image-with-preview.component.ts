@@ -21,8 +21,7 @@ export class ImageWithPreviewComponent implements OnInit {
   public showPreview() {
     const dialogRef = this.dialog.open(ImageManagerComponent, {
       width: '90%',
-      height: '90%',
-      data: { imageUrl: this.imageUrl, toLoadImage: true }
+      height: '90%'
     });
 
     dialogRef.afterClosed().subscribe(newImageUrl => {

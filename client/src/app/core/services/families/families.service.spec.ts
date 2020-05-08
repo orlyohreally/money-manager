@@ -17,7 +17,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 import { FamiliesService } from './families.service';
 
-fdescribe('FamiliesService', () => {
+describe('FamiliesService', () => {
   let service: FamiliesService;
   let httpTestingController: HttpTestingController;
 

@@ -1,33 +1,40 @@
-<div class="image-manager" fxLayoutAlign="center center" fxLayout="column">
-  <shared-image-preview [imageUrl]="config.imageUrl"></shared-image-preview>
-  <div class="file-loader" *ngIf="config.toLoadImage">
-    <input
-      class="file-loader__input"
-      type="file"
-      (change)="onFileChange($event)"
-      #file
-    />
-    <button mat-raised-button color="primary" (click)="file.click()">
+<div class="image-manager">
+  <div class="mat-h1">Image selector</div>
+  <shared-loader *ngIf="!cropperIsReady"></shared-loader>
+  <image-cropper
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="1"
+    [resizeToWidth]="300"
+    format="png"
+    (imageCropped)="imageCropped($event)"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()"
+  ></image-cropper>
+  <div *ngIf="hasLoadingError" sharedNotificationBlock="error">
+    Failed to load selected file. Only .jpeg and .png are supported.
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="file-loader" class="image-manager__controller">
+      <input
+        class="file-loader__input"
+        type="file"
+        (change)="onFileChange($event)"
+        accept="image/png, image/jpeg"
+        #file
+      />
+      <button mat-raised-button color="primary" (click)="file.click()">
+        Load image
+      </button>
+    </div>
+    <button
+      class="image-manager__controller"
+      mat-raised-button
+      color="primary"
+      [disabled]="!croppedImage"
+      (click)="saveChanges()"
+    >
       Select image
     </button>
   </div>
-
-  <button mat-raised-button color="primary" (click)="saveChanges()">
-    Save
-  </button>
 </div>
-
-<image-cropper
-  [imageChangedEvent]="imageChangedEvent"
-  [maintainAspectRatio]="true"
-  [aspectRatio]="4 / 3"
-  [resizeToWidth]="500"
-  [onlyScaleDown]="true"
-  format="png"
-  (imageCropped)="imageCropped($event)"
-  (imageLoaded)="croppingLoaded()"
-  (cropperReady)="cropperReady()"
-  (loadImageFailed)="loadImageFailed()"
-></image-cropper>
-
-<img [src]="croppedImage" />

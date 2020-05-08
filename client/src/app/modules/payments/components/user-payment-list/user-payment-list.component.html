@@ -37,7 +37,7 @@
           <td mat-cell *matCellDef="let element">
             <a
               *ngIf="!!element.family"
-              routerLink="/families/{{ element.family._id }}"
+              routerLink="/families/{{ element.family._id }}/payments"
             >
               {{ element.family.name }}
             </a>

@@ -33,7 +33,9 @@ export class PaymentFormComponent extends FormComponent<Payment>
       subjectId: new FormControl(payment.subjectId, [Validators.required]),
       amount: new FormControl(payment.amount, [
         Validators.required,
-        Validators.pattern('^[1-9][0-9]*')
+        Validators.pattern(
+          '^([0-9]*[1-9][0-9]*(.[0-9]+)?|[0]+.[0-9]*[1-9][0-9]*)$'
+        )
       ]),
       receipt: new FormControl(payment.receipt, [])
     });

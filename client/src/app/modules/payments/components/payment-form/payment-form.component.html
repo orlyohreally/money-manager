@@ -14,6 +14,7 @@
           required
           formControlName="userId"
           [value]="defaultPayer._id"
+          name="payment-payer"
         >
           <mat-option *ngFor="let payer of payersList" [value]="payer._id">
             <div
@@ -41,6 +42,7 @@
           required
           [matDatepicker]="picker"
           placeholder="Choose a date"
+          name="payment-date"
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
@@ -53,6 +55,7 @@
           required
           class="payment-subject-select"
           formControlName="subjectId"
+          name="payment-subject"
         >
           <mat-option *ngFor="let subject of subjects" [value]="subject._id">
             <shared-payment-subject
@@ -67,7 +70,13 @@
         <div matSuffix>
           {{ payment.currency | currencySymbol }}
         </div>
-        <input type="number" required matInput formControlName="amount" />
+        <input
+          type="number"
+          required
+          matInput
+          formControlName="amount"
+          name="payment-amount"
+        />
       </mat-form-field>
       <!-- <div>
         <mat-label>Receipt</mat-label>

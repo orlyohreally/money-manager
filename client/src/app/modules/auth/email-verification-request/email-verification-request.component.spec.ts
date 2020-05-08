@@ -187,7 +187,7 @@ describe('EmailVerificationRequestComponent', () => {
           fixture.debugElement.query(By.directive(NotificationBlockDirective)),
           NotificationBlockDirective
         );
-        expect(messageDirective.sharedNotificationBlock).toBe('success');
+        expect(messageDirective.type).toBe('success');
       }
     );
 
@@ -215,7 +215,7 @@ describe('EmailVerificationRequestComponent', () => {
           fixture.debugElement.query(By.directive(NotificationBlockDirective)),
           NotificationBlockDirective
         );
-        expect(messageDirective.sharedNotificationBlock).toBe('success');
+        expect(messageDirective.type).toBe('success');
       }
     );
 
@@ -282,7 +282,7 @@ describe('EmailVerificationRequestComponent', () => {
           )[1],
           NotificationBlockDirective
         );
-        expect(messageDirective.sharedNotificationBlock).toBe('error');
+        expect(messageDirective.type).toBe('error');
       })
     );
 

@@ -5,6 +5,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 
 // tslint:disable-next-line: max-line-length
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
+import { LoaderComponent } from '../loader/loader.component';
 import {
   ImageManagerComponent,
   ImageManagerData
@@ -21,7 +22,8 @@ describe('ImageManagerComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ImageManagerComponent,
-        MockComponent(ImagePreviewComponent)
+        MockComponent(ImagePreviewComponent),
+        MockComponent(LoaderComponent)
       ],
       imports: [ImageCropperModule],
       providers: [

@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 export interface ImageManagerData {
@@ -13,46 +13,34 @@ export interface ImageManagerData {
   styleUrls: ['./image-manager.component.scss']
 })
 export class ImageManagerComponent implements OnInit {
-  public loadedImage: string | ArrayBuffer;
-  public croppedImage = '';
-  public previewStyles: { [property: string]: string };
-  public imageLoaded = false;
+  croppedImage = '';
+  imageChangedEvent: Event;
+  hasLoadingError = false;
+  cropperIsReady = true;
 
-  public imageChangedEvent: Event;
-
-  constructor(
-    public dialogRef: MatDialogRef<ImageManagerComponent>,
-    @Inject(MAT_DIALOG_DATA) public config: ImageManagerData
-  ) {}
+  constructor(public dialogRef: MatDialogRef<ImageManagerComponent>) {}
 
   ngOnInit() {}
 
-  public onPreviewLoaded(event) {
-    event.target.style['display'] = 'block';
-    this.imageLoaded = true;
-  }
-
-  public saveChanges() {
+  saveChanges() {
     this.dialogRef.close(this.croppedImage);
   }
 
-  public onFileChange(event: Event) {
+  onFileChange(event: Event) {
+    this.cropperIsReady = false;
     this.imageChangedEvent = event;
   }
-
-  fileChangeEvent(): void {}
 
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
   }
 
-  croppingLoaded() {
-    // show cropper
-  }
   cropperReady() {
-    // cropper ready
+    this.cropperIsReady = true;
   }
+
   loadImageFailed() {
-    // show message
+    this.hasLoadingError = true;
+    this.cropperIsReady = true;
   }
 }

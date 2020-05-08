@@ -20,7 +20,6 @@ import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 })
 export class EditPaymentFormComponent implements OnInit {
   subjects: Observable<PaymentSubject[]>;
-  adminView: Observable<boolean>;
   familyMembers: Observable<FamilyMember[]>;
   errorMessage: string;
   submittingForm: boolean;

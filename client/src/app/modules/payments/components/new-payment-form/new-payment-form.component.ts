@@ -51,15 +51,7 @@ export class NewPaymentFormComponent implements OnInit {
         this.data.defaultUserId,
         this.data.familyId
       );
-      this.familyMembers = this.membersService
-        .getMembers(this.data.familyId)
-        .pipe(
-          map(members =>
-            members.filter(member =>
-              this.membersService.familyMemberCanManageFamilyPayments(member)
-            )
-          )
-        );
+      this.familyMembers = this.membersService.getMembers(this.data.familyId);
     }
     this.payment = this.data.familyId
       ? this.createDefaultFamilyPayment()

@@ -195,8 +195,7 @@ describe('LoginFormComponent', () => {
         );
         expect(errorEl.nativeElement.textContent.trim()).toBe('error message');
         expect(
-          (errorEl.componentInstance as NotificationBlockDirective)
-            .sharedNotificationBlock
+          (errorEl.componentInstance as NotificationBlockDirective).type
         ).toBe('error');
       }
     );

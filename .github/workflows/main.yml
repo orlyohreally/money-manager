@@ -32,6 +32,7 @@ jobs:
         env:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           TESTING_CREDENTIALS: ${{ secrets.TESTING_CREDENTIALS }}
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}
           CI: "true"
         run: |
           cd client

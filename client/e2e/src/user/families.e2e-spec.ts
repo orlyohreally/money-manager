@@ -1,5 +1,6 @@
 import { browser, by, element, ElementFinder } from 'protractor';
 
+import { registerUser } from '@src-e2e/shared';
 import {
   escapeRegExp,
   getPageUrl,
@@ -12,7 +13,8 @@ import { FamiliesPage } from './families.po';
 describe('Families Page', () => {
   let page: FamiliesPage;
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    await registerUser();
     page = new FamiliesPage();
   });
 

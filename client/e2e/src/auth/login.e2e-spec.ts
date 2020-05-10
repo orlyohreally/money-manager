@@ -2,6 +2,7 @@ import { browser } from 'protractor';
 
 import {
   clearLocalStorage,
+  deleteTestedUser,
   getSubmitButton,
   getTextTitle,
   getTitleText
@@ -12,12 +13,14 @@ describe('Login Page', () => {
   let page: LoginPage;
 
   beforeAll(() => {
+    deleteTestedUser();
     page = new LoginPage();
   });
 
   beforeEach(() => {
     page.goToPage();
     clearLocalStorage();
+    page.goToPage();
   });
 
   it('should have correct page title', () => {
@@ -41,7 +44,7 @@ describe('Login Page', () => {
 
   // tslint:disable-next-line: max-line-length
   it('should not redirect to main page when user is not registered', async () => {
-    page.deleteTestedUser();
+    deleteTestedUser();
     page.loginAsTestedUser();
 
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);

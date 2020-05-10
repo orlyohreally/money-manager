@@ -2,6 +2,7 @@ import { browser } from 'protractor';
 
 import {
   clearLocalStorage,
+  deleteTestedUser,
   escapeRegExp,
   getSubmitButton,
   getTextTitle,
@@ -16,12 +17,14 @@ describe('Registration Page', () => {
   let page: RegistrationPage;
 
   beforeAll(() => {
+    deleteTestedUser();
     page = new RegistrationPage();
   });
 
   beforeEach(() => {
     page.goToPage();
     clearLocalStorage();
+    page.goToPage();
   });
 
   it('should have correct page title', () => {

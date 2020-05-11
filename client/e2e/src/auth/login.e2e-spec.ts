@@ -42,7 +42,7 @@ describe('Login Page', () => {
   });
 
   // tslint:disable-next-line: max-line-length
-  it('should not redirect to main page when user is not registered', async () => {
+  it('should not redirect to main page when user is not registered', () => {
     deleteTestedUser();
     page.loginAsTestedUser();
 

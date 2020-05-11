@@ -19,13 +19,13 @@ import { FamiliesPage } from './families.po';
 describe('Families Page', () => {
   let page: FamiliesPage;
 
-  beforeAll(async () => {
-    await registerUser();
+  beforeAll(() => {
+    registerUser();
     page = new FamiliesPage();
   });
 
-  beforeEach(async () => {
-    await resetTestedUser();
+  beforeEach(() => {
+    resetTestedUser();
     page.login();
     page.goToPage();
   });

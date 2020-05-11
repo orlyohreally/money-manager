@@ -22,7 +22,6 @@ describe('Registration Page', () => {
   });
 
   beforeEach(() => {
-    page.goToPage();
     clearLocalStorage();
     page.goToPage();
   });

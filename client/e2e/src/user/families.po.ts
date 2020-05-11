@@ -4,7 +4,6 @@ import { LoginPage } from '@src-e2e/auth/login.po';
 import {
   clearLocalStorage,
   getPageUrl,
-  goToPage,
   submitForm,
   typeInInput
 } from '@src-e2e/shared';
@@ -15,7 +14,6 @@ export class FamiliesPage {
   private loginPage = new LoginPage();
 
   login() {
-    goToPage('main');
     clearLocalStorage();
     this.loginPage.loginAsTestedUser();
   }

@@ -17,8 +17,11 @@ export async function getTextTitle(): Promise<string> {
   return element(by.css('.mat-h1')).getText();
 }
 
-export async function clearLocalStorage() {
-  browser.executeScript('window.localStorage.clear();');
+export function clearLocalStorage() {
+  goToPage('main');
+  browser.executeScript(
+    'window.localStorage.clear(); window.location.reload();'
+  );
 }
 
 export function escapeRegExp(expression: string): string {

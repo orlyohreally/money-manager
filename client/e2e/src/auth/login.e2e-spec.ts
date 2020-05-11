@@ -18,7 +18,6 @@ describe('Login Page', () => {
   });
 
   beforeEach(() => {
-    page.goToPage();
     clearLocalStorage();
     page.goToPage();
   });

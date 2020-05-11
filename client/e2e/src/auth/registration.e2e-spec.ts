@@ -1,4 +1,4 @@
-import { browser } from 'protractor';
+import { browser, ExpectedConditions } from 'protractor';
 
 import {
   clearLocalStorage,
@@ -71,8 +71,9 @@ describe('Registration Page', () => {
     typeInInput('password-again', 'ABCabc123!@#');
     submitForm();
 
+    const EC = ExpectedConditions;
+    const waitTimeout = 30000;
+    browser.wait(EC.presenceOf(page.getNotificationBlock()), waitTimeout);
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
-    expect(getSubmitButton().isDisplayed).toBeTruthy();
-    expect(page.getNotificationBlock().getText()).toBeTruthy();
   });
 });

@@ -1,4 +1,10 @@
-import { browser, by, element, ElementFinder } from 'protractor';
+import {
+  browser,
+  by,
+  element,
+  ElementFinder,
+  ExpectedConditions
+} from 'protractor';
 
 import { registerUser } from '@src-e2e/shared';
 import {
@@ -78,12 +84,17 @@ describe('Families Page', () => {
 
   it('should have button to update family info', () => {
     page.createFamily('Petrov', 'USD');
-    const updatedName = 'Ivanov';
+    const waitTimeout = 30000;
+    browser.wait(
+      ExpectedConditions.urlContains(`${escapeRegExp(getPageUrl('family'))}`),
+      waitTimeout
+    );
     page.goToPage();
     getFamiliesCards()
       .get(0)
       .element(by.cssContainingText('mat-icon', 'create'))
       .click();
+    const updatedName = 'Ivanov';
     page.fillAndSubmitFamilyForm(updatedName, 'israel');
     const familiesCards = getFamiliesCards();
     expect(familiesCards.count()).toEqual(1);

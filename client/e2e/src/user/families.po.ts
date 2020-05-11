@@ -1,4 +1,4 @@
-import { browser, by, element, Key } from 'protractor';
+import { browser, by, element, ExpectedConditions, Key } from 'protractor';
 
 import { LoginPage } from '@src-e2e/auth/login.po';
 import {
@@ -21,6 +21,12 @@ export class FamiliesPage {
   }
 
   async goToPage(): Promise<void> {
+    const EC = ExpectedConditions;
+    const waitTimeout = 30000;
+    browser.wait(
+      EC.presenceOf(element(by.partialLinkText('My families'))),
+      waitTimeout
+    );
     element(by.partialLinkText('My families')).click();
   }
 

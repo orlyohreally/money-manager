@@ -37,5 +37,4 @@ export function getSubmitButton() {
 
 export function submitForm() {
   getSubmitButton().click();
-  browser.sleep(5000);
 }

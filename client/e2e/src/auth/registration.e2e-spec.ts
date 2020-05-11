@@ -1,7 +1,8 @@
-import { browser } from 'protractor';
+import { browser, ExpectedConditions } from 'protractor';
 
 import {
   clearLocalStorage,
+  deleteTestedUser,
   escapeRegExp,
   getSubmitButton,
   getTextTitle,
@@ -16,12 +17,13 @@ describe('Registration Page', () => {
   let page: RegistrationPage;
 
   beforeAll(() => {
+    deleteTestedUser();
     page = new RegistrationPage();
   });
 
   beforeEach(() => {
-    page.goToPage();
     clearLocalStorage();
+    page.goToPage();
   });
 
   it('should have correct page title', () => {
@@ -52,6 +54,11 @@ describe('Registration Page', () => {
         // tslint:disable-next-line: max-line-length
         `${page.emailVerificationPageUrl}\\?(${emailParam}\&${tokenPattern}|${tokenPattern}\&${emailParam})`
       );
+      const waitTimeout = 30000;
+      browser.wait(
+        ExpectedConditions.urlContains(`${page.emailVerificationPageUrl}`),
+        waitTimeout
+      );
       const currentUrl = await browser.getCurrentUrl();
       expect(currentUrl).toMatch(urlPattern);
     }
@@ -68,8 +75,11 @@ describe('Registration Page', () => {
     typeInInput('password-again', 'ABCabc123!@#');
     submitForm();
 
+    const waitTimeout = 30000;
+    browser.wait(
+      ExpectedConditions.presenceOf(page.getNotificationBlock()),
+      waitTimeout
+    );
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
-    expect(getSubmitButton().isDisplayed).toBeTruthy();
-    expect(page.getNotificationBlock().getText()).toBeTruthy();
   });
 });

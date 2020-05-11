@@ -38,10 +38,6 @@ export class LoginPage {
     submitForm();
   }
 
-  deleteTestedUser() {
-    this.registrationPage.deleteTestedUser();
-  }
-
   get registrationPageUrl(): string {
     return getPageUrl('registration');
   }

@@ -16,11 +16,12 @@
     "lint:tslint": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint:prettier": "prettier --write \"{src,test}/**/*.ts*\"",
     "start": "node src/main.js",
+    "start:test": "npm run build:clean && node src/test-server.js",
     "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "test": "jest --detectOpenHandles",
     "precommit": "lint-staged && npm run lint",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
-    "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\"",
+    "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\" --forceExit",
     "test:ci": "jest --detectOpenHandles --coverage",
     "clean": "rimraf \"{src,__tests__}/**/*.js?(x)?(.map)\"",
     "release": "./extra/deployment/release.sh"
@@ -41,6 +42,7 @@
   "devDependencies": {
     "concurrently": "^4.1.0",
     "jest": "^23.6.0",
+    "mongodb-memory-server": "^6.5.2",
     "nodemon": "^1.18.10",
     "prettier-config-trucknet-io": "^2.0.1",
     "rimraf": "^2.6.3",
@@ -67,6 +69,8 @@
     "@types/mongoose": "^5.5.1",
     "@types/node": "^10.12.21",
     "@types/redis": "^2.8.14",
+    "@types/redis-mock": "^0.17.0",
+    "@types/supertest": "^2.0.9",
     "atob": "^2.1.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
@@ -83,6 +87,7 @@
     "node-mocks-http": "^1.8.1",
     "npm": "^6.9.0",
     "redis": "^2.8.0",
+    "redis-mock": "^0.49.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.5.1"
   }

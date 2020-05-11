@@ -28,7 +28,7 @@ exports.config = {
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 100000,
     print: function() {}
   },
   params: {
@@ -51,14 +51,6 @@ exports.config = {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
-    var http = new HttpClient(browser.params.backendURL);
-    var testingUsersApi = `/testing/user/ivan-petrov-test@gmail.com`;
-    http.delete(testingUsersApi, {
-      Authorization: browser.params.testingCredentials
-    });
-    testingUsersApi = `/users/signin`;
-    const { testedUser } = require('@src-e2e/shared/tested-user');
-    http.post(testingUsersApi, testedUser);
 
     jasmine
       .getEnv()

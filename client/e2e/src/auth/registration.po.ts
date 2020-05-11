@@ -1,7 +1,7 @@
-import { browser, by, element } from 'protractor';
-import { HttpClient } from 'protractor-http-client';
+import { by, element } from 'protractor';
 
 import {
+  deleteTestedUser,
   getPageUrl,
   goToPage,
   submitForm,
@@ -12,8 +12,6 @@ import {
 export class RegistrationPage {
   pageUrl = getPageUrl('registration');
   loginPageUrl = getPageUrl('login');
-
-  private http = new HttpClient(browser.params.backendURL);
 
   async goToPage(): Promise<void> {
     return goToPage('registration');
@@ -27,19 +25,8 @@ export class RegistrationPage {
     return element(by.className('notification-message'));
   }
 
-  async deleteTestedUser() {
-    // tslint:disable-next-line: max-line-length
-    const testingUsersApi = `/testing/user/${testedUser.email}`;
-    const deleteResponse = this.http.delete(testingUsersApi, {
-      Authorization: browser.params.testingCredentials
-    });
-    expect(
-      [200, 404].indexOf(await deleteResponse.statusCode) > -1
-    ).toBeTruthy();
-  }
-
   registerAsTestedUser() {
-    this.deleteTestedUser();
+    deleteTestedUser();
     this.goToPage();
 
     typeInInput('first-name', testedUser.firstName);

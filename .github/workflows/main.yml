@@ -37,6 +37,7 @@ jobs:
           cd client
           npm run test:e2e
       - name: Archive e2e tests results
+        if: always()
         uses: actions/upload-artifact@v1
         with:
           name: e2e-tests-results

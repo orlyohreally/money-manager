@@ -24,8 +24,8 @@ describe('Families Page', () => {
     page = new FamiliesPage();
   });
 
-  beforeEach(() => {
-    resetTestedUser();
+  beforeEach(async () => {
+    await resetTestedUser();
     page.login();
     page.goToPage();
   });

@@ -54,6 +54,11 @@ describe('Registration Page', () => {
         // tslint:disable-next-line: max-line-length
         `${page.emailVerificationPageUrl}\\?(${emailParam}\&${tokenPattern}|${tokenPattern}\&${emailParam})`
       );
+      const waitTimeout = 30000;
+      browser.wait(
+        ExpectedConditions.urlContains(`${page.emailVerificationPageUrl}`),
+        waitTimeout
+      );
       const currentUrl = await browser.getCurrentUrl();
       expect(currentUrl).toMatch(urlPattern);
     }
@@ -70,9 +75,11 @@ describe('Registration Page', () => {
     typeInInput('password-again', 'ABCabc123!@#');
     submitForm();
 
-    const EC = ExpectedConditions;
     const waitTimeout = 30000;
-    browser.wait(EC.presenceOf(page.getNotificationBlock()), waitTimeout);
+    browser.wait(
+      ExpectedConditions.presenceOf(page.getNotificationBlock()),
+      waitTimeout
+    );
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
   });
 });

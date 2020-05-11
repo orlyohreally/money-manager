@@ -10,5 +10,5 @@ export async function resetTestedUser() {
   const deleteResponse = http.delete(testingUsersApi, {
     Authorization: browser.params.testingCredentials
   });
-  expect([200, 404].indexOf(await deleteResponse.statusCode) > -1).toBeTruthy();
+  expect(await deleteResponse.statusCode).toEqual(200);
 }

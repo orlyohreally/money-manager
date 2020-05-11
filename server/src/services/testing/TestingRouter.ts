@@ -49,7 +49,7 @@ export class TestingRouter {
       const { email } = req.params as { email: string };
       const user = await this.usersService.getUser("email", email);
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(200).json({ message: "User not found" });
       }
       await this.paymentsService.deleteUserPayments(user._id.toString());
       const userFamilies = await this.familiesService.getMemberFamilies(

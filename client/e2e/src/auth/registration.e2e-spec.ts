@@ -27,7 +27,7 @@ describe('Registration Page', () => {
   });
 
   it('should have correct page title', () => {
-    expect(getTitleText()).toEqual('Sign in | Money Manager');
+    expect(getTitleText()).toEqual('Sign in | Family Expenses');
   });
 
   it('should have correct text title', () => {

@@ -51,9 +51,6 @@ export const getFamilyMembersView = async (): Promise<
         }
       },
       {
-        $unwind: "$user"
-      },
-      {
         $project: {
           "member._id": "$user._id",
           "member.familyId": "$_id.familyId",
@@ -61,7 +58,7 @@ export const getFamilyMembersView = async (): Promise<
           "member.lastName": "$user.lastName",
           "member.email": "$user.email",
           "member.roles": "$roles",
-          "member.icon": "$icon",
+          "member.icon": "$user.icon",
           "member.createdAt": "$_id.createAt",
           "member.paymentPercentage": "$paymentPercentage"
         }

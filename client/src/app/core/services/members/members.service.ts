@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
-import { FamilyMember, MemberPaymentPercentage, Roles } from '@shared/types';
-import { User } from '@shared/types';
-import { MemberRole } from '@src/app/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { first, map, mergeMap, switchMap } from 'rxjs/operators';
+
+import { FamilyMember, MemberPaymentPercentage, Roles } from '@shared/types';
+import { User } from '@shared/types';
+import { updateArrayElement } from '@src/app/modules/shared/functions';
+import { MemberRole } from '@src/app/types';
 import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
@@ -135,6 +137,21 @@ export class MembersService extends DataService {
         });
       })
     );
+  }
+
+  updateMember(userId: string, member: User | FamilyMember): void {
+    const familyMembers = this.members.getValue();
+    const updatedFamilyMembersList = Object.keys(familyMembers).reduce(
+      (res, familyId) => {
+        const members = updateArrayElement(familyMembers[familyId], {
+          ...member,
+          _id: userId
+        });
+        return { ...res, [familyId]: members };
+      },
+      {}
+    );
+    this.members.next(updatedFamilyMembersList);
   }
 
   private loadMembers(familyId: string): Observable<FamilyMember[]> {

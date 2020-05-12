@@ -29,6 +29,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   login() {
+    this.serverError = null;
     if (this.loginForm.valid) {
       this.submittingForm = true;
       this.authService

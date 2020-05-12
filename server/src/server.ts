@@ -22,7 +22,9 @@ export const runServer = async (
     process.exit(1);
   }
   await mongoose.connect(mongoUri, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   });
 
   const apiPath = "/api/v1";

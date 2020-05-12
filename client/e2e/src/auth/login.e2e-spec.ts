@@ -23,7 +23,7 @@ describe('Login Page', () => {
   });
 
   it('should have correct page title', () => {
-    expect(getTitleText()).toEqual('Login | Money Manager');
+    expect(getTitleText()).toEqual('Login | Family Expenses');
   });
 
   it('should have correct text title', () => {

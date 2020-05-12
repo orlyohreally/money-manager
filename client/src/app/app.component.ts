@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('sidenav') sideNavEl: MatSidenav;
 
-  private appName = 'Money Manager';
+  private appName = 'Family Expenses';
 
   constructor(
     public media: MediaObserver,

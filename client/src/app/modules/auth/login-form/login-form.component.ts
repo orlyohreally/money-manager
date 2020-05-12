@@ -29,6 +29,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   login() {
+    this.serverError = null;
     if (this.loginForm.valid) {
       this.submittingForm = true;
       this.authService
@@ -46,7 +47,11 @@ export class LoginFormComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             this.submittingForm = false;
-            this.serverError = error.error;
+            if (error.error.message) {
+              this.serverError = error.error.message;
+            } else {
+              this.serverError = error.error;
+            }
           }
         );
     }

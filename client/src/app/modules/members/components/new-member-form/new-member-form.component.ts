@@ -13,10 +13,7 @@ import { map, mergeMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
-import {
-  Member,
-  MembersService
-} from '@core-client/services/members/members.service';
+import { MembersService } from '@core-client/services/members/members.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';
 // tslint:disable-next-line: max-line-length
@@ -45,7 +42,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NewFamilyMemberFormComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { family: FamilyView; member: Member },
+    public data: { family: FamilyView },
     private notificationsService: NotificationsService,
     private membersService: MembersService,
     private familiesService: FamiliesService
@@ -53,13 +50,8 @@ export class NewFamilyMemberFormComponent implements OnInit {
 
   ngOnInit() {
     this.memberForm = new FormGroup({
-      email: new FormControl(this.data.member ? this.data.member.email : '', [
-        Validators.required,
-        emailValidatorFn
-      ]),
-      roles: new FormControl(this.data.member ? this.data.member.roles : '', [
-        Validators.required
-      ])
+      email: new FormControl('', [Validators.required, emailValidatorFn]),
+      roles: new FormControl('', [Validators.required])
     });
   }
 
@@ -86,8 +78,9 @@ export class NewFamilyMemberFormComponent implements OnInit {
     }
     this.submittingForm = true;
     this.errorMessage = undefined;
+    const { email, roles } = this.memberForm.value;
     this.membersService
-      .addFamilyMember(this.data.family._id, this.memberForm.value)
+      .addFamilyMember(this.data.family._id, { email, roles })
       .pipe(
         mergeMap((newMember: FamilyMember) => {
           if (!this.data.family.equalPayments) {

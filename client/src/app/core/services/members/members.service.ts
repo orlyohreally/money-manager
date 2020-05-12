@@ -12,8 +12,6 @@ import { DataService } from '../data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 
-export type Member = User & { roles: string[] };
-
 @Injectable({
   providedIn: 'root'
 })
@@ -59,9 +57,9 @@ export class MembersService extends DataService {
 
   addFamilyMember(
     familyId: string,
-    member: Partial<Member>
+    memberInfo: { email: string; roles: string[] }
   ): Observable<FamilyMember> {
-    return this.post(this.getMemberApi(familyId), member).pipe(
+    return this.post(this.getMemberApi(familyId), memberInfo).pipe(
       mergeMap((response: FamilyMember) => {
         return this.loadMembers(familyId).pipe(
           switchMap(() => {

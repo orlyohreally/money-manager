@@ -10,7 +10,7 @@ import { FamilyMember } from '@shared/types';
 import { AuthenticationServiceMock } from '@src/app/tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
-import { Member, MembersService } from './members.service';
+import { MembersService } from './members.service';
 
 describe('MembersService', () => {
   let service: MembersService;
@@ -55,18 +55,18 @@ describe('MembersService', () => {
     'addFamilyMember should make POST request' +
       ' to api/families/:familyId/members',
     () => {
-      const mockedMembers: Member[] = [
+      const mockedMembers: FamilyMember[] = [
         {
           email: 'email@gmail.com',
           roles: ['Admin']
-        } as Member
+        } as FamilyMember
       ];
       spyOn(service, 'getMembers').and.returnValue(of(mockedMembers));
 
-      const mockedFamilyMember: Partial<Member> = {
+      const mockedFamilyMember: FamilyMember = {
         email: 'email@gmail.com',
         roles: ['Admin']
-      };
+      } as FamilyMember;
       const mockedResponse: FamilyMember = {
         roles: ['Member']
       } as FamilyMember;

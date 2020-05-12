@@ -107,11 +107,15 @@ export class UsersService {
       "Bearer "
     )[1];
     if (!token) {
-      return res.status(401).send("Access denied. No token provided.");
+      return res
+        .status(401)
+        .json({ message: "Access denied. No token provided." });
     }
     try {
       if (this.dao.tokenExpired(token)) {
-        return res.status(401).send("Access denied. Token expired.");
+        return res
+          .status(401)
+          .json({ message: "Access denied. Token expired." });
       }
       const decoded = await this.getUserFromToken(token, "auth");
       if (!decoded) {
@@ -121,7 +125,7 @@ export class UsersService {
       next();
       return;
     } catch (error) {
-      return res.status(401).send("Invalid token.");
+      return res.status(401).json({ message: "Invalid token." });
     }
   }
 

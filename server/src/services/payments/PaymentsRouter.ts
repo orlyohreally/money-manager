@@ -5,6 +5,7 @@ import { IRouter } from "express-serve-static-core";
 import { Payment, User } from "@shared/types";
 import { FamiliesService } from "@src/services/families/FamiliesService";
 import { UsersService } from "@src/services/users/UsersService";
+import { INTERNAL_SERVER_ERROR, OK } from "http-status-codes";
 import { PaymentsService } from "./PaymentsService";
 
 export class PaymentsRouter {
@@ -34,7 +35,10 @@ export class PaymentsRouter {
     );
     this.router.get(
       "/payments/:familyId",
-      this.usersService.validateToken.bind(usersService),
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isViewFamilyPaymentAllowedMW.bind(service)
+      ],
       asyncWrap(this.getPayments)
     );
     this.router.post(
@@ -64,7 +68,15 @@ export class PaymentsRouter {
         this.usersService.validateToken.bind(usersService),
         this.service.isEditFamilyPaymentAllowedMW.bind(service)
       ],
-      asyncWrap(this.putPayment)
+      asyncWrap(this.putFamilyPayment)
+    );
+    this.router.put(
+      "/payments/:paymentId",
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isEditUserPaymentAllowedMW.bind(service)
+      ],
+      asyncWrap(this.putUserPayment)
     );
   }
 
@@ -95,7 +107,7 @@ export class PaymentsRouter {
 
   private postPayment = async (req: Request, res: Response) => {
     try {
-      const { payment } = req.body as {
+      const { payment, user } = req.body as {
         payment: Omit<Payment, "_id">;
         user: User;
       };
@@ -117,10 +129,10 @@ export class PaymentsRouter {
       ];
       const createdPayment: Payment = await this.service.createPayment({
         ...payment,
+        userId: payment.userId || user._id.toString(),
         familyId,
         paymentPercentages: percentages
       });
-
       return res.status(200).json(createdPayment);
     } catch (err) {
       console.log(err);
@@ -128,7 +140,7 @@ export class PaymentsRouter {
     }
   };
 
-  private putPayment = async (req: Request, res: Response) => {
+  private putFamilyPayment = async (req: Request, res: Response) => {
     try {
       const body = req.body as { payment: Omit<Payment, "_id">; user: User };
       const { familyId, paymentId } = req.params as {
@@ -151,6 +163,34 @@ export class PaymentsRouter {
     } catch (err) {
       console.log(err);
       return res.status(400).json(err);
+    }
+  };
+
+  private putUserPayment = async (req: Request, res: Response) => {
+    try {
+      const { payment, user } = req.body as {
+        payment: Omit<Payment, "_id">;
+        user: User;
+      };
+      const { paymentId } = req.params as {
+        paymentId: string;
+      };
+
+      const error = this.service.validatePayment(payment);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+
+      const updatedPayment = await this.service.updatePayment({
+        ...payment,
+        _id: paymentId,
+        userId: user._id
+      });
+
+      return res.status(OK).json(updatedPayment);
+    } catch (err) {
+      console.log(err);
+      return res.status(INTERNAL_SERVER_ERROR).json(err);
     }
   };
 

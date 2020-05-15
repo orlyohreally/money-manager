@@ -21,7 +21,7 @@
     "test": "jest --detectOpenHandles",
     "precommit": "lint-staged && npm run lint",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
-    "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\" --forceExit",
+    "test:e2e": "jest --detectOpenHandles --runInBand --testPathPattern \"__tests__/.+.tsx?\" --forceExit",
     "test:ci": "jest --detectOpenHandles --coverage",
     "clean": "rimraf \"{src,__tests__}/**/*.js?(x)?(.map)\"",
     "release": "./extra/deployment/release.sh"

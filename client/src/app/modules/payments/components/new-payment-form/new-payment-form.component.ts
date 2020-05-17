@@ -129,16 +129,4 @@ export class NewPaymentFormComponent implements OnInit {
       })
     );
   }
-
-  // private updatePayment() {
-  //   this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
-  //     result => {
-  //       this.dialogRef.close(result);
-  //     },
-  //     () => {
-  //       // TODO: add handling
-  //       // console.log(error);
-  //     }
-  //   );
-  // }
 }

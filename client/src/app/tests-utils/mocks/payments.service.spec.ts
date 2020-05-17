@@ -10,6 +10,7 @@ import {
 } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { PaymentSubjectsServiceMock } from '.';
+import { AuthenticationServiceMock } from './authentication.service.spec';
 import { MembersServiceMock } from './members.service.spec';
 
 const paymentPercentageMock: MemberPaymentPercentage[] = [
@@ -89,7 +90,7 @@ const familyPaymentsListMock: FamilyPaymentView[] = [
     currency: 'USD'
   }
 ];
-
+const authenticationServiceMock = AuthenticationServiceMock();
 const userPaymentsListMock: Payment[] = [
   {
     _id: 'paymentId-1',
@@ -128,7 +129,8 @@ const userAggregatedPaymentsListMock: UserPaymentView[] = [
     currency: 'USD',
     createdAt: new Date('2020-10-01').toString(),
     updatedAt: new Date('2020-10-02').toString(),
-    paymentPercentages: paymentPercentageMock
+    paymentPercentages: paymentPercentageMock,
+    member: authenticationServiceMock.user
   },
   {
     _id: 'paymentId-2',
@@ -140,7 +142,8 @@ const userAggregatedPaymentsListMock: UserPaymentView[] = [
     currency: 'USD',
     createdAt: new Date('2020-10-02').toString(),
     updatedAt: new Date('2020-10-02').toString(),
-    paymentPercentages: paymentPercentageMock
+    paymentPercentages: paymentPercentageMock,
+    member: authenticationServiceMock.user
   }
 ];
 

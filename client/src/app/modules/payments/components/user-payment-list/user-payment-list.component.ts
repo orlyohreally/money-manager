@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,6 +15,8 @@ import {
 } from '@angular/material';
 import { compare } from '@shared-client/functions';
 import { UserPaymentView } from '@src/app/types';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'payment-user-payment-list',
@@ -23,14 +26,33 @@ import { UserPaymentView } from '@src/app/types';
 })
 export class UserPaymentsListComponent implements OnInit, OnChanges {
   @Input() payments: UserPaymentView[];
-
+  displayedColumns: Observable<string[]>;
   dataSource: MatTableDataSource<UserPaymentView>;
-  displayedColumns: string[] = ['subject', 'amount', 'family', 'paidAt'];
 
   private paginator: MatPaginator;
   private sort: MatSort;
+  private defaultDisplayedColumns: string[] = [
+    'subject',
+    'amount',
+    'family',
+    'paidAt',
+    'actions'
+  ];
 
-  ngOnInit() {}
+  constructor(private breakpointObserver: BreakpointObserver) {}
+
+  ngOnInit() {
+    this.displayedColumns = this.breakpointObserver
+      .observe(['(min-width: 600px'])
+      .pipe(
+        map((change: BreakpointState) => {
+          return this.defaultDisplayedColumns.slice(
+            0,
+            change.matches ? -1 : this.defaultDisplayedColumns.length
+          );
+        })
+      );
+  }
 
   @ViewChild(MatSort) set matSort(sort: MatSort) {
     this.sort = sort;

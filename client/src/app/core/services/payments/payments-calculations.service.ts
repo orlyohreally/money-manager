@@ -44,37 +44,27 @@ export class PaymentsCalculationsService {
                 ? this.familiesService.getFamilyById(payment.familyId)
                 : of(undefined)
             ]).pipe(
-              map(([subject, family]) => ({
-                _id: payment._id,
-                amount: payment.amount,
-                currency: family ? family.currency : user.currency,
-                receipt: payment.receipt,
-                subject,
-                paidAt: payment.paidAt,
-                family,
-                createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt,
-                paymentPercentages: payment.paymentPercentages
-              }))
+              map(
+                ([subject, family]) =>
+                  ({
+                    _id: payment._id,
+                    amount: payment.amount,
+                    currency: family ? family.currency : user.currency,
+                    receipt: payment.receipt,
+                    subject,
+                    paidAt: payment.paidAt.toString(),
+                    family,
+                    member: user,
+                    createdAt: payment.createdAt.toString(),
+                    updatedAt: payment.updatedAt.toString(),
+                    paymentPercentages: payment.paymentPercentages
+                  } as UserPaymentView)
+              )
             )
           ),
           toArray()
         );
       }),
-      map((payments: PaymentView[]) =>
-        payments.map((payment: PaymentView) => ({
-          _id: payment._id,
-          amount: payment.amount,
-          paidAt: payment.paidAt.toString(),
-          createdAt: payment.createdAt.toString(),
-          family: payment.family,
-          receipt: payment.receipt,
-          updatedAt: payment.updatedAt.toString(),
-          subject: payment.subject,
-          currency: payment.currency,
-          paymentPercentages: payment.paymentPercentages
-        }))
-      ),
       map(payments =>
         payments.sort((a, b) => compare(a.paidAt, b.paidAt, false))
       )

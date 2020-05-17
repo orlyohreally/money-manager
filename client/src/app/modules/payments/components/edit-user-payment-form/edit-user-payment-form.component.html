@@ -1,11 +1,10 @@
 <payment-form
-  [subjects]="subjects"
+  [subjects]="subjects | async"
   [defaultPayer]="payment.userId"
-  [adminView]="adminView"
+  [adminView]="false"
   [payment]="payment"
-  [payersList]="familyMembers"
   [errorMessage]="errorMessage"
   [submittingForm]="submittingForm"
-  formLabel="Family payment"
-  (formSubmitted)="updatePayment($event)"
+  formLabel="Personal payment"
+  (formSubmitted)="onFormSubmitted($event)"
 ></payment-form>

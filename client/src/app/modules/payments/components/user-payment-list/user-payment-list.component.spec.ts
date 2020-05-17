@@ -11,7 +11,10 @@ import { MockComponent } from 'ng-mocks';
 // tslint:disable-next-line: max-line-length
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 import { PrefixedNumberPipeMock } from '@tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { PaymentActionButtonsComponent } from './payment-action-buttons/payment-action-buttons.component';
 import { UserPaymentsListComponent } from './user-payment-list.component';
+import { UserPaymentComponent } from './user-payment/user-payment.component';
 
 describe('UserPaymentsListComponent', () => {
   let component: UserPaymentsListComponent;
@@ -22,7 +25,9 @@ describe('UserPaymentsListComponent', () => {
       declarations: [
         UserPaymentsListComponent,
         PrefixedNumberPipeMock,
-        MockComponent(LoaderComponent)
+        MockComponent(LoaderComponent),
+        MockComponent(UserPaymentComponent),
+        MockComponent(PaymentActionButtonsComponent)
       ],
       imports: [
         MatPaginatorModule,

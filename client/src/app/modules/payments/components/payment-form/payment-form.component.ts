@@ -17,6 +17,7 @@ export class PaymentFormComponent extends FormComponent<Payment>
   @Input() payersList: FamilyMember[];
   @Input() errorMessage: string;
   @Input() submittingForm: boolean;
+  @Input() formLabel: string;
 
   constructor() {
     super();
@@ -28,7 +29,10 @@ export class PaymentFormComponent extends FormComponent<Payment>
 
   initPaymentForm(payment: Payment) {
     this.form = new FormGroup({
-      userId: new FormControl(payment.userId, [Validators.required]),
+      userId: new FormControl(
+        payment.userId,
+        payment.familyId ? [Validators.required] : []
+      ),
       paidAt: new FormControl(payment.paidAt, [Validators.required]),
       subjectId: new FormControl(payment.subjectId, [Validators.required]),
       amount: new FormControl(payment.amount, [

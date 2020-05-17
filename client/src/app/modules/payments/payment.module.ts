@@ -25,6 +25,8 @@ import { EditFamilyPaymentFormComponent } from './components/edit-family-payment
 // tslint:disable-next-line: max-line-length
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
 // tslint:disable-next-line: max-line-length
+import { EditUserPaymentFormComponent } from './components/edit-user-payment-form/edit-user-payment-form.component';
+// tslint:disable-next-line: max-line-length
 import { MemberPaymentDebtListComponent } from './components/member-payment-debt-list/member-payment-debt-list.component';
 // tslint:disable-next-line: max-line-length
 import { MemberPaymentOverpayAndDebtListComponent } from './components/member-payment-overpay-and-debt-list/member-payment-overpay-and-debt-list.component';
@@ -46,11 +48,17 @@ import { PaymentsCalculatedPerMemberComponent } from './components/payments-calc
 import { PaymentsFiltersComponent } from './components/payments-filters/payments-filters.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
+import { PaymentActionButtonsComponent } from './components/user-payment-list/payment-action-buttons/payment-action-buttons.component';
+// tslint:disable-next-line: max-line-length
 import { UserPaymentsListComponent } from './components/user-payment-list/user-payment-list.component';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentComponent } from './components/user-payment-list/user-payment/user-payment.component';
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsCalculatedPerMemberComponent } from './components/user-payments-calculated-per-member/user-payments-calculated-per-member.component';
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsComponent } from './components/user-payments/user-payments.component';
+// tslint:disable-next-line: max-line-length
+import { EditUserPaymentDialogTriggerDirective } from './directives/edit-user-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
@@ -60,25 +68,30 @@ import { PaymentRoutingModule } from './payment-routing.module';
 
 @NgModule({
   declarations: [
-    PaymentFormComponent,
-    PaymentListComponent,
-    PaymentSubjectFormComponent,
-    MoneyAmountComponent,
-    PaymentsComponent,
-    NewPaymentDialogTriggerDirective,
-    ViewFamilyPaymentDialogTriggerDirective,
-    NewPaymentFormComponent,
-    UserPaymentsListComponent,
-    UserPaymentsComponent,
-    PaymentsCalculatedPerMemberComponent,
-    UserPaymentsCalculatedPerMemberComponent,
+    EditFamilyPaymentFormComponent,
+    EditPaymentFormComponent,
+    MemberPaymentDebtListComponent,
     MemberPaymentOverpayAndDebtComponent,
     MemberPaymentOverpayAndDebtListComponent,
-    MemberPaymentDebtListComponent,
+    MoneyAmountComponent,
+    NewPaymentFormComponent,
+    PaymentDetailsComponent,
+    PaymentFormComponent,
+    PaymentListComponent,
+    PaymentsCalculatedPerMemberComponent,
+    PaymentsComponent,
     PaymentsFiltersComponent,
-    EditPaymentFormComponent,
-    EditFamilyPaymentFormComponent,
-    PaymentDetailsComponent
+    PaymentSubjectFormComponent,
+    UserPaymentsCalculatedPerMemberComponent,
+    UserPaymentsComponent,
+    UserPaymentsListComponent,
+    EditUserPaymentFormComponent,
+
+    NewPaymentDialogTriggerDirective,
+    ViewFamilyPaymentDialogTriggerDirective,
+    EditUserPaymentDialogTriggerDirective,
+    PaymentActionButtonsComponent,
+    UserPaymentComponent
   ],
   imports: [
     CommonModule,
@@ -117,6 +130,7 @@ import { PaymentRoutingModule } from './payment-routing.module';
   entryComponents: [
     NewPaymentFormComponent,
     EditPaymentFormComponent,
+    EditUserPaymentFormComponent,
     PaymentSubjectFormComponent,
     PaymentDetailsComponent
   ]

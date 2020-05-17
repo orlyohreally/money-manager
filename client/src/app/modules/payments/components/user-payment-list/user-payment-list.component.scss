@@ -6,3 +6,18 @@
   height: 30px;
   display: block;
 }
+
+.mat-column-actions {
+  min-width: 100px;
+}
+
+td.mat-cell {
+  padding: 0 !important;
+}
+
+@media (min-width: 600px) {
+  .payment:hover td {
+    cursor: pointer;
+    background-color: rgba(188, 189, 189, 0.3);
+  }
+}

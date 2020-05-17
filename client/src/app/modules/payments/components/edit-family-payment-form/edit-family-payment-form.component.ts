@@ -31,7 +31,7 @@ export class EditFamilyPaymentFormComponent implements OnInit {
       receipt: this.editedPayment.receipt,
       subjectId: this.editedPayment.subject._id,
       paidAt: new Date(this.editedPayment.paidAt),
-      userId: this.editedPayment.member._id,
+      userId: this.editedPayment.member ? this.editedPayment.member._id : '',
       familyId: this.familyId,
       createdAt: new Date(this.editedPayment.createdAt),
       updatedAt: new Date(this.editedPayment.updatedAt),

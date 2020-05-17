@@ -6,7 +6,7 @@ import {
   OverpaidDebtPayment,
   PaymentExpense
 } from '@shared-client/types';
-import { FamilyMember } from '@shared/types';
+import { FamilyMember, User } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import {
   AuthenticationServiceMock,
@@ -100,7 +100,8 @@ describe('PaymentsCalculationsService', () => {
           createdAt: new Date('2020-10-01').toString(),
           updatedAt: new Date('2020-10-02').toString(),
           currency: familiesServiceMock.familyList[0].currency,
-          paymentPercentages: paymentsServiceMock.paymentPercentage
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          member: authenticationServiceMock.user
         },
         {
           _id: 'paymentId-2',
@@ -112,7 +113,8 @@ describe('PaymentsCalculationsService', () => {
           createdAt: new Date('2020-10-02').toString(),
           updatedAt: new Date('2020-10-02').toString(),
           currency: familiesServiceMock.familyList[1].currency,
-          paymentPercentages: paymentsServiceMock.paymentPercentage
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          member: authenticationServiceMock.user
         }
       ];
       familiesServiceSpy.getFamilyById.and.callFake((familyId: string) => {

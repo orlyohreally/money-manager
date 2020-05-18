@@ -123,10 +123,6 @@ import { PaymentRoutingModule } from './payment-routing.module';
     MoneyAmountComponent,
     UserPaymentsComponent
   ],
-  providers: [
-    MatDatepickerModule,
-    { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }
-  ],
   entryComponents: [
     NewPaymentFormComponent,
     EditPaymentFormComponent,

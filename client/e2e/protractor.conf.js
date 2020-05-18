@@ -1,11 +1,15 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 const { SpecReporter } = require('jasmine-spec-reporter');
-const { HttpClient } = require('protractor-http-client');
 
 require('dotenv').config();
 require('ts-node/register');
 require('tsconfig-paths/register');
+require('ts-node').register({
+  project: require('path').join(__dirname, './tsconfig.e2e.json')
+});
+
+const { tablet } = require('@src-e2e/shared/devices-sizes');
 
 exports.config = {
   allScriptsTimeout: 11000,
@@ -13,7 +17,11 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-      args: ['--headless', '--lang=en', '--window-size=800,600']
+      args: [
+        '--headless',
+        '--lang=ru',
+        `--window-size=${tablet.height},${tablet.width}`
+      ]
     }
   },
   ...(process.env.CI === 'true' && {
@@ -48,10 +56,6 @@ exports.config = {
     }
   ],
   onPrepare() {
-    require('ts-node').register({
-      project: require('path').join(__dirname, './tsconfig.e2e.json')
-    });
-
     jasmine
       .getEnv()
       .addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));

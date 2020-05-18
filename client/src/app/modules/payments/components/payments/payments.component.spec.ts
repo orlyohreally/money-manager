@@ -21,9 +21,9 @@ import {
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from '../../directives/new-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
-import { PaymentListComponent } from '../../payment-list/payment-list.component';
-// tslint:disable-next-line: max-line-length
 import { MemberPaymentOverpayAndDebtComponent } from '../member-payment-overpay-and-debt/member-payment-overpay-and-debt.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentListComponent } from '../payment-list/payment-list.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentsCalculatedPerMemberComponent } from '../payments-calculated-per-member/payments-calculated-per-member.component';
 // tslint:disable-next-line: max-line-length

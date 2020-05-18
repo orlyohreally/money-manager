@@ -32,12 +32,12 @@
         [ngTemplateOutlet]="paymentsListTemplate"
         #paymentsListTemplate
       >
-        <payment-payment-list
+        <payment-payments-list-wrapper
           [payments]="paymentsList"
           [currency]="familyCurrency"
           [familyId]="familyIdValue"
         >
-        </payment-payment-list>
+        </payment-payments-list-wrapper>
         <payment-payments-calculated-per-member
           *ngIf="paymentsList?.length"
           class="payments-calculated-per-member"

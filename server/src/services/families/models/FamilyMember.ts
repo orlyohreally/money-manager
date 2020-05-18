@@ -51,6 +51,9 @@ export const getFamilyMembersView = async (): Promise<
         }
       },
       {
+        $unwind: "$user"
+      },
+      {
         $project: {
           "member._id": "$user._id",
           "member.familyId": "$_id.familyId",

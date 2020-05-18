@@ -99,14 +99,14 @@
             <ng-container *matCellDef="let element">
               <td mat-cell>
                 <payment-user-payment [element]="element">
-                  {{ element.paidAt | date: 'dd.MM.yy HH:mm:ss' }}
+                  {{ element.paidAt | date: 'shortDate' }}
                 </payment-user-payment>
               </td>
             </ng-container>
           </ng-container>
           <ng-template #actions>
             <td mat-cell *matCellDef="let element">
-              {{ element.paidAt | date: 'dd.MM.yy HH:mm:ss' }}
+              {{ element.paidAt | date: 'shortDate' }}
             </td>
           </ng-template>
         </ng-container>

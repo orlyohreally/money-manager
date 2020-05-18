@@ -17,8 +17,8 @@
     [ngTemplateOutlet]="paymentsListTemplate"
     #paymentsListTemplate
   >
-    <payment-user-payment-list [payments]="paymentsList">
-    </payment-user-payment-list>
+    <payment-user-payment-list-wrapper [payments]="paymentsList">
+    </payment-user-payment-list-wrapper>
     <payment-user-payments-calculated-per-member
       *ngIf="paymentsList?.length"
       class="payments-calculated-per-member"

@@ -15,8 +15,6 @@ import {
 } from '@angular/material';
 import { compare } from '@shared-client/functions';
 import { UserPaymentView } from '@src/app/types';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'payment-user-payment-list',
@@ -26,33 +24,16 @@ import { map } from 'rxjs/operators';
 })
 export class UserPaymentsListComponent implements OnInit, OnChanges {
   @Input() payments: UserPaymentView[];
-  displayedColumns: Observable<string[]>;
+  @Input() displayedColumns: string[];
+
   dataSource: MatTableDataSource<UserPaymentView>;
 
   private paginator: MatPaginator;
   private sort: MatSort;
-  private defaultDisplayedColumns: string[] = [
-    'subject',
-    'amount',
-    'family',
-    'paidAt',
-    'actions'
-  ];
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.displayedColumns = this.breakpointObserver
-      .observe(['(min-width: 600px'])
-      .pipe(
-        map((change: BreakpointState) => {
-          return this.defaultDisplayedColumns.slice(
-            0,
-            change.matches ? -1 : this.defaultDisplayedColumns.length
-          );
-        })
-      );
-  }
+  ngOnInit() {}
 
   @ViewChild(MatSort) set matSort(sort: MatSort) {
     this.sort = sort;

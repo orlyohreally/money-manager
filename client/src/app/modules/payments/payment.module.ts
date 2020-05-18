@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  MAT_DATE_LOCALE,
   MatButtonModule,
   MatDatepickerModule,
   MatDialogModule,
@@ -41,11 +40,15 @@ import { PaymentDetailsComponent } from './components/payment-details/payment-de
 // tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './components/payment-form/payment-form.component';
 // tslint:disable-next-line: max-line-length
+import { PaymentListComponent } from './components/payment-list/payment-list.component';
+// tslint:disable-next-line: max-line-length
 import { PaymentSubjectFormComponent } from './components/payment-subject-form/payment-subject-form.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentsCalculatedPerMemberComponent } from './components/payments-calculated-per-member/payments-calculated-per-member.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentsFiltersComponent } from './components/payments-filters/payments-filters.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentsListWrapperComponent } from './components/payments-list-wrapper/payments-list-wrapper.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentActionButtonsComponent } from './components/user-payment-list/payment-action-buttons/payment-action-buttons.component';
@@ -63,7 +66,6 @@ import { EditUserPaymentDialogTriggerDirective } from './directives/edit-user-pa
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
 import { ViewFamilyPaymentDialogTriggerDirective } from './directives/view-family-payment-dialog-trigger.directive';
-import { PaymentListComponent } from './payment-list/payment-list.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 
 @NgModule({
@@ -91,7 +93,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     ViewFamilyPaymentDialogTriggerDirective,
     EditUserPaymentDialogTriggerDirective,
     PaymentActionButtonsComponent,
-    UserPaymentComponent
+    UserPaymentComponent,
+    PaymentsListWrapperComponent
   ],
   imports: [
     CommonModule,

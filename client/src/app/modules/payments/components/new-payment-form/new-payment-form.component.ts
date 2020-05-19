@@ -74,7 +74,7 @@ export class NewPaymentFormComponent implements OnInit {
       )
       .subscribe(
         user => {
-          if (user._id === payment.userId) {
+          if (payment.familyId && user._id === payment.userId) {
             this.familiesService.updateMemberFamilySpentAmount(
               this.data.familyId,
               payment.amount,

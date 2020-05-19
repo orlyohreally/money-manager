@@ -31,7 +31,7 @@ describe('Families Page', () => {
   });
 
   it('should have correct page title', () => {
-    expect(getTitleText()).toEqual('My families | Money Manager');
+    expect(getTitleText()).toEqual('My families | Family Expenses');
   });
 
   it('should have correct text title', () => {

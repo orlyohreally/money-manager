@@ -59,7 +59,13 @@ function getMembersServiceSpy() {
   // tslint:disable-next-line: max-line-length
   const membersServiceSpy: jasmine.SpyObj<MembersService> = jasmine.createSpyObj(
     'MembersService',
-    ['getFamilyMemberById', 'getMembers', 'getRoles', 'userIsFamilyAdmin']
+    [
+      'getFamilyMemberById',
+      'getMembers',
+      'getRoles',
+      'userIsFamilyAdmin',
+      'updateMember'
+    ]
   );
   membersServiceSpy.getFamilyMemberById.and.returnValue(
     cold('--a', { a: mockedFamilyMember })

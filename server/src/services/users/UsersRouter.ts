@@ -47,7 +47,9 @@ export class UsersRouter {
     try {
       const user = req.body as User;
       if (!(user.password as string) || !user.email) {
-        return res.status(400).send("Email and password are required");
+        return res
+          .status(400)
+          .json({ message: "Email and password are required" });
       }
       try {
         const registeredUser = await this.service.authUser(user);
@@ -63,7 +65,7 @@ export class UsersRouter {
             refreshToken
           });
       } catch (er) {
-        return res.status(401).json("Wrong email or password.");
+        return res.status(401).json({ message: "Wrong email or password." });
       }
     } catch (err) {
       return res.status(400).json(err);
@@ -75,11 +77,11 @@ export class UsersRouter {
       const user = req.body as User;
       const { error } = this.service.validateUser(user);
       if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ message: error.details[0].message });
       }
       const registeredUser = await this.service.getUser("email", user.email);
       if (registeredUser) {
-        return res.status(400).send("User already registered.");
+        return res.status(400).json({ message: "User already registered." });
       }
       const newUser = await this.service.registerUser(user);
       // tslint:disable-next-line: max-line-length
@@ -113,11 +115,11 @@ export class UsersRouter {
 
       const { error } = this.service.validateUser(user, false);
       if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).json({ message: error.details[0].message });
       }
       const registeredUser = await this.service.getUser("_id", userId);
       if (!registeredUser) {
-        return res.status(400).send("User is not registered.");
+        return res.status(400).json({ message: "User is not registered." });
       }
       // "updateUser" method should not be used to update user's email
       const updatedUser = await this.service.updateUser(userId, {
@@ -138,13 +140,15 @@ export class UsersRouter {
       const token = (req.headers.authorization as string).split("Bearer ")[1];
       const refreshToken = reqBody.refreshToken;
       if (!token || !refreshToken) {
-        return res
-          .status(400)
-          .send("Authentication token or refresh token were not provided");
+        return res.status(400).json({
+          message: "Authentication token or refresh token were not provided"
+        });
       }
 
       if (this.service.tokenExpired(refreshToken)) {
-        return res.status(401).send("Access denied. Refresh token expired.");
+        return res
+          .status(401)
+          .json({ message: "Access denied. Refresh token expired." });
       }
 
       const savedRefreshToken = await this.redisService.get(
@@ -174,7 +178,9 @@ export class UsersRouter {
             refreshToken: newRefreshToken
           });
       }
-      return res.status(400).send("Invalid refresh or authentication token");
+      return res
+        .status(400)
+        .json({ message: "Invalid refresh or authentication token" });
     } catch (err) {
       return res.status(400).json(err);
     }
@@ -187,7 +193,7 @@ export class UsersRouter {
       if (registeredUser) {
         return res.status(200).json(registeredUser);
       }
-      return res.status(400).send("User is not found");
+      return res.status(400).json({ message: "User is not found" });
     } catch (err) {
       return res.status(400).json(err);
     }

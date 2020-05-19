@@ -27,8 +27,11 @@ export class ImageManagerComponent implements OnInit {
   }
 
   onFileChange(event: Event) {
-    this.cropperIsReady = false;
-    this.imageChangedEvent = event;
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files.length) {
+      this.cropperIsReady = false;
+      this.imageChangedEvent = event;
+    }
   }
 
   imageCropped(event: ImageCroppedEvent) {

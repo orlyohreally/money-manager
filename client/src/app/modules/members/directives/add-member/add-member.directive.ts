@@ -1,6 +1,7 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Member } from '@core-client/services/members/members.service';
+
+import { FamilyMember } from '@shared/types';
 // tslint:disable-next-line: max-line-length
 import { NewFamilyMemberFormComponent } from '../../components/new-member-form/new-member-form.component';
 
@@ -23,12 +24,6 @@ export class AddMemberDirective {
       height: '80%',
       restoreFocus: false,
       data: { family: this.familyAddMember }
-    });
-
-    dialogRef.afterClosed().subscribe((familyMember: Partial<Member>) => {
-      if (!familyMember) {
-        return;
-      }
     });
   }
 }

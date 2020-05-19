@@ -23,11 +23,11 @@ import { NewPaymentDialogTriggerDirective } from '../../directives/new-payment-d
 // tslint:disable-next-line: max-line-length
 import { MemberPaymentOverpayAndDebtComponent } from '../member-payment-overpay-and-debt/member-payment-overpay-and-debt.component';
 // tslint:disable-next-line: max-line-length
-import { PaymentListComponent } from '../payment-list/payment-list.component';
-// tslint:disable-next-line: max-line-length
 import { PaymentsCalculatedPerMemberComponent } from '../payments-calculated-per-member/payments-calculated-per-member.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentsFiltersComponent } from '../payments-filters/payments-filters.component';
+// tslint:disable-next-line: max-line-length
+import { PaymentsListWrapperComponent } from '../payments-list-wrapper/payments-list-wrapper.component';
 import { PaymentsComponent } from './payments.component';
 
 describe('PaymentsComponent', () => {
@@ -54,7 +54,7 @@ describe('PaymentsComponent', () => {
       declarations: [
         PaymentsComponent,
         MockComponent(PaymentsFiltersComponent),
-        MockComponent(PaymentListComponent),
+        MockComponent(PaymentsListWrapperComponent),
         MockComponent(PaymentsCalculatedPerMemberComponent),
         MockComponent(MemberPaymentOverpayAndDebtComponent),
         MockComponent(LoaderComponent),

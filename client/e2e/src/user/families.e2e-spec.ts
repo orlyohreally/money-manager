@@ -6,7 +6,7 @@ import {
   ExpectedConditions
 } from 'protractor';
 
-import { registerUser } from '@src-e2e/shared';
+import { constants, registerUser } from '@src-e2e/shared';
 import {
   escapeRegExp,
   getPageUrl,
@@ -56,7 +56,13 @@ describe('Families Page', () => {
         getPageUrl('family')
       )}\/[0-9a-z]*\/dashboard`;
       expect(browser.getCurrentUrl()).toMatch(urlPattern);
+
       page.goToPage();
+      browser.wait(
+        ExpectedConditions.presenceOf(element(by.css('family-families'))),
+        constants.waitTimeout
+      );
+
       let familiesCards = getFamiliesCards();
       expect(familiesCards.count()).toEqual(1);
       expectFamilyToBeDisplayedCorrectly(
@@ -67,6 +73,11 @@ describe('Families Page', () => {
 
       page.createFamily(familyNames[1], 'Israel');
       page.goToPage();
+      browser.wait(
+        ExpectedConditions.presenceOf(element(by.css('family-families'))),
+        constants.waitTimeout
+      );
+
       familiesCards = getFamiliesCards();
       expect(familiesCards.count()).toEqual(2);
       expectFamilyToBeDisplayedCorrectly(
@@ -90,6 +101,11 @@ describe('Families Page', () => {
       waitTimeout
     );
     page.goToPage();
+    browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('family-families'))),
+      constants.waitTimeout
+    );
+
     getFamiliesCards()
       .get(0)
       .element(by.cssContainingText('mat-icon', 'create'))

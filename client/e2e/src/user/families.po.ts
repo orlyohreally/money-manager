@@ -3,6 +3,7 @@ import { browser, by, element, ExpectedConditions, Key } from 'protractor';
 import { LoginPage } from '@src-e2e/auth/login.po';
 import {
   clearLocalStorage,
+  constants,
   getPageUrl,
   submitForm,
   typeInInput
@@ -19,13 +20,20 @@ export class FamiliesPage {
   }
 
   async goToPage(): Promise<void> {
-    const EC = ExpectedConditions;
-    const waitTimeout = 30000;
+    const sizes = await browser
+      .manage()
+      .window()
+      .getSize();
+    if (sizes.width < constants.menuScreenThreshold) {
+      element(by.partialButtonText('menu')).click();
+    }
+
+    const getLink = () => element(by.partialLinkText('My families'));
     browser.wait(
-      EC.presenceOf(element(by.partialLinkText('My families'))),
-      waitTimeout
+      ExpectedConditions.presenceOf(getLink()),
+      constants.waitTimeout
     );
-    element(by.partialLinkText('My families')).click();
+    getLink().click();
   }
 
   getCreateFamilyButton() {
@@ -33,6 +41,10 @@ export class FamiliesPage {
   }
 
   async createFamily(name: string, currency: string, roles: string[] = []) {
+    browser.wait(
+      ExpectedConditions.presenceOf(this.getCreateFamilyButton()),
+      constants.waitTimeout
+    );
     this.getCreateFamilyButton().click();
     typeInInput('family-name', name);
 
@@ -54,7 +66,9 @@ export class FamiliesPage {
     const select = element(by.css(`mat-select[name="${selectName}"]`));
     select.click();
     const searchInput = browser.switchTo().activeElement();
-    searchInput.sendKeys(currency);
+    for (const character of currency) {
+      searchInput.sendKeys(character);
+    }
     searchInput.sendKeys(Key.ENTER);
   }
 }

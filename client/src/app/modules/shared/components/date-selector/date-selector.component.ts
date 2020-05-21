@@ -11,41 +11,11 @@ import { FormControl } from '@angular/forms';
 import { EMPTY, Subject, timer } from 'rxjs';
 import { debounce, startWith, takeUntil } from 'rxjs/operators';
 
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
-} from '@angular/material/core';
-
-import _moment from 'moment';
-import { default as _rollupMoment } from 'moment';
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'DD.MM.YYYY'
-  },
-  display: {
-    dateInput: 'DD.MM.YYYY',
-    monthYearLabel: 'D MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'D MMMM YYYY'
-  }
-};
-
 @Component({
   selector: 'shared-date-selector',
   templateUrl: './date-selector.component.html',
   styleUrls: ['./date-selector.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateSelectorComponent implements OnInit, OnDestroy {
   @Input() selectorLabel: string;

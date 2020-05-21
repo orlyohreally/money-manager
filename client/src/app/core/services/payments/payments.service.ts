@@ -110,6 +110,31 @@ export class PaymentsService extends DataService {
     );
   }
 
+  updateUserPayment(
+    payment: Pick<Payment, '_id' | 'amount' | 'subjectId' | 'paidAt'>
+  ): Observable<void> {
+    return this.put(`${this.paymentsApiUrl}/${payment._id}`, {
+      payment
+    }).pipe(
+      switchMap((updatedPayment: Payment) => {
+        if (!this.userPaymentsAlreadyLoaded()) {
+          return of(undefined);
+        }
+        return this.paymentsList.asObservable().pipe(
+          first(),
+          switchMap(payments => {
+            const familyPayments: Payment[] = payments['user'] || [];
+            this.paymentsList.next({
+              ...payments,
+              user: updateArrayElement(familyPayments, updatedPayment)
+            });
+            return of(undefined);
+          })
+        );
+      })
+    );
+  }
+
   updatePayment(payment: Partial<Payment>, familyId: string): Observable<void> {
     return this.put(
       `${this.paymentsApiUrl}${familyId ? `/${familyId}` : ''}/${payment._id}`,
@@ -118,10 +143,9 @@ export class PaymentsService extends DataService {
       }
     ).pipe(
       switchMap((updatedPayment: Payment) => {
-        const alreadyLoadedUserPayments = this.paymentsAlreadyLoaded();
         if (
-          !(!!familyId && this.paymentsAlreadyLoaded(familyId)) &&
-          !alreadyLoadedUserPayments
+          !(!!familyId && this.familyPaymentsAlreadyLoaded(familyId)) &&
+          !this.userPaymentsAlreadyLoaded()
         ) {
           return of(undefined);
         }
@@ -140,7 +164,7 @@ export class PaymentsService extends DataService {
                 updatedPayment
               ),
               ...(!!familyId &&
-                alreadyLoadedUserPayments &&
+                this.userPaymentsAlreadyLoaded() &&
                 updatedPayment.userId === user._id && {
                   user: updateArrayElement(
                     payments['user'] || [],
@@ -164,7 +188,7 @@ export class PaymentsService extends DataService {
     }).pipe(
       switchMap(() => {
         // no need to update payments if they are not loaded yet
-        if (!this.paymentsAlreadyLoaded(familyId)) {
+        if (!this.familyPaymentsAlreadyLoaded(familyId)) {
           return of(undefined);
         }
         return this.getPayments(familyId).pipe(
@@ -204,8 +228,11 @@ export class PaymentsService extends DataService {
     );
   }
 
-  private paymentsAlreadyLoaded(familyId?: string): boolean {
-    const familyIdPrefix = familyId ? familyId : 'user';
-    return !!this.paymentsList.getValue()[familyIdPrefix];
+  private familyPaymentsAlreadyLoaded(familyId: string): boolean {
+    return !!this.paymentsList.getValue()[familyId];
+  }
+
+  private userPaymentsAlreadyLoaded(): boolean {
+    return !!this.paymentsList.getValue()['user'];
   }
 }

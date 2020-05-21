@@ -1,12 +1,10 @@
-<ng-container *ngIf="data.familyId">
-  <payment-family-payment-edit-form
-    [subjects]="subjects | async"
-    [adminView]="data.isAdminMode"
-    [familyMembers]="familyMembers | async"
-    [editedPayment]="data.payment"
-    [familyId]="data.familyId"
-    [errorMessage]="errorMessage"
-    [submittingForm]="submittingForm"
-    (formSubmitted)="onFormSubmitted($event)"
-  ></payment-family-payment-edit-form>
-</ng-container>
+<payment-family-payment-edit-form
+  [subjects]="subjects | async"
+  [adminView]="data.isAdminMode"
+  [familyMembers]="familyMembers | async"
+  [editedPayment]="data.payment"
+  [familyId]="data.familyId"
+  [errorMessage]="errorMessage"
+  [submittingForm]="submittingForm"
+  (formSubmitted)="onFormSubmitted($event)"
+></payment-family-payment-edit-form>

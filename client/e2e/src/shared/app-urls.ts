@@ -4,5 +4,7 @@ export const appUrls = {
   registration: '/auth/register',
   emailVerification: '/auth/email-verification-request',
   families: '/user/families',
-  family: '/families'
+  family: '/families',
+  userPayments: 'user/payments',
+  payments: '/payments'
 };

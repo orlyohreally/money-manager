@@ -45,6 +45,7 @@ import { PaymentFormComponent } from './payment-form.component';
       [payersList]="payersList"
       [errorMessage]="errorMessage"
       [submittingForm]="submittingForm"
+      formLabel="Payment"
     ></payment-form>
   `
 })

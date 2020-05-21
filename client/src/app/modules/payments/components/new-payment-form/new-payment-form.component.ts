@@ -74,7 +74,7 @@ export class NewPaymentFormComponent implements OnInit {
       )
       .subscribe(
         user => {
-          if (user._id === payment.userId) {
+          if (payment.familyId && user._id === payment.userId) {
             this.familiesService.updateMemberFamilySpentAmount(
               this.data.familyId,
               payment.amount,
@@ -129,16 +129,4 @@ export class NewPaymentFormComponent implements OnInit {
       })
     );
   }
-
-  // private updatePayment() {
-  //   this.paymentsService.updatePayment(this.paymentForm.value).subscribe(
-  //     result => {
-  //       this.dialogRef.close(result);
-  //     },
-  //     () => {
-  //       // TODO: add handling
-  //       // console.log(error);
-  //     }
-  //   );
-  // }
 }

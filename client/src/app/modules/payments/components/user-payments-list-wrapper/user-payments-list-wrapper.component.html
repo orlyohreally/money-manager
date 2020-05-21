@@ -1,0 +1,6 @@
+<payment-user-payment-list
+  sharedScrollableContent
+  [displayedColumns]="columns"
+  [payments]="payments"
+  *ngIf="displayedColumns | async as columns"
+></payment-user-payment-list>

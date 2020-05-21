@@ -1,6 +1,6 @@
-<div *ngIf="payments; else loading">
-  <div *ngIf="payments.length; else noData">
-    <div sharedScrollableContent>
+<ng-container *ngIf="payments; else loading">
+  <ng-container *ngIf="payments.length; else noData">
+    <ng-container>
       <table
         mat-table
         [dataSource]="dataSource"
@@ -12,57 +12,149 @@
           <th mat-sort-header="amount" mat-header-cell *matHeaderCellDef>
             Amount
           </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.amount | sharedPrefixedNumber: element.currency }}
-          </td>
+          <ng-container
+            *ngIf="
+              displayedColumns.indexOf('actions') === -1;
+              else actionsAmount
+            "
+          >
+            <ng-container *matCellDef="let element">
+              <td mat-cell>
+                <payment-user-payment [element]="element">
+                  {{ element.amount | sharedPrefixedNumber: element.currency }}
+                </payment-user-payment>
+              </td>
+            </ng-container>
+          </ng-container>
+          <ng-template #actionsAmount>
+            <td mat-cell *matCellDef="let element">
+              {{ element.amount | sharedPrefixedNumber: element.currency }}
+            </td>
+          </ng-template>
         </ng-container>
         <ng-container matColumnDef="subject">
           <th mat-sort-header="subject" mat-header-cell *matHeaderCellDef>
             Subject
           </th>
-          <td mat-cell *matCellDef="let element">
-            <div fxLayout="row" fxLayoutAlign="center center">
-              <img
-                class="subject__icon"
-                [src]="element.subject.icon"
-                [matTooltip]="element.subject.name"
-              />
-            </div>
-          </td>
+          <ng-container
+            *ngIf="
+              displayedColumns.indexOf('actions') === -1;
+              else actionsSubject
+            "
+          >
+            <ng-container *matCellDef="let element">
+              <td mat-cell>
+                <payment-user-payment [element]="element">
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="center center"
+                    class="full-width"
+                  >
+                    <img
+                      class="subject__icon"
+                      [src]="element.subject.icon"
+                      [matTooltip]="element.subject.name"
+                    />
+                  </div>
+                </payment-user-payment>
+              </td>
+            </ng-container>
+          </ng-container>
+          <ng-template #actionsSubject>
+            <td mat-cell *matCellDef="let element">
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <img
+                  class="subject__icon"
+                  [src]="element.subject.icon"
+                  [matTooltip]="element.subject.name"
+                />
+              </div>
+            </td>
+          </ng-template>
         </ng-container>
         <ng-container matColumnDef="family">
           <th mat-sort-header="family" mat-header-cell *matHeaderCellDef>
             Family
           </th>
-          <td mat-cell *matCellDef="let element">
-            <a
-              *ngIf="!!element.family"
-              routerLink="/families/{{ element.family._id }}/payments"
-            >
-              {{ element.family.name }}
-            </a>
-          </td>
+          <ng-container
+            *ngIf="
+              displayedColumns.indexOf('actions') === -1;
+              else actionsFamily
+            "
+          >
+            <ng-container *matCellDef="let element">
+              <td mat-cell>
+                <payment-user-payment [element]="element">
+                  <a
+                    *ngIf="!!element.family"
+                    routerLink="/families/{{ element.family._id }}/payments"
+                  >
+                    {{ element.family.name }}
+                  </a>
+                </payment-user-payment>
+              </td>
+            </ng-container>
+          </ng-container>
+          <ng-template #actionsFamily>
+            <td mat-cell *matCellDef="let element">
+              <a
+                *ngIf="!!element.family"
+                routerLink="/families/{{ element.family._id }}/payments"
+              >
+                {{ element.family.name }}
+              </a>
+            </td>
+          </ng-template>
         </ng-container>
         <ng-container matColumnDef="paidAt">
           <th mat-sort-header="paidAt" mat-header-cell *matHeaderCellDef>
             Payment Date
           </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.paidAt | date: 'dd.MM.yy HH:mm:ss' }}
-          </td>
+          <ng-container
+            *ngIf="
+              displayedColumns.indexOf('actions') === -1;
+              else actionsPaidAt
+            "
+          >
+            <ng-container *matCellDef="let element">
+              <td mat-cell>
+                <payment-user-payment [element]="element">
+                  {{ element.paidAt | date: 'shortDate' }}
+                </payment-user-payment>
+              </td>
+            </ng-container>
+          </ng-container>
+          <ng-template #actionsPaidAt>
+            <td mat-cell *matCellDef="let element">
+              {{ element.paidAt | date: 'shortDate' }}
+            </td>
+          </ng-template>
         </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell="actions" *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <payment-action-buttons
+              [payment]="element"
+            ></payment-action-buttons>
+          </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="payment"
+        ></tr>
       </table>
-    </div>
+    </ng-container>
     <mat-paginator
       *ngIf="dataSource.data.length > 10"
       [pageSize]="10"
       [pageSizeOptions]="[10, 25, 100]"
     ></mat-paginator>
-  </div>
-</div>
+  </ng-container>
+</ng-container>
 <ng-template #noData>
   <div fxLayoutAlign="center center">No payments yet...</div>
 </ng-template>

@@ -217,9 +217,6 @@ export class FamiliesRouter {
       };
       const familyId = (req.params as { familyId: string }).familyId;
       const familyMemberEmail = body.email;
-      if (!familyId) {
-        return res.status(400).json({ familyId: "familyId is required" });
-      }
       if (!familyMemberEmail) {
         return res.status(400).json({ email: "Email is required" });
       }

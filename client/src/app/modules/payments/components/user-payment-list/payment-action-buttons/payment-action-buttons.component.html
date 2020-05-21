@@ -1,0 +1,20 @@
+<ng-container *ngIf="payment.family?._id; else userPayment">
+  <button
+    mat-icon-button
+    [paymentViewFamilyPayment]="payment"
+    [familyId]="payment.family._id"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-container>
+<ng-template #userPayment>
+  <button mat-icon-button [paymentEditUserPayment]="payment">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-template>

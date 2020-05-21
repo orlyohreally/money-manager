@@ -185,6 +185,9 @@ export class FamiliesService extends DataService {
   }
 
   updateMemberFamilySpentAmount(familyId: string, k: number, type: '+' | '*') {
+    if (!this.loadedFamilies.getValue()) {
+      return;
+    }
     const updateAmount = (amount: number) =>
       type === '+' ? amount + k : amount * k;
     const families = this.familyStore

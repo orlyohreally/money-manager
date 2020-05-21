@@ -10,7 +10,7 @@ import { NotificationsService } from '@core-client/services/notifications/notifi
 import { PaymentSubjectsService } from '@core-client/services/payment-subject/payment-subjects.service';
 // tslint:disable-next-line: max-line-length
 import { PaymentsService } from '@core-client/services/payments/payments.service';
-import { FamilyMember, Payment, PaymentSubject } from '@shared/types';
+import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 
 @Component({
@@ -34,7 +34,7 @@ export class EditPaymentFormComponent implements OnInit {
     public data: {
       isAdminMode: boolean;
       familyId: string;
-      payment: FamilyPaymentView | UserPaymentView;
+      payment: FamilyPaymentView;
     }
   ) {}
 

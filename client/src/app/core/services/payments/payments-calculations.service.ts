@@ -86,39 +86,29 @@ export class PaymentsCalculationsService {
               ),
               this.membersService.getFamilyMemberById(familyId, payment.userId)
             ]).pipe(
-              map(([subject, user]) => ({
-                _id: payment._id,
-                amount: payment.amount,
-                receipt: payment.receipt,
-                subject,
-                paidAt: payment.paidAt,
-                user,
-                currency,
-                familyId: payment.familyId,
-                createdAt: payment.createdAt,
-                updatedAt: payment.updatedAt,
-                paymentPercentages: payment.paymentPercentages
-              }))
+              map(
+                ([subject, user]) =>
+                  ({
+                    _id: payment._id,
+                    amount: payment.amount,
+                    receipt: payment.receipt,
+                    subject,
+                    paidAt: payment.paidAt.toString(),
+                    member: user,
+                    currency,
+                    familyId: payment.familyId,
+                    createdAt: payment.createdAt.toString(),
+                    updatedAt: payment.updatedAt.toString(),
+                    paymentPercentages: payment.paymentPercentages
+                  } as FamilyPaymentView)
+              )
             )
           ),
           toArray()
         );
       }),
-      map((payments: PaymentView[]) =>
-        payments
-          .map((payment: PaymentView) => ({
-            _id: payment._id,
-            amount: payment.amount,
-            currency: payment.currency,
-            paidAt: payment.paidAt.toString(),
-            createdAt: payment.createdAt.toString(),
-            receipt: payment.receipt,
-            member: payment.user,
-            updatedAt: payment.updatedAt.toString(),
-            subject: payment.subject,
-            paymentPercentages: payment.paymentPercentages
-          }))
-          .sort((a, b) => compare(a.paidAt, b.paidAt, false))
+      map(payments =>
+        payments.sort((a, b) => compare(a.paidAt, b.paidAt, false))
       )
     );
   }

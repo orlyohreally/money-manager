@@ -37,7 +37,10 @@ exports.config = {
           '--headless',
           '--lang=ru',
           `--window-size=${iphone5.width},${iphone5.height}`
-        ]
+        ],
+        mobileEmulation: {
+          deviceName: 'iPhone 5/SE'
+        }
       },
       specs: ['./src/**/*.e2e-spec.ts'],
       exclude: ['./src/**/*.screen-lg.e2e-spec.ts']

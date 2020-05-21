@@ -77,6 +77,7 @@ export class FamilyPaymentsPage {
 
   typeInPaidDate(paidAt: string) {
     const input = element(by.css(`input[name="payment-date"]`));
+    input.click();
     input.sendKeys(Key.chord(Key.CONTROL, 'a'));
     for (const character of paidAt) {
       input.sendKeys(character);

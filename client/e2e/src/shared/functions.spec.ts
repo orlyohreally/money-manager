@@ -31,6 +31,7 @@ export function escapeRegExp(expression: string): string {
 
 export function typeInInput(inputName: string, value: string): void {
   const input = element(by.css(`input[name="${inputName}"]`));
+  input.click();
   input.clear();
   // input.sendKeys(value) not always works properly so use this workaround
   for (const character of value) {

@@ -1,5 +1,6 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import { appUrls } from './app-urls';
+import { constants } from './constants';
 
 export function getPageUrl(pageAlias: string): string {
   return `${browser.baseUrl}${appUrls[pageAlias]}`;
@@ -31,7 +32,10 @@ export function escapeRegExp(expression: string): string {
 export function typeInInput(inputName: string, value: string): void {
   const input = element(by.css(`input[name="${inputName}"]`));
   input.clear();
-  input.sendKeys(value);
+  // input.sendKeys(value) not always works properly so use this workaround
+  for (const character of value) {
+    input.sendKeys(character);
+  }
 }
 
 export function getSubmitButton() {
@@ -40,4 +44,20 @@ export function getSubmitButton() {
 
 export function submitForm() {
   getSubmitButton().click();
+}
+
+export function waitForForm() {
+  browser.wait(
+    ExpectedConditions.presenceOf(element(by.css('form'))),
+    constants.waitTimeout
+  );
+}
+
+export function waitForFormToClose() {
+  browser.wait(
+    ExpectedConditions.not(
+      ExpectedConditions.presenceOf(element(by.css('form')))
+    ),
+    constants.waitTimeout
+  );
 }

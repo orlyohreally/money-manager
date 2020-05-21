@@ -57,7 +57,43 @@ jobs:
         with:
           name: e2e-tests-results
           path: client/e2e-tests-results
-      - name: Run server tests
+      - name: Run server unit tests
+        env:
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}
+          CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+          API_KEY: ${{secrets.API_KEY}}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          PORT: 3000
+          JWT_HASH: ${{ secrets.JWT_HASH }}
+          JWT_REFRESH_HASH: ${{ secrets.JWT_REFRESH_HASH }}
+          SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          FRONT_END_URL: "http://localhost:4200"
+          BACK_END_URL: "http://localhost:3000/api/v1"
+          EMAIL_VERIFICATION_EMAIL_TEMPLATE: ${{ secrets.EMAIL_VERIFICATION_EMAIL_TEMPLATE }}
+          MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE: ${{ secrets.MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE }}
+          NODE_ENV: "staging"
+          EMAILING_ENABLED: false
         run: |
           cd server
-          npm run test
+          npm run test:unit
+      - name: Run server integration tests
+        env:
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}
+          CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+          API_KEY: ${{secrets.API_KEY}}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          PORT: 3000
+          JWT_HASH: ${{ secrets.JWT_HASH }}
+          JWT_REFRESH_HASH: ${{ secrets.JWT_REFRESH_HASH }}
+          SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          FRONT_END_URL: "http://localhost:4200"
+          BACK_END_URL: "http://localhost:3000/api/v1"
+          EMAIL_VERIFICATION_EMAIL_TEMPLATE: ${{ secrets.EMAIL_VERIFICATION_EMAIL_TEMPLATE }}
+          MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE: ${{ secrets.MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE }}
+          NODE_ENV: "staging"
+          EMAILING_ENABLED: false
+        run: |
+          cd server
+          npm run test:e2e

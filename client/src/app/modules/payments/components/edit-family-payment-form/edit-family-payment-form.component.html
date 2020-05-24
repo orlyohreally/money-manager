@@ -1,5 +1,4 @@
 <payment-form
-  *ngIf="payment"
   [subjects]="subjects"
   [defaultPayer]="payment.userId"
   [adminView]="adminView"
@@ -7,5 +6,6 @@
   [payersList]="familyMembers"
   [errorMessage]="errorMessage"
   [submittingForm]="submittingForm"
+  formLabel="Family payment"
   (formSubmitted)="updatePayment($event)"
 ></payment-form>

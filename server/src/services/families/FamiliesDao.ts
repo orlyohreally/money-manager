@@ -73,10 +73,10 @@ export class FamiliesDao implements IFamiliesDao {
 
   public async createFamilyMember(
     familyId: string,
-    familyMember: FamilyMember
+    familyMember: { roles: string[]; _id: string }
   ): Promise<FamilyMember> {
     const newFamilyMember = new FamilyMemberModel({
-      ...familyMember,
+      roles: familyMember.roles,
       _id: { familyId, userId: familyMember._id }
     });
     await newFamilyMember.save();

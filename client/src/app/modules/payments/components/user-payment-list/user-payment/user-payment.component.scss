@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  height: 48px;
+}
+
+.payment-row {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  box-sizing: border-box;
+  padding: 4px 8px !important;
+}

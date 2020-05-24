@@ -5,9 +5,9 @@ import { MockComponent } from 'ng-mocks';
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 import { PaymentsCalculationsServiceMock } from '@src/app/tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
-import { UserPaymentsListComponent } from '../user-payment-list/user-payment-list.component';
-// tslint:disable-next-line: max-line-length
 import { UserPaymentsCalculatedPerMemberComponent } from '../user-payments-calculated-per-member/user-payments-calculated-per-member.component';
+// tslint:disable-next-line: max-line-length
+import { UserPaymentsListWrapperComponent } from '../user-payments-list-wrapper/user-payments-list-wrapper.component';
 import { UserPaymentsComponent } from './user-payments.component';
 
 describe('UserPaymentsComponent', () => {
@@ -24,7 +24,7 @@ describe('UserPaymentsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserPaymentsComponent,
-        MockComponent(UserPaymentsListComponent),
+        MockComponent(UserPaymentsListWrapperComponent),
         MockComponent(UserPaymentsCalculatedPerMemberComponent)
       ],
       providers: [

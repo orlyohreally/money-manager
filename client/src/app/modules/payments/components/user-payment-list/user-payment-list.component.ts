@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,12 +24,14 @@ import { UserPaymentView } from '@src/app/types';
 })
 export class UserPaymentsListComponent implements OnInit, OnChanges {
   @Input() payments: UserPaymentView[];
+  @Input() displayedColumns: string[];
 
   dataSource: MatTableDataSource<UserPaymentView>;
-  displayedColumns: string[] = ['subject', 'amount', 'family', 'paidAt'];
 
   private paginator: MatPaginator;
   private sort: MatSort;
+
+  constructor() {}
 
   ngOnInit() {}
 

@@ -1,5 +1,5 @@
 import { Omit } from '@shared-client/functions';
-import { Payment, PaymentSubject } from '@shared/types';
+import { Payment, PaymentSubject, User } from '@shared/types';
 import { MemberFamily } from '../modules/shared/types';
 
 export interface UserPaymentView
@@ -10,6 +10,7 @@ export interface UserPaymentView
   paidAt: string;
   createdAt: string;
   updatedAt: string;
+  member: User;
   family?: MemberFamily;
   subject: PaymentSubject;
   currency: string;

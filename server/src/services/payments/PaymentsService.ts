@@ -5,6 +5,7 @@ import { familiesService } from "@src/services/families";
 import { FamiliesService } from "@src/services/families/FamiliesService";
 // tslint:disable-next-line: max-line-length
 import { ImageManagerService } from "@src/services/image-manager/ImageManagerService";
+import { FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } from "http-status-codes";
 
 export interface IPaymentsDao {
   getUserPayments(userId: string): Promise<Payment[]>;
@@ -40,9 +41,9 @@ export class PaymentsService {
     return this.dao.getFamilyPayments(familyId);
   }
 
-  public async getFamilyPayment(
-    familyId: string,
-    paymentId: string
+  public async getPayment(
+    paymentId: string,
+    familyId?: string
   ): Promise<Payment> {
     return this.dao.getPayment(paymentId, familyId);
   }
@@ -83,6 +84,35 @@ export class PaymentsService {
     return this.dao.updatePaymentsAmountByRate(familyId, exchangeRate);
   }
 
+  public async isViewFamilyPaymentAllowedMW(
+    req: Request & { user: User },
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { familyId } = req.params as {
+        familyId: string;
+        paymentId?: string;
+      };
+      const { user } = req.body as {
+        user: User;
+      };
+
+      const isFamilyMember = await this.familiesService.isFamilyMember(
+        user._id.toString(),
+        familyId
+      );
+      if (!isFamilyMember) {
+        return res.status(FORBIDDEN).json({ message: "Forbidden" });
+      }
+      next();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      return res.status(FORBIDDEN).json(error);
+    }
+  }
+
   public async isEditFamilyPaymentAllowedMW(
     req: Request & { user?: User },
     res: Response,
@@ -105,13 +135,10 @@ export class PaymentsService {
 
       try {
         if (paymentId) {
-          const currentPayment = await this.getFamilyPayment(
-            familyId,
-            paymentId
-          );
+          const currentPayment = await this.getPayment(paymentId, familyId);
           if (!currentPayment) {
             return res
-              .status(500)
+              .status(NOT_FOUND)
               .json({ message: "Payment has not been found" });
           }
         }
@@ -122,17 +149,52 @@ export class PaymentsService {
           paymentId
         );
         if (!updateAllowed) {
-          return res.status(403).json({ message: "Unauthorized access" });
+          return res.status(FORBIDDEN).json({ message: "Forbidden" });
         }
       } catch (error) {
         console.log("error", error);
-        return res.status(500).json(error);
+        return res.status(INTERNAL_SERVER_ERROR).send(error);
       }
       next();
       return;
     } catch (error) {
       console.log("error", error);
-      return res.status(403).json(error);
+      return res.status(FORBIDDEN).json(error);
+    }
+  }
+
+  public async isEditUserPaymentAllowedMW(
+    req: Request & { user?: User },
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { paymentId } = req.params as {
+        paymentId: string;
+      };
+
+      const { payment, user } = req.body as {
+        payment: Omit<Payment, "_id">;
+        user: User;
+      };
+
+      if (!payment) {
+        return res.status(403).json({ message: "Payment is required" });
+      }
+
+      const currentPayment = await this.getPayment(paymentId);
+      if (!currentPayment) {
+        return res.status(500).json({ message: "Payment has not been found" });
+      }
+      if (user._id.toString() !== currentPayment.userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized access" });
+      }
+
+      next();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      return res.status(INTERNAL_SERVER_ERROR).send(error);
     }
   }
 
@@ -146,6 +208,7 @@ export class PaymentsService {
     payment: Omit<Payment, "_id">,
     paymentId?: string
   ): Promise<boolean> {
+    // user is family member
     const isFamilyMember = await this.familiesService.isFamilyMember(
       userId,
       familyId
@@ -154,6 +217,21 @@ export class PaymentsService {
       return false;
     }
 
+    // payer is a family member
+    let payerId = payment.userId;
+    if (paymentId && !payment.userId) {
+      const currentPayment = await this.getPayment(paymentId, familyId);
+      payerId = currentPayment._id.toString();
+    }
+    const isPayerFamilyMember = await this.familiesService.isFamilyMember(
+      payerId || userId,
+      familyId
+    );
+    if (!isPayerFamilyMember) {
+      return false;
+    }
+
+    // user is family admin or is the payer
     const isFamilyAdmin = await this.familiesService.isFamilyAdmin(
       userId,
       familyId
@@ -161,7 +239,7 @@ export class PaymentsService {
     const isUserPayer =
       payment.userId === userId || payment.userId === undefined;
     if (paymentId) {
-      const currentPayment = await this.getFamilyPayment(familyId, paymentId);
+      const currentPayment = await this.getPayment(paymentId, familyId);
       if (!currentPayment) {
         throw new Error("Payment has not been found");
       }

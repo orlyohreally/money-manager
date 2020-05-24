@@ -66,7 +66,7 @@ export class FamiliesService {
     }
     let savedFamily: Family = await this.dao.createFamily(family);
     await this.dao.createFamilyMember(savedFamily._id, {
-      _id: userId,
+      _id: userId.toString(),
       roles: [...roles, roles.indexOf(Roles.Owner) > -1 ? "" : Roles.Owner]
     });
     if (familyIcon) {
@@ -133,7 +133,7 @@ export class FamiliesService {
   public async createFamilyMember(
     userId: string,
     familyId: string,
-    roles: string[]
+    roles: string[] = []
   ): Promise<FamilyMember> {
     const newMember = await this.dao.createFamilyMember(familyId, {
       _id: userId,
@@ -147,8 +147,7 @@ export class FamiliesService {
         paymentPercentage: 0
       });
     } else {
-      const currentMembers = await this.getFamilyMembers(familyId);
-      const members = [...currentMembers, newMember];
+      const members = await this.getFamilyMembers(familyId);
       await this.setPaymentPercentageEqually(familyId, members);
     }
 
@@ -340,7 +339,7 @@ export class FamiliesService {
     const paymentPercentage = 100 / members.length;
     return this.updateMembersPercentages(familyId, [
       ...members.map(member => ({
-        userId: member._id,
+        userId: member._id.toString(),
         paymentPercentage
       }))
     ]);

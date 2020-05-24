@@ -1,0 +1,9 @@
+<ng-container *ngIf="displayedColumns | async as columns">
+  <payment-payment-list
+    sharedScrollableContent
+    [familyId]="familyId"
+    [currency]="currency"
+    [payments]="payments"
+    [displayedColumns]="columns"
+  ></payment-payment-list>
+</ng-container>

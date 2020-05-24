@@ -9,21 +9,44 @@ require('ts-node').register({
   project: require('path').join(__dirname, './tsconfig.e2e.json')
 });
 
-const { tablet } = require('@src-e2e/shared/devices-sizes');
+const fs = require('fs-extra');
+
+const { tablet, iphone5 } = require('@src-e2e/shared/devices-sizes');
+const getFileName = (name, version, size) =>
+  `${name}-${version}-${size.width}x${size.height}`;
 
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: ['./src/**/*.e2e-spec.ts'],
-  capabilities: {
-    browserName: 'chrome',
-    chromeOptions: {
-      args: [
-        '--headless',
-        '--lang=ru',
-        `--window-size=${tablet.height},${tablet.width}`
-      ]
+  multiCapabilities: [
+    {
+      browserName: 'chrome',
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--lang=ru',
+          `--window-size=${tablet.width},${tablet.height}`
+        ]
+      },
+      specs: ['./src/**/*.e2e-spec.ts'],
+      exclude: ['./src/**/*.screen-sm.e2e-spec.ts']
+    },
+    {
+      browserName: 'chrome',
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--lang=ru',
+          `--window-size=${iphone5.width},${iphone5.height}`
+        ],
+        mobileEmulation: {
+          deviceName: 'iPhone 5/SE'
+        }
+      },
+      specs: ['./src/**/*.e2e-spec.ts'],
+      exclude: ['./src/**/*.screen-lg.e2e-spec.ts']
     }
-  },
+  ],
+  maxSessions: 1,
   ...(process.env.CI === 'true' && {
     chromeDriver:
       '../node_modules/webdriver-manager/selenium/chromedriver_80.0.3987.163'
@@ -43,48 +66,88 @@ exports.config = {
     backendURL: process.env.BACKEND_URL,
     testingCredentials: process.env.TESTING_CREDENTIALS
   },
-  plugins: [
-    {
-      package: 'jasmine2-protractor-utils',
-      disableHTMLReport: false,
-      outputPath: './e2e-tests-results',
-      disableScreenshot: false,
-      screenshotPath: './e2e-tests-results/screenshots',
-      screenshotOnExpectFailure: false,
-      screenshotOnSpecFailure: true,
-      clearFoldersBeforeTest: true
-    }
-  ],
+  beforeLaunch() {
+    fs.emptyDir('e2e-tests-results/screenshots/', function(err) {
+      console.log(err);
+    });
+  },
   onPrepare() {
     jasmine
       .getEnv()
       .addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-    var jasmineReporters = require('jasmine-reporters');
-    jasmine.getEnv().addReporter(
-      new jasmineReporters.JUnitXmlReporter({
-        consolidateAll: true,
-        savePath: './e2e-tests-results/',
-        disableHTMLReport: true,
-        disableScreenshot: true,
-        filePrefix: 'xmlresults'
-      })
-    );
+    const jasmineReporters = require('jasmine-reporters');
+    Promise.all([
+      browser
+        .manage()
+        .window()
+        .getSize(),
+      browser.getCapabilities()
+    ]).then(function([size, caps]) {
+      jasmine.getEnv().addReporter(
+        new jasmineReporters.JUnitXmlReporter({
+          consolidateAll: true,
+          savePath: './e2e-tests-results/',
+          disableHTMLReport: true,
+          disableScreenshot: true,
+          filePrefix: getFileName(
+            caps.get('browserName'),
+            caps.get('version'),
+            size
+          )
+        })
+      );
+    });
+
+    jasmine.getEnv().addReporter({
+      specDone: function(result) {
+        if (result.status == 'failed') {
+          Promise.all([
+            browser
+              .manage()
+              .window()
+              .getSize(),
+            browser.getCapabilities()
+          ]).then(function([size, caps]) {
+            const browserName = caps.get('browserName');
+            const browserVersion = caps.get('version');
+
+            browser.takeScreenshot().then(function(png) {
+              var stream = fs.createWriteStream(
+                'e2e-tests-results/screenshots/' +
+                  getFileName(browserName, browserVersion, size) +
+                  '-' +
+                  result.fullName +
+                  '.png'
+              );
+              stream.write(new Buffer(png, 'base64'));
+              stream.end();
+            });
+          });
+        }
+      }
+    });
   },
-  onComplete: function() {
-    var browserName, browserVersion;
-    var capsPromise = browser.getCapabilities();
-
-    capsPromise.then(function(caps) {
-      browserName = caps.get('browserName');
-      browserVersion = caps.get('version');
+  onComplete() {
+    Promise.all([
+      browser
+        .manage()
+        .window()
+        .getSize(),
+      browser.getCapabilities()
+    ]).then(function([size, caps]) {
+      const browserName = caps.get('browserName');
+      const browserVersion = caps.get('version');
+      const fileNamePrefix = `${getFileName(
+        browserName,
+        browserVersion,
+        size
+      )}`;
       platform = caps.get('platform');
-
-      var HTMLReport = require('protractor-html-reporter-2');
-
+      const HTMLReport = require('protractor-html-reporter-2');
       testConfig = {
-        reportTitle: 'Protractor Test Execution Report',
+        reportTitle: `Protractor Test Execution Report ${size.width}x${size.height}`,
         outputPath: './e2e-tests-results/',
-        outputFilename: 'ProtractorTestReport',
+        outputFilename: `ProtractorTestReport ${fileNamePrefix}`,
         screenshotPath: './screenshots',
         testBrowser: browserName,
         browserVersion: browserVersion,
@@ -92,7 +155,10 @@ exports.config = {
         screenshotsOnlyOnFailure: true,
         testPlatform: platform
       };
-      new HTMLReport().from('./e2e-tests-results/xmlresults.xml', testConfig);
+      new HTMLReport().from(
+        `./e2e-tests-results/${fileNamePrefix}.xml`,
+        testConfig
+      );
     });
   }
 };

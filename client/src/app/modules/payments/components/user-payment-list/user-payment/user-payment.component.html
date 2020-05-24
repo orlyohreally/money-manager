@@ -1,0 +1,17 @@
+<div
+  class="payment-row"
+  *ngIf="element.family; else userPayment"
+  [paymentViewFamilyPayment]="element"
+  [familyId]="element.family._id"
+>
+  <ng-template [ngTemplateOutlet]="content"></ng-template>
+</div>
+<ng-template #userPayment>
+  <div class="payment-row" [paymentEditUserPayment]="element">
+    <ng-template [ngTemplateOutlet]="content"></ng-template>
+  </div>
+</ng-template>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

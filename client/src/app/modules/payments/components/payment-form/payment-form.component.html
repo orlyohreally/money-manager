@@ -1,6 +1,6 @@
 <div class="payment-form">
   <h1 mat-dialog-title>
-    Payment
+    {{ formLabel }}
   </h1>
   <ng-container *ngIf="subjects; else loading">
     <form [formGroup]="form" (ngSubmit)="submitForm()">

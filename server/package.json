@@ -8,23 +8,24 @@
     "npm": "^6.9.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run setup-swagger && tsc",
     "build:clean": "npm run clean && npm run build",
-    "watch": "tsc -w",
+    "watch": "npm run setup-swagger && tsc -w",
     "lint": "npm run lint:tsc && npm run lint:tslint",
-    "lint:tsc": "tsc -p tsconfig.json --noEmit",
+    "lint:tsc": "npm run setup-swagger && tsc -p tsconfig.json --noEmit",
     "lint:tslint": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint:prettier": "prettier --write \"{src,test}/**/*.ts*\"",
     "start": "node src/main.js",
     "start:test": "npm run build:clean && node src/test-server.js",
-    "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
+    "start:dev": "concurrently --kill-others \"npm run setup-swagger && tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "test": "jest --detectOpenHandles",
     "precommit": "lint-staged && npm run lint",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
     "test:e2e": "jest --detectOpenHandles --testPathPattern --runInBand \"__tests__/.+.tsx?\" --forceExit",
     "test:ci": "jest --detectOpenHandles --coverage",
     "clean": "rimraf \"{src,__tests__}/**/*.js?(x)?(.map)\"",
-    "release": "./extra/deployment/release.sh"
+    "release": "./extra/deployment/release.sh",
+    "setup-swagger": "cd src/services/api-documentation && multi-file-swagger swagger.json > options.json && cd ../../.."
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
   "homepage": "https://github.com/orlyohreally/money-manager#readme",
   "devDependencies": {
     "concurrently": "^4.1.0",
+    "express-swagger-generator": "^1.1.17",
     "jest": "^23.6.0",
     "mongodb-memory-server": "^6.5.2",
     "nodemon": "^1.18.10",
@@ -84,6 +86,7 @@
     "lodash": "^4.17.13",
     "module-alias": "^2.1.0",
     "mongoose": "^5.7.5",
+    "multi-file-swagger": "^2.3.0",
     "node-mocks-http": "^1.8.1",
     "npm": "^6.9.0",
     "redis": "^2.8.0",

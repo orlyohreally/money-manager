@@ -1,0 +1,34 @@
+type: object
+properties:
+  _id:
+    type: string
+    required: true
+  firstName:
+    type: string
+    required: true
+  lastName:
+    type: string
+    required: true
+  email:
+    type: string
+    required: true
+  icon:
+    type: string
+  password:
+    type: string
+  colorScheme:
+    type: string
+  isVerified:
+    type: boolean
+  currency:
+    type: string
+    default: "USD"
+  createdAt:
+    type: string
+  updatedAt:
+    type: string
+example:
+  firstName: "John"
+  lastName: "Doe"
+  email: "email@handle.com"
+  password: "aA1!2345"

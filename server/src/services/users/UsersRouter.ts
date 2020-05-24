@@ -32,11 +32,38 @@ export class UsersRouter {
       this.service.validateToken.bind(this.service),
       asyncWrap(this.getUser)
     );
+
+    /**
+     * Register user
+     * @route POST /users/login
+     * @group unauthenticated users
+     * @param {UserCredentials.model} user.body.required - user credentials
+     * @returns {User.model} 200 - registered user data
+     * @returns {string} header - Authorization token
+     * @return {Error.model} 401 - incorrect email or password
+     * @returns {Error} 500 - Server error
+     */
     this.router.post("/users/login", asyncWrap(this.loginUser));
+
+    /**
+     * @typedef {Object} SigninResponse
+     * @property {string} verificationToken - token to verify user email
+     */
+    /**
+     * Register user
+     * @route POST /users/signin
+     * @group unauthenticated users
+     * @param {User.model} user.body.required - user info
+     * @headers {string} 200.Authorization - authorization token
+     * @returns {SigninResponse.model} 200  - token to verify user email
+     * @returns {Error} 400 - invalid user value or email is already taken
+     * @returns {Error} 500 - Server error
+     */
     this.router.post("/users/signin", asyncWrap(this.registerUser));
     this.router.put("/users/update/:userId", asyncWrap(this.updateUser));
     this.router.post("/users/refresh-token", asyncWrap(this.refreshToken));
     this.router.post("/users/verify", asyncWrap(this.verifyUser));
+
     this.router.post(
       "/users/request-email-verification",
       asyncWrap(this.sendEmailVerification)

@@ -1,0 +1,52 @@
+{
+  "swagger": 3,
+  "files": [
+    "../src/services/**/*Router.js"
+  ],
+  "swaggerDefinition": {
+    "basePath": "/api/v1",
+    "info": {
+      "title": "Family Expenses API",
+      "description": "API documentation",
+      "version": "1.0.0",
+      "contact": {
+        "name": "API Support",
+        "url": "https://github.com/orlyohreally/money-manager/issues",
+        "email": "orly.knop@gmail.com"
+      },
+      "license": {
+        "name": "MIT License",
+        "url": "https://github.com/orlyohreally/money-manager/blob/master/LICENSE"
+      }
+    },
+    "tags": [
+      {
+        "name": "admins",
+        "description": "Secured Admin-only calls"
+      },
+      {
+        "name": "authenticated users",
+        "description": "Operations available to logged in users"
+      },
+      {
+        "name": "unauthenticated users",
+        "description": "Operations available to not logged in users"
+      }
+    ],
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "securityDefinitions": {
+      "JWT": {
+        "description": "JWT Bearer Authorization",
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "$ref": "./definitions/index.yaml"
+    }
+  }
+}

@@ -30,8 +30,9 @@
 .arrow-icon {
   padding: 5px;
   border-radius: 50%;
-  height: 8px;
-  width: 8px;
+  box-sizing: border-box;
+  height: 24px;
+  width: 24px;
   margin: 5px;
   border: 1px solid mat-color($angular-material-primary, 100);
   display: flex;

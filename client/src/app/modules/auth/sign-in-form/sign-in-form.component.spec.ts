@@ -40,7 +40,7 @@ describe('SignInFormComponent', () => {
     ]);
     authServiceSpy.register.and.returnValue(
       cold('---a', {
-        a: { email: 'email@gmail.com', verificationToken: 'verification-token' }
+        a: { verificationToken: 'verification-token' }
       })
     );
 
@@ -476,7 +476,7 @@ describe('SignInFormComponent', () => {
         ['/auth/email-verification-request'],
         {
           queryParams: {
-            email: 'email@gmail.com',
+            email: 'valid-email@gmail.com',
             'verification-token': 'verification-token'
           }
         }

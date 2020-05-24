@@ -96,12 +96,11 @@ describe('AuthenticationService', () => {
     () => {
       createService();
       const mockedResponse = {
-        email: 'email@gmail.com',
         verificationToken: 'verificationToken'
       };
       service
         .register(mockedUser)
-        .subscribe((response: { email: string; verificationToken: string }) => {
+        .subscribe((response: { verificationToken: string }) => {
           expect(response).toBe(mockedResponse);
         });
 

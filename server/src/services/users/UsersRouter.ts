@@ -127,7 +127,6 @@ export class UsersRouter {
           .json({ message: "Could not send verification email" });
       }
       return res.status(200).json({
-        email: user.email,
         verificationToken: verificationToken.token
       });
     } catch (err) {

@@ -95,7 +95,7 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
             this.submittingForm = false;
             this.router.navigate(['/auth/email-verification-request'], {
               queryParams: {
-                email: response.email,
+                email: this.email.value,
                 'verification-token': response.verificationToken
               }
             });

@@ -4,10 +4,12 @@ import "module-alias/register";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as express from "express";
+import * as swaggerGenerator from "express-swagger-generator";
 import { Server } from "http";
 import * as mongoose from "mongoose";
 import * as path from "path";
 
+import { apiDocumentationService } from "./services/api-documentation";
 import { familiesRouter } from "./services/families";
 import { paymentSubjectsRouter } from "./services/payment-subjects";
 import { paymentsRouter } from "./services/payments";
@@ -33,7 +35,6 @@ export const runServer = async (
   const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
   });
-
   if (process.env.NODE_ENV === "staging") {
     const whitelist = ["http://localhost:4200", process.env.BACK_END_URL];
     const corsOptions = {
@@ -42,12 +43,6 @@ export const runServer = async (
         origin: string | undefined,
         callback: (err: Error | null, allow?: boolean) => void
       ) => {
-        console.log(
-          origin,
-          whitelist,
-          whitelist.indexOf(origin),
-          whitelist.indexOf(origin) !== -1 || !origin
-        );
         if (whitelist.indexOf(origin) !== -1 || !origin) {
           // tslint:disable-next-line: no-null-keyword
           callback(null, true);
@@ -70,6 +65,8 @@ export const runServer = async (
   if (["development", "staging"].indexOf(process.env.NODE_ENV as string) > -1) {
     app.use(apiPath, testingRouter);
   }
+
+  swaggerGenerator(app)(apiDocumentationService.options);
 
   app.use(express.static(`${__dirname}/assets/frontend`));
 

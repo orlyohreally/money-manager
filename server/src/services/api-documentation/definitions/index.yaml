@@ -1,0 +1,10 @@
+FamilyView:
+  $ref: ../../../../../shared/types/family-view.yaml
+User:
+  $ref: ../../../../../shared/types/member.yaml
+Payment:
+  $ref: ../../../../../shared/types/payment.yaml
+Error:
+  $ref: ./error-message.yaml
+UserCredentials:
+  $ref: ./user-credentials.yaml

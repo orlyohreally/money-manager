@@ -21,7 +21,6 @@ export class TestingService {
   ) {
     try {
       const credentials = req.headers.authorization as string;
-      console.log("process.env.TESTING_CREDENTIALS", credentials);
       if (credentials !== process.env.TESTING_CREDENTIALS) {
         throw new Error("Unauthorized access");
       }

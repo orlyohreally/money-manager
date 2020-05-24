@@ -38,6 +38,7 @@ export class PaymentsComponent implements OnInit {
 
   private filters: PaymentFilters;
   private payments: Observable<FamilyPaymentView[]>;
+  private datePeriodIsSet: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,11 +69,17 @@ export class PaymentsComponent implements OnInit {
 
   onFiltersUpdated(filterUpdate: PaymentFilters) {
     this.filters = filterUpdate;
+    if (!!this.filters.startDate && !!this.filters.endDate) {
+      this.datePeriodIsSet = true;
+    }
     this.filterPayments();
   }
 
   filterPayments() {
     this.filteringPayments = true;
+    if (!this.datePeriodIsSet) {
+      return;
+    }
     this.filteredPayments = this.payments.pipe(
       map(payments =>
         [...(payments || [])].filter(

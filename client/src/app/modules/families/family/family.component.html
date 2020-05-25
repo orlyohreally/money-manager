@@ -21,6 +21,18 @@
         </div>
         <div
           class="family-info__stats"
+          fxLayout="row"
+          fxLayoutAlign="start start"
+        >
+          <mat-icon matTooltip="Family currency">
+            account_balance_wallet
+          </mat-icon>
+          <div>
+            {{ familyInfo.currency }}
+          </div>
+        </div>
+        <div
+          class="family-info__stats"
           fxLayout="row wrap"
           fxLayoutAlign="start start"
         >

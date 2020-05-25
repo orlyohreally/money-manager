@@ -6,7 +6,6 @@
     <form [formGroup]="familyForm" (ngSubmit)="submitForm()">
       <shared-image-with-preview
         class="family-form__avatar-preview"
-        fxLayout='row' fxLayoutAlign="center center"
         [imageUrl]="familyForm.get('icon').value"
         (selectedImage)="familyIconLoaded($event)"
       ></shared-image-with-preview>

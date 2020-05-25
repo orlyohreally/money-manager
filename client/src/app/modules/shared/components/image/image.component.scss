@@ -1,3 +1,6 @@
+@import 'variables';
+
 .image {
   background-size: cover;
+  background-color: $background-color;
 }

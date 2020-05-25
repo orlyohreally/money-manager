@@ -134,6 +134,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
     });
     return this.membersService.updateMembersPaymentPercentages(
       this.data.family._id,
+      false,
       percentages
     );
   }

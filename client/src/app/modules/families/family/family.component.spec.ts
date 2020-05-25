@@ -95,7 +95,7 @@ describe('FamilyComponent', () => {
       );
       const membersRoles: HTMLElement = fixture.nativeElement.querySelectorAll(
         '.family-info__stats'
-      )[1];
+      )[2];
       expect(membersRoles.textContent.trim()).toEqual(
         `bookmark ${expectedFamily.userRoles.join(' ')}`
       );
@@ -160,7 +160,7 @@ describe('FamilyComponent', () => {
       );
       const membersRoles: HTMLElement = fixture.nativeElement.querySelectorAll(
         '.family-info__stats'
-      )[1];
+      )[2];
       expect(membersRoles.textContent.trim()).toEqual(
         `bookmark ${expectedFamily.userRoles.join(' ')}`
       );

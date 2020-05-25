@@ -25,6 +25,7 @@ export class CheckboxComponent implements OnInit {
   get checked(): boolean {
     return this._checked;
   }
+  @Input() disabled: boolean;
 
   @Output() changedValue = new EventEmitter<boolean>();
 

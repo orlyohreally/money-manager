@@ -51,7 +51,7 @@ export class NewFamilyMemberFormComponent implements OnInit {
   ngOnInit() {
     this.memberForm = new FormGroup({
       email: new FormControl('', [Validators.required, emailValidatorFn]),
-      roles: new FormControl('', [Validators.required])
+      roles: new FormControl('')
     });
   }
 

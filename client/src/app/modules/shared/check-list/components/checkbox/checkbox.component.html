@@ -1,8 +1,9 @@
 <div
   fxLayout="row"
   fxLayoutAlign="start center"
-  (click)="onChecked($event)"
+  (click)="!disabled && onChecked($event)"
   class="checkbox"
+  [ngClass]="{ checkbox_disabled: disabled }"
 >
   <mat-checkbox class="checkbox-element" [(ngModel)]="checked">
     <ng-content></ng-content>

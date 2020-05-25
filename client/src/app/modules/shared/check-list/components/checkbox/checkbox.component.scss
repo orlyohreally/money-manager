@@ -39,3 +39,8 @@
 .checkbox-element {
   padding: 16px;
 }
+
+.checkbox_disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}

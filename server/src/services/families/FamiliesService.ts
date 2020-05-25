@@ -65,10 +65,10 @@ export class FamiliesService {
       family.icon = "";
     }
     let savedFamily: Family = await this.dao.createFamily(family);
-    await this.dao.createFamilyMember(savedFamily._id, {
-      _id: userId.toString(),
-      roles: [...roles, roles.indexOf(Roles.Owner) > -1 ? "" : Roles.Owner]
-    });
+    await this.createFamilyMember(userId, savedFamily._id, [
+      ...roles,
+      roles.indexOf(Roles.Owner) > -1 ? "" : Roles.Owner
+    ]);
     if (familyIcon) {
       const newIcon = await this.imageLoaderService.loadImage(
         familyIcon,

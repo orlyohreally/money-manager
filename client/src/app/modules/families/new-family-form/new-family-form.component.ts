@@ -43,7 +43,7 @@ export class NewFamilyFormComponent implements OnInit {
   }
 
   submitForm() {
-    if (!this.form.valid || !this.memberRoles.length) {
+    if (!this.form.valid) {
       this.form.markAsTouched();
       return;
     }

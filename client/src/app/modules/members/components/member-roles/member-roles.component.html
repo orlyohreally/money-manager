@@ -9,6 +9,7 @@
     <shared-checkbox
       *ngFor="let role of rolesList"
       [checked]="role.default"
+      [disabled]="role.default"
       class="member-roles-list__role"
       (changedValue)="onRoleChanged(role, $event)"
     >

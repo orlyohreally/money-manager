@@ -4,3 +4,7 @@
   background-size: cover;
   background-color: $background-color;
 }
+
+:host {
+  display: block;
+}

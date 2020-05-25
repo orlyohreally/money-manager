@@ -1,19 +1,31 @@
 <div fxLayout="column" fxLayoutAlign="center center">
-  <shared-image
-    class="image-preview"
-    [imageUrl]="imageUrl"
-    height="100px"
-    width="100px"
-    borderRadius="50%"
-    (click)="showPreview()"
-  >
-    <img
-      *ngIf="!imageUrl"
-      class="image-preview__default-image"
-      [src]="defaultImageUrl"
-    />
-    <div class="shade shade_round">
-      <mat-icon class="image-preview__icon">photo_camera</mat-icon>
-    </div>
-  </shared-image>
+  <div class="image-preview__wrapper">
+    <shared-image
+      class="image-preview"
+      [imageUrl]="imageUrl"
+      height="100px"
+      width="100px"
+      borderRadius="50%"
+      (click)="showPreview()"
+    >
+      <img
+        *ngIf="!imageUrl"
+        class="image-preview__default-image"
+        [src]="defaultImageUrl"
+      />
+      <div class="shade shade_round">
+        <mat-icon class="image-preview__icon">photo_camera</mat-icon>
+      </div>
+    </shared-image>
+    <button
+      mat-button
+      type="button"
+      sharedBackgroundColor
+      class="image-preview__reset-button"
+      *ngIf="!!imageUrl"
+      (click)="resetImage()"
+    >
+      <mat-icon>highlight_off</mat-icon>
+    </button>
+  </div>
 </div>

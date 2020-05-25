@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material';
+
 // tslint:disable-next-line: max-line-length
 import { ImageManagerComponent } from '../image-manager/image-manager.component';
 
@@ -14,11 +15,11 @@ export class ImageWithPreviewComponent implements OnInit {
 
   defaultImageUrl = '/assets/images/no-image.png';
 
-  constructor(public dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit() {}
 
-  public showPreview() {
+  showPreview() {
     const dialogRef = this.dialog.open(ImageManagerComponent, {
       width: '90%',
       height: '90%'
@@ -29,5 +30,9 @@ export class ImageWithPreviewComponent implements OnInit {
         this.selectedImage.emit(newImageUrl);
       }
     });
+  }
+
+  resetImage() {
+    this.selectedImage.emit('');
   }
 }

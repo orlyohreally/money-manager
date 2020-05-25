@@ -58,6 +58,8 @@ import { PaymentSubjectSelectorComponent } from './components/payment-subject-se
 import { PaymentSubjectComponent } from './components/payment-subject/payment-subject.component';
 // tslint:disable-next-line: max-line-length
 import { ValueEditorComponent } from './components/value-editor/value-editor.component';
+// tslint:disable-next-line: max-line-length
+import { BackgroundColorDirective } from './directives/background-color/background-color.directive';
 import { BadgeDirective } from './directives/badge.directive';
 // tslint:disable-next-line: max-line-length
 import { ColoredNumberDirective } from './directives/colored-number/colored-number.directive';
@@ -112,7 +114,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectComponent,
     DateSelectorComponent,
     SortByPipe,
-    DynamicActiveRouterLinkDirective
+    DynamicActiveRouterLinkDirective,
+    BackgroundColorDirective
   ],
   imports: [
     CommonModule,
@@ -171,7 +174,12 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective
   ],
-  providers: [CurrencySymbolPipe, DecimalPipe, UserFullNamePipe],
+  providers: [
+    CurrencySymbolPipe,
+    DecimalPipe,
+    UserFullNamePipe,
+    { provide: 'windowObj', useValue: window }
+  ],
   entryComponents: [
     ImageManagerComponent,
     ImagePreviewComponent,

@@ -1,3 +1,5 @@
+@import 'variables';
+
 .image-preview__default-image {
   height: 50px;
   position: absolute;
@@ -27,4 +29,30 @@
 
 .image-preview:hover .shade {
   display: flex;
+}
+
+.image-preview__wrapper {
+  position: relative;
+}
+
+.image-preview__reset-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  line-height: normal;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  display: flex;
+  min-width: unset;
+  min-height: unset;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+::ng-deep .image-preview__reset-button .mat-button-focus-overlay {
+  background-color: transparent !important;
 }

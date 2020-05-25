@@ -8,6 +8,8 @@
 
 .image-preview {
   position: relative;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .image-preview__icon {

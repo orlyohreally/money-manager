@@ -1,3 +1,5 @@
+import * as emailCheck from "email-check";
+
 export interface IEmailSenderDao {
   sendEmail(
     templateId: string,
@@ -23,5 +25,14 @@ export class EmailSenderService {
       return Promise.resolve();
     }
     return this.dao.sendEmail(templateId, to, dynamicTemplateData);
+  }
+
+  public async isValidEmail(email: string): Promise<boolean> {
+    try {
+      await emailCheck(email);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

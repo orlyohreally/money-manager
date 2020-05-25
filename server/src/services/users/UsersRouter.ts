@@ -106,6 +106,12 @@ export class UsersRouter {
       if (error) {
         return res.status(400).json({ message: error.details[0].message });
       }
+      const isValidEmail = await this.emailSenderService.isValidEmail(
+        user.email
+      );
+      if (!isValidEmail) {
+        return res.status(400).json({ message: "Email is invalid" });
+      }
       const registeredUser = await this.service.getUser("email", user.email);
       if (registeredUser) {
         return res.status(400).json({ message: "User already registered." });

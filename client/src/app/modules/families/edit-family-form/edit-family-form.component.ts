@@ -110,10 +110,7 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
           );
         }),
         switchMap(() => {
-          if (this.form.value.equalPayments) {
-            return of(undefined);
-          }
-          return this.updatePercentages();
+          return this.updatePercentages(family.equalPayments);
         })
       )
       .subscribe(
@@ -137,14 +134,24 @@ export class EditFamilyFormComponent implements OnInit, OnDestroy {
     this.membersPaymentPercentagesInfo = percentagesInfo;
   }
 
-  private updatePercentages() {
-    const percentages = this.membersPaymentPercentagesInfo.value.map(adult => ({
-      userId: adult.userId,
-      paymentPercentage: adult.paymentPercentage
-    }));
+  private updatePercentages(equalPaymentsPercentages: boolean) {
+    if (!!this.membersPaymentPercentagesInfo) {
+      const payers = this.membersPaymentPercentagesInfo.value;
+      const percentages = payers.map(adult => ({
+        userId: adult.userId,
+        paymentPercentage: !equalPaymentsPercentages
+          ? adult.paymentPercentage
+          : 100 / payers.length
+      }));
+      return this.membersService.updateMembersPaymentPercentages(
+        this.family._id,
+        equalPaymentsPercentages,
+        percentages
+      );
+    }
     return this.membersService.updateMembersPaymentPercentages(
       this.family._id,
-      percentages
+      equalPaymentsPercentages
     );
   }
 

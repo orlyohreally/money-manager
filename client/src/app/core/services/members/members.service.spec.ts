@@ -3,11 +3,14 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 
-import { FamilyMember } from '@shared/types';
-import { AuthenticationServiceMock } from '@src/app/tests-utils/mocks';
+import { FamilyMember, MemberPaymentPercentage } from '@shared/types';
+import {
+  AuthenticationServiceMock,
+  MembersServiceMock
+} from '@src/app/tests-utils/mocks';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '../global-variables/global-variables.service';
 import { MembersService } from './members.service';
@@ -27,13 +30,17 @@ describe('MembersService', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
+  afterEach(() => {
+    httpTestingController.verify();
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
   it(
     'getMembers should make GET request' + ' to api/families/:familyId/members',
-    () => {
+    done => {
       const mockedMembers: FamilyMember[] = [
         {
           firstName: 'Adam',
@@ -42,6 +49,7 @@ describe('MembersService', () => {
       ];
       service.getMembers('familyId').subscribe((response: FamilyMember[]) => {
         expect(response).toBe(mockedMembers);
+        done();
       });
 
       const req = httpTestingController.expectOne(
@@ -54,14 +62,13 @@ describe('MembersService', () => {
   it(
     'addFamilyMember should make POST request' +
       ' to api/families/:familyId/members',
-    () => {
+    done => {
       const mockedMembers: FamilyMember[] = [
         {
           email: 'email@gmail.com',
           roles: ['Admin']
         } as FamilyMember
       ];
-      spyOn(service, 'getMembers').and.returnValue(of(mockedMembers));
 
       const mockedFamilyMember: FamilyMember = {
         email: 'email@gmail.com',
@@ -75,14 +82,20 @@ describe('MembersService', () => {
         .addFamilyMember('familyId', mockedFamilyMember)
         .subscribe((response: FamilyMember) => {
           expect(response).toBe(mockedResponse);
-          expect(service.getMembers).toHaveBeenCalledTimes(1);
-          expect(service.getMembers).toHaveBeenCalledWith('familyId');
+          done();
         });
 
-      const req = httpTestingController.expectOne(
-        'apiURL/families/familyId/members'
-      );
+      const req = httpTestingController.expectOne({
+        url: 'apiURL/families/familyId/members',
+        method: 'POST'
+      });
       req.flush(mockedResponse);
+
+      const reqGet = httpTestingController.expectOne({
+        url: 'apiURL/families/familyId/members',
+        method: 'GET'
+      });
+      reqGet.flush(mockedMembers);
     }
   );
 
@@ -183,4 +196,86 @@ describe('MembersService', () => {
     });
     reqFamiliesMembers2.flush(family2Members);
   });
+
+  it(
+    'updateMembersPaymentPercentages should make put request' +
+      ' to families/:familyId/members/payment-percentages' +
+      ' and update members percentages' +
+      ' if equalPercentages is false',
+    done => {
+      const familyMembers: FamilyMember[] = MembersServiceMock().membersList;
+      const percentages: MemberPaymentPercentage[] = [
+        { userId: familyMembers[0]._id, paymentPercentage: 30 },
+        { userId: familyMembers[1]._id, paymentPercentage: 70 }
+      ];
+      const familyId = 'familyId-1';
+      service
+        .getMembers('familyId-1')
+        .pipe(
+          first(),
+          switchMap(() => {
+            return service.updateMembersPaymentPercentages(
+              familyId,
+              false,
+              percentages
+            );
+          }),
+          switchMap(() => {
+            return service.getMembers(familyId).pipe(first());
+          })
+        )
+        .subscribe((res: FamilyMember[]) => {
+          expect(res).toEqual([
+            { ...familyMembers[0], paymentPercentage: 30 },
+            { ...familyMembers[1], paymentPercentage: 70 }
+          ]);
+          done();
+        });
+
+      const reqFamiliesMembers = httpTestingController.expectOne({
+        url: 'apiURL/families/familyId-1/members',
+        method: 'GET'
+      });
+      reqFamiliesMembers.flush(familyMembers);
+
+      const reqPercentages = httpTestingController.expectOne({
+        url: 'apiURL/families/familyId-1/members/payment-percentages',
+        method: 'PUT'
+      });
+      reqPercentages.flush({ message: 'message' });
+    }
+  );
+
+  it(
+    'updateMembersPaymentPercentages should set  members percentages equal' +
+      ' if equalPercentages is true',
+    done => {
+      const familyMembers: FamilyMember[] = MembersServiceMock().membersList;
+      const familyId = 'familyId-1';
+      service
+        .getMembers('familyId-1')
+        .pipe(
+          first(),
+          switchMap(() => {
+            return service.updateMembersPaymentPercentages(familyId, true);
+          }),
+          switchMap(() => {
+            return service.getMembers(familyId).pipe(first());
+          })
+        )
+        .subscribe((res: FamilyMember[]) => {
+          expect(res).toEqual([
+            { ...familyMembers[0], paymentPercentage: 50 },
+            { ...familyMembers[1], paymentPercentage: 50 }
+          ]);
+          done();
+        });
+
+      const reqFamiliesMembers = httpTestingController.expectOne({
+        url: 'apiURL/families/familyId-1/members',
+        method: 'GET'
+      });
+      reqFamiliesMembers.flush(familyMembers);
+    }
+  );
 });

@@ -109,26 +109,42 @@ export class MembersService extends DataService {
 
   updateMembersPaymentPercentages(
     familyId: string,
-    percentages: MemberPaymentPercentage[]
+    equalPercentages: boolean,
+    percentages?: MemberPaymentPercentage[]
   ): Observable<void> {
-    return this.put(`${this.getMemberApi(familyId)}/payment-percentages`, {
-      familyId,
-      percentages
-    }).pipe(
-      switchMap(() => this.getMembers(familyId).pipe(first())),
+    return (!equalPercentages
+      ? this.put(`${this.getMemberApi(familyId)}/payment-percentages`, {
+          familyId,
+          percentages
+        })
+      : of(undefined)
+    ).pipe(
+      switchMap(() => {
+        return this.getMembers(familyId).pipe(first());
+      }),
       map(members => {
-        const updatedMembers: FamilyMember[] = members.map(member => {
-          const foundPercentage = percentages.filter(
-            percentage => percentage.userId === member._id
-          )[0];
-          if (!foundPercentage) {
-            return member;
-          }
-          return {
-            ...member,
-            paymentPercentage: foundPercentage.paymentPercentage
-          };
-        });
+        let updatedMembers: FamilyMember[];
+        if (!equalPercentages) {
+          updatedMembers = members.map(member => {
+            const foundPercentage = percentages.filter(
+              percentage => percentage.userId === member._id
+            )[0];
+            if (!foundPercentage) {
+              return member;
+            }
+            return {
+              ...member,
+              paymentPercentage: foundPercentage.paymentPercentage
+            };
+          });
+        } else {
+          updatedMembers = members.map(member => {
+            return {
+              ...member,
+              paymentPercentage: 100 / members.length
+            };
+          });
+        }
         this.members.next({
           ...this.members.getValue(),
           [familyId]: updatedMembers

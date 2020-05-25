@@ -1,6 +1,6 @@
 export const testedUser = {
   firstName: 'Ivan',
   lastName: 'Petrov',
-  email: 'ivan-petrov-test@gmail.com',
+  email: 'orly.knop@gmail.com',
   password: 'ABCabc123!@#'
 };

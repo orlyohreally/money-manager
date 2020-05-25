@@ -1,4 +1,5 @@
 import { Server } from "http";
+import { BAD_REQUEST } from "http-status-codes";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import * as mongoose from "mongoose";
 import * as redis from "redis-mock";
@@ -17,7 +18,7 @@ describe("Registration", () => {
   const user: Partial<User> = {
     firstName: "Peter",
     lastName: "Samuel",
-    email: "peter-samuel@gmail.com",
+    email: "orly.knop@gmail.com",
     password: "ABCabc123!@#",
     currency: "ILS"
   };
@@ -66,6 +67,14 @@ describe("Registration", () => {
       .post(`${routerPrefix}/signin`)
       .send({ user: newUser });
     expect(result.badRequest).toBeTruthy();
+    expect(result.type).toEqual("application/json");
+  });
+
+  it("should not register user on route /signin POST if email is not valid (email does not receive messages)", async () => {
+    const result = await request(server)
+      .post(`${routerPrefix}/signin`)
+      .send({ ...user, email: "test@gmail.com" });
+    expect(result.status).toEqual(BAD_REQUEST);
     expect(result.type).toEqual("application/json");
   });
 });

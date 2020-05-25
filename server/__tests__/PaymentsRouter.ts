@@ -25,14 +25,14 @@ describe("PaymentsRouter", () => {
   const mockedUser: Omit<User, "_id" | "updatedAt" | "createdAt"> = {
     firstName: "Peter",
     lastName: "Samuel",
-    email: "peter-samuel@gmail.com",
+    email: "orly.knop@gmail.com",
     password: "ABCabc123!@#",
     currency: "ILS"
   };
   const mockedAnotherUser: Omit<User, "_id" | "updatedAt" | "createdAt"> = {
     firstName: "Peter",
     lastName: "Peterson",
-    email: "peter-peterson@gmail.com",
+    email: "orli-knop@ya.ru",
     password: "ABCabc123!@#"
   };
 
@@ -226,7 +226,7 @@ describe("PaymentsRouter", () => {
       it("should get error code forbidden when authorized user is not family admin and payment.userId is not authorized user", async () => {
         const { userToken } = await registerAndLogin(mockedUser);
         const familyId = await createFamily([], userToken);
-        const memberEmail = "peter-peterson@gmail.com";
+        const memberEmail = "orli-knop@yandex.ru";
         const anotherUserId = (await registerAndLogin(mockedAnotherUser)).user
           ._id;
         await addFamilyMember(userToken, familyId, memberEmail);

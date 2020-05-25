@@ -5,7 +5,7 @@ import { testedUser } from '.';
 const http = new HttpClient(browser.params.backendURL);
 
 export async function registerUser() {
-  await http.delete('/testing/user/ivan-petrov-test@gmail.com', {
+  await http.delete(`/testing/user/${testedUser.email}`, {
     Authorization: browser.params.testingCredentials
   });
   await http.post('/users/signin', testedUser);

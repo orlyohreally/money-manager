@@ -43,11 +43,9 @@ describe("Registration", () => {
     expect(result.status).toEqual(200);
     expect(result.type).toEqual("application/json");
     expect(result.body).toBeTruthy();
-    const { email, verificationToken } = result.body as {
-      email: string;
+    const { verificationToken } = result.body as {
       verificationToken: string;
     };
-    expect(email).toEqual(user.email);
     expect(verificationToken).toBeTruthy();
   });
 

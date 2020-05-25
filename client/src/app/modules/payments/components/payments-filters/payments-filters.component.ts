@@ -31,7 +31,7 @@ export class PaymentsFiltersComponent implements OnInit {
       endDate: null
     };
     this.defaultStartDate = new Date();
-    this.defaultStartDate.setDate(this.defaultStartDate.getDate() - 7);
+    this.defaultStartDate.setMonth(this.defaultStartDate.getMonth() - 1);
     this.defaultEndDate = new Date();
     this.defaultEndDate.setDate(this.defaultEndDate.getDate() + 1);
   }

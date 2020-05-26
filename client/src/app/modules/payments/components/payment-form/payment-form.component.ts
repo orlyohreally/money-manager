@@ -44,4 +44,8 @@ export class PaymentFormComponent extends FormComponent<Payment>
       receipt: new FormControl(payment.receipt, [])
     });
   }
+
+  onPaidAtSelected(date: Date) {
+    this.form.get('paidAt').setValue(date);
+  }
 }

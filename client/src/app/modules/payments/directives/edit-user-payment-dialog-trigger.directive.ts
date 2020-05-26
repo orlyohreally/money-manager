@@ -16,7 +16,9 @@ export class EditUserPaymentDialogTriggerDirective {
     this.dialog.open(EditUserPaymentFormComponent, {
       data: {
         payment: this.payment
-      }
+      },
+      width: '80%',
+      maxWidth: '500px'
     });
   }
 }

@@ -3,17 +3,18 @@ import { Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
-  MatNativeDateModule,
   MatSelectModule
 } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
+// tslint:disable-next-line: max-line-length
+import { DatetimeSelectorComponent } from '@shared-client/components/datetime-selector/datetime-selector.component';
 // tslint:disable-next-line: max-line-length
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 // tslint:disable-next-line: max-line-length
@@ -65,11 +66,9 @@ describe('PaymentFormComponent', () => {
   let component: PaymentFormComponent;
   let parentComponent: ParentComponent;
   let fixture: ComponentFixture<ParentComponent>;
-
   const mockedMembersList = MembersServiceMock().membersList;
   const mockedSubjectList = PaymentSubjectsServiceMock().paymentSubjectsList;
   const mockedPayment = PaymentsServiceMock().payment;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -80,15 +79,14 @@ describe('PaymentFormComponent', () => {
         CurrencySymbolPipeMock,
         MockComponent(LoaderComponent),
         MockComponent(PaymentSubjectComponent),
-        MockComponent(ContentWithLoaderComponent)
+        MockComponent(ContentWithLoaderComponent),
+        MockComponent(DatetimeSelectorComponent)
       ],
       imports: [
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatDatepickerModule,
         MatSelectModule,
-        MatNativeDateModule,
         NoopAnimationsModule
       ]
     }).compileComponents();
@@ -119,7 +117,7 @@ describe('PaymentFormComponent', () => {
     const mockedPaymentDate = '07.05.2020';
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedAmount.toString());
-    setInputField(fixture, 'payment-date', mockedPaymentDate);
+    setPaidAtDate(mockedPaymentDate);
     await setSelectorOption(fixture, 'payment-subject', 0);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
@@ -139,7 +137,7 @@ describe('PaymentFormComponent', () => {
     async () => {
       spyOn(component.formSubmitted, 'emit');
       setInputField(fixture, 'payment-amount', '4.g');
-      setInputField(fixture, 'payment-date', '07.05.2020');
+      setPaidAtDate('07.05.2020');
       await setSelectorOption(fixture, 'payment-subject', 0);
       await setSelectorOption(fixture, 'payment-payer', 0);
       submitForm();
@@ -150,44 +148,40 @@ describe('PaymentFormComponent', () => {
   it('should not call formSubmitted.emit if amount is not set', async () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', '');
-    setInputField(fixture, 'payment-date', '07.05.2020');
+    setPaidAtDate('07.05.2020');
     await setSelectorOption(fixture, 'payment-subject', 0);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).not.toHaveBeenCalled();
   });
-
   it('should not call formSubmitted.emit if amount is 0', async () => {
     spyOn(component.formSubmitted, 'emit');
-
     setInputField(fixture, 'payment-amount', '0');
-    setInputField(fixture, 'payment-date', '07.05.2020');
+    setPaidAtDate('07.05.2020');
     await setSelectorOption(fixture, 'payment-subject', 0);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).not.toHaveBeenCalled();
   });
-
   it(
     'should not call formSubmitted.emit' +
       ' if  amount is not float number over 0 - "-50"',
     async () => {
       spyOn(component.formSubmitted, 'emit');
       setInputField(fixture, 'payment-amount', '-50');
-      setInputField(fixture, 'payment-date', '07.05.2020');
+      setPaidAtDate('07.05.2020');
       await setSelectorOption(fixture, 'payment-subject', 0);
       await setSelectorOption(fixture, 'payment-payer', 0);
       submitForm();
       expect(component.formSubmitted.emit).not.toHaveBeenCalled();
     }
   );
-
   it('should call formSubmitted.emit if amount is "40"', async () => {
     const mockedPaymentAmount = 40;
     const mockedPaymentDate = '07.05.2020';
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedPaymentAmount.toString());
-    setInputField(fixture, 'payment-date', '07.05.2020');
+    setPaidAtDate('07.05.2020');
     await setSelectorOption(fixture, 'payment-subject', 1);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
@@ -200,13 +194,12 @@ describe('PaymentFormComponent', () => {
       receipt: mockedPayment.receipt
     });
   });
-
   it('should call formSubmitted.emit if amount is "0.6"', async () => {
     const mockedPaymentAmount = 0.6;
     const mockedPaymentDate = '07.05.2020';
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedPaymentAmount.toString());
-    setInputField(fixture, 'payment-date', '07.05.2020');
+    setPaidAtDate('07.05.2020');
     await setSelectorOption(fixture, 'payment-subject', 1);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
@@ -226,5 +219,12 @@ describe('PaymentFormComponent', () => {
     );
     submitButton.click();
     fixture.detectChanges();
+  }
+
+  function setPaidAtDate(paidAtDate: string) {
+    const paidAtEl: DatetimeSelectorComponent = fixture.debugElement.query(
+      By.directive(DatetimeSelectorComponent)
+    ).componentInstance;
+    paidAtEl.dateSelected.emit(new Date(paidAtDate));
   }
 });

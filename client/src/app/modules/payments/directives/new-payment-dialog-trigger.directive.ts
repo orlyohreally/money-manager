@@ -40,9 +40,9 @@ export class NewPaymentDialogTriggerDirective {
       .pipe(take(1))
       .subscribe((user: User) => {
         this.dialog.open(NewPaymentFormComponent, {
-          width: '60%',
+          width: '80%',
           maxHeight: '80%',
-          maxWidth: '700px',
+          maxWidth: '500px',
           minWidth: '300px',
           restoreFocus: false,
           panelClass: 'dialog_scrollable',

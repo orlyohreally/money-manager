@@ -1,0 +1,29 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ selectorLabel }}</mat-label>
+  <input
+    matInput
+    [ngxMatDatetimePicker]="picker"
+    [formControl]="selectedDate"
+    [min]="minDate"
+    [required]="required"
+    [name]="inputName"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <ngx-mat-datetime-picker
+    #picker
+    [showSpinners]="showSpinners"
+    [showSeconds]="showSeconds"
+    [stepHour]="stepHour"
+    [stepMinute]="stepMinute"
+    [stepSecond]="stepSecond"
+    [touchUi]="touchUi"
+    [color]="color"
+    [enableMeridian]="enableMeridian"
+    [disableMinute]="disableMinute"
+    [hideTime]="hideTime"
+  >
+  </ngx-mat-datetime-picker>
+  <mat-error *ngIf="selectedDate.hasError('required')">
+    Required field
+  </mat-error>
+</mat-form-field>

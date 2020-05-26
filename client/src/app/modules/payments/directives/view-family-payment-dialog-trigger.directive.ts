@@ -47,7 +47,9 @@ export class ViewFamilyPaymentDialogTriggerDirective {
               isAdminMode,
               familyId: this.familyId,
               payment: this.payment
-            }
+            },
+            width: '80%',
+            maxWidth: '500px'
           });
           return;
         }

@@ -1,3 +1,8 @@
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule
+} from '@angular-material-components/datetime-picker';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -34,6 +39,8 @@ import { ContentWithLoaderComponent } from './components/content-with-loader/con
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
 // tslint:disable-next-line: max-line-length
 import { DateSelectorComponent } from './components/date-selector/date-selector.component';
+// tslint:disable-next-line: max-line-length
+import { DatetimeSelectorComponent } from './components/datetime-selector/datetime-selector.component';
 // tslint:disable-next-line: max-line-length
 import { FormFieldComponent } from './components/form-field/form-field.component';
 import { FormComponent } from './components/form/form.component';
@@ -113,6 +120,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
     DateSelectorComponent,
+    DatetimeSelectorComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective,
     BackgroundColorDirective
@@ -136,7 +144,10 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     ImageCropperModule,
     NgxMatSelectSearchModule,
     CheckListModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    NgxMatTimepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule
   ],
   exports: [
     FilterPipe,
@@ -171,6 +182,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectSelectorComponent,
     PaymentSubjectComponent,
     DateSelectorComponent,
+    DatetimeSelectorComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective
   ],

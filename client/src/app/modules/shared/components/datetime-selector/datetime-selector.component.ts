@@ -63,7 +63,6 @@ export class DatetimeSelectorComponent implements OnInit, OnDestroy {
           this.selectedDate.setValue(defaultValidDate, { emitEvent: false });
         }
         const date = new Date(this.selectedDate.value);
-        date.setHours(0, 0, 0, 0);
         this.dateSelected.emit(date);
       });
   }

@@ -18,7 +18,7 @@ import { UserPaymentView } from '@src/app/types';
   styleUrls: ['./edit-user-payment-form.component.scss']
 })
 export class EditUserPaymentFormComponent implements OnInit {
-  payment: Payment;
+  payment: Payment & { currency: string };
   paymentCurrency: string;
 
   subjects: Observable<PaymentSubject[]>;
@@ -47,7 +47,8 @@ export class EditUserPaymentFormComponent implements OnInit {
       userId: this.data.payment.member ? this.data.payment.member._id : '',
       createdAt: new Date(this.data.payment.createdAt),
       updatedAt: new Date(this.data.payment.updatedAt),
-      paymentPercentages: this.data.payment.paymentPercentages
+      paymentPercentages: this.data.payment.paymentPercentages,
+      currency: this.data.payment.currency
     };
   }
 

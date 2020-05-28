@@ -19,7 +19,7 @@ export class EditFamilyPaymentFormComponent implements OnInit {
 
   @Output() formSubmitted = new EventEmitter<Payment>();
 
-  payment: Payment;
+  payment: Payment & { currency: string };
   paymentCurrency: string;
 
   constructor() {}
@@ -35,7 +35,8 @@ export class EditFamilyPaymentFormComponent implements OnInit {
       familyId: this.familyId,
       createdAt: new Date(this.editedPayment.createdAt),
       updatedAt: new Date(this.editedPayment.updatedAt),
-      paymentPercentages: this.editedPayment.paymentPercentages
+      paymentPercentages: this.editedPayment.paymentPercentages,
+      currency: this.editedPayment.currency
     };
   }
 

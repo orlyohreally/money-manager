@@ -47,10 +47,10 @@ exports.config = {
     }
   ],
   maxSessions: 1,
-  ...(process.env.CI === 'true' && {
-    chromeDriver:
-      '../node_modules/webdriver-manager/selenium/chromedriver_80.0.3987.163'
-  }),
+  // ...(process.env.CI === 'true' && {
+  //   chromeDriver:
+  //     '../node_modules/webdriver-manager/selenium/chromedriver_80.0.3987.163'
+  // }),
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   paths: {

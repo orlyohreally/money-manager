@@ -44,7 +44,7 @@
           name="payment-date"
           [defaultDate]="form.get('paidAt').value"
           [required]="true"
-          [debounceTime]="5000"
+          [debounceTime]="300"
           inputName="payment-date"
           (dateSelected)="onPaidAtSelected($event)"
         ></shared-datetime-selector>

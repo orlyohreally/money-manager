@@ -1,10 +1,18 @@
-import { browser, by, element, ExpectedConditions, Key } from 'protractor';
+import * as moment from 'moment';
+import {
+  browser,
+  by,
+  element,
+  ElementFinder,
+  ExpectedConditions
+} from 'protractor';
 
 import { LoginPage } from '@src-e2e/auth/login.po';
 import {
   clearLocalStorage,
   constants,
   getPageUrl,
+  setDatetimeInput,
   submitForm,
   typeInInput
 } from '@src-e2e/shared';
@@ -68,19 +76,27 @@ export class FamilyPaymentsPage {
   }
 
   fillAndSubmitPaymentForm(amount: string, subject: string, paidAt: string) {
+    setDatetimeInput('form', paidAt);
     typeInInput('payment-amount', amount);
-    this.typeInPaidDate(paidAt);
     this.selectSubject(subject);
 
     submitForm();
   }
 
-  typeInPaidDate(paidAt: string) {
-    const input = element(by.css(`input[name="payment-date"]`));
-    input.click();
-    input.sendKeys(Key.chord(Key.CONTROL, 'a'));
-    for (const character of paidAt) {
-      input.sendKeys(character);
-    }
+  expectPaymentToBeDisplayedCorrectly(
+    paymentEl: ElementFinder,
+    amount: string,
+    userFullName: string,
+    subject: string,
+    paidAt: string
+  ) {
+    const columns = paymentEl.all(by.tagName('td'));
+    const subjectImage = columns.get(0).element(by.tagName('img'));
+    expect(subjectImage.getAttribute('src')).toContain(subject);
+    expect(columns.get(1).getText()).toEqual(amount);
+    expect(columns.get(2).getText()).toEqual(userFullName);
+    expect(columns.get(3).getText()).toEqual(
+      moment(paidAt).format('M/D/YY, h:mm A')
+    );
   }
 }

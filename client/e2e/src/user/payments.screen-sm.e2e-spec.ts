@@ -1,15 +1,10 @@
-import {
-  browser,
-  by,
-  element,
-  ElementFinder,
-  ExpectedConditions
-} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import {
   constants,
   iphone5,
   registerUser,
+  setDatetimeInput,
   submitForm,
   typeInInput,
   waitForForm,
@@ -39,12 +34,12 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
     const payment = {
       amount: { value: '75', display: '$75' },
       subject: 'apartment',
-      paidAt: '1/2/20'
+      paidAt: '1/2/20, 13:40:00'
     };
     const updatedPayment = {
       amount: { value: '350', display: '$350' },
       subject: 'apartment',
-      paidAt: '3/2/20'
+      paidAt: '3/2/20, 13:40:00'
     };
 
     page.createUserPayment(
@@ -60,12 +55,12 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .click();
 
     typeInInput('payment-amount', updatedPayment.amount.value);
-    page.typeInPaidDate(updatedPayment.paidAt);
+    setDatetimeInput('form', updatedPayment.paidAt);
     submitForm();
 
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(1);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       updatedPayment.amount.display,
       updatedPayment.subject,
@@ -84,7 +79,7 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
     const userPayment = {
       amount: { value: '75', display: '$75' },
       subject: 'apartment',
-      paidAt: '1/6/20'
+      paidAt: '1/6/20, 13:40:00'
     };
 
     page.createUserPayment(
@@ -102,7 +97,7 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
     const updatedPayment = {
       amount: { value: '350', display: '€350' },
       subject: 'apartment',
-      paidAt: '3/2/20'
+      paidAt: '3/2/20, 13:40:00'
     };
 
     paymentsList
@@ -112,20 +107,20 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
     waitForForm();
 
     typeInInput('payment-amount', updatedPayment.amount.value);
-    page.typeInPaidDate(updatedPayment.paidAt);
+    setDatetimeInput('form', updatedPayment.paidAt);
     submitForm();
     waitForFormToClose();
 
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(2);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(1),
       userPayment.amount.display,
       userPayment.subject,
       userPayment.paidAt,
       ''
     );
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       updatedPayment.amount.display,
       updatedPayment.subject,
@@ -136,21 +131,6 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
 
   function getUserPayments() {
     return element.all(by.css('payment-user-payment-list tbody tr'));
-  }
-
-  function expectPaymentToBeDisplayedCorrectly(
-    paymentEl: ElementFinder,
-    amount: string,
-    subject: string,
-    paidAt: string,
-    familyName: string
-  ) {
-    const columns = paymentEl.all(by.tagName('td'));
-    const subjectImage = columns.get(0).element(by.tagName('img'));
-    expect(subjectImage.getAttribute('src')).toContain(subject);
-    expect(columns.get(1).getText()).toEqual(amount);
-    expect(columns.get(2).getText()).toEqual(familyName);
-    expect(columns.get(3).getText()).toEqual(paidAt);
   }
 
   function waitForUserPaymentsList() {

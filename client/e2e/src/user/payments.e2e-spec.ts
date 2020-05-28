@@ -1,10 +1,5 @@
-import {
-  browser,
-  by,
-  element,
-  ElementFinder,
-  ExpectedConditions
-} from 'protractor';
+import * as moment from 'moment';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import { constants, registerUser } from '@src-e2e/shared';
 import { getTextTitle, getTitleText, resetTestedUser } from '@src-e2e/shared/';
@@ -46,12 +41,12 @@ describe('User payments Page', () => {
       {
         amount: { value: '75', display: '$75' },
         subject: 'apartment',
-        paidAt: '1/2/20'
+        paidAt: '1/2/20, 13:45:00'
       },
       {
         amount: { value: '1500', display: '$1.5K' },
         subject: 'pet',
-        paidAt: '5/2/20'
+        paidAt: '5/2/20, 13:35:00'
       }
     ];
     page.createUserPayment(
@@ -61,7 +56,7 @@ describe('User payments Page', () => {
     );
     let paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(1);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       payments[0].amount.display,
       payments[0].subject,
@@ -76,14 +71,14 @@ describe('User payments Page', () => {
     );
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(2);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(1),
       payments[0].amount.display,
       payments[0].subject,
       payments[0].paidAt,
       ''
     );
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       payments[1].amount.display,
       payments[1].subject,
@@ -96,7 +91,7 @@ describe('User payments Page', () => {
     const userPayment = {
       amount: { value: '75', display: '$75' },
       subject: 'apartment',
-      paidAt: '1/6/20'
+      paidAt: '1/6/20, 13:40:00'
     };
 
     page.createUserPayment(
@@ -106,7 +101,7 @@ describe('User payments Page', () => {
     );
     let paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(1);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       userPayment.amount.display,
       userPayment.subject,
@@ -118,7 +113,7 @@ describe('User payments Page', () => {
     const familyPayment = {
       amount: { value: '278', display: '€278' },
       subject: 'pet',
-      paidAt: '1/2/20'
+      paidAt: '1/2/20, 13:40:00'
     };
     page.createFamilyPayment(
       familyName,
@@ -130,14 +125,14 @@ describe('User payments Page', () => {
     waitForUserPaymentsList();
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(2);
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(0),
       userPayment.amount.display,
       userPayment.subject,
       userPayment.paidAt,
       ''
     );
-    expectPaymentToBeDisplayedCorrectly(
+    page.expectPaymentToBeDisplayedCorrectly(
       paymentsList.get(1),
       familyPayment.amount.display,
       familyPayment.subject,
@@ -153,21 +148,6 @@ describe('User payments Page', () => {
 
   function getUserPayments() {
     return element.all(by.css('payment-user-payment-list tbody tr'));
-  }
-
-  function expectPaymentToBeDisplayedCorrectly(
-    paymentEl: ElementFinder,
-    amount: string,
-    subject: string,
-    paidAt: string,
-    familyName: string
-  ) {
-    const columns = paymentEl.all(by.tagName('td'));
-    const subjectImage = columns.get(0).element(by.tagName('img'));
-    expect(subjectImage.getAttribute('src')).toContain(subject);
-    expect(columns.get(1).getText()).toEqual(amount);
-    expect(columns.get(2).getText()).toEqual(familyName);
-    expect(columns.get(3).getText()).toEqual(paidAt);
   }
 
   function expectHeaderToDisplayCorrectly() {

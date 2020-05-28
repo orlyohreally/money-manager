@@ -82,13 +82,16 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
           mockedFamilyId
         );
         expect(dialogSpy.open).toHaveBeenCalledTimes(1);
-        expect(dialogSpy.open).toHaveBeenCalledWith(EditPaymentFormComponent, {
-          data: {
-            isAdminMode: true,
-            familyId: mockedFamilyId,
-            payment: mockedFamilyPayment
-          }
-        });
+        expect(dialogSpy.open).toHaveBeenCalledWith(
+          EditPaymentFormComponent,
+          jasmine.objectContaining({
+            data: {
+              isAdminMode: true,
+              familyId: mockedFamilyId,
+              payment: mockedFamilyPayment
+            }
+          })
+        );
       }
     );
   });
@@ -123,13 +126,16 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
           mockedFamilyId
         );
         expect(dialogSpy.open).toHaveBeenCalledTimes(1);
-        expect(dialogSpy.open).toHaveBeenCalledWith(EditPaymentFormComponent, {
-          data: {
-            isAdminMode: false,
-            familyId: mockedFamilyId,
-            payment: usersPayment
-          }
-        });
+        expect(dialogSpy.open).toHaveBeenCalledWith(
+          EditPaymentFormComponent,
+          jasmine.objectContaining({
+            data: {
+              isAdminMode: false,
+              familyId: mockedFamilyId,
+              payment: usersPayment
+            }
+          })
+        );
       }
     );
   });
@@ -165,12 +171,15 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
           mockedFamilyId
         );
         expect(dialogSpy.open).toHaveBeenCalledTimes(1);
-        expect(dialogSpy.open).toHaveBeenCalledWith(PaymentDetailsComponent, {
-          width: '40%',
-          data: {
-            payment: anotherUsersPayment
-          }
-        });
+        expect(dialogSpy.open).toHaveBeenCalledWith(
+          PaymentDetailsComponent,
+          jasmine.objectContaining({
+            width: '40%',
+            data: {
+              payment: anotherUsersPayment
+            }
+          })
+        );
       }
     );
   });

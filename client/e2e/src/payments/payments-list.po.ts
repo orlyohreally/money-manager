@@ -26,7 +26,7 @@ export class FamilyPaymentsPage {
   }
 
   createFamily(familyName: string) {
-    this.familiesPage.createFamily(familyName, 'israel', []);
+    this.familiesPage.createFamily(familyName, 'Israel', []);
   }
 
   async goToPage(familyName: string): Promise<void> {

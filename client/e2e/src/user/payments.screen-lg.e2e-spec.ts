@@ -86,7 +86,7 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
     );
 
     const familyName = 'Peterson';
-    page.createFamily(familyName, 'euro');
+    page.createFamily(familyName, 'Euro');
     page.createFamilyPayment(familyName, '90', 'apartment', '1/1/20');
 
     page.goToPage();

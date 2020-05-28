@@ -65,10 +65,9 @@ export class FamiliesPage {
     const selectName = 'currency';
     const select = element(by.css(`mat-select[name="${selectName}"]`));
     select.click();
-    const searchInput = browser.switchTo().activeElement();
-    for (const character of currency) {
-      searchInput.sendKeys(character);
-    }
-    searchInput.sendKeys(Key.ENTER);
+    const options = element(
+      by.cssContainingText('.mat-select-search-panel mat-option', currency)
+    );
+    options.click();
   }
 }

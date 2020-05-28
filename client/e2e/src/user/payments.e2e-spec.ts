@@ -114,7 +114,7 @@ describe('User payments Page', () => {
       ''
     );
     const familyName = 'Peterson';
-    page.createFamily(familyName, 'euro');
+    page.createFamily(familyName, 'Euro');
     const familyPayment = {
       amount: { value: '278', display: '€278' },
       subject: 'pet',

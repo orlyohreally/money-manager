@@ -51,7 +51,7 @@ describe('Families Page', () => {
         'No families added yet...'
       );
       const familyNames = ['Petrov', 'Petrov II'];
-      page.createFamily(familyNames[0], 'USD', ['Admin']);
+      page.createFamily(familyNames[0], '$', ['Admin']);
       const urlPattern = `${escapeRegExp(
         getPageUrl('family')
       )}\/[0-9a-z]*\/dashboard`;
@@ -94,7 +94,7 @@ describe('Families Page', () => {
   );
 
   it('should have button to update family info', () => {
-    page.createFamily('Petrov', 'USD');
+    page.createFamily('Petrov', '$');
     const waitTimeout = 30000;
     browser.wait(
       ExpectedConditions.urlContains(`${escapeRegExp(getPageUrl('family'))}`),
@@ -111,7 +111,7 @@ describe('Families Page', () => {
       .element(by.cssContainingText('mat-icon', 'create'))
       .click();
     const updatedName = 'Ivanov';
-    page.fillAndSubmitFamilyForm(updatedName, 'israel');
+    page.fillAndSubmitFamilyForm(updatedName, 'Israel');
     const familiesCards = getFamiliesCards();
     expect(familiesCards.count()).toEqual(1);
     expectFamilyToBeDisplayedCorrectly(

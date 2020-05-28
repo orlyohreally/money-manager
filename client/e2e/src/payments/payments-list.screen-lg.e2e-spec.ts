@@ -1,9 +1,10 @@
 import * as moment from 'moment';
-import { by, element, ElementFinder } from 'protractor';
+import { by, element } from 'protractor';
 
 import {
   constants,
   registerUser,
+  setDatetimeInput,
   submitForm,
   testedUser,
   typeInInput,
@@ -55,16 +56,15 @@ describe(`Family payments Page (screen is more than ${constants.menuScreenThresh
       const payment = {
         amount: { value: '75', display: '₪75' },
         subject: 'apartment',
-        paidAt: moment().format('L')
+        paidAt: moment().format('MM/DD/YYYY, h:mm:ss')
       };
       const updatedPayment = {
         amount: { value: '350', display: '₪350' },
         subject: 'apartment',
         paidAt: moment()
           .subtract(3, 'days')
-          .format('L')
+          .format('MM/DD/YYYY, h:mm:ss')
       };
-
       page.createFamilyPayment(
         payment.amount.value,
         payment.subject,
@@ -77,20 +77,18 @@ describe(`Family payments Page (screen is more than ${constants.menuScreenThresh
       waitForForm();
 
       typeInInput('payment-amount', updatedPayment.amount.value);
-      page.typeInPaidDate(updatedPayment.paidAt);
+      setDatetimeInput('form', updatedPayment.paidAt);
       submitForm();
 
       waitForFormToClose();
       paymentsList = getFamilyPayments();
       expect(paymentsList.count()).toEqual(1);
-      expectPaymentToBeDisplayedCorrectly(
+      page.expectPaymentToBeDisplayedCorrectly(
         paymentsList.get(0),
         updatedPayment.amount.display,
         `${testedUser.firstName} ${testedUser.lastName}`,
         updatedPayment.subject,
-        moment(updatedPayment.paidAt)
-          .format('l')
-          .slice(0, -2)
+        updatedPayment.paidAt
       );
     });
   });
@@ -106,20 +104,5 @@ describe(`Family payments Page (screen is more than ${constants.menuScreenThresh
 
   function getFamilyPayments() {
     return element.all(by.css('payment-payment-list tbody tr'));
-  }
-
-  function expectPaymentToBeDisplayedCorrectly(
-    paymentEl: ElementFinder,
-    amount: string,
-    userFullName: string,
-    subject: string,
-    paidAt: string
-  ) {
-    const columns = paymentEl.all(by.tagName('td'));
-    const subjectImage = columns.get(0).element(by.tagName('img'));
-    expect(subjectImage.getAttribute('src')).toContain(subject);
-    expect(columns.get(1).getText()).toEqual(amount);
-    expect(columns.get(2).getText()).toEqual(userFullName);
-    expect(columns.get(3).getText()).toEqual(paidAt);
   }
 });

@@ -64,12 +64,14 @@ describe('Family payments Page', () => {
         {
           amount: { value: '75', display: '₪75' },
           subject: 'apartment',
-          paidAt: moment().format('L')
+          paidAt: moment().format('MM/D/YYYY, h:mm A')
         },
         {
           amount: { value: '1500', display: '₪1.5K' },
           subject: 'pet',
-          paidAt: moment().format('L')
+          paidAt: moment()
+            .add(1, 'hours')
+            .format('MM/D/YYYY, h:mm A')
         }
       ];
       page.createFamilyPayment(
@@ -86,14 +88,12 @@ describe('Family payments Page', () => {
       );
       let paymentsList = getFamilyPayments();
       expect(paymentsList.count()).toEqual(1);
-      expectPaymentToBeDisplayedCorrectly(
+      page.expectPaymentToBeDisplayedCorrectly(
         paymentsList.get(0),
         payments[0].amount.display,
         `${testedUser.firstName} ${testedUser.lastName}`,
         payments[0].subject,
-        moment(payments[0].paidAt)
-          .format('l')
-          .slice(0, -2)
+        payments[0].paidAt
       );
       expectHeaderToDisplayCorrectly();
       page.createFamilyPayment(
@@ -109,23 +109,19 @@ describe('Family payments Page', () => {
       );
       paymentsList = getFamilyPayments();
       expect(paymentsList.count()).toEqual(2);
-      expectPaymentToBeDisplayedCorrectly(
-        paymentsList.get(0),
+      page.expectPaymentToBeDisplayedCorrectly(
+        paymentsList.get(1),
         payments[0].amount.display,
         `${testedUser.firstName} ${testedUser.lastName}`,
         payments[0].subject,
-        moment(payments[0].paidAt)
-          .format('l')
-          .slice(0, -2)
+        payments[0].paidAt
       );
-      expectPaymentToBeDisplayedCorrectly(
-        paymentsList.get(1),
+      page.expectPaymentToBeDisplayedCorrectly(
+        paymentsList.get(0),
         payments[1].amount.display,
         `${testedUser.firstName} ${testedUser.lastName}`,
         payments[1].subject,
-        moment(payments[1].paidAt)
-          .format('l')
-          .slice(0, -2)
+        payments[1].paidAt
       );
     });
   });
@@ -141,21 +137,6 @@ describe('Family payments Page', () => {
 
   function getFamilyPayments() {
     return element.all(by.css('payment-payment-list tbody tr'));
-  }
-
-  function expectPaymentToBeDisplayedCorrectly(
-    paymentEl: ElementFinder,
-    amount: string,
-    userFullName: string,
-    subject: string,
-    paidAt: string
-  ) {
-    const columns = paymentEl.all(by.tagName('td'));
-    const subjectImage = columns.get(0).element(by.tagName('img'));
-    expect(subjectImage.getAttribute('src')).toContain(subject);
-    expect(columns.get(1).getText()).toEqual(amount);
-    expect(columns.get(2).getText()).toEqual(userFullName);
-    expect(columns.get(3).getText()).toEqual(paidAt);
   }
 
   function expectHeaderToDisplayCorrectly() {

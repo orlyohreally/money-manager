@@ -31,6 +31,9 @@
       {
         "name": "unauthenticated users",
         "description": "Operations available to not logged in users"
+      },
+      {
+        "name": "Family payments"
       }
     ],
     "schemes": [

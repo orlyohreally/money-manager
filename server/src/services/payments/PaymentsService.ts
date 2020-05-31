@@ -18,6 +18,7 @@ export interface IPaymentsDao {
   ): Promise<void>;
   getPayment(paymentId: string, familyId?: string): Promise<Payment>;
   deleteUserPayments(userId: string): Promise<void>;
+  deletePayment(paymentId: string, familyId?: string): Promise<void>;
 }
 
 export class PaymentsService {
@@ -105,6 +106,45 @@ export class PaymentsService {
       if (!isFamilyMember) {
         return res.status(FORBIDDEN).json({ message: "Forbidden" });
       }
+      next();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      return res.status(FORBIDDEN).json(error);
+    }
+  }
+
+  public async isDeleteFamilyPaymentAllowedMW(
+    req: Request & { user?: User },
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { familyId, paymentId } = req.params as {
+        familyId: string;
+        paymentId: string;
+      };
+
+      const { user } = req.body as {
+        user: User;
+      };
+
+      const currentPayment = await this.getPayment(paymentId, familyId);
+      if (!currentPayment) {
+        return res
+          .status(NOT_FOUND)
+          .json({ message: "Payment has not been found" });
+      }
+
+      const isAllowedToDelete = await this.isDeleteFamilyPaymentAllowed(
+        user._id.toString(),
+        familyId,
+        currentPayment
+      );
+      if (!isAllowedToDelete) {
+        return res.status(FORBIDDEN).json({ message: "Forbidden" });
+      }
+
       next();
       return;
     } catch (error) {
@@ -202,6 +242,10 @@ export class PaymentsService {
     return this.dao.deleteUserPayments(userId);
   }
 
+  public deletePayment(paymentId: string, familyId?: string): Promise<void> {
+    return this.dao.deletePayment(paymentId, familyId);
+  }
+
   private async isEditFamilyPaymentAllowed(
     userId: string,
     familyId: string,
@@ -250,5 +294,27 @@ export class PaymentsService {
       );
     }
     return isFamilyAdmin || isUserPayer;
+  }
+
+  private async isDeleteFamilyPaymentAllowed(
+    userId: string,
+    familyId: string,
+    payment: Payment
+  ): Promise<boolean> {
+    const isFamilyMember = await this.familiesService.isFamilyMember(
+      userId,
+      familyId
+    );
+    if (!isFamilyMember) {
+      return false;
+    }
+
+    // user is family admin or is the payer
+    const isFamilyAdmin = await this.familiesService.isFamilyAdmin(
+      userId,
+      familyId
+    );
+
+    return isFamilyAdmin || payment.userId.toString() === userId;
   }
 }

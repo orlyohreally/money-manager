@@ -14,6 +14,7 @@ import {
   User
 } from "@shared/types";
 import { runServer } from "@src/server";
+import { testingService } from "@src/services/testing";
 
 jest.mock("redis", () => redis);
 
@@ -41,6 +42,7 @@ describe("PaymentsRouter", () => {
 
     const uri = await mongoServer.getUri();
     server = await runServer(3000, uri);
+    await testingService.prepareDBForTests();
   });
 
   afterEach(async () => {
@@ -54,7 +56,6 @@ describe("PaymentsRouter", () => {
         const { userToken, user } = await registerAndLogin(mockedUser);
 
         const familyId = await createFamily([], userToken);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -73,7 +74,6 @@ describe("PaymentsRouter", () => {
         const { userToken, user } = await registerAndLogin(mockedUser);
 
         const familyId = await createFamily([], userToken);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -109,7 +109,6 @@ describe("PaymentsRouter", () => {
 
         const { userToken, user } = await registerAndLogin(mockedUser);
         await createFamily([], userToken);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -128,7 +127,6 @@ describe("PaymentsRouter", () => {
         const { user, userToken } = await registerAndLogin(mockedUser);
 
         const familyId = await createFamily([], userToken);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<
           Payment,
@@ -166,7 +164,6 @@ describe("PaymentsRouter", () => {
         const anotherUserId = (await registerAndLogin(mockedAnotherUser)).user
           ._id;
 
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -190,7 +187,6 @@ describe("PaymentsRouter", () => {
           userToken: anotherUserToken
         } = await registerAndLogin(mockedAnotherUser);
         await addFamilyMember(userToken, familyId, mockedAnotherUser.email);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -230,7 +226,6 @@ describe("PaymentsRouter", () => {
         const anotherUserId = (await registerAndLogin(mockedAnotherUser)).user
           ._id;
         await addFamilyMember(userToken, familyId, memberEmail);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -251,7 +246,6 @@ describe("PaymentsRouter", () => {
         const familyId = await createFamily([Roles.Admin], userToken);
         const anotherUserId = (await registerAndLogin(mockedAnotherUser)).user
           ._id;
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -277,7 +271,6 @@ describe("PaymentsRouter", () => {
           userToken: anotherUserToken
         } = await registerAndLogin(mockedAnotherUser);
         await addFamilyMember(userToken, familyId, mockedAnotherUser.email);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -320,7 +313,6 @@ describe("PaymentsRouter", () => {
         const familyId = await createFamily([Roles.Admin], userToken);
         const anotherUserId = (await registerAndLogin(mockedAnotherUser)).user
           ._id;
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken, familyId);
         const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
           amount: 100,
@@ -346,7 +338,6 @@ describe("PaymentsRouter", () => {
     describe("Get payments on route /payments/:familyId GET", () => {
       it("should return family payments", async () => {
         const { userToken, user } = await registerAndLogin(mockedUser);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const userPayment: Omit<
           Payment,
@@ -385,7 +376,6 @@ describe("PaymentsRouter", () => {
       // tslint:disable-next-line: max-line-length
       const anotherUserToken = (await registerAndLogin(mockedAnotherUser))
         .userToken;
-      await createPaymentSubject(userToken);
       const paymentSubjects = await getPaymentSubjects(userToken);
       const userPayment: Omit<
         Payment,
@@ -419,13 +409,164 @@ describe("PaymentsRouter", () => {
         .set("Authorization", `Bearer ${anotherUserToken}`);
       expect(response.forbidden).toBeTruthy();
     });
+
+    describe("Delete payment on /payments/:familyId/:paymentId", () => {
+      it("should delete existent family payment if payment.userId is user._id", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const familyId = await createFamily([], userToken);
+        const paymentSubjects = await getPaymentSubjects(userToken, familyId);
+
+        const firstPayment = await createFamilyPayment(userToken, familyId, {
+          amount: 150,
+          subjectId: paymentSubjects[1]._id,
+          paidAt: new Date("01.05.2020")
+        });
+
+        const payment: Omit<
+          Payment,
+          "_id" | "paymentPercentages" | "userId"
+        > = {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020")
+        };
+        const paymentId = (await createFamilyPayment(
+          userToken,
+          familyId,
+          payment
+        ))._id;
+        const response = await request(server)
+          .delete(`${routerPrefix}/${familyId}/${paymentId}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.ok).toBeTruthy();
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}/${familyId}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(getRequest.body).toEqual([firstPayment]);
+      });
+
+      it("should delete existent family payment if user is family admin and payment.userId is not user._id", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const {
+          user: payer,
+          userToken: anotherUserToken
+        } = await registerAndLogin(mockedAnotherUser);
+        const familyId = await createFamily([Roles.Admin], userToken);
+        const paymentSubjects = await getPaymentSubjects(userToken, familyId);
+
+        const firstPayment = await createFamilyPayment(userToken, familyId, {
+          amount: 150,
+          subjectId: paymentSubjects[1]._id,
+          paidAt: new Date("01.05.2020")
+        });
+
+        await addFamilyMember(userToken, familyId, payer.email);
+        const payment: Omit<Payment, "_id" | "paymentPercentages"> = {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020"),
+          userId: payer._id
+        };
+        const paymentId = (await createFamilyPayment(
+          anotherUserToken,
+          familyId,
+          payment
+        ))._id;
+        const response = await request(server)
+          .delete(`${routerPrefix}/${familyId}/${paymentId}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.ok).toBeTruthy();
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}/${familyId}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(getRequest.body).toEqual([firstPayment]);
+      });
+
+      it("should return code not found when family payment does not exist", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const anotherUserToken = (await registerAndLogin(mockedAnotherUser))
+          .userToken;
+        const familyId = await createFamily([], userToken);
+        const anotherFamilyId = await createFamily([], anotherUserToken);
+        const paymentSubjects = await getPaymentSubjects(userToken, familyId);
+
+        const payment = await createFamilyPayment(
+          anotherUserToken,
+          anotherFamilyId,
+          {
+            amount: 100,
+            subjectId: paymentSubjects[0]._id,
+            paidAt: new Date("01.02.2020")
+          }
+        );
+
+        const response = await request(server)
+          .delete(`${routerPrefix}/${familyId}/${payment._id}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.notFound).toBeTruthy();
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}/${anotherFamilyId}`)
+          .set("Authorization", `Bearer ${anotherUserToken}`);
+        expect(getRequest.body).toEqual([payment]);
+      });
+
+      it("should return code forbidden if payment.userId is not user._id and user is not family admin", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const { user: payer, userToken: payerToken } = await registerAndLogin(
+          mockedAnotherUser
+        );
+        const familyId = await createFamily([], userToken);
+        await addFamilyMember(userToken, familyId, payer.email);
+        const paymentSubjects = await getPaymentSubjects(userToken, familyId);
+
+        const payment = await createFamilyPayment(payerToken, familyId, {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020"),
+          userId: payer._id
+        });
+        const response = await request(server)
+          .delete(`${routerPrefix}/${familyId}/${payment._id}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.status).toBe(403);
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}/${familyId}`)
+          .set("Authorization", `Bearer ${payerToken}`);
+        expect(getRequest.body).toEqual([payment]);
+      });
+
+      it("should return code unauthorized if when no authorization token provided", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const familyId = await createFamily([], userToken);
+        const paymentSubjects = await getPaymentSubjects(userToken, familyId);
+        const payment: Omit<
+          Payment,
+          "_id" | "paymentPercentages" | "userId"
+        > = {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020")
+        };
+        const paymentId = ((await request(server)
+          .post(`${routerPrefix}/${familyId}`)
+          .send({ payment })
+          .set("Authorization", `Bearer ${userToken}`)).body as Payment)._id;
+        const response = await request(server).delete(
+          `${routerPrefix}/${familyId}/${paymentId}`
+        );
+        expect(response.unauthorized).toBeTruthy();
+      });
+    });
   });
 
   describe("User payments", () => {
     describe("Create payment on route /payments POST", () => {
       it("should create new user payment with no paymentPercentages set", async () => {
         const { userToken } = await registerAndLogin(mockedUser);
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const payment: Omit<
           Payment,
@@ -456,8 +597,6 @@ describe("PaymentsRouter", () => {
     describe("Update payment on route /payments/:paymentId PUT", () => {
       it("should update user payment", async () => {
         const { userToken } = await registerAndLogin(mockedUser);
-
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const payment: Omit<
           Payment,
@@ -492,8 +631,6 @@ describe("PaymentsRouter", () => {
 
       it("should return error code unauthorized for route /payments/:paymentId PUT when no authorization token provided", async () => {
         const { userToken } = await registerAndLogin(mockedUser);
-
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const payment: Omit<
           Payment,
@@ -519,7 +656,6 @@ describe("PaymentsRouter", () => {
         const anotherUserToken = (await registerAndLogin(mockedAnotherUser))
           .userToken;
 
-        await createPaymentSubject(anotherUserToken);
         const paymentSubjects = await getPaymentSubjects(anotherUserToken);
         const payment: Omit<
           Payment,
@@ -549,7 +685,6 @@ describe("PaymentsRouter", () => {
       it("should return all user payments (including family payments)", async () => {
         const { userToken, user } = await registerAndLogin(mockedUser);
 
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const userPayment: Omit<
           Payment,
@@ -588,7 +723,6 @@ describe("PaymentsRouter", () => {
       it("should get error code unauthorized when authorization token is set", async () => {
         const { userToken, user } = await registerAndLogin(mockedUser);
 
-        await createPaymentSubject(userToken);
         const paymentSubjects = await getPaymentSubjects(userToken);
         const familyId = await createFamily([], userToken);
         const familyPayment: Omit<Payment, "_id" | "paymentPercentages"> = {
@@ -656,25 +790,6 @@ describe("PaymentsRouter", () => {
     return response.body as PaymentSubject[];
   }
 
-  async function createPaymentSubject(
-    userToken: string,
-    familyId?: string
-  ): Promise<void> {
-    const subjectsRouterPrefix = "/api/v1/payment-subjects";
-    const paymentSubject: Omit<
-      PaymentSubject,
-      "_id" | "createdAt" | "updatedAt"
-    > = {
-      name: "apartment",
-      icon: "https://icon.png"
-    };
-    const response = await request(server)
-      .post(`${subjectsRouterPrefix}/${familyId ? familyId : ""}`)
-      .send({ paymentSubject })
-      .set("Authorization", `Bearer ${userToken}`);
-    expect(response.ok).toBeTruthy();
-  }
-
   async function getPayments(
     userToken: string,
     familyId?: string
@@ -695,5 +810,20 @@ describe("PaymentsRouter", () => {
       .send({ email: memberEmail })
       .set("Authorization", `Bearer ${userToken}`);
     return response.body as FamilyMember[];
+  }
+
+  async function createFamilyPayment(
+    userToken: string,
+    familyId: string,
+    payment: Omit<Payment, "_id" | "paymentPercentages" | "userId"> & {
+      userId?: string;
+    }
+  ): Promise<Payment> {
+    return (await request(server)
+      .post(`${routerPrefix}/${familyId}`)
+      .send({
+        payment
+      })
+      .set("Authorization", `Bearer ${userToken}`)).body as Payment;
   }
 });

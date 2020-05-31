@@ -54,6 +54,14 @@ export class PaymentsRouter {
       ],
       asyncWrap(this.postPayment)
     );
+    this.router.delete(
+      "/payments/:familyId/:paymentId",
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isDeleteFamilyPaymentAllowedMW.bind(service)
+      ],
+      asyncWrap(this.deleteFamilyPayment)
+    );
     this.router.put(
       "/payments/:familyId/update-exchange-rate",
       [
@@ -92,6 +100,16 @@ export class PaymentsRouter {
     }
   };
 
+  /**
+   * @route GET /payments/{familyId}
+   * @group Family payments
+   * @param {string} familyId.path.required
+   * @returns {Array.<Payment>} 200 - family payments list
+   * @returns {MessageResponse.model} 401 - No user credentials
+   * @returns {MessageResponse.model} 403 - Access denied to these payments
+   * @returns {Error} 500 - Server error
+   * @security JWT
+   */
   private getPayments = async (req: Request, res: Response) => {
     try {
       const familyId: string = (req.params as { familyId: string }).familyId;
@@ -137,6 +155,35 @@ export class PaymentsRouter {
     } catch (err) {
       console.log(err);
       return res.status(400).json(err);
+    }
+  };
+
+  /**
+   * @route DELETE /payments/{familyId}/{paymentId}
+   * @group Family payments
+   * @param {string} familyId.path.required
+   * @param {string} paymentId.path.required
+   * @returns {MessageResponse.model} 200 - payment has been deleted
+   * @returns {MessageResponse.model} 401 - no user credentials provided
+   * @returns {MessageResponse.model} 403 - access denied to delete payment
+   * @returns {MessageResponse.model} 404 - payment has not been found
+   * @returns {Error} 500 - Server error
+   * @security JWT
+   */
+  private deleteFamilyPayment = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const { familyId, paymentId } = req.params as {
+        familyId: string;
+        paymentId: string;
+      };
+      await this.service.deletePayment(paymentId, familyId);
+      return res.status(OK).json({ message: "Payment has been deleted" });
+    } catch (err) {
+      console.log(err);
+      return res.status(INTERNAL_SERVER_ERROR).json(err);
     }
   };
 

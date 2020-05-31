@@ -34,6 +34,9 @@
       },
       {
         "name": "Family payments"
+      },
+      {
+        "name": "User payments"
       }
     ],
     "schemes": [

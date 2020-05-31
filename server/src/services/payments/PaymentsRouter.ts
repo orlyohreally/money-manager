@@ -86,6 +86,14 @@ export class PaymentsRouter {
       ],
       asyncWrap(this.putUserPayment)
     );
+    this.router.delete(
+      "/payments/:paymentId",
+      [
+        this.usersService.validateToken.bind(usersService),
+        this.service.isDeleteUserPaymentAllowedMW.bind(service)
+      ],
+      asyncWrap(this.deleteUserPayment)
+    );
   }
 
   private getUserPayments = async (req: Request, res: Response) => {
@@ -180,6 +188,32 @@ export class PaymentsRouter {
         paymentId: string;
       };
       await this.service.deletePayment(paymentId, familyId);
+      return res.status(OK).json({ message: "Payment has been deleted" });
+    } catch (err) {
+      console.log(err);
+      return res.status(INTERNAL_SERVER_ERROR).json(err);
+    }
+  };
+
+  /**
+   * @route DELETE /payments/{paymentId}
+   * @group User payments
+   * @param {string} paymentId.path.required
+   * @returns {MessageResponse.model} 200 - payment has been deleted
+   * @returns {MessageResponse.model} 401 - no user credentials provided
+   * @returns {MessageResponse.model} 404 - payment has not been found
+   * @returns {Error} 500 - Server error
+   * @security JWT
+   */
+  private deleteUserPayment = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const { paymentId } = req.params as {
+        paymentId: string;
+      };
+      await this.service.deletePayment(paymentId);
       return res.status(OK).json({ message: "Payment has been deleted" });
     } catch (err) {
       console.log(err);

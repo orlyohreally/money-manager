@@ -531,7 +531,7 @@ describe("PaymentsRouter", () => {
         const response = await request(server)
           .delete(`${routerPrefix}/${familyId}/${payment._id}`)
           .set("Authorization", `Bearer ${userToken}`);
-        expect(response.status).toBe(403);
+        expect(response.forbidden).toBeTruthy();
 
         const getRequest = await request(server)
           .get(`${routerPrefix}/${familyId}`)
@@ -652,7 +652,7 @@ describe("PaymentsRouter", () => {
         expect(await getPayments(userToken)).toEqual([createdPayment]);
       });
 
-      it("should return error code forbidden for route /payments/:paymentId PUT when set payment is not user's", async () => {
+      it("should return error code not found for route /payments/:paymentId PUT when set payment is not user's", async () => {
         const anotherUserToken = (await registerAndLogin(mockedAnotherUser))
           .userToken;
 
@@ -675,7 +675,7 @@ describe("PaymentsRouter", () => {
           .put(`${routerPrefix}/${createdPayment._id}`)
           .set("Authorization", `Bearer ${userToken}`)
           .send({ payment: { ...payment, amount: 150 } });
-        expect(responsePUT.forbidden).toBeTruthy();
+        expect(responsePUT.notFound).toBeTruthy();
         expect(await getPayments(anotherUserToken)).toEqual([createdPayment]);
         expect(await getPayments(userToken)).toEqual([]);
       });
@@ -737,6 +737,82 @@ describe("PaymentsRouter", () => {
           .set("Authorization", `Bearer ${userToken}`);
 
         const response = await request(server).get(routerPrefix);
+        expect(response.unauthorized).toBeTruthy();
+      });
+    });
+
+    describe("Delete payment on /payments/:paymentId", () => {
+      it("should delete existent user payment if payment.userId is user._id", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const paymentSubjects = await getPaymentSubjects(userToken);
+
+        const firstPayment = await createUserPayment(userToken, {
+          amount: 150,
+          subjectId: paymentSubjects[1]._id,
+          paidAt: new Date("01.05.2020")
+        });
+
+        const payment: Omit<
+          Payment,
+          "_id" | "paymentPercentages" | "userId"
+        > = {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020")
+        };
+        const paymentId = (await createUserPayment(userToken, payment))._id;
+        const response = await request(server)
+          .delete(`${routerPrefix}/${paymentId}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.ok).toBeTruthy();
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(getRequest.body).toEqual([firstPayment]);
+      });
+
+      it("should return code not found when family payment does not exist", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const anotherUserToken = (await registerAndLogin(mockedAnotherUser))
+          .userToken;
+        const paymentSubjects = await getPaymentSubjects(userToken);
+
+        const payment = await createUserPayment(anotherUserToken, {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020")
+        });
+
+        const response = await request(server)
+          .delete(`${routerPrefix}/${payment._id}`)
+          .set("Authorization", `Bearer ${userToken}`);
+        expect(response.notFound).toBeTruthy();
+
+        const getRequest = await request(server)
+          .get(`${routerPrefix}`)
+          .set("Authorization", `Bearer ${anotherUserToken}`);
+        expect(getRequest.body).toEqual([payment]);
+      });
+
+      it("should return code unauthorized if when no authorization token provided", async () => {
+        const { userToken } = await registerAndLogin(mockedUser);
+        const paymentSubjects = await getPaymentSubjects(userToken);
+        const payment: Omit<
+          Payment,
+          "_id" | "paymentPercentages" | "userId"
+        > = {
+          amount: 100,
+          subjectId: paymentSubjects[0]._id,
+          paidAt: new Date("01.02.2020")
+        };
+        const paymentId = ((await request(server)
+          .post(`${routerPrefix}`)
+          .send({ payment })
+          .set("Authorization", `Bearer ${userToken}`)).body as Payment)._id;
+        const response = await request(server).delete(
+          `${routerPrefix}/${paymentId}`
+        );
         expect(response.unauthorized).toBeTruthy();
       });
     });
@@ -821,6 +897,20 @@ describe("PaymentsRouter", () => {
   ): Promise<Payment> {
     return (await request(server)
       .post(`${routerPrefix}/${familyId}`)
+      .send({
+        payment
+      })
+      .set("Authorization", `Bearer ${userToken}`)).body as Payment;
+  }
+
+  async function createUserPayment(
+    userToken: string,
+    payment: Omit<Payment, "_id" | "paymentPercentages" | "userId"> & {
+      userId?: string;
+    }
+  ): Promise<Payment> {
+    return (await request(server)
+      .post(`${routerPrefix}`)
       .send({
         payment
       })

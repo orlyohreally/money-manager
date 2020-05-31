@@ -227,7 +227,43 @@ export class PaymentsService {
         return res.status(500).json({ message: "Payment has not been found" });
       }
       if (user._id.toString() !== currentPayment.userId.toString()) {
-        return res.status(403).json({ message: "Unauthorized access" });
+        return res
+          .status(NOT_FOUND)
+          .json({ message: "Payment has not been found" });
+      }
+
+      next();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      return res.status(INTERNAL_SERVER_ERROR).send(error);
+    }
+  }
+
+  public async isDeleteUserPaymentAllowedMW(
+    req: Request & { user?: User },
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { paymentId } = req.params as {
+        paymentId: string;
+      };
+
+      const { user } = req.body as {
+        user: User;
+      };
+
+      const currentPayment = await this.getPayment(paymentId);
+      if (!currentPayment) {
+        return res
+          .status(NOT_FOUND)
+          .json({ message: "Payment has not been found" });
+      }
+      if (user._id.toString() !== currentPayment.userId.toString()) {
+        return res
+          .status(NOT_FOUND)
+          .json({ message: "Payment has not been found" });
       }
 
       next();

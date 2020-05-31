@@ -81,7 +81,7 @@ export class PaymentsDao implements IPaymentsDao {
   public deletePayment(paymentId: string, familyId?: string): Promise<void> {
     return PaymentModel.deleteOne({
       _id: new ObjectId(paymentId),
-      familyId: new ObjectId(familyId)
+      ...(familyId && { familyId: new ObjectId(familyId) })
     })
       .lean()
       .exec();

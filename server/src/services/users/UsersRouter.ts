@@ -40,7 +40,7 @@ export class UsersRouter {
      * @param {UserCredentials.model} user.body.required - user credentials
      * @returns {User.model} 200 - registered user data
      * @returns {string} header - Authorization token
-     * @return {Error.model} 401 - incorrect email or password
+     * @return {MessageResponse.model} 401 - incorrect email or password
      * @returns {Error} 500 - Server error
      */
     this.router.post("/users/login", asyncWrap(this.loginUser));

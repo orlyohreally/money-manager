@@ -25,10 +25,13 @@ properties:
     type: string
   paymentPercentages:
     type: array
-    items: object
-    properties:
-      userId:
-        type: string
-        required: true
-      paymentPercentage: number
-      required: true
+    items:
+      type: object
+      properties:
+        userId:
+          type: string
+          required: true
+        paymentPercentage:
+          type: number
+          required: true
+    required: true

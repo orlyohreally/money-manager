@@ -20,6 +20,8 @@ import {
 } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 // tslint:disable-next-line: max-line-length
+import { DeletePaymentDialogComponent } from './components/delete-payment-dialog/delete-payment-dialog.component';
+// tslint:disable-next-line: max-line-length
 import { EditFamilyPaymentFormComponent } from './components/edit-family-payment-form/edit-family-payment-form.component';
 // tslint:disable-next-line: max-line-length
 import { EditPaymentFormComponent } from './components/edit-payment-form/edit-payment-form.component';
@@ -63,6 +65,8 @@ import { UserPaymentsListWrapperComponent } from './components/user-payments-lis
 // tslint:disable-next-line: max-line-length
 import { UserPaymentsComponent } from './components/user-payments/user-payments.component';
 // tslint:disable-next-line: max-line-length
+import { DeleteFamilyPaymentDialogTriggerDirective } from './directives/delete-family-payment-dialog-trigger.directive';
+// tslint:disable-next-line: max-line-length
 import { EditUserPaymentDialogTriggerDirective } from './directives/edit-user-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentDialogTriggerDirective } from './directives/new-payment-dialog-trigger.directive';
@@ -97,7 +101,9 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PaymentActionButtonsComponent,
     UserPaymentComponent,
     PaymentsListWrapperComponent,
-    UserPaymentsListWrapperComponent
+    UserPaymentsListWrapperComponent,
+    DeleteFamilyPaymentDialogTriggerDirective,
+    DeletePaymentDialogComponent
   ],
   imports: [
     CommonModule,
@@ -134,7 +140,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     EditPaymentFormComponent,
     EditUserPaymentFormComponent,
     PaymentSubjectFormComponent,
-    PaymentDetailsComponent
+    PaymentDetailsComponent,
+    DeletePaymentDialogComponent
   ]
 })
 export class PaymentModule {}

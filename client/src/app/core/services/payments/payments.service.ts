@@ -9,7 +9,11 @@ import { DataService } from '@core-client/services/data.service';
 // tslint:disable-next-line: max-line-length
 import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 import { Payment, User } from '@shared/types';
-import { compare, updateArrayElement } from '@src/app/modules/shared/functions';
+import {
+  compare,
+  deleteArrayElement,
+  updateArrayElement
+} from '@src/app/modules/shared/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -207,12 +211,35 @@ export class PaymentsService extends DataService {
     );
   }
 
-  removePayment() {
-    // delete this.payments[payment._id];
-    return of({
-      status: 'success',
-      msg: null
-    });
+  deletePayment(paymentId: string, familyId?: string): Observable<void> {
+    return this.delete(
+      `${this.paymentsApiUrl}${familyId ? `/${familyId}` : ''}/${paymentId}`
+    ).pipe(
+      switchMap(() => {
+        if (
+          !(!!familyId && this.familyPaymentsAlreadyLoaded(familyId)) &&
+          !this.userPaymentsAlreadyLoaded()
+        ) {
+          return of(undefined);
+        }
+        return this.paymentsList.asObservable().pipe(
+          first(),
+          switchMap(payments => {
+            const familyPrefix = familyId ? familyId : 'user';
+            const familyPayments: Payment[] = payments[familyPrefix] || [];
+            this.paymentsList.next({
+              ...payments,
+              [familyPrefix]: deleteArrayElement(familyPayments, paymentId),
+              ...(!!familyId &&
+                this.userPaymentsAlreadyLoaded() && {
+                  user: deleteArrayElement(payments['user'] || [], paymentId)
+                })
+            });
+            return of(undefined);
+          })
+        );
+      })
+    );
   }
 
   private loadPayments(familyId?: string): Observable<Payment[]> {

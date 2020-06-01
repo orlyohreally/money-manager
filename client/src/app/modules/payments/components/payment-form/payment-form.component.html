@@ -94,6 +94,17 @@
         {{ errorMessage }}
       </div>
       <shared-content-with-loader [showLoader]="submittingForm">
+        <button
+          mat-raised-button
+          class="button"
+          color="warn"
+          type="button"
+          *ngIf="payment._id"
+          [paymentDeleteFamilyPaymentDialogTrigger]="payment._id"
+          [familyId]="payment.familyId"
+        >
+          Delete
+        </button>
         <button mat-raised-button class="button" color="primary" type="submit">
           Save
         </button>

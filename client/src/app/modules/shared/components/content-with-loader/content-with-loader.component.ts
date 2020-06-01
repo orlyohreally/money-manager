@@ -9,7 +9,8 @@ import {
   selector: 'shared-content-with-loader',
   templateUrl: './content-with-loader.component.html',
   styleUrls: ['./content-with-loader.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'shared-content-with-loader' }
 })
 export class ContentWithLoaderComponent implements OnInit {
   @Input() showLoader: boolean;

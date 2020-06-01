@@ -296,7 +296,7 @@ describe('PaymentsService', () => {
         .pipe(
           first(),
           switchMap(() => {
-            service.updatePayment(updatedPayment, mockedFamilyId);
+            // service.updatePayment(updatedPayment, mockedFamilyId);
             return service.updatePayment(updatedPayment, mockedFamilyId);
           })
         )
@@ -323,6 +323,220 @@ describe('PaymentsService', () => {
         payment: updatedPayment
       });
 
+      req.flush(response);
+    }
+  );
+
+  it(
+    'deletePayment should make http DELETE request' +
+      ' to /payments/:familyId/:paymentId and update family payments list' +
+      ' when familyId is set',
+    done => {
+      const paymentsListMock: Payment[] = [
+        {
+          _id: 'paymentId-3',
+          amount: 10,
+          receipt: 'receipt-1.png',
+          subjectId: 'subjectId-1',
+          paidAt: new Date('2020-01-02'),
+          userId: 'userId-2',
+          familyId: 'familyId-1',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-01'),
+          updatedAt: new Date('2020-10-02')
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          receipt: 'receipt-2.png',
+          subjectId: 'subjectId-2',
+          paidAt: new Date('2020-01-04'),
+          userId: 'userId-1',
+          familyId: 'familyId-2',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-02'),
+          updatedAt: new Date('2020-10-02')
+        }
+      ];
+
+      const userPaymentsListMock: Payment[] = [
+        {
+          _id: 'paymentId-1',
+          amount: 10,
+          receipt: 'receipt-1.png',
+          subjectId: 'subjectId-1',
+          paidAt: new Date('2020-01-02'),
+          userId: 'userId-1',
+          familyId: 'familyId-1',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-01'),
+          updatedAt: new Date('2020-10-02')
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          receipt: 'receipt-2.png',
+          subjectId: 'subjectId-2',
+          paidAt: new Date('2020-01-04'),
+          userId: 'userId-1',
+          familyId: 'familyId-2',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-02'),
+          updatedAt: new Date('2020-10-02')
+        }
+      ];
+
+      const mockedFamilyId = 'familyId-1';
+      const deletedPaymentId = paymentsListMock[1]._id;
+      const response = {
+        message: 'Successfully deleted'
+      };
+      service
+        .getPayments(mockedFamilyId)
+        .pipe(
+          first(),
+          switchMap(() => {
+            return service.getUserPayments().pipe(first());
+          }),
+          switchMap(() => {
+            return service.deletePayment(deletedPaymentId, mockedFamilyId);
+          })
+        )
+        .subscribe(() => {
+          scheduler.run(({ expectObservable }) => {
+            expectObservable(service.getPayments(mockedFamilyId)).toBe('a', {
+              a: [paymentsListMock[0]]
+            });
+            expectObservable(service.getUserPayments()).toBe('a', {
+              a: [userPaymentsListMock[0]]
+            });
+            done();
+          });
+        });
+
+      const reqPayments = httpTestingController.expectOne({
+        url: `apiURL/payments/${mockedFamilyId}`,
+        method: 'GET'
+      });
+      reqPayments.flush(paymentsListMock);
+
+      const reqUserPayments = httpTestingController.expectOne({
+        url: 'apiURL/payments/',
+        method: 'GET'
+      });
+      reqUserPayments.flush(userPaymentsListMock);
+
+      const req = httpTestingController.expectOne({
+        url: `apiURL/payments/${mockedFamilyId}/${deletedPaymentId}`,
+        method: 'DELETE'
+      });
+      req.flush(response);
+    }
+  );
+
+  it(
+    'deletePayment should make http DELETE request' +
+      ' to /payments/:paymentId and update family payments list' +
+      ' when familyId is not set',
+    done => {
+      const paymentsListMock: Payment[] = [
+        {
+          _id: 'paymentId-3',
+          amount: 10,
+          receipt: 'receipt-1.png',
+          subjectId: 'subjectId-1',
+          paidAt: new Date('2020-01-02'),
+          userId: 'userId-2',
+          familyId: 'familyId-1',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-01'),
+          updatedAt: new Date('2020-10-02')
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          receipt: 'receipt-2.png',
+          subjectId: 'subjectId-2',
+          paidAt: new Date('2020-01-04'),
+          userId: 'userId-1',
+          familyId: 'familyId-2',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-02'),
+          updatedAt: new Date('2020-10-02')
+        }
+      ];
+
+      const userPaymentsListMock: Payment[] = [
+        {
+          _id: 'paymentId-1',
+          amount: 10,
+          receipt: 'receipt-1.png',
+          subjectId: 'subjectId-1',
+          paidAt: new Date('2020-01-02'),
+          userId: 'userId-1',
+          familyId: 'familyId-1',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-01'),
+          updatedAt: new Date('2020-10-02')
+        },
+        {
+          _id: 'paymentId-2',
+          amount: 20,
+          receipt: 'receipt-2.png',
+          subjectId: 'subjectId-2',
+          paidAt: new Date('2020-01-04'),
+          userId: 'userId-1',
+          familyId: 'familyId-2',
+          paymentPercentages: paymentsServiceMock.paymentPercentage,
+          createdAt: new Date('2020-10-02'),
+          updatedAt: new Date('2020-10-02')
+        }
+      ];
+
+      const mockedFamilyId = 'familyId-1';
+      const deletedPaymentId = userPaymentsListMock[0]._id;
+      const response = {
+        message: 'Successfully deleted'
+      };
+      service
+        .getPayments(mockedFamilyId)
+        .pipe(
+          first(),
+          switchMap(() => {
+            return service.getUserPayments().pipe(first());
+          }),
+          switchMap(() => {
+            return service.deletePayment(deletedPaymentId);
+          })
+        )
+        .subscribe(() => {
+          scheduler.run(({ expectObservable }) => {
+            expectObservable(service.getPayments(mockedFamilyId)).toBe('a', {
+              a: paymentsListMock
+            });
+            expectObservable(service.getUserPayments()).toBe('a', {
+              a: [userPaymentsListMock[1]]
+            });
+            done();
+          });
+        });
+
+      const reqPayments = httpTestingController.expectOne({
+        url: `apiURL/payments/${mockedFamilyId}`,
+        method: 'GET'
+      });
+      reqPayments.flush(paymentsListMock);
+
+      const reqUserPayments = httpTestingController.expectOne({
+        url: 'apiURL/payments/',
+        method: 'GET'
+      });
+      reqUserPayments.flush(userPaymentsListMock);
+
+      const req = httpTestingController.expectOne({
+        url: `apiURL/payments/${deletedPaymentId}`,
+        method: 'DELETE'
+      });
       req.flush(response);
     }
   );

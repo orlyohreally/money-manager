@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable, TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +20,9 @@ export class DialogService {
   open<S, T>(
     componentOrTemplateRef: ComponentType<S> | TemplateRef<S>,
     config?: MatDialogConfig<T>
-  ) {
+  ): MatDialogRef<S> {
     const defaultPanelClasses = this.defaultConfig.panelClass as string[];
-    this.dialog.open(componentOrTemplateRef, {
+    return this.dialog.open(componentOrTemplateRef, {
       ...this.defaultConfig,
       ...(config && {
         ...config,

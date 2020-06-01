@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Delete payment?</h1>
+<div mat-dialog-content>
+  This action is irreversible. Once payment is deleted it will be gone forever.
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>
+    Cancel
+  </button>
+  <button mat-button color="warn" mat-dialog-close [mat-dialog-close]="true">
+    Delete
+  </button>
+</div>

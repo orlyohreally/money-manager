@@ -56,7 +56,11 @@
             >
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button>
+            <button
+              mat-icon-button
+              [paymentDeleteFamilyPaymentDialogTrigger]="element._id"
+              [familyId]="element.familyId"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </td>

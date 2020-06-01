@@ -9,7 +9,7 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockDirective } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
@@ -33,6 +33,8 @@ import {
   PaymentSubjectsServiceMock,
   UserFullNamePipeMock
 } from '@tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { DeleteFamilyPaymentDialogTriggerDirective } from '../../directives/delete-family-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './payment-form.component';
 
@@ -80,7 +82,8 @@ describe('PaymentFormComponent', () => {
         MockComponent(LoaderComponent),
         MockComponent(PaymentSubjectComponent),
         MockComponent(ContentWithLoaderComponent),
-        MockComponent(DatetimeSelectorComponent)
+        MockComponent(DatetimeSelectorComponent),
+        MockDirective(DeleteFamilyPaymentDialogTriggerDirective)
       ],
       imports: [
         ReactiveFormsModule,

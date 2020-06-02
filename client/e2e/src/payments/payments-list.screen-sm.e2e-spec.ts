@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { by, element } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import {
   constants,
@@ -49,7 +49,7 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
         'No payments yet...'
       );
 
-      expect(getFamilyPayments().count()).toEqual(0);
+      expect(page.getFamilyPayments().count()).toEqual(0);
       const payment = {
         amount: { value: '75', display: '₪75' },
         subject: 'apartment',
@@ -68,7 +68,7 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
         payment.subject,
         payment.paidAt
       );
-      let paymentsList = getFamilyPayments();
+      let paymentsList = page.getFamilyPayments();
       expect(paymentsList.count()).toEqual(1);
 
       paymentsList
@@ -83,7 +83,7 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
       submitForm();
 
       waitForFormToClose();
-      paymentsList = getFamilyPayments();
+      paymentsList = page.getFamilyPayments();
       expect(paymentsList.count()).toEqual(1);
       page.expectPaymentToBeDisplayedCorrectly(
         paymentsList.get(0),
@@ -93,6 +93,8 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
         updatedPayment.paidAt
       );
     });
+
+    runTestsForDeletePayment();
   });
 
   // describe('User is only family member', () => {
@@ -104,7 +106,130 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
 
   // TODO: tests for filters
 
-  function getFamilyPayments() {
-    return element.all(by.css('payment-payment-list tbody tr'));
+  function runTestsForDeletePayment() {
+    // tslint:disable-next-line: max-line-length
+    it('should delete user payment by clicking delete button in table row and update payments list', () => {
+      expect(page.getFamilyPayments().count()).toEqual(0);
+      const payments = [
+        {
+          amount: { value: '75', display: '₪75' },
+          subject: 'apartment',
+          paidAt: moment()
+            .subtract(3, 'days')
+            .format('MM/DD/YYYY, h:mm:ss')
+        },
+        {
+          amount: { value: '350', display: '₪350' },
+          subject: 'apartment',
+          paidAt: moment().format('MM/DD/YYYY, h:mm:ss')
+        }
+      ];
+
+      page.createFamilyPayment(
+        payments[0].amount.value,
+        payments[0].subject,
+        payments[0].paidAt
+      );
+      page.createFamilyPayment(
+        payments[1].amount.value,
+        payments[1].subject,
+        payments[1].paidAt
+      );
+      let paymentsList = page.getFamilyPayments();
+      expect(paymentsList.count()).toEqual(2);
+      paymentsList
+        .get(0)
+        .element(by.partialButtonText('delete'))
+        .click();
+
+      element(by.className('mat-dialog-actions'))
+        .element(by.buttonText('Delete'))
+        .click();
+      browser.wait(
+        ExpectedConditions.not(
+          ExpectedConditions.presenceOf(
+            element(by.className('mat-dialog-actions'))
+          )
+        ),
+        constants.waitTimeout
+      );
+      browser.sleep(1000);
+      paymentsList = page.getFamilyPayments();
+      expect(paymentsList.count()).toEqual(1);
+      page.expectPaymentToBeDisplayedCorrectly(
+        paymentsList.get(0),
+        payments[0].amount.display,
+        `${testedUser.firstName} ${testedUser.lastName}`,
+        payments[0].subject,
+        payments[0].paidAt
+      );
+    });
+
+    // tslint:disable-next-line: max-line-length
+    it('should delete user payment by clicking delete button in edit payment form and update payments list', () => {
+      expect(page.getFamilyPayments().count()).toEqual(0);
+      const payments = [
+        {
+          amount: { value: '75', display: '₪75' },
+          subject: 'apartment',
+          paidAt: moment()
+            .subtract(3, 'days')
+            .format('MM/DD/YYYY, h:mm:ss')
+        },
+        {
+          amount: { value: '350', display: '₪350' },
+          subject: 'apartment',
+          paidAt: moment().format('MM/DD/YYYY, h:mm:ss')
+        }
+      ];
+
+      page.createFamilyPayment(
+        payments[0].amount.value,
+        payments[0].subject,
+        payments[0].paidAt
+      );
+      page.createFamilyPayment(
+        payments[1].amount.value,
+        payments[1].subject,
+        payments[1].paidAt
+      );
+      let paymentsList = page.getFamilyPayments();
+      expect(paymentsList.count()).toEqual(2);
+      paymentsList
+        .get(0)
+        .element(by.partialButtonText('edit'))
+        .click();
+
+      element(by.tagName('form'))
+        .element(by.partialButtonText('Delete'))
+        .click();
+      browser.wait(
+        ExpectedConditions.presenceOf(
+          element(by.className('mat-dialog-actions'))
+        ),
+        constants.waitTimeout
+      );
+      element(by.className('mat-dialog-actions'))
+        .element(by.buttonText('Delete'))
+        .click();
+      browser.wait(
+        ExpectedConditions.not(
+          ExpectedConditions.presenceOf(
+            element(by.className('mat-dialog-actions'))
+          )
+        ),
+        constants.waitTimeout
+      );
+      browser.sleep(1000);
+      paymentsList = page.getFamilyPayments();
+      expect(paymentsList.count()).toEqual(1);
+      page.expectPaymentToBeDisplayedCorrectly(
+        paymentsList.get(0),
+        payments[0].amount.display,
+        `${testedUser.firstName} ${testedUser.lastName}`,
+        payments[0].subject,
+        payments[0].paidAt
+      );
+    });
   }
 });

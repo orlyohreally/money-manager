@@ -91,15 +91,18 @@ export class UserPaymentsPage {
     familyName: string,
     amount: string,
     subject: string,
-    paidAt: string
+    paidAt: string,
+    goToFamilyPaymentsPage = true
   ) {
-    this.familyPaymentsPage.goToPage(familyName);
-    browser.wait(
-      ExpectedConditions.presenceOf(
-        this.familyPaymentsPage.getCreatePaymentButton()
-      ),
-      constants.waitTimeout
-    );
+    if (goToFamilyPaymentsPage) {
+      this.familyPaymentsPage.goToPage(familyName);
+      browser.wait(
+        ExpectedConditions.presenceOf(
+          this.familyPaymentsPage.getCreatePaymentButton()
+        ),
+        constants.waitTimeout
+      );
+    }
     this.familyPaymentsPage.createFamilyPayment(amount, subject, paidAt);
   }
 
@@ -117,6 +120,28 @@ export class UserPaymentsPage {
     expect(columns.get(2).getText()).toEqual(familyName);
     expect(columns.get(3).getText()).toEqual(
       moment(paidAt).format('M/D/YY, h:mm A')
+    );
+  }
+
+  getFamilyPayments(familyName: string) {
+    this.goToFamilyPage(familyName);
+    this.familyPaymentsPage.waitForFamilyPaymentsList();
+    return this.familyPaymentsPage.getFamilyPayments();
+  }
+
+  expectFamilyPaymentToBeDisplayedCorrectly(
+    paymentEl: ElementFinder,
+    amount: string,
+    userFullName: string,
+    subject: string,
+    paidAt: string
+  ) {
+    this.familyPaymentsPage.expectPaymentToBeDisplayedCorrectly(
+      paymentEl,
+      amount,
+      userFullName,
+      subject,
+      paidAt
     );
   }
 }

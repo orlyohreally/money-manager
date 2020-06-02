@@ -99,4 +99,15 @@ export class FamilyPaymentsPage {
       moment(paidAt).format('M/D/YY, h:mm A')
     );
   }
+
+  getFamilyPayments() {
+    return element.all(by.css('payment-payment-list tbody tr'));
+  }
+
+  waitForFamilyPaymentsList() {
+    browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('payment-payment-list'))),
+      constants.waitTimeout
+    );
+  }
 }

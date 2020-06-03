@@ -174,7 +174,7 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
         expect(dialogSpy.open).toHaveBeenCalledWith(
           PaymentDetailsComponent,
           jasmine.objectContaining({
-            width: '40%',
+            width: '60%',
             data: {
               payment: anotherUsersPayment
             }

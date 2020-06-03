@@ -7,6 +7,5 @@
   [payersList]="familyMembers | async"
   [errorMessage]="errorMessage"
   [submittingForm]="submittingForm"
-  [formLabel]="data.familyId ? 'Family payment' : 'Personal payment'"
   (formSubmitted)="createPayment($event)"
 ></payment-form>

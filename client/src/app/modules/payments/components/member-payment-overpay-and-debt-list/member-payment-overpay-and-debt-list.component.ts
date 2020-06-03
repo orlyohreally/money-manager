@@ -26,14 +26,7 @@ export class MemberPaymentOverpayAndDebtListComponent
   implements OnInit, OnChanges {
   @Input() calculatedPayments: OverpaidDebtPayment[];
 
-  displayedColumns = [
-    'user',
-    'debt',
-    'overpaid',
-    'toUser',
-    'createdAt',
-    'updatedAt'
-  ];
+  displayedColumns = ['user', 'debt', 'overpaid', 'toUser'];
 
   constructor() {}
   dataSource: MatTableDataSource<OverpaidDebtPayment>;

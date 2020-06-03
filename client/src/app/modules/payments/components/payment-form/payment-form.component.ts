@@ -17,7 +17,6 @@ export class PaymentFormComponent extends FormComponent<Payment>
   @Input() payersList: FamilyMember[];
   @Input() errorMessage: string;
   @Input() submittingForm: boolean;
-  @Input() formLabel: string;
 
   constructor() {
     super();

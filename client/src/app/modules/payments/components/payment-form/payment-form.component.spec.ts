@@ -36,6 +36,8 @@ import {
 // tslint:disable-next-line: max-line-length
 import { DeleteFamilyPaymentDialogTriggerDirective } from '../../directives/delete-family-payment-dialog-trigger.directive';
 // tslint:disable-next-line: max-line-length
+import { PaymentHeaderComponent } from '../payment-header/payment-header.component';
+// tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './payment-form.component';
 
 @Component({
@@ -48,7 +50,6 @@ import { PaymentFormComponent } from './payment-form.component';
       [payersList]="payersList"
       [errorMessage]="errorMessage"
       [submittingForm]="submittingForm"
-      formLabel="Payment"
     ></payment-form>
   `
 })
@@ -83,6 +84,7 @@ describe('PaymentFormComponent', () => {
         MockComponent(PaymentSubjectComponent),
         MockComponent(ContentWithLoaderComponent),
         MockComponent(DatetimeSelectorComponent),
+        MockComponent(PaymentHeaderComponent),
         MockDirective(DeleteFamilyPaymentDialogTriggerDirective)
       ],
       imports: [

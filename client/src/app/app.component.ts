@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material';
 import { Title } from '@angular/platform-browser';
@@ -12,6 +12,9 @@ import {
   RouterEvent
 } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
+
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from './core/services/global-variables/global-variables.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +32,16 @@ export class AppComponent implements OnInit {
     public media: MediaObserver,
     private router: Router,
     private route: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    @Inject('windowObj')
+    private window: Window & {
+      gtag: (
+        config: string,
+        ga_measurement_id: string,
+        setup: { page_path?: string }
+      ) => void;
+    },
+    private globalVariablesService: GlobalVariablesService
   ) {}
 
   ngOnInit() {
@@ -37,6 +49,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((routerEvent: RouterEvent) => {
       this.displayPageLoader(routerEvent);
     });
+    this.setupGoogleAnalytics();
   }
 
   isOpened(): boolean {
@@ -82,6 +95,20 @@ export class AppComponent implements OnInit {
         routerEvent instanceof NavigationError
       ) {
         this.pageIsLoading = false;
+      }
+    });
+  }
+
+  private setupGoogleAnalytics() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.window.gtag(
+          'config',
+          this.globalVariablesService.gaMeasurementId,
+          {
+            page_path: event.urlAfterRedirects
+          }
+        );
       }
     });
   }

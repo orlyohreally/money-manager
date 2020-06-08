@@ -4,6 +4,8 @@ import { MockComponent } from 'ng-mocks';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 // tslint:disable-next-line: max-line-length
+import { CloseDialogButtonComponent } from '../close-dialog-button/close-dialog-button.component';
+// tslint:disable-next-line: max-line-length
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 import { LoaderComponent } from '../loader/loader.component';
 import {
@@ -23,7 +25,8 @@ describe('ImageManagerComponent', () => {
       declarations: [
         ImageManagerComponent,
         MockComponent(ImagePreviewComponent),
-        MockComponent(LoaderComponent)
+        MockComponent(LoaderComponent),
+        MockComponent(CloseDialogButtonComponent)
       ],
       imports: [ImageCropperModule],
       providers: [

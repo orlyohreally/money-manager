@@ -1,22 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog, MatIconModule } from '@angular/material';
+import { MatIconModule } from '@angular/material';
 import { MockComponent } from 'ng-mocks';
 
+import { DialogService } from '@core-client/services/dialog/dialog.service';
 import { ImageComponent } from '../image/image.component';
 import { ImageWithPreviewComponent } from './image-with-preview.component';
 
 describe('ImageWithPreviewComponent', () => {
   let component: ImageWithPreviewComponent;
   let fixture: ComponentFixture<ImageWithPreviewComponent>;
-  let dialogSpy: jasmine.SpyObj<MatDialog>;
+  let dialogSpy: jasmine.SpyObj<DialogService>;
 
   beforeEach(async(() => {
-    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+    dialogSpy = jasmine.createSpyObj('DialogService', ['open']);
 
     TestBed.configureTestingModule({
       declarations: [ImageWithPreviewComponent, MockComponent(ImageComponent)],
       imports: [MatIconModule],
-      providers: [{ provide: MatDialog, useValue: dialogSpy }]
+      providers: [{ provide: DialogService, useValue: dialogSpy }]
     }).compileComponents();
   }));
 

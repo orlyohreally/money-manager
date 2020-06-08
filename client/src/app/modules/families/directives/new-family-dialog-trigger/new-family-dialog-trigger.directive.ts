@@ -1,5 +1,6 @@
 import { Directive, HostListener } from '@angular/core';
-import { MatDialog } from '@angular/material';
+
+import { DialogService } from '@core-client/services/dialog/dialog.service';
 // tslint:disable-next-line: max-line-length
 import { NewFamilyFormComponent } from '../../new-family-form/new-family-form.component';
 
@@ -11,7 +12,7 @@ export class NewFamilyDialogTriggerDirective {
     this.newFamily();
   }
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: DialogService) {}
 
   newFamily() {
     this.dialog.open(NewFamilyFormComponent, {
@@ -19,8 +20,7 @@ export class NewFamilyDialogTriggerDirective {
       maxHeight: '80%',
       maxWidth: '700px',
       minWidth: '300px',
-      restoreFocus: false,
-      panelClass: 'dialog_scrollable'
+      restoreFocus: false
     });
   }
 }

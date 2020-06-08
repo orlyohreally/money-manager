@@ -32,6 +32,8 @@ import { CheckListModule } from './check-list/check-list.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { ButtonComponent } from './components/button/button.component';
 // tslint:disable-next-line: max-line-length
+import { CloseDialogButtonComponent } from './components/close-dialog-button/close-dialog-button.component';
+// tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 // tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from './components/content-with-loader/content-with-loader.component';
@@ -123,7 +125,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     DatetimeSelectorComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective,
-    BackgroundColorDirective
+    BackgroundColorDirective,
+    CloseDialogButtonComponent
   ],
   imports: [
     CommonModule,
@@ -183,6 +186,7 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     PaymentSubjectComponent,
     DateSelectorComponent,
     DatetimeSelectorComponent,
+    CloseDialogButtonComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective
   ],

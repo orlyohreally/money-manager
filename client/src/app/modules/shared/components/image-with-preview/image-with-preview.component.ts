@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material';
 
+// tslint:disable-next-line: max-line-length
+import { DialogService } from '@core-client/services/dialog/dialog.service';
 // tslint:disable-next-line: max-line-length
 import { ImageManagerComponent } from '../image-manager/image-manager.component';
 
@@ -15,7 +16,7 @@ export class ImageWithPreviewComponent implements OnInit {
 
   defaultImageUrl = '/assets/images/no-image.png';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: DialogService) {}
 
   ngOnInit() {}
 

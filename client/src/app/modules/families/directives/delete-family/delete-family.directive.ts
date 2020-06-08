@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from '@shared-client/components/confirmat
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogData } from '@shared-client/types/confirmation-dialog-data';
 import { MemberFamily } from '@shared-client/types/member-family';
+import { DialogService } from '@src/app/core/services/dialog/dialog.service';
 
 @Directive({
   selector: '[familyDeleteFamily]'
@@ -22,23 +23,25 @@ export class DeleteFamilyDirective {
   }
 
   constructor(
-    private dialog: MatDialog,
+    private dialog: DialogService,
     private familiesService: FamiliesService,
     private notificationsService: NotificationsService,
     private router: Router
   ) {}
 
   deleteFamily() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '250px',
-      data: {
-        title: 'Delete family',
-        // tslint:disable-next-line: max-line-length
-        message: `Are you sure you want to remove family ${this.familyDeleteFamily.name}`,
-        okayLabel: 'Yes',
-        cancelLabel: 'No'
-      } as ConfirmationDialogData
-    });
+    const dialogRef = this.dialog.open(
+      ConfirmationDialogComponent,
+      {
+        width: '250px',
+        data: {
+          title: `Delete family ${this.familyDeleteFamily.name}?`,
+          okayLabel: 'Yes',
+          cancelLabel: 'No'
+        } as ConfirmationDialogData
+      },
+      false
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (!result) {

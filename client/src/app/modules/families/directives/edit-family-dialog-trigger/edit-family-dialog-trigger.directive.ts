@@ -1,5 +1,6 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+
+import { DialogService } from '@core-client/services/dialog/dialog.service';
 import { MemberFamily } from '@shared-client/types/member-family';
 // tslint:disable-next-line: max-line-length
 import { EditFamilyFormComponent } from '../../edit-family-form/edit-family-form.component';
@@ -14,17 +15,11 @@ export class EditFamilyDialogTriggerDirective {
     this.editFamily();
   }
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: DialogService) {}
 
   editFamily() {
     this.dialog.open(EditFamilyFormComponent, {
-      width: '60%',
-      maxHeight: '80%',
-      maxWidth: '700px',
-      minWidth: '300px',
-      restoreFocus: false,
-      data: this.family,
-      panelClass: 'dialog_scrollable'
+      data: this.family
     });
   }
 }

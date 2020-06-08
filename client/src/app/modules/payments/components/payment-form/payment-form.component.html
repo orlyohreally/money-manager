@@ -1,8 +1,7 @@
+<shared-close-dialog-button></shared-close-dialog-button>
 <div class="payment-form">
-  <h1 mat-dialog-title>
-    {{ formLabel }}
-  </h1>
   <ng-container *ngIf="subjects; else loading">
+    <payment-header [payment]="payment"></payment-header>
     <form [formGroup]="form" (ngSubmit)="submitForm()">
       <div fxLayout="row wrap" fxLayoutGap.gt-xs="10px grid">
         <mat-form-field
@@ -87,6 +86,7 @@
             matInput
             formControlName="amount"
             name="payment-amount"
+            cdkFocusInitial
           />
         </mat-form-field>
       </div>

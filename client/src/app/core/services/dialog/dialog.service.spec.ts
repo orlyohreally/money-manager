@@ -1,6 +1,8 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { cold, getTestScheduler, hot } from 'jasmine-marbles';
 
 import { DialogService } from './dialog.service';
 
@@ -10,6 +12,7 @@ class DummyComponent {}
 describe('DialogService', () => {
   let service: DialogService;
   let dialogSpy: jasmine.SpyObj<MatDialog>;
+  let breakpointObserverSpy: jasmine.SpyObj<BreakpointObserver>;
 
   const defaultConfig: MatDialogConfig & { panelClass?: string[] } = {
     width: '60%',
@@ -22,8 +25,27 @@ describe('DialogService', () => {
 
   beforeEach(() => {
     dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+    dialogSpy.open.and.returnValue({
+      afterClosed: () => cold('-----------a', { a: undefined }),
+      addPanelClass: () => {},
+      removePanelClass: () => {}
+    });
+
+    breakpointObserverSpy = jasmine.createSpyObj('BreakpointObserver', [
+      'observe'
+    ]);
+    breakpointObserverSpy.observe.and.returnValue(
+      hot('--^a--b--c|', {
+        a: { matches: true },
+        b: { matches: false },
+        c: { matches: true }
+      })
+    );
     TestBed.configureTestingModule({
-      providers: [{ provide: MatDialog, useValue: dialogSpy }]
+      providers: [
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: BreakpointObserver, useValue: breakpointObserverSpy }
+      ]
     });
     service = TestBed.get(DialogService);
   });
@@ -89,6 +111,26 @@ describe('DialogService', () => {
         ],
         width: '50%'
       });
+    }
+  );
+
+  it(
+    'should call dialogRef.addPanelClass and dialogRef.removePanelClass' +
+      ' depending on width when responsive is true',
+    () => {
+      const dialogRef = service.open(DummyComponent, {
+        width: '50%',
+        panelClass: ['panel-class-1', 'panel-class-2']
+      });
+
+      spyOn(dialogRef, 'addPanelClass');
+      spyOn(dialogRef, 'removePanelClass');
+      getTestScheduler().flush();
+      const responsiveClass = 'dialog_full-screen';
+      expect(dialogRef.addPanelClass).toHaveBeenCalledTimes(2);
+      expect(dialogRef.addPanelClass).toHaveBeenCalledWith(responsiveClass);
+      expect(dialogRef.removePanelClass).toHaveBeenCalledTimes(1);
+      expect(dialogRef.removePanelClass).toHaveBeenCalledWith(responsiveClass);
     }
   );
 });

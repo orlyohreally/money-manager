@@ -4,6 +4,8 @@ import { MatFormFieldModule } from '@angular/material';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
+import { CloseDialogButtonComponent } from '@shared-client/components/close-dialog-button/close-dialog-button.component';
+// tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
 import { CurrencySelectorComponent } from '@shared-client/components/currency-selector/currency-selector.component';
@@ -21,7 +23,8 @@ describe('FamilyFormComponent', () => {
         FamilyFormComponent,
         MockComponent(ImageWithPreviewComponent),
         MockComponent(CurrencySelectorComponent),
-        MockComponent(ContentWithLoaderComponent)
+        MockComponent(ContentWithLoaderComponent),
+        MockComponent(CloseDialogButtonComponent)
       ],
       imports: [ReactiveFormsModule, MatFormFieldModule]
     }).compileComponents();

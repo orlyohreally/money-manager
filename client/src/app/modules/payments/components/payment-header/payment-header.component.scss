@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  margin-bottom: 16px;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+.payment__stats {
+  color: gray;
+}
+
+.payment__stats div {
+  margin-right: 10px;
+}
+
+.payment__stats div:last-child {
+  margin-right: 0;
+}
+
+.payment__icon {
+  margin-right: 10px;
+}

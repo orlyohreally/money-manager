@@ -112,10 +112,7 @@ describe('NewFamilyMemberFormComponent', () => {
       emailInput.dispatchEvent(new Event('input'));
       fixture.detectChanges();
       // tslint:disable-next-line: max-line-length
-      const submitButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-        'button'
-      );
-      submitButton.click();
+      getSubmitButton().click();
       expect(membersServiceSpy.addFamilyMember).toHaveBeenCalledTimes(1);
       expect(membersServiceSpy.addFamilyMember).toHaveBeenCalledWith(
         familiesServiceMock.family._id,
@@ -134,11 +131,7 @@ describe('NewFamilyMemberFormComponent', () => {
       getTestScheduler().flush();
       fixture.detectChanges();
       await selectRoles();
-      // tslint:disable-next-line: max-line-length
-      const submitButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-        'button'
-      );
-      submitButton.click();
+      getSubmitButton().click();
       expect(membersServiceSpy.addFamilyMember).not.toHaveBeenCalled();
     }
   );
@@ -161,11 +154,7 @@ describe('NewFamilyMemberFormComponent', () => {
       emailInput.value = 'email@gmail.com';
       emailInput.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      // tslint:disable-next-line: max-line-length
-      const submitButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-        'button'
-      );
-      submitButton.click();
+      getSubmitButton().click();
       getTestScheduler().flush();
       fixture.detectChanges();
       const errorMessage: DebugElement = fixture.debugElement.query(
@@ -201,5 +190,9 @@ describe('NewFamilyMemberFormComponent', () => {
     // roles[1].changedValue.emit(true);
     // fixture.detectChanges();
     // await fixture.whenStable();
+  }
+
+  function getSubmitButton() {
+    return fixture.nativeElement.querySelector('button[type="submit"]');
   }
 });

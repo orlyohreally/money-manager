@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   backendURL: '/api/v1',
   supportEmail: 'orly.knop@gmail.com',
-  gaMeasurementId: 'UA-168919876-1'
+  gaMeasurementId: 'xx-xxxxxxxxx-x'
 };
 
 /*

@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,8 +9,8 @@ import {
   Output
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { EMPTY, Subject, timer } from 'rxjs';
-import { debounce, startWith, takeUntil } from 'rxjs/operators';
+import { EMPTY, Observable, Subject, timer } from 'rxjs';
+import { debounce, map, startWith, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'shared-date-selector',
@@ -27,10 +28,11 @@ export class DateSelectorComponent implements OnInit, OnDestroy {
   @Output() dateSelected = new EventEmitter<Date>();
 
   selectedDate: FormControl;
+  smallScreen: Observable<boolean>;
 
   private destroyed = new Subject<void>();
 
-  constructor() {}
+  constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
     this.selectedDate = new FormControl(this.defaultDate || null);
@@ -55,6 +57,10 @@ export class DateSelectorComponent implements OnInit, OnDestroy {
         date.setHours(0, 0, 0, 0);
         this.dateSelected.emit(date);
       });
+
+    this.smallScreen = this.breakpointObserver
+      .observe([Breakpoints.Small, Breakpoints.HandsetPortrait])
+      .pipe(map(response => response.matches));
   }
 
   ngOnDestroy(): void {

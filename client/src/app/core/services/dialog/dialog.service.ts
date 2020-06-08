@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
@@ -6,8 +7,6 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
   providedIn: 'root'
 })
 export class DialogService {
-  constructor(private dialog: MatDialog) {}
-
   private defaultConfig: MatDialogConfig = {
     width: '60%',
     maxHeight: '80%',
@@ -16,13 +15,20 @@ export class DialogService {
     restoreFocus: false,
     panelClass: ['dialog_scrollable']
   };
+  private fullScreenClass = 'dialog_full-screen';
 
+  constructor(
+    private dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
+  ) {}
   open<S, T>(
     componentOrTemplateRef: ComponentType<S> | TemplateRef<S>,
-    config?: MatDialogConfig<T>
+    config?: MatDialogConfig<T>,
+    responsive: boolean = true
   ): MatDialogRef<S> {
     const defaultPanelClasses = this.defaultConfig.panelClass as string[];
-    return this.dialog.open(componentOrTemplateRef, {
+
+    const dialogRef = this.dialog.open(componentOrTemplateRef, {
       ...this.defaultConfig,
       ...(config && {
         ...config,
@@ -34,5 +40,21 @@ export class DialogService {
         })
       })
     });
+
+    if (responsive) {
+      const subs = this.breakpointObserver
+        .observe(Breakpoints.XSmall)
+        .subscribe(result => {
+          if (result.matches) {
+            dialogRef.addPanelClass(this.fullScreenClass);
+          } else {
+            dialogRef.removePanelClass(this.fullScreenClass);
+          }
+        });
+      dialogRef.afterClosed().subscribe(() => {
+        subs.unsubscribe();
+      });
+    }
+    return dialogRef;
   }
 }

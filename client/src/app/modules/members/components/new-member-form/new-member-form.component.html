@@ -1,6 +1,7 @@
 <div class="family-form">
+  <shared-close-dialog-button></shared-close-dialog-button>
   <h1 mat-dialog-title>
-    Add new family member
+    New family member
   </h1>
   <div mat-dialog-content>
     <form [formGroup]="memberForm" (ngSubmit)="submitForm()">
@@ -10,6 +11,7 @@
           type="text"
           required
           matInput
+          cdkFocusInitial
           formControlName="email"
           #emailField
         />

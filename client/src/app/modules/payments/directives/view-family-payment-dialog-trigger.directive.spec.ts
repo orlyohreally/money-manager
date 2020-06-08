@@ -42,7 +42,7 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
   const mockedFamilyId = 'familyId-1';
 
   beforeEach(async(() => {
-    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+    dialogSpy = jasmine.createSpyObj('DialogService', ['open']);
     authServiceSpy = authenticationServiceMock.getService();
     membersServiceSpy = membersServiceMock.getService();
 
@@ -140,7 +140,7 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
     );
   });
 
-  describe('User is neither  payer of the payment nor family admin', () => {
+  describe('User is neither payer of the payment nor family admin', () => {
     const anotherUsersPayment: FamilyPaymentView = {
       ...mockedFamilyPayment,
       member: {
@@ -178,7 +178,8 @@ describe('ViewFamilyPaymentDialogTriggerDirective', () => {
             data: {
               payment: anotherUsersPayment
             }
-          })
+          }),
+          false
         );
       }
     );

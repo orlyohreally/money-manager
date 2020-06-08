@@ -1,3 +1,4 @@
+<shared-close-dialog-button></shared-close-dialog-button>
 <div class="payment-form">
   <ng-container *ngIf="subjects; else loading">
     <payment-header [payment]="payment"></payment-header>
@@ -85,6 +86,7 @@
             matInput
             formControlName="amount"
             name="payment-amount"
+            cdkFocusInitial
           />
         </mat-form-field>
       </div>

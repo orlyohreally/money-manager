@@ -12,6 +12,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent, MockDirective } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
+import { CloseDialogButtonComponent } from '@shared-client/components/close-dialog-button/close-dialog-button.component';
+// tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
 import { DatetimeSelectorComponent } from '@shared-client/components/datetime-selector/datetime-selector.component';
@@ -85,6 +87,7 @@ describe('PaymentFormComponent', () => {
         MockComponent(ContentWithLoaderComponent),
         MockComponent(DatetimeSelectorComponent),
         MockComponent(PaymentHeaderComponent),
+        MockComponent(CloseDialogButtonComponent),
         MockDirective(DeleteFamilyPaymentDialogTriggerDirective)
       ],
       imports: [

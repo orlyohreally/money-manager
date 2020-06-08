@@ -34,11 +34,15 @@ export class DeleteFamilyPaymentDialogTriggerDirective {
     if (this.editFamilyPaymentDialog) {
       this.editFamilyPaymentDialog.close();
     }
-    const dialogRef = this.dialog.open(DeletePaymentDialogComponent, {
-      width: '400px',
-      maxWidth: '80%',
-      panelClass: 'full-width-dialog'
-    });
+    const dialogRef = this.dialog.open(
+      DeletePaymentDialogComponent,
+      {
+        width: '400px',
+        maxWidth: '80%',
+        panelClass: 'full-width-dialog'
+      },
+      false
+    );
 
     dialogRef
       .afterClosed()

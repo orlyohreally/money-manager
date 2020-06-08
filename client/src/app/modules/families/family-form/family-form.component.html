@@ -1,4 +1,5 @@
 <div class="family-form">
+  <shared-close-dialog-button></shared-close-dialog-button>
   <h1 mat-dialog-title>
     Family
   </h1>
@@ -15,6 +16,7 @@
           type="text"
           required
           matInput
+          cdkFocusInitial
           formControlName="name"
           name="family-name"
         />

@@ -1,0 +1,25 @@
+<div fxLayoutAlign="start center">
+  <img
+    height="45px"
+    class="payment__icon"
+    src="{{
+      payment.familyId
+        ? 'assets/icons/multiple-actions-credit-card.png'
+        : 'assets/icons/single-neutral-actions-credit-card.png'
+    }}"
+  />
+  <div>
+    <h1 mat-dialog-title>
+      {{ payment.familyId ? 'FamilyPayment' : 'Personal payment' }}
+    </h1>
+    <div
+      *ngIf="payment._id"
+      class="mat-caption payment__stats"
+      fxLayout="row"
+      fxLayout.xs="column"
+    >
+      <div>Created at {{ payment.createdAt | date: 'short' }}</div>
+      <div>Updated at {{ payment.updatedAt | date: 'short' }}</div>
+    </div>
+  </div>
+</div>

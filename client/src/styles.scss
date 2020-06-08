@@ -8,6 +8,7 @@
 @import 'navigation';
 @import 'notifications';
 @import 'scrollbar';
+@import 'dialog';
 
 body,
 html {
@@ -123,4 +124,12 @@ $table-border-radius: 6px;
 
 .mat-paginator {
   border-radius: 6px;
+}
+
+.cdk-global-overlay-wrapper {
+  overflow: auto;
+}
+
+.mat-datepicker-content .mat-calendar {
+  max-width: 100%;
 }

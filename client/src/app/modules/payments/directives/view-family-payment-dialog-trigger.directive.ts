@@ -53,12 +53,17 @@ export class ViewFamilyPaymentDialogTriggerDirective {
           });
           return;
         }
-        this.dialog.open(PaymentDetailsComponent, {
-          width: '40%',
-          data: {
-            payment: this.payment
-          }
-        });
+        this.dialog.open(
+          PaymentDetailsComponent,
+          {
+            maxWidth: '450px',
+            width: '60%',
+            data: {
+              payment: this.payment
+            }
+          },
+          false
+        );
       });
   }
 }

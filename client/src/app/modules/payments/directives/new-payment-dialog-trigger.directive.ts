@@ -1,9 +1,10 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { take } from 'rxjs/operators';
+
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+import { DialogService } from '@core-client/services/dialog/dialog.service';
 import { User } from '@shared/types';
-import { take } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
 import { NewPaymentFormComponent } from '../components/new-payment-form/new-payment-form.component';
 
@@ -12,7 +13,7 @@ import { NewPaymentFormComponent } from '../components/new-payment-form/new-paym
 })
 export class NewPaymentDialogTriggerDirective {
   constructor(
-    private dialog: MatDialog,
+    private dialog: DialogService,
     private authenticationService: AuthenticationService
   ) {}
   @Input('paymentNewPayment') familyId: string;
@@ -41,11 +42,7 @@ export class NewPaymentDialogTriggerDirective {
       .subscribe((user: User) => {
         this.dialog.open(NewPaymentFormComponent, {
           width: '80%',
-          maxHeight: '80%',
           maxWidth: '500px',
-          minWidth: '300px',
-          restoreFocus: false,
-          panelClass: 'dialog_scrollable',
           data: {
             defaultUserId: user._id,
             familyId: this.familyId

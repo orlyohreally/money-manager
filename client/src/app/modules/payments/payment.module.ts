@@ -42,6 +42,8 @@ import { PaymentDetailsComponent } from './components/payment-details/payment-de
 // tslint:disable-next-line: max-line-length
 import { PaymentFormComponent } from './components/payment-form/payment-form.component';
 // tslint:disable-next-line: max-line-length
+import { PaymentHeaderComponent } from './components/payment-header/payment-header.component';
+// tslint:disable-next-line: max-line-length
 import { PaymentListComponent } from './components/payment-list/payment-list.component';
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectFormComponent } from './components/payment-subject-form/payment-subject-form.component';
@@ -103,7 +105,8 @@ import { PaymentRoutingModule } from './payment-routing.module';
     PaymentsListWrapperComponent,
     UserPaymentsListWrapperComponent,
     DeleteFamilyPaymentDialogTriggerDirective,
-    DeletePaymentDialogComponent
+    DeletePaymentDialogComponent,
+    PaymentHeaderComponent
   ],
   imports: [
     CommonModule,

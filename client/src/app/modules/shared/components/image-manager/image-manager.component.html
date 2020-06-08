@@ -1,4 +1,5 @@
 <div class="image-manager">
+  <shared-close-dialog-button></shared-close-dialog-button>
   <div class="mat-h1">Image selector</div>
   <shared-loader *ngIf="!cropperIsReady"></shared-loader>
   <image-cropper
@@ -7,6 +8,7 @@
     [aspectRatio]="1"
     [resizeToWidth]="300"
     format="png"
+    cdkFocusInitial
     (imageCropped)="imageCropped($event)"
     (cropperReady)="cropperReady()"
     (loadImageFailed)="loadImageFailed()"

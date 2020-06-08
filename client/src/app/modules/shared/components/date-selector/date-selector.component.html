@@ -8,7 +8,7 @@
     [min]="minDate"
   />
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
+  <mat-datepicker [touchUi]="smallScreen | async" #picker></mat-datepicker>
   <mat-error *ngIf="selectedDate.hasError('required')">
     Required field
   </mat-error>

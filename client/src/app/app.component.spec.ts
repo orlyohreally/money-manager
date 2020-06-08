@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 
+// tslint:disable-next-line: max-line-length
+import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
 import { AppComponent } from './app.component';
 // tslint:disable-next-line: max-line-length
 import { MainToolbarComponent } from './modules/navigation/main-toolbar/main-toolbar.component';
@@ -13,6 +15,7 @@ import { MainToolbarComponent } from './modules/navigation/main-toolbar/main-too
 import { SideNavToolbarComponent } from './modules/navigation/side-nav-toolbar/side-nav-toolbar.component';
 // tslint:disable-next-line: max-line-length
 import { SideNavComponent } from './modules/navigation/side-nav/side-nav.component';
+import { getGlobalVariablesServiceSpy } from './tests-utils/mocks';
 
 describe('AppComponent', () => {
   let titleServiceSpy: jasmine.SpyObj<Title>;
@@ -38,7 +41,12 @@ describe('AppComponent', () => {
           provide: ActivatedRoute,
           useValue: { firstChild: { snapshot: { data: {} } } as ActivatedRoute }
         },
-        { provide: Title, useValue: titleServiceSpy }
+        { provide: Title, useValue: titleServiceSpy },
+        {
+          provide: GlobalVariablesService,
+          useValue: getGlobalVariablesServiceSpy()
+        },
+        { provide: 'windowObj', useValue: { gtag: () => {} } }
       ]
     }).compileComponents();
   }));

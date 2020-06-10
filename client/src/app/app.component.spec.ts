@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
-import { GlobalVariablesService } from '@core-client/services/global-variables/global-variables.service';
+import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
 import { AppComponent } from './app.component';
 // tslint:disable-next-line: max-line-length
 import { MainToolbarComponent } from './modules/navigation/main-toolbar/main-toolbar.component';
@@ -15,7 +15,8 @@ import { MainToolbarComponent } from './modules/navigation/main-toolbar/main-too
 import { SideNavToolbarComponent } from './modules/navigation/side-nav-toolbar/side-nav-toolbar.component';
 // tslint:disable-next-line: max-line-length
 import { SideNavComponent } from './modules/navigation/side-nav/side-nav.component';
-import { getGlobalVariablesServiceSpy } from './tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsServiceMock } from './tests-utils/mocks/google-analytics.service.spec';
 
 describe('AppComponent', () => {
   let titleServiceSpy: jasmine.SpyObj<Title>;
@@ -43,10 +44,9 @@ describe('AppComponent', () => {
         },
         { provide: Title, useValue: titleServiceSpy },
         {
-          provide: GlobalVariablesService,
-          useValue: getGlobalVariablesServiceSpy()
-        },
-        { provide: 'windowObj', useValue: { gtag: () => {} } }
+          provide: GoogleAnalyticsService,
+          useValue: GoogleAnalyticsServiceMock().getService()
+        }
       ]
     }).compileComponents();
   }));

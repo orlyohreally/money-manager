@@ -6,8 +6,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren
-} from '@angular/core';
+  ViewChildren} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -21,6 +20,8 @@ import { takeUntil } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
+// tslint:disable-next-line: max-line-length
 import { emailValidatorFn } from '@shared-client/directives/email-validator/email-validator';
 import { User } from '@shared/types';
 import { nameValidatorFn } from '@shared/utils';
@@ -33,7 +34,8 @@ import { nameValidatorFn } from '@shared/utils';
 export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private googleAnalyticsService: GoogleAnalyticsService
   ) {}
   @ViewChildren('errorMessageBlock')
   errorMessageBlocks: QueryList<ElementRef>;
@@ -82,6 +84,11 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
   register() {
     this.serverError = null;
     if (this.signInForm.valid) {
+      this.googleAnalyticsService.event('register', {
+        email: this.email.value,
+        firstName: this.firstName.value,
+        lastName: this.lastName.value
+      });
       this.submittingForm = true;
       this.authService
         .register({

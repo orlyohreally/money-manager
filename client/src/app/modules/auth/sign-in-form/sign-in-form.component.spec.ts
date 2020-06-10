@@ -22,15 +22,20 @@ import { MockComponent, MockDirective, MockHelper } from 'ng-mocks';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
+// tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from '@shared-client/components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
+// tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsServiceMock } from '@tests-utils/mocks/google-analytics.service.spec';
 import { SignInFormComponent } from './sign-in-form.component';
 
 describe('SignInFormComponent', () => {
   let component: SignInFormComponent;
   let fixture: ComponentFixture<SignInFormComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthenticationService>;
+  let googleAnalyticsServiceSpy: jasmine.SpyObj<GoogleAnalyticsService>;
   let router: Router;
 
   beforeEach(async(() => {
@@ -43,6 +48,7 @@ describe('SignInFormComponent', () => {
         a: { verificationToken: 'verification-token' }
       })
     );
+    googleAnalyticsServiceSpy = GoogleAnalyticsServiceMock().getService();
 
     TestBed.configureTestingModule({
       declarations: [
@@ -50,7 +56,10 @@ describe('SignInFormComponent', () => {
         MockDirective(NotificationBlockDirective),
         MockComponent(ContentWithLoaderComponent)
       ],
-      providers: [{ provide: AuthenticationService, useValue: authServiceSpy }],
+      providers: [
+        { provide: AuthenticationService, useValue: authServiceSpy },
+        { provide: GoogleAnalyticsService, useValue: googleAnalyticsServiceSpy }
+      ],
       imports: [
         AppRoutingModule,
         FlexLayoutModule,
@@ -483,6 +492,21 @@ describe('SignInFormComponent', () => {
       );
     }
   );
+
+  it('register should call googleAnalytics.event when submitting form', () => {
+    setEmail('valid-email@gmail.com');
+    setField('firstName', 'firstNameMock');
+    setField('lastName', 'lastNameMock');
+    setField('password', 'dbv38rhu*(dbchsHFSJ');
+    setField('passwordVerification', 'dbv38rhu*(dbchsHFSJ');
+    submitForm();
+    expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
+    expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('register', {
+      email: 'valid-email@gmail.com',
+      firstName: 'firstNameMock',
+      lastName: 'lastNameMock'
+    });
+  });
 
   function getEmailInput(): HTMLInputElement {
     return fixture.nativeElement.querySelector(

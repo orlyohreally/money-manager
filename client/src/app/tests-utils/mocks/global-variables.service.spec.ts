@@ -1,3 +1,3 @@
 export function getGlobalVariablesServiceSpy() {
-  return { apiURL: 'apiURL' };
+  return { apiURL: 'apiURL', gaMeasurementId: 'gaMeasurementId' };
 }

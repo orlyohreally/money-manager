@@ -146,7 +146,7 @@ describe('EmailVerificationRequestComponent', () => {
 
     it('should display title', () => {
       const titleEl: HTMLElement = fixture.nativeElement.querySelector(
-        '.mat-h1'
+        'h1'
       );
       expect(titleEl).toBeTruthy();
       expectTextContentToBe(titleEl, 'Activate your account');

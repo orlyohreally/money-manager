@@ -87,31 +87,6 @@ describe('SignInFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display title', () => {
-    const titleEl = fixture.nativeElement.querySelector('.mat-h1');
-    expect(titleEl).toBeTruthy();
-  });
-
-  it('should display link to login page', () => {
-    const linkEl: HTMLAnchorElement = fixture.nativeElement.querySelector(
-      'a[href="/auth/login"]'
-    );
-    expect(linkEl).toBeTruthy();
-    expect(linkEl.textContent).toBe('Log in');
-  });
-
-  it('should display input field for email', () => {
-    expect(getEmailInput()).toBeTruthy();
-  });
-
-  it('should display input field for password', () => {
-    expect(getPasswordInput()).toBeTruthy();
-  });
-
-  it('should display input field for password verification', () => {
-    expect(getPasswordVerificationInput()).toBeTruthy();
-  });
-
   it('should call register when valid form is submitted', () => {
     spyOn(component, 'register');
     setField('email', 'email@gmail.com');

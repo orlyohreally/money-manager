@@ -1,5 +1,10 @@
 <div class="error-banner" fxLayout="column" fxLayoutAlign="center center">
-  <img class="error-banner__image" src="assets/images/404.jpg" />
+  <mat-icon class="icon icon_warn">block</mat-icon>
+  <h1>404 page not found</h1>
+  <p class="error-banner__text">
+    The page you are looking for might have been removed, had its name changed
+    or is temporarily unavailable.
+  </p>
   <a mat-raised-button color="primary" [routerLink]="['/']">
     Go to home page
   </a>

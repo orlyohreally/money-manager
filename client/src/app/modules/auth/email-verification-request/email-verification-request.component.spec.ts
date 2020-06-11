@@ -5,6 +5,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { MockHelper } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
@@ -43,7 +44,7 @@ describe('EmailVerificationRequestComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [EmailVerificationRequestComponent],
-      imports: [SharedModule],
+      imports: [SharedModule, MatIconModule],
       providers: [
         { provide: AuthenticationService, useValue: authenticationServiceSpy },
         { provide: Router, useValue: routerSpy },
@@ -145,9 +146,7 @@ describe('EmailVerificationRequestComponent', () => {
     });
 
     it('should display title', () => {
-      const titleEl: HTMLElement = fixture.nativeElement.querySelector(
-        'h1'
-      );
+      const titleEl: HTMLElement = fixture.nativeElement.querySelector('h1');
       expect(titleEl).toBeTruthy();
       expectTextContentToBe(titleEl, 'Activate your account');
     });

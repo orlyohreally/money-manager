@@ -1,4 +1,4 @@
 <div fxLayout="row" fxLayoutAlign="start center">
-  <img class="subject__icon" [src]="paymentSubject.icon" />
+  <img class="subject__icon" [alt]="'payment subject ' + paymentSubject.name" [src]="paymentSubject.icon" />
   <div>{{ paymentSubject.name }}</div>
 </div>

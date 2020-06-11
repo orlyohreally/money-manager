@@ -1,7 +1,7 @@
 <ng-container *ngIf="overpaysAndDebtsList | async as overpaysAndDebts; loading">
   <ng-container *ngIf="overpaysAndDebts.length">
     <div class="member-debt-list">
-      <div class="mat-h3">Family members' balances</div>
+      <h3>Family members' balances</h3>
       <payment-member-debt-list
         [debts]="overpaysAndDebts"
       ></payment-member-debt-list>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <ng-container *ngIf="showMoreDetailedList">
-      <div class="mat-h3">List of debts and overpays</div>
+      <h3>List of debts and overpays</h3>
       <payment-member-overpay-and-debt-list
         class="member-overpay-and-debt-list"
         [calculatedPayments]="paymentTransactions | async"

@@ -21,17 +21,29 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        data: {
+          title: 'Family dashboard',
+          description: 'Family dashboard'
+        }
       },
       {
         path: 'members',
         component: FamilyMembersComponent,
-        data: { title: 'Family members' }
+        data: {
+          title: 'Family members',
+          description: 'Family members information'
+        }
       },
       {
         path: 'payments',
         component: PaymentsComponent,
-        data: { title: 'Family payments' }
+        data: {
+          title: 'Family payments',
+          description:
+            // tslint:disable-next-line: max-line-length
+            'List of family payments and family members debts and overpay balances'
+        }
       },
       {
         path: '**',

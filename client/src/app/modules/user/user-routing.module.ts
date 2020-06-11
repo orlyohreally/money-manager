@@ -16,22 +16,36 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        component: UserDashboardComponent
+        component: UserDashboardComponent,
+        data: {
+          title: 'User Dashboard',
+          description: 'User dashboard'
+        }
       },
       {
         path: 'families',
         component: FamiliesComponent,
-        data: { title: 'My families' }
+        data: {
+          title: 'My families',
+          description: 'List of your families registered in Families Expenses'
+        }
       },
       {
         path: 'payments',
         component: UserPaymentsComponent,
-        data: { title: 'My payments' }
+        data: {
+          title: 'My payments',
+          description: 'List of your payments registered in Families Expenses'
+        }
       },
       {
         path: 'manage-account',
         component: ManagerComponent,
-        data: { title: 'Manage account' }
+        data: {
+          title: 'Manage account',
+          description:
+            'Set up your account to meet your personal needs the best'
+        }
       },
       {
         path: '**',

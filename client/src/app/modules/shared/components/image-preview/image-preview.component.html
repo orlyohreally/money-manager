@@ -3,6 +3,7 @@
     [hidden]="!imageLoaded"
     (load)="onPreviewLoaded()"
     class="image-preview__image"
+    alt="image preview"
     [src]="imageUrl"
   />
   <mat-spinner *ngIf="!imageLoaded"></mat-spinner>

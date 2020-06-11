@@ -20,6 +20,8 @@ import { DatetimeSelectorComponent } from '@shared-client/components/datetime-se
 // tslint:disable-next-line: max-line-length
 import { LoaderComponent } from '@shared-client/components/loader/loader.component';
 // tslint:disable-next-line: max-line-length
+import { PaymentSubjectSelectorComponent } from '@shared-client/components/payment-subject-selector/payment-subject-selector.component';
+// tslint:disable-next-line: max-line-length
 import { PaymentSubjectComponent } from '@shared-client/components/payment-subject/payment-subject.component';
 import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
 import {
@@ -88,7 +90,8 @@ describe('PaymentFormComponent', () => {
         MockComponent(DatetimeSelectorComponent),
         MockComponent(PaymentHeaderComponent),
         MockComponent(CloseDialogButtonComponent),
-        MockDirective(DeleteFamilyPaymentDialogTriggerDirective)
+        MockDirective(DeleteFamilyPaymentDialogTriggerDirective),
+        MockComponent(PaymentSubjectSelectorComponent)
       ],
       imports: [
         ReactiveFormsModule,
@@ -126,7 +129,7 @@ describe('PaymentFormComponent', () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedAmount.toString());
     setPaidAtDate(mockedPaymentDate);
-    await setSelectorOption(fixture, 'payment-subject', 0);
+    setSubjectId(mockedSubjectList[0]._id);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).toHaveBeenCalledTimes(1);
@@ -146,7 +149,7 @@ describe('PaymentFormComponent', () => {
       spyOn(component.formSubmitted, 'emit');
       setInputField(fixture, 'payment-amount', '4.g');
       setPaidAtDate('07.05.2020');
-      await setSelectorOption(fixture, 'payment-subject', 0);
+      setSubjectId(mockedSubjectList[0]._id);
       await setSelectorOption(fixture, 'payment-payer', 0);
       submitForm();
       expect(component.formSubmitted.emit).not.toHaveBeenCalled();
@@ -157,7 +160,7 @@ describe('PaymentFormComponent', () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', '');
     setPaidAtDate('07.05.2020');
-    await setSelectorOption(fixture, 'payment-subject', 0);
+    setSubjectId(mockedSubjectList[0]._id);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).not.toHaveBeenCalled();
@@ -166,7 +169,7 @@ describe('PaymentFormComponent', () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', '0');
     setPaidAtDate('07.05.2020');
-    await setSelectorOption(fixture, 'payment-subject', 0);
+    setSubjectId(mockedSubjectList[0]._id);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).not.toHaveBeenCalled();
@@ -178,7 +181,7 @@ describe('PaymentFormComponent', () => {
       spyOn(component.formSubmitted, 'emit');
       setInputField(fixture, 'payment-amount', '-50');
       setPaidAtDate('07.05.2020');
-      await setSelectorOption(fixture, 'payment-subject', 0);
+      setSubjectId(mockedSubjectList[0]._id);
       await setSelectorOption(fixture, 'payment-payer', 0);
       submitForm();
       expect(component.formSubmitted.emit).not.toHaveBeenCalled();
@@ -190,7 +193,7 @@ describe('PaymentFormComponent', () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedPaymentAmount.toString());
     setPaidAtDate('07.05.2020');
-    await setSelectorOption(fixture, 'payment-subject', 1);
+    setSubjectId(mockedSubjectList[1]._id);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).toHaveBeenCalledTimes(1);
@@ -208,7 +211,7 @@ describe('PaymentFormComponent', () => {
     spyOn(component.formSubmitted, 'emit');
     setInputField(fixture, 'payment-amount', mockedPaymentAmount.toString());
     setPaidAtDate('07.05.2020');
-    await setSelectorOption(fixture, 'payment-subject', 1);
+    setSubjectId(mockedSubjectList[1]._id);
     await setSelectorOption(fixture, 'payment-payer', 0);
     submitForm();
     expect(component.formSubmitted.emit).toHaveBeenCalledTimes(1);
@@ -234,5 +237,13 @@ describe('PaymentFormComponent', () => {
       By.directive(DatetimeSelectorComponent)
     ).componentInstance;
     paidAtEl.dateSelected.emit(new Date(paidAtDate));
+  }
+
+  function setSubjectId(subjectId: string) {
+    // tslint:disable-next-line: max-line-length
+    const paidAtEl: PaymentSubjectSelectorComponent = fixture.debugElement.query(
+      By.directive(PaymentSubjectSelectorComponent)
+    ).componentInstance;
+    paidAtEl.subjectSelected.emit(subjectId);
   }
 });

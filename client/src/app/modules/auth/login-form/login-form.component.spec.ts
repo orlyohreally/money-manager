@@ -84,27 +84,6 @@ describe('LoginFormComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should display title', () => {
-      const titleEl = fixture.nativeElement.querySelector('.mat-h1');
-      expect(titleEl).toBeTruthy();
-    });
-
-    it('should display link to registration page', () => {
-      const linkEl: HTMLAnchorElement = fixture.nativeElement.querySelector(
-        'a[href="/auth/register"]'
-      );
-      expect(linkEl).toBeTruthy();
-      expect(linkEl.textContent.trim()).toBe('Create an account');
-    });
-
-    it('should display input field for email', () => {
-      expect(getEmailInput()).toBeTruthy();
-    });
-
-    it('should display input field for password', () => {
-      expect(getPasswordInput()).toBeTruthy();
-    });
-
     it('should call login when form is submitted', () => {
       spyOn(component, 'login');
       setEmail('email@gmail.com');

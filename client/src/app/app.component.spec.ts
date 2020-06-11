@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,9 +20,12 @@ import { GoogleAnalyticsServiceMock } from './tests-utils/mocks/google-analytics
 
 describe('AppComponent', () => {
   let titleServiceSpy: jasmine.SpyObj<Title>;
+  let metaServiceSpy: jasmine.SpyObj<Meta>;
 
   beforeEach(async(() => {
     titleServiceSpy = jasmine.createSpyObj('Title', ['setTitle']);
+    metaServiceSpy = jasmine.createSpyObj('Meta', ['addTags']);
+
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -43,6 +46,7 @@ describe('AppComponent', () => {
           useValue: { firstChild: { snapshot: { data: {} } } as ActivatedRoute }
         },
         { provide: Title, useValue: titleServiceSpy },
+        { provide: Meta, useValue: metaServiceSpy },
         {
           provide: GoogleAnalyticsService,
           useValue: GoogleAnalyticsServiceMock().getService()

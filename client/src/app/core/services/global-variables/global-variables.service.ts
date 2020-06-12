@@ -14,4 +14,8 @@ export class GlobalVariablesService {
   get supportEmail(): string {
     return environment.supportEmail;
   }
+
+  get gaMeasurementId(): string {
+    return environment.gaMeasurementId;
+  }
 }

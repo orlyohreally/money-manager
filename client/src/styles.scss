@@ -134,3 +134,17 @@ $table-border-radius: 6px;
   max-width: 100% !important;
   max-height: 100% !important;
 }
+
+mat-icon.icon {
+  height: 150px;
+  width: 150px;
+  font-size: 150px;
+  color: mat-color($angular-material-accent);
+}
+
+mat-icon.icon.icon_warn {
+  height: 150px;
+  width: 150px;
+  font-size: 150px;
+  color: mat-color($angular-material-warn);
+}

@@ -47,4 +47,8 @@ export class PaymentFormComponent extends FormComponent<Payment>
   onPaidAtSelected(date: Date) {
     this.form.get('paidAt').setValue(date);
   }
+
+  onPaymentSubjectSelected(subjectId: string) {
+    this.form.get('subjectId').setValue(subjectId);
+  }
 }

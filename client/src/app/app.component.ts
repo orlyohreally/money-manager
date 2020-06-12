@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
   NavigationCancel,
@@ -12,6 +12,9 @@ import {
   RouterEvent
 } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
+
+// tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -24,12 +27,20 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav') sideNavEl: MatSidenav;
 
   private appName = 'Family Expenses';
+  private defaultKeywords =
+    // tslint:disable-next-line: max-line-length
+    'family expenses, household expenses list, household expenses, manage my finance';
+  // tslint:disable-next-line: max-line-length
+  private defaultDescription =
+    'Family Expenses is a smart way to track your family expenses';
 
   constructor(
     public media: MediaObserver,
     private router: Router,
     private route: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private metaService: Meta,
+    private googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {
@@ -37,6 +48,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((routerEvent: RouterEvent) => {
       this.displayPageLoader(routerEvent);
     });
+    this.setupGoogleAnalytics();
   }
 
   isOpened(): boolean {
@@ -60,13 +72,37 @@ export class AppComponent implements OnInit {
         }),
         mergeMap(route => route.data)
       )
-      .subscribe((data: { title: string; hideMenu: boolean }) => {
-        const title = data ? data.title : '';
-        this.titleService.setTitle(`${title} | ${this.appName}`);
-        if (this.sideNavEl.mode !== 'side') {
-          this.sideNavEl.close();
+      .subscribe(
+        (data: {
+          title: string;
+          description: string;
+          keywords: string;
+          hideMenu: boolean;
+        }) => {
+          const title = data ? data.title : '';
+          this.titleService.setTitle(`${title} | ${this.appName}`);
+
+          if (this.sideNavEl.mode !== 'side') {
+            this.sideNavEl.close();
+          }
+
+          this.metaService.addTags([
+            {
+              name: 'keywords',
+              content: `${this.defaultKeywords}${
+                data.keywords ? `, ${data.keywords}` : ''
+              }`
+            },
+            {
+              name: 'description',
+              content: data.description
+                ? data.description
+                : this.defaultDescription
+            },
+            { name: 'robots', content: 'index, follow' }
+          ]);
         }
-      });
+      );
   }
 
   private displayPageLoader(routerEvent: RouterEvent): void {
@@ -82,6 +118,16 @@ export class AppComponent implements OnInit {
         routerEvent instanceof NavigationError
       ) {
         this.pageIsLoading = false;
+      }
+    });
+  }
+
+  private setupGoogleAnalytics() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.googleAnalyticsService.config({
+          page_path: event.urlAfterRedirects
+        });
       }
     });
   }

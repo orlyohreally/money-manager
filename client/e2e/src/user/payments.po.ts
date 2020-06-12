@@ -60,7 +60,7 @@ export class UserPaymentsPage {
   }
 
   selectSubject(subject: string) {
-    const select = element(by.css('mat-select[name="payment-subject"]'));
+    const select = element(by.css('form mat-select[name="payment-subject"]'));
     select.click();
     const options = element.all(by.cssContainingText('mat-option', subject));
     options.get(0).click();

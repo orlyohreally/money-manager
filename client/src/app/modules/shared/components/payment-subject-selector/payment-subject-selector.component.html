@@ -4,6 +4,7 @@
     [required]="required"
     [formControl]="selectedSubject"
     [value]="defaultSubjectId"
+    name="payment-subject"
   >
     <mat-option [value]="null">Any subject</mat-option>
     <mat-option *ngFor="let subject of subjects" [value]="subject._id">

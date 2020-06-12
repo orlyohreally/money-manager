@@ -12,12 +12,22 @@ const routes: Routes = [
   {
     path: 'register',
     component: SignInFormComponent,
-    data: { title: 'Sign in' }
+    data: {
+      title: 'Sign in',
+      description:
+        // tslint:disable-next-line: max-line-length
+        'Register to Family Expenses to track how much you and your family spend every month'
+    }
   },
   {
     path: 'login',
     component: LoginFormComponent,
-    data: { title: 'Login' }
+    data: {
+      title: 'Login',
+      description:
+        // tslint:disable-next-line: max-line-length
+        'Login to Family Expenses to check how much you and your family has spent today'
+    }
   },
   {
     path: 'logout',

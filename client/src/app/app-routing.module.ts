@@ -6,8 +6,7 @@ import { ErrorModule } from './modules/errors/error.module';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: './modules/home/home.module#HomeModule',
-    canActivate: [AuthGuard]
+    loadChildren: './modules/home/home.module#HomeModule'
   },
   {
     path: '',

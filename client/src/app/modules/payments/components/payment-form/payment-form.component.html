@@ -26,6 +26,7 @@
               >
                 <img
                   class="select-option__icon"
+                  alt="{{ payer | sharedUserFullName }}'s icon"
                   [src]="payer | familyMemberIcon"
                 />
                 <div class="select-option__title">
@@ -48,27 +49,16 @@
           (dateSelected)="onPaidAtSelected($event)"
         ></shared-datetime-selector>
 
-        <mat-form-field
-          appearance="outline"
-          class="payment-subject-field"
+        <shared-payment-subject-selector
           fxFlex="1 1 100%"
           fxFlex.gt-xs="1 1 50%"
-        >
-          <mat-label>Subject of payment</mat-label>
-
-          <mat-select
-            required
-            class="payment-subject-select"
-            formControlName="subjectId"
-            name="payment-subject"
-          >
-            <mat-option *ngFor="let subject of subjects" [value]="subject._id">
-              <shared-payment-subject
-                [paymentSubject]="subject"
-              ></shared-payment-subject>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          selectorLabel="Subject of payment"
+          [subjects]="subjects"
+          [required]="true"
+          [defaultSubjectId]="form.get('subjectId').value"
+          [debounceTime]="300"
+          (subjectSelected)="onPaymentSubjectSelected($event)"
+        ></shared-payment-subject-selector>
 
         <mat-form-field
           appearance="outline"

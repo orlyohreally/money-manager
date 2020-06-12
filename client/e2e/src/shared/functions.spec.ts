@@ -15,7 +15,7 @@ export async function getTitleText(): Promise<string> {
 }
 
 export async function getTextTitle(): Promise<string> {
-  return element(by.css('.mat-h1')).getText();
+  return element(by.css('h1')).getText();
 }
 
 export function clearLocalStorage() {

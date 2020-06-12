@@ -4,7 +4,11 @@
     <mat-option [value]="null">Any member</mat-option>
     <mat-option *ngFor="let member of members" [value]="member._id">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <img class="member__icon" [src]="member | familyMemberIcon" />
+        <img
+          class="member__icon"
+          [src]="member | familyMemberIcon"
+          alt="{{ member | sharedUserFullName }}'s icon"
+        />
         <div>
           {{ member | sharedUserFullName }}
         </div>

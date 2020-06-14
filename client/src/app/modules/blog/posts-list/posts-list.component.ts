@@ -11,11 +11,11 @@ import { BlogPost } from '@src/app/types';
   styleUrls: ['./posts-list.component.scss']
 })
 export class PostsListComponent implements OnInit {
-  posts: Observable<BlogPost[]>;
+  posts: Observable<{ data: BlogPost[]; meta: { count: number } }>;
 
   constructor(private butterCMSService: ButterCMSService) {}
 
   ngOnInit() {
-    this.posts = this.butterCMSService.getPosts();
+    this.posts = this.butterCMSService.getPosts(1, 10);
   }
 }

@@ -14,15 +14,18 @@ export class ButterCMSService {
 
   constructor(private route: Router) {}
 
-  getPosts(): Observable<BlogPost[]> {
+  getPosts(
+    page: number,
+    pageSize: number
+  ): Observable<{ data: BlogPost[]; meta: { count: number } }> {
     return from(
       this.butter.post.list({
-        page: 1,
-        page_size: 10
+        page,
+        page_size: pageSize
       })
     ).pipe(
       map(response => {
-        return response.data.data;
+        return response.data;
       })
     );
   }

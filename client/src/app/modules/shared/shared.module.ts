@@ -191,7 +191,6 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     CloseDialogButtonComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective,
-    ImageResizerDirective,
     TruncatePipe
   ],
   providers: [

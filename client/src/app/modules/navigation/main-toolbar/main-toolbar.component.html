@@ -7,9 +7,7 @@
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <a [routerLink]="['/blog']" class="link_help" matTooltip="Help">
-          <mat-icon>help</mat-icon>
-        </a>
+        <help-help></help-help>
         <ng-container *ngIf="isAuthenticated | async">
           <div>
             <button mat-icon-button [matMenuTriggerFor]="menu">

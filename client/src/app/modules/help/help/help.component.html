@@ -1,0 +1,58 @@
+<button
+  mat-icon-button
+  matTooltip="Help center"
+  matTooltipPosition="left"
+  (click)="toggleHelp()"
+>
+  <mat-icon>help</mat-icon>
+</button>
+<div role="help links" class="help-links" *ngIf="isActive">
+  <ng-container *ngIf="helpLinks | async as links; else loading">
+    <mat-list>
+      <div mat-subheader class="help__title">Support center</div>
+      <button class="help__close-button" mat-icon-button (click)="toggleHelp()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-list-item *ngFor="let link of links">
+        <a
+          mat-button
+          [routerLink]="['/blog', link.slug]"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="nav-block__link_active"
+          class="mat-button_stretched nav-block__link"
+          target="_blank"
+        >
+          {{ link.title }}
+          <mat-icon class="help__link_external">launch</mat-icon>
+        </a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <div mat-subheader class="help__title">Useful links</div>
+      <mat-list-item>
+        <a
+          mat-button
+          [routerLink]="['/blog']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="nav-block__link_active"
+          class="mat-button_stretched nav-block__link"
+        >
+          <!-- <mat-icon>notes</mat-icon> -->
+          Go to blog
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a
+          mat-button
+          [routerLink]="['/contact-us']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="nav-block__link_active"
+          class="mat-button_stretched nav-block__link"
+        >
+          <!-- <mat-icon>chat</mat-icon> -->
+          Contact us
+        </a>
+      </mat-list-item>
+    </mat-list>
+  </ng-container>
+</div>
+<ng-template #loading></ng-template>

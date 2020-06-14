@@ -21,7 +21,8 @@
         "member",
         "user",
         "tc",
-        "about"
+        "about",
+        "blog"
       ],
       "kebab-case"
     ]

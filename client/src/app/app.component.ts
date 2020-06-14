@@ -15,6 +15,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
+import { ButterCMSService } from './core/services/butter-cms/butter-cms.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { GoogleAnalyticsService } from '@core-client/services/google-analytics/g
 })
 export class AppComponent implements OnInit {
   pageIsLoading = true;
+  posts: any[];
 
   @ViewChild('sidenav', { static: true }) sideNavEl: MatSidenav;
 
@@ -40,7 +42,8 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private titleService: Title,
     private metaService: Meta,
-    private googleAnalyticsService: GoogleAnalyticsService
+    private googleAnalyticsService: GoogleAnalyticsService,
+    private butterCMSService: ButterCMSService
   ) {}
 
   ngOnInit() {
@@ -49,11 +52,25 @@ export class AppComponent implements OnInit {
       this.displayPageLoader(routerEvent);
     });
     this.setupGoogleAnalytics();
+    // this.fetchPosts();
   }
 
   isOpened(): boolean {
     return !this.media.isActive('lt-sm');
   }
+
+  // private fetchPosts() {
+  //   this.butterCMSService.butter.post
+  //     .list({
+  //       page: 1,
+  //       page_size: 10
+  //     })
+  //     .then(res => {
+  //       console.log('Content from ButterCMS');
+  //       console.log(res);
+  //       this.posts = res.data;
+  //     });
+  // }
 
   getMode(): string {
     return this.media.isActive('lt-sm') ? 'over' : 'side';

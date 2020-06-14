@@ -1,0 +1,15 @@
+<h1>Guides</h1>
+<div fxLayout="row wrap" *ngIf="posts | async as postsList; else loading">
+  <ng-container *ngIf="postsList.length; else noData">
+    <blog-post-preview
+      *ngFor="let post of postsList"
+      class="post"
+      [post]="post"
+    >
+    </blog-post-preview>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <shared-loader></shared-loader>
+</ng-template>
+<ng-template #noData>No guides yet</ng-template>

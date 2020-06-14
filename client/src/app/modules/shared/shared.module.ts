@@ -93,6 +93,7 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { UserFullNamePipe } from './pipes/user-full-name.pipe';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     DynamicActiveRouterLinkDirective,
     BackgroundColorDirective,
     CloseDialogButtonComponent,
-    ContactFormComponent
+    ContactFormComponent,
+    TruncatePipe
   ],
   imports: [
     CommonModule,
@@ -200,7 +202,9 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     CloseDialogButtonComponent,
     SortByPipe,
     DynamicActiveRouterLinkDirective,
-    ContactFormComponent
+    ContactFormComponent,
+    ImageResizerDirective,
+    TruncatePipe
   ],
   providers: [
     CurrencySymbolPipe,

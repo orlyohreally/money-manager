@@ -1,0 +1,17 @@
+.post {
+  margin-bottom: 16px;
+}
+
+@media (min-width: 960px) {
+  .post:not(:first-child) {
+    flex: 1;
+  }
+
+  .post:nth-child(even):not(:first-child) {
+    margin-right: 16px;
+  }
+
+  .post:first-child {
+    width: 100%;
+  }
+}

@@ -46,7 +46,12 @@ describe('GoogleAnalyticsService', () => {
   });
 
   it('event should call window.gtag("event", eventName, data)', () => {
-    const mockedData = { email: 'email@example.com' };
+    const mockedData = {
+      eventCategory: 'category',
+      eventLabel: JSON.stringify({ email: 'email@example.com' }),
+      eventAction: 'action',
+      eventValue: 'value'
+    };
     const mockedEventName = 'login';
     service.event(mockedEventName, mockedData);
     expect(windowSpy.gtag).toHaveBeenCalledTimes(1);

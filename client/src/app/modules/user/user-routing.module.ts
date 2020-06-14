@@ -18,33 +18,38 @@ const routes: Routes = [
         path: 'dashboard',
         component: UserDashboardComponent,
         data: {
-          title: 'User Dashboard',
-          description: 'User dashboard'
+          seo: { title: 'User Dashboard', description: 'User dashboard' }
         }
       },
       {
         path: 'families',
         component: FamiliesComponent,
         data: {
-          title: 'My families',
-          description: 'List of your families registered in Families Expenses'
+          seo: {
+            title: 'My families',
+            description: 'List of your families registered in Families Expenses'
+          }
         }
       },
       {
         path: 'payments',
         component: UserPaymentsComponent,
         data: {
-          title: 'My payments',
-          description: 'List of your payments registered in Families Expenses'
+          seo: {
+            title: 'My payments',
+            description: 'List of your payments registered in Families Expenses'
+          }
         }
       },
       {
         path: 'manage-account',
         component: ManagerComponent,
         data: {
-          title: 'Manage account',
-          description:
-            'Set up your account to meet your personal needs the best'
+          seo: {
+            title: 'Manage account',
+            description:
+              'Set up your account to meet your personal needs the best'
+          }
         }
       },
       {

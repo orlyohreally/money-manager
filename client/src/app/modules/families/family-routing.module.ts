@@ -23,26 +23,29 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         data: {
-          title: 'Family dashboard',
-          description: 'Family dashboard'
+          seo: { title: 'Family dashboard', description: 'Family dashboard' }
         }
       },
       {
         path: 'members',
         component: FamilyMembersComponent,
         data: {
-          title: 'Family members',
-          description: 'Family members information'
+          seo: {
+            title: 'Family members',
+            description: 'Family members information'
+          }
         }
       },
       {
         path: 'payments',
         component: PaymentsComponent,
         data: {
-          title: 'Family payments',
-          description:
-            // tslint:disable-next-line: max-line-length
-            'List of family payments and family members debts and overpay balances'
+          seo: {
+            title: 'Family payments',
+            description:
+              // tslint:disable-next-line: max-line-length
+              'List of family payments and family members debts and overpay balances}'
+          }
         }
       },
       {

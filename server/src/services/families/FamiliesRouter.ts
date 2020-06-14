@@ -74,6 +74,11 @@ export class FamiliesRouter {
       asyncWrap(this.getFamilyMembers)
     );
     this.router.get(
+      "/families/members/roles",
+      this.usersService.validateToken.bind(usersService),
+      asyncWrap(this.getFamilyMembersRoles)
+    );
+    this.router.get(
       "/families/:familyId/members/roles",
       this.usersService.validateToken.bind(usersService),
       asyncWrap(this.getFamilyMembersRoles)
@@ -260,11 +265,8 @@ export class FamiliesRouter {
   private getFamilyMembersRoles = async (req: Request, res: Response) => {
     try {
       const familyId = (req.params as { familyId: string }).familyId;
-      if (!familyId) {
-        return res.status(400).json({ message: "familyId is required" });
-      }
 
-      const roles = this.service.getFamilyMemberRoles();
+      const roles = this.service.getFamilyMemberRoles(familyId);
       return res.status(200).json({ roles });
     } catch (err) {
       return res.status(400).json(err);

@@ -177,8 +177,8 @@ export class MembersService extends DataService {
     );
   }
 
-  private getMemberApi(familyId: string): string {
-    return `families/${familyId}/members`;
+  private getMemberApi(familyId?: string): string {
+    return familyId ? `families/${familyId}/members` : 'families/members';
   }
 
   private findMember(userId: string, familyId: string): FamilyMember {

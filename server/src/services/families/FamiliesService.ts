@@ -171,7 +171,9 @@ export class FamiliesService {
     return this.dao.deleteFamily(familyId);
   }
 
-  public getFamilyMemberRoles(): {
+  public getFamilyMemberRoles(
+    familyId: string
+  ): {
     name: string;
     description: string;
     default: boolean;
@@ -187,8 +189,8 @@ export class FamiliesService {
         name: Roles.Owner,
         // tslint:disable-next-line: max-line-length
         description:
-          "Can add and remove family members, edit their roles in family",
-        default: false
+          "Can edit family info, add and remove family members, edit their roles in family",
+        default: !familyId
       },
       {
         name: Roles.Admin,

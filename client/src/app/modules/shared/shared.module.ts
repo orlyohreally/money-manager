@@ -17,7 +17,8 @@ import {
   MatInputModule,
   MatMenuModule,
   MatProgressSpinnerModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTooltipModule
 } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -150,7 +151,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     MatDatepickerModule,
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
+    MatTooltipModule
   ],
   exports: [
     FilterPipe,

@@ -45,7 +45,10 @@
           </div>
         </div>
       </div>
-      <family-actions [familyInfo]="familyInfo"></family-actions>
+      <family-actions
+        *ngIf="familyInfo.userRoles.indexOf(ownerRole) > -1"
+        [familyInfo]="familyInfo"
+      ></family-actions>
     </div>
   </div>
   <router-outlet></router-outlet>

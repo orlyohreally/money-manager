@@ -1,0 +1,36 @@
+<ng-container *ngIf="postData$ | async as postData; else loading">
+  <blog-post-details [post]="postData.data"></blog-post-details>
+  <div *ngIf="postData.meta?.previous_post || postData.meta?.next_post">
+    <h2>Keep reading</h2>
+    <div
+      fxLayout.gt-xs="row"
+      fxLayout="column"
+      fxLayoutGap="0px grid"
+      fxLayoutGap.gt-xs="10px grid"
+    >
+      <div class="post__preview" *ngIf="postData.meta?.previous_post">
+        <a routerLink="../{{ postData.meta.previous_post.slug }}">
+          <div class="image-wrapper">
+            <img
+              class="image-wrapper__image"
+              [src]="postData.meta.previous_post.featured_image"
+            />
+          </div>
+          <h4>< {{ postData.meta.previous_post.title }}</h4>
+        </a>
+      </div>
+      <div class="post__preview" *ngIf="postData.meta?.next_post">
+        <a routerLink="../{{ postData.meta.next_post.slug }}">
+          <div class="image-wrapper">
+            <img
+              class="image-wrapper__image"
+              [src]="postData.meta.next_post.featured_image"
+            />
+          </div>
+          <h4>{{ postData.meta.next_post.title }} ></h4>
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #loading><shared-loader></shared-loader></ng-template>

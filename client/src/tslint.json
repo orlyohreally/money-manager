@@ -24,7 +24,8 @@
         "home",
         "payment",
         "member",
-        "user"
+        "user",
+        "blog"
       ],
       "kebab-case"
     ]

@@ -1,0 +1,7 @@
+<h1>
+  {{ post.title }}
+</h1>
+<div class="post-body" [innerHTML]="post.body"></div>
+<div *ngIf="post.tags">
+  <div *ngFor="let tag of post.tags">{{ tag.name }}</div>
+</div>

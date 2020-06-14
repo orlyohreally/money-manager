@@ -1,0 +1,37 @@
+<mat-card>
+  <!-- <div
+    class="post__featured-image"
+    *ngIf="post.featured_image"
+    mat-card-image
+    style.background-image="url({{ post.featured_image }})"
+    alt="featured image"
+  ></div> -->
+  <div class="image-wrapper">
+    <img
+      *ngIf="post.featured_image"
+      class="image-wrapper__featured-image"
+      [src]="post.featured_image"
+      alt="featured image"
+    />
+  </div>
+  <div class="post__content">
+    <div *ngIf="post.categories">
+      <div class="post__category" *ngFor="let category of post.categories">
+        {{ category.name }}
+      </div>
+    </div>
+    <mat-card-title>
+      <a [routerLink]="[post.slug]" class="post__title">{{ post.title }}</a>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="container">
+        <div fxLayout="column" class="summary">
+          <div [innerHTML]="post.summary | truncate: [100, '...']"></div>
+        </div>
+      </div>
+    </mat-card-content>
+    <div *ngIf="post.tags">
+      <h3 class="post__tag" *ngFor="let tag of post.tags">#{{ tag.name }}</h3>
+    </div>
+  </div>
+</mat-card>

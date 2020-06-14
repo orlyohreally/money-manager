@@ -86,6 +86,7 @@ import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { UserFullNamePipe } from './pipes/user-full-name.pipe';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -126,7 +127,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective,
     BackgroundColorDirective,
-    CloseDialogButtonComponent
+    CloseDialogButtonComponent,
+    TruncatePipe
   ],
   imports: [
     CommonModule,
@@ -188,7 +190,9 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     DatetimeSelectorComponent,
     CloseDialogButtonComponent,
     SortByPipe,
-    DynamicActiveRouterLinkDirective
+    DynamicActiveRouterLinkDirective,
+    ImageResizerDirective,
+    TruncatePipe
   ],
   providers: [
     CurrencySymbolPipe,

@@ -5,6 +5,7 @@ export * from './families.service.spec';
 export * from './family-member-icon.pipe.spec';
 export * from './filter.pipe.spec';
 export * from './global-variables.service.spec';
+export * from './google-analytics.service.spec';
 export * from './members.service.spec';
 export * from './notifications.service.spec';
 export * from './payment-subject.service-mock.spec';

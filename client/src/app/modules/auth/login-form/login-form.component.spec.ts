@@ -28,12 +28,16 @@ import { ContentWithLoaderComponent } from '@shared-client/components/content-wi
 import { NotificationBlockDirective } from '@shared-client/directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
 import { User } from '@shared/types';
+// tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsService } from '@src/app/core/services/google-analytics/google-analytics.service';
+import { GoogleAnalyticsServiceMock } from '@tests-utils/mocks';
 import { LoginFormComponent } from './login-form.component';
 
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
   let fixture: ComponentFixture<LoginFormComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthenticationService>;
+  let googleAnalyticsServiceSpy: jasmine.SpyObj<GoogleAnalyticsService>;
   let router: Router;
 
   beforeEach(async(() => {
@@ -44,6 +48,7 @@ describe('LoginFormComponent', () => {
     authServiceSpy.login.and.returnValue(
       cold('---a', { a: { firstName: 'firstName' } as User })
     );
+    googleAnalyticsServiceSpy = GoogleAnalyticsServiceMock().getService();
 
     TestBed.configureTestingModule({
       declarations: [
@@ -58,6 +63,10 @@ describe('LoginFormComponent', () => {
           useValue: {
             snapshot: { queryParamMap: convertToParamMap({}) }
           }
+        },
+        {
+          provide: GoogleAnalyticsService,
+          useValue: googleAnalyticsServiceSpy
         }
       ],
       imports: [
@@ -244,6 +253,16 @@ describe('LoginFormComponent', () => {
         expect(router.navigate).toHaveBeenCalledWith(['/']);
       }
     );
+
+    it('login should call googleAnalyticsService.event for valid form', () => {
+      setEmail('valid-email@gmail.com');
+      setPassword('dbv38rhu*(dbchsHFSJ');
+      submitForm();
+      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
+      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('login', {
+        eventLabel: '{"email":"valid-email@gmail.com"}'
+      });
+    });
   });
 
   describe('returnUrl is set', () => {

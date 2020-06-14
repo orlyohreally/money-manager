@@ -477,9 +477,9 @@ describe('SignInFormComponent', () => {
     submitForm();
     expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
     expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('register', {
-      email: 'valid-email@gmail.com',
-      firstName: 'firstNameMock',
-      lastName: 'lastNameMock'
+      eventLabel:
+        // tslint:disable-next-line: max-line-length
+        '{"email":"valid-email@gmail.com","firstName":"firstNameMock","lastName":"lastNameMock"}'
     });
   });
 

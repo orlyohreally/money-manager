@@ -25,7 +25,15 @@ export class GoogleAnalyticsService {
     }
   }
 
-  event<T>(name: string, data: T) {
+  event(
+    name: string,
+    data: {
+      eventCategory?: string;
+      eventLabel?: string;
+      eventAction?: string;
+      eventValue?: string | number;
+    }
+  ) {
     if (!this.isDevModeService.isDevMode()) {
       this.window.gtag('event', name, data);
     }

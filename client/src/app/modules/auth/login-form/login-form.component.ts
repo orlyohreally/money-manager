@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
+// tslint:disable-next-line: max-line-length
+import { GoogleAnalyticsService } from '@src/app/core/services/google-analytics/google-analytics.service';
 
 @Component({
   selector: 'auth-login-form',
@@ -20,7 +22,8 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {
@@ -32,6 +35,11 @@ export class LoginFormComponent implements OnInit {
     this.serverError = null;
     if (this.loginForm.valid) {
       this.submittingForm = true;
+      this.googleAnalyticsService.event('login', {
+        eventLabel: JSON.stringify({
+          email: this.email.value
+        })
+      });
       this.authService
         .login({
           email: this.email.value,

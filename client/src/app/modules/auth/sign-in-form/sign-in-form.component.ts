@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren} from '@angular/core';
+  ViewChildren
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -85,9 +86,11 @@ export class SignInFormComponent implements OnInit, AfterViewInit, OnDestroy {
     this.serverError = null;
     if (this.signInForm.valid) {
       this.googleAnalyticsService.event('register', {
-        email: this.email.value,
-        firstName: this.firstName.value,
-        lastName: this.lastName.value
+        eventLabel: JSON.stringify({
+          email: this.email.value,
+          firstName: this.firstName.value,
+          lastName: this.lastName.value
+        })
       });
       this.submittingForm = true;
       this.authService

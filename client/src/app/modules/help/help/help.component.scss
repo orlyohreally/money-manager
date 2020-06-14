@@ -1,0 +1,48 @@
+.help-links {
+  width: 300px;
+  max-width: 90%;
+  max-height: 400px;
+  background: white;
+  position: absolute;
+  right: 0;
+  top: 56px;
+  z-index: 100;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.help-links__link {
+  width: 100%;
+}
+
+.mat-expansion-panel {
+  border-radius: 0 !important;
+}
+
+.help__close-button {
+  position: absolute;
+  right: 4px;
+  top: 0;
+}
+
+.help__title {
+  color: inherit;
+  font-weight: bold;
+}
+
+.help__link_external {
+  font-size: 15px;
+  height: 15px;
+  width: 15px;
+}
+
+.nav-block__link {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@media (min-width: 600px) {
+  .help-links {
+    top: 64px;
+  }
+}

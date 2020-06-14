@@ -22,7 +22,8 @@
         "user",
         "tc",
         "about",
-        "blog"
+        "blog",
+        "help"
       ],
       "kebab-case"
     ]

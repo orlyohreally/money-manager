@@ -17,5 +17,7 @@ export class PostDetailsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.post);
+  }
 }

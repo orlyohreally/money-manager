@@ -88,14 +88,15 @@ export class AppComponent implements OnInit {
             {
               name: 'keywords',
               content: `${this.defaultKeywords}${
-                data.seo.keywords ? `, ${data.seo.keywords}` : ''
+                data.seo && data.seo.keywords ? `, ${data.seo.keywords}` : ''
               }`
             },
             {
               name: 'description',
-              content: data.seo.description
-                ? data.seo.description
-                : this.defaultDescription
+              content:
+                data.seo && data.seo.description
+                  ? data.seo.description
+                  : this.defaultDescription
             },
             { name: 'robots', content: 'index, follow' }
           ]);

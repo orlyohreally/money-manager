@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    data: { title: 'Main Page' }
+    data: { seo: { title: 'Main Page' } }
   }
 ];
 

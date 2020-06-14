@@ -2,6 +2,6 @@ export type WindowWithGA = Window & {
   gtag: (
     config: string,
     ga_measurement_id: string,
-    setup: { page_path?: string }
+    setup: { [property: string]: string | number }
   ) => void;
-}
+};

@@ -2,3 +2,22 @@ $custom-typography: mat-typography-config(
   $font-family: 'Nunito Sans',
   $display-1: mat-typography-level(32px, 40px, 600)
 );
+
+@function theme-foreground($color) {
+  @return (
+    base: $color,
+    divider: rgba($color, 0.38),
+    dividers: rgba($color, 0.38),
+    disabled: rgba($color, 0.38),
+    disabled-button: rgba($color, 0.38),
+    disabled-text: rgba($color, 0.38),
+    hint-text: rgba($color, 0.38),
+    secondary-text: rgba($color, 0.54),
+    icon: rgba($color, 0.54),
+    icons: rgba($color, 0.54),
+    text: $color,
+    slider-off: rgba($color, 0.26),
+    slider-off-active: rgba($color, 0.38),
+    slider-min: rgba($color, 0.38)
+  );
+}

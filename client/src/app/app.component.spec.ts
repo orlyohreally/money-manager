@@ -9,6 +9,7 @@ import { MockComponent } from 'ng-mocks';
 // tslint:disable-next-line: max-line-length
 import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
 import { AppComponent } from './app.component';
+import { FooterComponent } from './modules/navigation/footer/footer.component';
 // tslint:disable-next-line: max-line-length
 import { MainToolbarComponent } from './modules/navigation/main-toolbar/main-toolbar.component';
 // tslint:disable-next-line: max-line-length
@@ -37,7 +38,8 @@ describe('AppComponent', () => {
         AppComponent,
         MockComponent(SideNavToolbarComponent),
         MockComponent(SideNavComponent),
-        MockComponent(MainToolbarComponent)
+        MockComponent(MainToolbarComponent),
+        MockComponent(FooterComponent)
       ],
       providers: [
         { provide: Router, useValue: { events: () => null } },

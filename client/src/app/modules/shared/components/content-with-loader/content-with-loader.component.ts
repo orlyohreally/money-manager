@@ -14,6 +14,7 @@ import {
 })
 export class ContentWithLoaderComponent implements OnInit {
   @Input() showLoader: boolean;
+  @Input() color: string;
 
   constructor() {}
 

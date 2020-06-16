@@ -1,0 +1,23 @@
+<div
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+  fxLayoutGap="0px grid"
+  fxLayoutGap.gt-sm="10px grid"
+>
+  <div
+    fxLayout="column"
+    class="footer-column"
+    fxFlex="100"
+    fxFlex.gt-sm="40"
+    [ngStyle.sm]="{ 'margin-bottom.px': 16 }"
+  >
+    <span class="footer-column__title">Company</span>
+    <a class="footer-column__link" routerLink="/">About us</a>
+    <a class="footer-column__link" routerLink="/">Blog</a>
+    <a class="footer-column__link" routerLink="/">News</a>
+    <a class="footer-column__link" routerLink="/">Terms and Conditions</a>
+  </div>
+  <div fxLayout="row" fxFlex="100" fxFlex.gt-sm="60">
+    <shared-contact-form></shared-contact-form>
+  </div>
+</div>

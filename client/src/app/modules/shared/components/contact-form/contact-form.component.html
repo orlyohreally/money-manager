@@ -1,0 +1,74 @@
+<div class="contact-us-form dark-theme">
+  <span class="contact-us-form__title">
+    Contact Us
+  </span>
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <div
+      gdAlignColumns="start stretch"
+      gdColumns="repeat(auto-fill, 1fr)"
+      gdGap="10px"
+    >
+      <mat-form-field appearance="outline" class="multi-line-error">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          required
+          matInput
+          formControlName="email"
+          name="contact-email"
+        />
+        <mat-error *ngIf="email.hasError('required')">
+          Set email for us to send the response
+        </mat-error>
+        <mat-error *ngIf="email.hasError('email')">
+          Invalid email
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="multi-line-error">
+        <mat-label>Subject</mat-label>
+        <input
+          type="text"
+          required
+          matInput
+          formControlName="subject"
+          name="contact-email"
+        />
+        <mat-error *ngIf="subject.hasError('required')">
+          Specify subject
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="multi-line-error"
+        gdColumn.gt-sm="auto / span 2"
+        gdColumn="auto"
+      >
+        <mat-label>Message</mat-label>
+        <textarea
+          required
+          matInput
+          rows="5"
+          formControlName="message"
+          name="contact-email"
+        ></textarea>
+        <mat-error *ngIf="message.hasError('required')">
+          Specify your question or problem
+        </mat-error>
+        <mat-error *ngIf="message.hasError('minlength')">
+          Message is too short
+        </mat-error>
+        <mat-error *ngIf="message.hasError('maxlength')">
+          Message is too long
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div sharedNotificationBlock="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+    <shared-content-with-loader [showLoader]="submittingForm" color="accent">
+      <button mat-raised-button class="button" color="accent" type="submit">
+        Send
+      </button>
+    </shared-content-with-loader>
+  </form>
+</div>

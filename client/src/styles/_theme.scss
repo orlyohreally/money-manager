@@ -27,11 +27,33 @@ $angular-material-theme: mat-light-theme(
   $angular-material-warn
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($angular-material-theme);
-
 @import './typography';
 
 @include mat-core($custom-typography);
+
+// Define an alternate dark theme.
+$dark-primary: mat-palette($mat-blue-grey);
+$dark-accent: mat-palette($mat-amber, A200, A100, A400);
+$dark-warn: mat-palette($mat-deep-orange);
+$dark-theme: mat-dark-theme(
+  $angular-material-primary,
+  $angular-material-accent,
+  $angular-material-warn
+);
+
+$theme-brown: map-merge(
+  $dark-theme,
+  (
+    foreground: theme-foreground(#ffffff)
+  )
+);
+
+@include angular-material-theme($angular-material-theme);
+
+.light-theme {
+  @include angular-material-theme($angular-material-theme);
+}
+
+.dark-theme {
+  @include angular-material-theme($theme-brown);
+}

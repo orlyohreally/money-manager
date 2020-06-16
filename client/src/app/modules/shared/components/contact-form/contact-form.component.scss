@@ -1,0 +1,57 @@
+@import 'theme';
+:host {
+  width: 100%;
+}
+
+.dark-theme {
+  ::ng-deep &.contact-us-form {
+    .mat-form-field .mat-input-element {
+      caret-color: mat-color($angular-material-primary, lighter);
+    }
+
+    .mat-form-field.mat-focused:not(.mat-form-field-invalid)
+      .mat-form-field-label {
+      color: mat-color($angular-material-primary, lighter);
+    }
+
+    .mat-form-field-appearance-outline.mat-focused:not(.mat-form-field-invalid)
+      .mat-form-field-outline-thick {
+      color: mat-color($angular-material-primary, lighter);
+    }
+  }
+}
+
+::ng-deep .contact-us-form {
+  .mat-form-field.mat-form-field.mat-form-field-appearance-outline
+    > div.mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field.mat-form-field.mat-form-field-appearance-outline
+    > div.mat-form-field-wrapper
+    > div.mat-form-field-flex
+    > div.mat-form-field-infix {
+    padding: 0.4em 0px;
+  }
+
+  .mat-form-field.mat-form-field.mat-form-field-appearance-outline
+    > div.mat-form-field-wrapper
+    > div.mat-form-field-flex
+    > div.mat-form-field-infix
+    > span.mat-form-field-label-wrapper {
+    top: -1.5em;
+  }
+
+  .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+    .mat-form-field-label {
+    transform: translateY(-1.1em) scale(0.75);
+    width: 133.33333%;
+  }
+}
+
+.contact-us-form__title {
+  font-size: 15px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  display: block;
+}

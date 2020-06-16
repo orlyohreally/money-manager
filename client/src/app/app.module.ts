@@ -1,12 +1,13 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
 // tslint:disable-next-line: max-line-length
 import { ServerErrorInterceptor } from '@core-client/interceptors/server-error.interceptor';
 // tslint:disable-next-line: max-line-length
@@ -46,4 +47,8 @@ import { UserModule } from './modules/user/user.module';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(overlayContainer: OverlayContainer) {
+    overlayContainer.getContainerElement().classList.add('light-theme');
+  }
+}

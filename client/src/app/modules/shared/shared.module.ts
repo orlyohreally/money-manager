@@ -37,6 +37,8 @@ import { CloseDialogButtonComponent } from './components/close-dialog-button/clo
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 // tslint:disable-next-line: max-line-length
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
+// tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from './components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
@@ -127,7 +129,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective,
     BackgroundColorDirective,
-    CloseDialogButtonComponent
+    CloseDialogButtonComponent,
+    ContactFormComponent
   ],
   imports: [
     CommonModule,
@@ -190,7 +193,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     DatetimeSelectorComponent,
     CloseDialogButtonComponent,
     SortByPipe,
-    DynamicActiveRouterLinkDirective
+    DynamicActiveRouterLinkDirective,
+    ContactFormComponent
   ],
   providers: [
     CurrencySymbolPipe,

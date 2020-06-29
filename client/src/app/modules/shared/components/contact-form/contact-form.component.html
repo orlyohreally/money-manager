@@ -36,6 +36,9 @@
         <mat-error *ngIf="subject.hasError('required')">
           Specify subject
         </mat-error>
+        <mat-error *ngIf="subject.hasError('maxlength')">
+          Subject is too long
+        </mat-error>
       </mat-form-field>
       <mat-form-field
         appearance="outline"
@@ -62,8 +65,11 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div sharedNotificationBlock="error" *ngIf="errorMessage">
-      {{ errorMessage }}
+    <div
+      [sharedNotificationBlock]="serverResponse.type"
+      *ngIf="serverResponse.message"
+    >
+      {{ serverResponse.message }}
     </div>
     <shared-content-with-loader [showLoader]="submittingForm" color="accent">
       <button mat-raised-button class="button" color="accent" type="submit">

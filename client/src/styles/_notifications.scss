@@ -25,3 +25,13 @@
 .notification-message_error {
   background-color: mat-color($angular-material-warn, lighter);
 }
+
+.dark-theme {
+  .notification-message_error {
+    background-color: mat-color($angular-material-warn);
+  }
+
+  .notification-message_success {
+    background-color: mat-color($angular-material-accent, darker);
+  }
+}

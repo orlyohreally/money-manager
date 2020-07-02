@@ -20,7 +20,8 @@
         "payment",
         "member",
         "user",
-        "tc"
+        "tc",
+        "about"
       ],
       "kebab-case"
     ]

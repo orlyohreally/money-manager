@@ -1,0 +1,18 @@
+.functionalities {
+  margin-bottom: 16px;
+}
+
+.functionalities__functionality {
+  display: flex;
+  align-items: center;
+}
+
+.functionalities__functionality:before {
+  content: '';
+  display: inline-flex;
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 2px;
+  background: #18191b;
+}

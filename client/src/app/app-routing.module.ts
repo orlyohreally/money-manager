@@ -29,6 +29,10 @@ const routes: Routes = [
       './modules/terms-and-conditions/terms-and-conditions.module#TermsAndConditionsModule'
   },
   {
+    path: 'about-us',
+    loadChildren: './modules/about-us/about-us.module#AboutUsModule'
+  },
+  {
     path: 'not-found',
     loadChildren: () => ErrorModule
   },

@@ -11,9 +11,9 @@
     [ngStyle.sm]="{ 'margin-bottom.px': 16 }"
   >
     <span class="footer-column__title">Company</span>
-    <a class="footer-column__link" routerLink="/">About us</a>
-    <a class="footer-column__link" routerLink="/">Blog</a>
-    <a class="footer-column__link" routerLink="/">News</a>
+    <a class="footer-column__link" routerLink="/about-us">About us</a>
+    <a class="footer-column__link" routerLink="/" *ngIf="isDev">Blog</a>
+    <a class="footer-column__link" routerLink="/" *ngIf="isDev">News</a>
     <a class="footer-column__link" routerLink="/terms-and-conditions">
       Terms and Conditions
     </a>

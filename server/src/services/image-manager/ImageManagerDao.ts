@@ -1,5 +1,4 @@
 import * as cloudinary from "cloudinary";
-import * as dotenv from "dotenv";
 
 import { IImageLoaderDao } from "./ImageManagerService";
 
@@ -32,7 +31,6 @@ export class ImageManagerDao implements IImageLoaderDao {
   }
 
   private configCloudinary() {
-    dotenv.config();
     cloudinary.v2.config({
       cloud_name: process.env.CLOUD_NAME,
       api_key: process.env.API_KEY,

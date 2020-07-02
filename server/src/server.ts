@@ -1,6 +1,9 @@
 // tslint:disable-next-line
 import "module-alias/register";
 
+import { setupEnv } from "./env-setup";
+setupEnv();
+
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as express from "express";

@@ -64,6 +64,14 @@
           Message is too long
         </mat-error>
       </mat-form-field>
+      <div class="contact-us-form__captcha">
+        <re-captcha
+          theme="dark"
+          formControlName="g-recaptcha-response"
+          name="form-captcha"
+          required
+        ></re-captcha>
+      </div>
     </div>
     <div
       [sharedNotificationBlock]="serverResponse.type"

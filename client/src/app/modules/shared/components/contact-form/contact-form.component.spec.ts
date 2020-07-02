@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 
 // tslint:disable-next-line: max-line-length
 import { SupportService } from '@core-client/services/support/support.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 // tslint:disable-next-line: max-line-length
 import { NotificationBlockDirective } from '../../directives/notification-block.directive';
 // tslint:disable-next-line: max-line-length
@@ -30,7 +31,8 @@ describe('ContactFormComponent', () => {
       declarations: [
         ContactFormComponent,
         MockComponent(ContentWithLoaderComponent),
-        MockDirective(NotificationBlockDirective)
+        MockDirective(NotificationBlockDirective),
+        MockComponent(RecaptchaComponent)
       ],
       imports: [
         ReactiveFormsModule,

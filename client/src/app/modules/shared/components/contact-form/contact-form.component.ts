@@ -28,7 +28,8 @@ export class ContactFormComponent implements OnInit {
       subject: new FormControl('', [
         Validators.required,
         Validators.maxLength(20)
-      ])
+      ]),
+      'g-recaptcha-response': new FormControl('', Validators.required)
     });
   }
 

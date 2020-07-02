@@ -40,7 +40,8 @@ describe('SupportService', () => {
     const mockedContactMessage = {
       email: 'email@handle.com',
       subject: 'Not working',
-      message: 'Members are not displaying correctly'
+      message: 'Members are not displaying correctly',
+      'g-recaptcha-response': 'recaptcha'
     };
     const mockedResponse = { message: 'We will get in touch' };
 

@@ -3,6 +3,18 @@
   width: 100%;
 }
 
+.contact-us-form__title {
+  font-size: 15px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  display: block;
+}
+
+.contact-us-form__captcha {
+  transform: scale(0.7);
+  transform-origin: left;
+}
+
 .dark-theme {
   ::ng-deep &.contact-us-form {
     .mat-form-field .mat-input-element {
@@ -47,11 +59,4 @@
     transform: translateY(-1.1em) scale(0.75);
     width: 133.33333%;
   }
-}
-
-.contact-us-form__title {
-  font-size: 15px;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  display: block;
 }

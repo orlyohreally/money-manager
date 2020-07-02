@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { RecaptchaV2 } from "express-recaptcha";
 import { IRouter } from "express-serve-static-core";
 
 // tslint:disable-next-line: max-line-length
@@ -22,11 +23,25 @@ export class SupportRouter {
     this.service = service;
     this.emailService = emailSenderService;
 
-    this.router.post("/support/contact", asyncWrap(this.contactSupport));
+    const recaptcha = new RecaptchaV2(
+      process.env.CAPTCHA_SITE_KEY as string,
+      process.env.CAPTCHA_SECRET_KEY as string
+    );
+
+    this.router.post(
+      "/support/contact",
+      recaptcha.middleware.verify,
+      asyncWrap(this.contactSupport)
+    );
   }
 
   private contactSupport = async (req: Request, res: Response) => {
     try {
+      if (!req.recaptcha || req.recaptcha.error) {
+        return res
+          .status(400)
+          .json({ message: "Recaptcha was not provided or is invalid" });
+      }
       const { email, subject, message } = req.body as {
         email: string;
         subject: string;

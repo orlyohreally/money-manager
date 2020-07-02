@@ -23,6 +23,7 @@ export class SupportService extends DataService {
     email: string;
     subject: string;
     message: string;
+    'g-recaptcha-response': string;
   }): Observable<{ message: string }> {
     return this.post(this.apiUrl, data);
   }

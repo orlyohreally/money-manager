@@ -20,6 +20,12 @@ import {
   MatSelectModule,
   MatTooltipModule
 } from '@angular/material';
+import {
+  RECAPTCHA_SETTINGS,
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RecaptchaSettings
+} from 'ng-recaptcha';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -155,7 +161,9 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   exports: [
     FilterPipe,
@@ -200,7 +208,13 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     CurrencySymbolPipe,
     DecimalPipe,
     UserFullNamePipe,
-    { provide: 'windowObj', useValue: window }
+    { provide: 'windowObj', useValue: window },
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: '6LciOKsZAAAAAMlT8x8m6hlzA61QCCvAEN0M8Eu5'
+      } as RecaptchaSettings
+    }
   ],
   entryComponents: [
     ImageManagerComponent,

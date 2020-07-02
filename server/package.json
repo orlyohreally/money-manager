@@ -84,6 +84,7 @@
     "express": "^4.17.0",
     "express-recaptcha": "^5.0.2",
     "http-status-codes": "^1.4.0",
+    "husky": "^4.2.5",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.13",
     "module-alias": "^2.1.0",

@@ -74,12 +74,10 @@ export class AppComponent implements OnInit {
       )
       .subscribe(
         (data: {
-          title: string;
-          description: string;
-          keywords: string;
+          seo: { title: string; description: string; keywords: string };
           hideMenu: boolean;
         }) => {
-          const title = data ? data.title : '';
+          const title = data && data.seo ? data.seo.title : '';
           this.titleService.setTitle(`${title} | ${this.appName}`);
 
           if (this.sideNavEl.mode !== 'side') {
@@ -90,14 +88,15 @@ export class AppComponent implements OnInit {
             {
               name: 'keywords',
               content: `${this.defaultKeywords}${
-                data.keywords ? `, ${data.keywords}` : ''
+                data.seo && data.seo.keywords ? `, ${data.seo.keywords}` : ''
               }`
             },
             {
               name: 'description',
-              content: data.description
-                ? data.description
-                : this.defaultDescription
+              content:
+                data.seo && data.seo.description
+                  ? data.seo.description
+                  : this.defaultDescription
             },
             { name: 'robots', content: 'index, follow' }
           ]);

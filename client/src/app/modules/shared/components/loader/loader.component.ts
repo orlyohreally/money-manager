@@ -13,8 +13,10 @@ import {
 })
 export class LoaderComponent implements OnInit {
   @Input() diameter: number;
+  @Input() color: 'primary' | 'accent' | 'warn';
 
   defaultDiameter = 50;
+  defaultColor = 'primary';
 
   constructor() {}
 

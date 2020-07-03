@@ -23,6 +23,16 @@ const routes: Routes = [
     loadChildren: './modules/auth/auth.module#AuthModule'
   },
   {
+    path: 'terms-and-conditions',
+    loadChildren:
+      // tslint:disable-next-line: max-line-length
+      './modules/terms-and-conditions/terms-and-conditions.module#TermsAndConditionsModule'
+  },
+  {
+    path: 'about-us',
+    loadChildren: './modules/about-us/about-us.module#AboutUsModule'
+  },
+  {
     path: 'not-found',
     loadChildren: () => ErrorModule
   },

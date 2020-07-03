@@ -3,7 +3,6 @@ import {
   browser,
   by,
   element,
-  ElementFinder,
   ExpectedConditions
 } from 'protractor';
 
@@ -82,7 +81,9 @@ describe('Family payments Page', () => {
       const waitTimeout = 30000;
       browser.wait(
         ExpectedConditions.not(
-          ExpectedConditions.presenceOf(element(by.tagName('form')))
+          ExpectedConditions.presenceOf(
+            element(by.css('.cdk-overlay-container form'))
+          )
         ),
         waitTimeout
       );
@@ -103,7 +104,9 @@ describe('Family payments Page', () => {
       );
       browser.wait(
         ExpectedConditions.not(
-          ExpectedConditions.presenceOf(element(by.tagName('form')))
+          ExpectedConditions.presenceOf(
+            element(by.css('.cdk-overlay-container form'))
+          )
         ),
         waitTimeout
       );

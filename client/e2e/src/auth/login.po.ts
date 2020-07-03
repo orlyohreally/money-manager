@@ -33,9 +33,9 @@ export class LoginPage {
 
   loginAsTestedUser() {
     this.goToPage();
-    typeInInput('email', testedUser.email);
-    typeInInput('password', testedUser.password);
-    submitForm();
+    typeInInput('email', testedUser.email, '.page-content');
+    typeInInput('password', testedUser.password, '.page-content');
+    submitForm('.page-content');
   }
 
   get registrationPageUrl(): string {

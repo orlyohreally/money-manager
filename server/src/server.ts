@@ -1,6 +1,9 @@
 // tslint:disable-next-line
 import "module-alias/register";
 
+import { setupEnv } from "./env-setup";
+setupEnv();
+
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as express from "express";
@@ -13,6 +16,7 @@ import { apiDocumentationService } from "./services/api-documentation";
 import { familiesRouter } from "./services/families";
 import { paymentSubjectsRouter } from "./services/payment-subjects";
 import { paymentsRouter } from "./services/payments";
+import { supportRouter } from "./services/support";
 import { testingRouter } from "./services/testing";
 import { usersRouter } from "./services/users";
 
@@ -35,7 +39,7 @@ export const runServer = async (
   const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
   });
-  if (process.env.NODE_ENV === "staging") {
+  if (process.env.NODE_ENV === "testing") {
     const whitelist = ["http://localhost:4200", process.env.BACK_END_URL];
     const corsOptions = {
       exposedHeaders: ["Authorization"],
@@ -61,8 +65,12 @@ export const runServer = async (
   app.use(apiPath, paymentSubjectsRouter);
   app.use(apiPath, familiesRouter);
   app.use(apiPath, paymentsRouter);
+  app.use(apiPath, supportRouter);
 
-  if (["development", "staging"].indexOf(process.env.NODE_ENV as string) > -1) {
+  if (
+    ["development", "staging", "testing"].indexOf(process.env
+      .NODE_ENV as string) > -1
+  ) {
     app.use(apiPath, testingRouter);
   }
 

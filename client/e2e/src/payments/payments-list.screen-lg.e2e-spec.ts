@@ -74,13 +74,17 @@ describe(`Family payments Page (screen is more than ${constants.menuScreenThresh
       expect(paymentsList.count()).toEqual(1);
       paymentsList.get(0).click();
 
-      waitForForm();
+      waitForForm('.cdk-overlay-container');
 
-      typeInInput('payment-amount', updatedPayment.amount.value);
-      setDatetimeInput('form', updatedPayment.paidAt);
-      submitForm();
+      typeInInput(
+        'payment-amount',
+        updatedPayment.amount.value,
+        '.cdk-overlay-container'
+      );
+      setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
+      submitForm('.cdk-overlay-container');
 
-      waitForFormToClose();
+      waitForFormToClose('.cdk-overlay-container');
       paymentsList = page.getFamilyPayments();
       expect(paymentsList.count()).toEqual(1);
       page.expectPaymentToBeDisplayedCorrectly(
@@ -124,7 +128,7 @@ describe(`Family payments Page (screen is more than ${constants.menuScreenThresh
       expect(paymentsList.count()).toEqual(2);
       paymentsList.get(0).click();
 
-      element(by.tagName('form'))
+      element(by.css('.cdk-overlay-container form'))
         .element(by.partialButtonText('Delete'))
         .click();
       browser.wait(

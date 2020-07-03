@@ -20,6 +20,12 @@ import {
   MatSelectModule,
   MatTooltipModule
 } from '@angular/material';
+import {
+  RECAPTCHA_SETTINGS,
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RecaptchaSettings
+} from 'ng-recaptcha';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -36,6 +42,8 @@ import { ButtonComponent } from './components/button/button.component';
 import { CloseDialogButtonComponent } from './components/close-dialog-button/close-dialog-button.component';
 // tslint:disable-next-line: max-line-length
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+// tslint:disable-next-line: max-line-length
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
 // tslint:disable-next-line: max-line-length
 import { ContentWithLoaderComponent } from './components/content-with-loader/content-with-loader.component';
 // tslint:disable-next-line: max-line-length
@@ -127,7 +135,8 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective,
     BackgroundColorDirective,
-    CloseDialogButtonComponent
+    CloseDialogButtonComponent,
+    ContactFormComponent
   ],
   imports: [
     CommonModule,
@@ -152,7 +161,9 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   exports: [
     FilterPipe,
@@ -190,13 +201,20 @@ import { UserFullNamePipe } from './pipes/user-full-name.pipe';
     DatetimeSelectorComponent,
     CloseDialogButtonComponent,
     SortByPipe,
-    DynamicActiveRouterLinkDirective
+    DynamicActiveRouterLinkDirective,
+    ContactFormComponent
   ],
   providers: [
     CurrencySymbolPipe,
     DecimalPipe,
     UserFullNamePipe,
-    { provide: 'windowObj', useValue: window }
+    { provide: 'windowObj', useValue: window },
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: '6LciOKsZAAAAAMlT8x8m6hlzA61QCCvAEN0M8Eu5'
+      } as RecaptchaSettings
+    }
   ],
   entryComponents: [
     ImageManagerComponent,

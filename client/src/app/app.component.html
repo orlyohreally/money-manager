@@ -1,4 +1,4 @@
-<mat-sidenav-container>
+<mat-sidenav-container class="mat-typography light-theme">
   <mat-sidenav
     #sidenav
     role="navigation"
@@ -13,7 +13,8 @@
     </mat-progress-bar>
     <nav-main-toolbar (toggleNavbar)="sidenav.toggle()"></nav-main-toolbar>
     <div class="page-content">
-      <router-outlet></router-outlet>
+      <router-outlet> </router-outlet>
     </div>
+    <nav-footer></nav-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

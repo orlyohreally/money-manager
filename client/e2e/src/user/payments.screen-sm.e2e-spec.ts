@@ -3,7 +3,6 @@ import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import {
   constants,
-  iphone5,
   registerUser,
   setDatetimeInput,
   submitForm,
@@ -56,9 +55,13 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .element(by.partialButtonText('edit'))
       .click();
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
-    setDatetimeInput('form', updatedPayment.paidAt);
-    submitForm();
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
+    setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
+    submitForm('.cdk-overlay-container');
 
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(1);
@@ -101,12 +104,16 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .get(1)
       .element(by.partialButtonText('edit'))
       .click();
-    waitForForm();
+    waitForForm('.cdk-overlay-container');
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
-    setDatetimeInput('form', updatedPayment.paidAt);
-    submitForm();
-    waitForFormToClose();
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
+    setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
+    submitForm('.cdk-overlay-container');
+    waitForFormToClose('.cdk-overlay-container');
 
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(2);
@@ -215,7 +222,7 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .element(by.partialButtonText('edit'))
       .click();
 
-    element(by.tagName('form'))
+    element(by.css('.cdk-overlay-container form'))
       .element(by.partialButtonText('Delete'))
       .click();
     browser.wait(
@@ -432,7 +439,7 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .element(by.partialButtonText('edit'))
       .click();
 
-    element(by.tagName('form'))
+    element(by.css('.cdk-overlay-container form'))
       .element(by.partialButtonText('Delete'))
       .click();
     browser.wait(

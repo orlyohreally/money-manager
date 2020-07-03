@@ -6,5 +6,6 @@ __tests__/**/*.js
 __tests__/**/*.js.map
 coverage
 .env
+.env.test
 src/assets/frontend
 src/services/api-documentation/options.json

@@ -24,6 +24,18 @@
   max-width: 500px;
 }
 
+.copyright {
+  text-align: center;
+  padding: 16px;
+  margin: 0 -20px -20px -20px;
+  background-color: mat-color($angular-material-primary, darker);
+}
+
+.copyright__author {
+  text-decoration: none;
+  color: mat-color($angular-material-primary, 100);
+}
+
 @media (min-width: 960px) {
   .contact-form {
     padding-right: 0 !important;

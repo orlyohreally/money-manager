@@ -49,6 +49,8 @@ import { UserModule } from './modules/user/user.module';
 })
 export class AppModule {
   constructor(overlayContainer: OverlayContainer) {
-    overlayContainer.getContainerElement().classList.add('light-theme');
+    overlayContainer
+      .getContainerElement()
+      .classList.add('light-theme', 'mat-typography');
   }
 }

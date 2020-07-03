@@ -76,10 +76,10 @@ export const runServer = async (
 
   swaggerGenerator(app)(apiDocumentationService.options);
 
-  app.use(express.static(`${__dirname}/assets/frontend`));
+  app.use(express.static(path.join(__dirname, "/assets/frontend")));
 
   app.get("/*", (req, res) => {
-    res.sendFile(path.join(`${__dirname}/assets/frontend/index.html`));
+    res.sendFile(path.join(__dirname, "/assets/frontend/index.html"));
   });
   console.log("Running server");
   return server;

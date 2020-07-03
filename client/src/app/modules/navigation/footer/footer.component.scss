@@ -18,3 +18,14 @@
   margin-bottom: 8px;
   text-decoration: none;
 }
+
+.contact-form {
+  display: block;
+  max-width: 500px;
+}
+
+@media (min-width: 960px) {
+  .contact-form {
+    padding-right: 0 !important;
+  }
+}

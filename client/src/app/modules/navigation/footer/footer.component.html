@@ -1,13 +1,7 @@
-<div
-  gdAreas="links | form"
-  gdAreas.gt-sm="links form"
-  gdGap="10px"
-  gdRows="auto auto auto"
->
+<div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="20px grid">
   <div
-    gdArea="links"
-    fxLayout="column"
     class="footer-column"
+    fxLayout="column"
     [ngStyle.sm]="{ 'margin-bottom.px': 16 }"
   >
     <span class="footer-column__title">Company</span>
@@ -18,7 +12,5 @@
       Terms and Conditions
     </a>
   </div>
-  <div gdArea="form">
-    <shared-contact-form></shared-contact-form>
-  </div>
+  <shared-contact-form class="contact-form"></shared-contact-form>
 </div>

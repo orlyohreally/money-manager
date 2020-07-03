@@ -3,12 +3,13 @@
     Contact Us
   </span>
   <form [formGroup]="form" (ngSubmit)="submitForm()">
-    <div
-      gdAlignColumns="start stretch"
-      gdColumns="repeat(auto-fill, minmax(250px, 1fr))"
-      gdGap="10px"
-    >
-      <mat-form-field appearance="outline" class="multi-line-error">
+    <div fxLayout="row wrap" fxLayoutGap.gt-xs="10px grid">
+      <mat-form-field
+        fxFlex="1 1 100%"
+        fxFlex.gt-sm="1 1 50%"
+        appearance="outline"
+        class="multi-line-error"
+      >
         <mat-label>Email</mat-label>
         <input
           type="email"
@@ -24,7 +25,12 @@
           Invalid email
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="multi-line-error">
+      <mat-form-field
+        fxFlex="1 1 100%"
+        fxFlex.gt-sm="1 1 50%"
+        appearance="outline"
+        class="multi-line-error"
+      >
         <mat-label>Subject</mat-label>
         <input
           type="text"
@@ -41,10 +47,9 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field
+        fxFlex="1 1 100%"
         appearance="outline"
         class="multi-line-error"
-        gdColumn.gt-sm="auto / span 2"
-        gdColumn="auto"
       >
         <mat-label>Message</mat-label>
         <textarea
@@ -64,14 +69,14 @@
           Message is too long
         </mat-error>
       </mat-form-field>
-      <div class="contact-us-form__captcha">
-        <re-captcha
-          theme="dark"
-          formControlName="g-recaptcha-response"
-          name="form-captcha"
-          required
-        ></re-captcha>
-      </div>
+    </div>
+    <div class="contact-us-form__captcha">
+      <re-captcha
+        theme="dark"
+        formControlName="g-recaptcha-response"
+        name="form-captcha"
+        required
+      ></re-captcha>
     </div>
     <div
       [sharedNotificationBlock]="serverResponse.type"

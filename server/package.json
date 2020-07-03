@@ -25,7 +25,7 @@
     "test:ci": "jest --detectOpenHandles --coverage",
     "clean": "rimraf \"{src,__tests__}/**/*.js?(x)?(.map)\"",
     "release": "./extra/deployment/release.sh",
-    "setup-swagger": "cd src/services/api-documentation && multi-file-swagger swagger.json > options.json && cd ../../.."
+    "setup-swagger": "multi-file-swagger src/services/api-documentation/swagger.json >  src/services/api-documentation/options.json"
   },
   "repository": {
     "type": "git",

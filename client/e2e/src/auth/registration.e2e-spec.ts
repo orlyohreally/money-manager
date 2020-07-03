@@ -40,7 +40,7 @@ describe('Registration Page', () => {
   });
 
   it('should display submit button with text "Sign in"', () => {
-    expect(getSubmitButton().getText()).toBe('Sign in');
+    expect(getSubmitButton('.page-content').getText()).toBe('Sign in');
   });
 
   it(
@@ -68,12 +68,12 @@ describe('Registration Page', () => {
     page.registerAsTestedUser();
     page.goToPage();
 
-    typeInInput('first-name', 'Ivan I');
-    typeInInput('last-name', 'Samuel');
-    typeInInput('email', testedUser.email);
-    typeInInput('password', 'ABCabc123!@#');
-    typeInInput('password-again', 'ABCabc123!@#');
-    submitForm();
+    typeInInput('first-name', 'Ivan I', '.page-content');
+    typeInInput('last-name', 'Samuel', '.page-content');
+    typeInInput('email', testedUser.email, '.page-content');
+    typeInInput('password', 'ABCabc123!@#', '.page-content');
+    typeInInput('password-again', 'ABCabc123!@#', '.page-content');
+    submitForm('.page-content');
 
     const waitTimeout = 30000;
     browser.wait(

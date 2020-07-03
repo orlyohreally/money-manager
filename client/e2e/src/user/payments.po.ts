@@ -54,24 +54,26 @@ export class UserPaymentsPage {
   async createUserPayment(amount: string, subject: string, paidAt: string) {
     this.getCreatePaymentButton().click();
     const waitTimeout = 30000;
-    const getForm = () => element(by.tagName('form'));
+    const getForm = () => element(by.css('.cdk-overlay-container form'));
     browser.wait(ExpectedConditions.presenceOf(getForm()), waitTimeout);
     this.fillAndSubmitPaymentForm(amount, subject, paidAt);
   }
 
   selectSubject(subject: string) {
-    const select = element(by.css('form mat-select[name="payment-subject"]'));
+    const select = element(
+      by.css('.cdk-overlay-container form mat-select[name="payment-subject"]')
+    );
     select.click();
     const options = element.all(by.cssContainingText('mat-option', subject));
     options.get(0).click();
   }
 
   fillAndSubmitPaymentForm(amount: string, subject: string, paidAt: string) {
-    setDatetimeInput('form', paidAt);
+    setDatetimeInput('.cdk-overlay-container form', paidAt);
     typeInInput('payment-amount', amount);
     this.selectSubject(subject);
 
-    submitForm();
+    submitForm('.cdk-overlay-container');
   }
 
   createFamily(familyName: string, currency: string) {

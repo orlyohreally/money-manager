@@ -61,8 +61,8 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
       .click();
 
     typeInInput('payment-amount', updatedPayment.amount.value);
-    setDatetimeInput('form', updatedPayment.paidAt);
-    submitForm();
+    setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
+    submitForm('.cdk-overlay-container');
 
     paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(1);
@@ -105,7 +105,7 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
       .all(by.tagName('div'))
       .get(1)
       .click();
-    waitForForm();
+    waitForForm('.cdk-overlay-container');
     const updatedPayment = {
       amount: { value: '350', display: '€350' },
       subject: 'apartment',
@@ -113,8 +113,8 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
     };
 
     typeInInput('payment-amount', updatedPayment.amount.value);
-    setDatetimeInput('form', updatedPayment.paidAt);
-    submitForm();
+    setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
+    submitForm('.cdk-overlay-container');
 
     const paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(2);
@@ -168,7 +168,7 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
       .get(1)
       .click();
 
-    element(by.tagName('form'))
+    element(by.css('.cdk-overlay-container form'))
       .element(by.partialButtonText('Delete'))
       .click();
     browser.wait(
@@ -252,7 +252,7 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
     let paymentsList = getUserPayments();
     expect(paymentsList.count()).toEqual(3);
     openEditPaymentForm(paymentsList, 0);
-    element(by.tagName('form'))
+    element(by.css('.cdk-overlay-container form'))
       .element(by.partialButtonText('Delete'))
       .click();
     browser.wait(
@@ -354,7 +354,7 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
   }
 
   function clickDeleteInEditPaymentForm() {
-    element(by.tagName('form'))
+    element(by.css('.cdk-overlay-container form'))
       .element(by.partialButtonText('Delete'))
       .click();
   }

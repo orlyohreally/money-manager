@@ -29,8 +29,12 @@ export function escapeRegExp(expression: string): string {
   return expression.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export function typeInInput(inputName: string, value: string): void {
-  const input = element(by.css(`input[name="${inputName}"]`));
+export function typeInInput(
+  inputName: string,
+  value: string,
+  parentSelector = ''
+): void {
+  const input = element(by.css(`${parentSelector} input[name="${inputName}"]`));
   input.click();
   input.clear();
   // input.sendKeys(value) not always works properly so use this workaround
@@ -39,25 +43,25 @@ export function typeInInput(inputName: string, value: string): void {
   }
 }
 
-export function getSubmitButton() {
-  return element(by.css('button[type="submit"]'));
+export function getSubmitButton(parentSelector: string) {
+  return element(by.css(`${parentSelector} button[type="submit"]`));
 }
 
-export function submitForm() {
-  getSubmitButton().click();
+export function submitForm(parentSelector: string) {
+  getSubmitButton(parentSelector).click();
 }
 
-export function waitForForm() {
+export function waitForForm(parentSelector: string) {
   browser.wait(
-    ExpectedConditions.presenceOf(element(by.css('form'))),
+    ExpectedConditions.presenceOf(element(by.css(`${parentSelector} form`))),
     constants.waitTimeout
   );
 }
 
-export function waitForFormToClose() {
+export function waitForFormToClose(parentSelector: string) {
   browser.wait(
     ExpectedConditions.not(
-      ExpectedConditions.presenceOf(element(by.css('form')))
+      ExpectedConditions.presenceOf(element(by.css(`${parentSelector} form`)))
     ),
     constants.waitTimeout
   );

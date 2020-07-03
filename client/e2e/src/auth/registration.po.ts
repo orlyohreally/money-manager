@@ -34,7 +34,7 @@ export class RegistrationPage {
     typeInInput('email', testedUser.email);
     typeInInput('password', testedUser.password);
     typeInInput('password-again', testedUser.password);
-    submitForm();
+    submitForm('.page-content');
   }
 
   get emailVerificationPageUrl() {

@@ -38,7 +38,7 @@ describe('Login Page', () => {
   });
 
   it('should display submit button with text "Log In"', () => {
-    expect(getSubmitButton().getText()).toBe('Log In');
+    expect(getSubmitButton('.page-content').getText()).toBe('Log In');
   });
 
   // tslint:disable-next-line: max-line-length
@@ -47,7 +47,7 @@ describe('Login Page', () => {
     page.loginAsTestedUser();
 
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
-    expect(getSubmitButton().isDisplayed).toBeTruthy();
+    expect(getSubmitButton('.page-content').isDisplayed).toBeTruthy();
     expect(page.getNotificationBlock().getText()).toBeTruthy();
   });
 

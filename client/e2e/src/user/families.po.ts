@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions, Key } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import { LoginPage } from '@src-e2e/auth/login.po';
 import {
@@ -52,13 +52,13 @@ export class FamiliesPage {
     roles.forEach(role => {
       element(by.cssContainingText('.mat-checkbox-label', role)).click();
     });
-    submitForm();
+    submitForm('.cdk-overlay-container');
   }
 
   async fillAndSubmitFamilyForm(name: string, currency: string) {
     typeInInput('family-name', name);
     this.selectCurrency(currency);
-    submitForm();
+    submitForm('.cdk-overlay-container');
   }
 
   selectCurrency(currency: string) {

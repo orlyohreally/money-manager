@@ -46,7 +46,7 @@ jobs:
           BACK_END_URL: "http://localhost:3000/api/v1"
           EMAIL_VERIFICATION_EMAIL_TEMPLATE: ${{ secrets.EMAIL_VERIFICATION_EMAIL_TEMPLATE }}
           MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE: ${{ secrets.MEMBER_WAS_ADDED_TO_FAMILY_EMAIL_TEMPLATE }}
-          NODE_ENV: "staging"
+          NODE_ENV: "testing"
           EMAILING_ENABLED: false
         run: |
           cd client

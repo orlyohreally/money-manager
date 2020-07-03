@@ -39,7 +39,7 @@ export const runServer = async (
   const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
   });
-  if (process.env.NODE_ENV === "staging") {
+  if (process.env.NODE_ENV === "testing") {
     const whitelist = ["http://localhost:4200", process.env.BACK_END_URL];
     const corsOptions = {
       exposedHeaders: ["Authorization"],
@@ -67,7 +67,10 @@ export const runServer = async (
   app.use(apiPath, paymentsRouter);
   app.use(apiPath, supportRouter);
 
-  if (["development", "staging"].indexOf(process.env.NODE_ENV as string) > -1) {
+  if (
+    ["development", "staging", "testing"].indexOf(process.env
+      .NODE_ENV as string) > -1
+  ) {
     app.use(apiPath, testingRouter);
   }
 

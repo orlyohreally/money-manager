@@ -16,7 +16,7 @@
     "lint:tslint": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint:prettier": "prettier --write \"{src,test}/**/*.ts*\"",
     "start": "node src/main.js",
-    "start:test": "npm run build:clean && node src/test-server.js",
+    "start:test": "npm run build:clean && env NODE_ENV=testing node src/test-server.js",
     "start:dev": "concurrently --kill-others \"npm run setup-swagger && tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "test": "jest --detectOpenHandles",
     "precommit": "lint-staged && npm run lint",

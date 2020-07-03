@@ -8,10 +8,18 @@ import { IsDevModeService } from '@src/app/core/services/is-dev-mode.service';
 })
 export class FooterComponent implements OnInit {
   isDev: boolean;
+  copyrightDuration: string;
+
+  private startYear = 2019;
 
   constructor(private dev: IsDevModeService) {
     this.isDev = this.dev.isDevMode();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const currentYear = new Date().getFullYear();
+    this.copyrightDuration = `${this.startYear}${
+      currentYear > this.startYear ? ` - ${currentYear}` : ''
+    }`;
+  }
 }

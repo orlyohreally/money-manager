@@ -29,11 +29,11 @@ export class RegistrationPage {
     deleteTestedUser();
     this.goToPage();
 
-    typeInInput('first-name', testedUser.firstName);
-    typeInInput('last-name', testedUser.lastName);
-    typeInInput('email', testedUser.email);
-    typeInInput('password', testedUser.password);
-    typeInInput('password-again', testedUser.password);
+    typeInInput('first-name', testedUser.firstName, '.page-content');
+    typeInInput('last-name', testedUser.lastName, '.page-content');
+    typeInInput('email', testedUser.email, '.page-content');
+    typeInInput('password', testedUser.password, '.page-content');
+    typeInInput('password-again', testedUser.password, '.page-content');
     submitForm('.page-content');
   }
 

@@ -46,7 +46,7 @@ export class FamiliesPage {
       constants.waitTimeout
     );
     this.getCreateFamilyButton().click();
-    typeInInput('family-name', name);
+    typeInInput('family-name', name, '.cdk-overlay-container');
 
     this.selectCurrency(currency);
     roles.forEach(role => {
@@ -56,7 +56,7 @@ export class FamiliesPage {
   }
 
   async fillAndSubmitFamilyForm(name: string, currency: string) {
-    typeInInput('family-name', name);
+    typeInInput('family-name', name, '.cdk-overlay-container');
     this.selectCurrency(currency);
     submitForm('.cdk-overlay-container');
   }

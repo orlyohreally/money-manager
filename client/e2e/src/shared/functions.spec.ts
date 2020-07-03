@@ -32,7 +32,7 @@ export function escapeRegExp(expression: string): string {
 export function typeInInput(
   inputName: string,
   value: string,
-  parentSelector = ''
+  parentSelector: string
 ): void {
   const input = element(by.css(`${parentSelector} input[name="${inputName}"]`));
   input.click();

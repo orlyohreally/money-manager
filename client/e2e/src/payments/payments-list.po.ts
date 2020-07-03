@@ -79,7 +79,7 @@ export class FamilyPaymentsPage {
 
   fillAndSubmitPaymentForm(amount: string, subject: string, paidAt: string) {
     setDatetimeInput('.cdk-overlay-container form', paidAt);
-    typeInInput('payment-amount', amount);
+    typeInInput('payment-amount', amount, '.cdk-overlay-container');
     this.selectSubject(subject);
 
     submitForm('.cdk-overlay-container');

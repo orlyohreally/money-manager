@@ -55,7 +55,11 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .element(by.partialButtonText('edit'))
       .click();
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
     setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
     submitForm('.cdk-overlay-container');
 
@@ -102,7 +106,11 @@ describe(`User payments Page (screen is equal or less than ${constants.menuScree
       .click();
     waitForForm('.cdk-overlay-container');
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
     setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
     submitForm('.cdk-overlay-container');
     waitForFormToClose('.cdk-overlay-container');

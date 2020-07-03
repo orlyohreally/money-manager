@@ -78,7 +78,11 @@ describe(`Family payments Page (screen is equal or less than ${constants.menuScr
 
       waitForForm('.cdk-overlay-container');
 
-      typeInInput('payment-amount', updatedPayment.amount.value);
+      typeInInput(
+        'payment-amount',
+        updatedPayment.amount.value,
+        '.cdk-overlay-container'
+      );
       setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
       submitForm('.cdk-overlay-container');
 

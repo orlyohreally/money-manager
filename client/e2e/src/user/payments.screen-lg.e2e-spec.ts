@@ -60,7 +60,11 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
       .get(1)
       .click();
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
     setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
     submitForm('.cdk-overlay-container');
 
@@ -112,7 +116,11 @@ describe(`User payments Page (screen is more than ${constants.menuScreenThreshol
       paidAt: '3/2/2020, 13:40:00'
     };
 
-    typeInInput('payment-amount', updatedPayment.amount.value);
+    typeInInput(
+      'payment-amount',
+      updatedPayment.amount.value,
+      '.cdk-overlay-container'
+    );
     setDatetimeInput('.cdk-overlay-container form', updatedPayment.paidAt);
     submitForm('.cdk-overlay-container');
 

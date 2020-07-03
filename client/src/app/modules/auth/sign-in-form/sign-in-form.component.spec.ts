@@ -3,14 +3,10 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCheckboxModule,
-  MatError,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatSuffix
-} from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatError, MatFormFieldModule, MatSuffix } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';

@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatToolbarModule } from '@angular/material';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MockComponent } from 'ng-mocks';
 
 import { MainNavLogoComponent } from '../main-nav-logo/main-nav-logo.component';

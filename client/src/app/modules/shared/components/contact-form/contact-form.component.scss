@@ -15,6 +15,16 @@
   transform-origin: left;
 }
 
+@media (min-width: 960px) {
+  .mat-form-field:nth-child(2) {
+    padding-right: 0 !important;
+  }
+
+  .mat-form-field:nth-child(3) {
+    padding-right: 0 !important;
+  }
+}
+
 .dark-theme {
   ::ng-deep &.contact-us-form {
     .mat-form-field .mat-input-element {

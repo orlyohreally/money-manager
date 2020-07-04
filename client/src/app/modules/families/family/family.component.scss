@@ -1,6 +1,10 @@
 $padding: 16px;
 $avatar-size: 100px;
 
+:host {
+  display: block;
+}
+
 .family-card {
   position: relative;
   display: flex;

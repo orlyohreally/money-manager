@@ -5,15 +5,12 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { FamiliesService } from '@core-client/services/families/families.service';
-import { FamilyView } from '@shared/types';
+import { FamilyView, Roles } from '@shared/types';
 
 @Component({
   selector: 'family-family',
   templateUrl: './family.component.html',
-  styleUrls: ['./family.component.scss'],
-  host: {
-    style: 'display: block;'
-  }
+  styleUrls: ['./family.component.scss']
 })
 export class FamilyComponent implements OnInit {
   family: Observable<FamilyView>;
@@ -21,6 +18,8 @@ export class FamilyComponent implements OnInit {
     '=1': '1 member',
     other: '# members'
   };
+  ownerRole = Roles.Owner;
+
   private familyId: string;
 
   constructor(

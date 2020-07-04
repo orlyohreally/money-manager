@@ -15,8 +15,8 @@ import { SharedModule } from '../shared/shared.module';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
-import { FooterComponent } from './footer/footer.component';
 import { HelpModule } from '../help/help.module';
+import { FooterComponent } from './footer/footer.component';
 import { MainNavLogoComponent } from './main-nav-logo/main-nav-logo.component';
 import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 // tslint:disable-next-line: max-line-length

@@ -60,6 +60,19 @@ export class AppComponent implements OnInit {
     return !this.media.isActive('lt-sm');
   }
 
+  // private fetchPosts() {
+  //   this.butterCMSService.butter.post
+  //     .list({
+  //       page: 1,
+  //       page_size: 10
+  //     })
+  //     .then(res => {
+  //       console.log('Content from ButterCMS');
+  //       console.log(res);
+  //       this.posts = res.data;
+  //     });
+  // }
+
   getMode(): string {
     return this.media.isActive('lt-sm') ? 'over' : 'side';
   }

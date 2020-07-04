@@ -92,8 +92,8 @@ import { FamilyIconPipe } from './pipes/family-icon.pipe';
 import { FamilyMemberIconPipe } from './pipes/family-member-icon.pipe';
 import { PrefixedNumberPipe } from './pipes/prefixed-number.pipe';
 import { SortByPipe } from './pipes/sort-by.pipe';
-import { UserFullNamePipe } from './pipes/user-full-name.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { UserFullNamePipe } from './pipes/user-full-name.pipe';
 
 @NgModule({
   declarations: [
@@ -203,7 +203,6 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     SortByPipe,
     DynamicActiveRouterLinkDirective,
     ContactFormComponent,
-    ImageResizerDirective,
     TruncatePipe
   ],
   providers: [

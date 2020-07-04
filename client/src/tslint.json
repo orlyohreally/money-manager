@@ -4,7 +4,12 @@
     "directive-selector": [
       true,
       "attribute",
-      ["app", "shared", "family", "payment"],
+      [
+        "app",
+        "shared",
+        "family",
+        "payment"
+      ],
       "camelCase"
     ],
     "component-selector": [
@@ -23,6 +28,7 @@
         "tc",
         "about",
         "blog",
+        "page",
         "help"
       ],
       "kebab-case"

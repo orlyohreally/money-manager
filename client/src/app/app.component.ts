@@ -14,8 +14,9 @@ import {
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
+import { ButterCMSService } from '@core-client/services/butter-cms/butter-cms.service';
+// tslint:disable-next-line: max-line-length
 import { GoogleAnalyticsService } from '@core-client/services/google-analytics/google-analytics.service';
-import { ButterCMSService } from './core/services/butter-cms/butter-cms.service';
 
 @Component({
   selector: 'app-root',
@@ -58,19 +59,6 @@ export class AppComponent implements OnInit {
   isOpened(): boolean {
     return !this.media.isActive('lt-sm');
   }
-
-  // private fetchPosts() {
-  //   this.butterCMSService.butter.post
-  //     .list({
-  //       page: 1,
-  //       page_size: 10
-  //     })
-  //     .then(res => {
-  //       console.log('Content from ButterCMS');
-  //       console.log(res);
-  //       this.posts = res.data;
-  //     });
-  // }
 
   getMode(): string {
     return this.media.isActive('lt-sm') ? 'over' : 'side';

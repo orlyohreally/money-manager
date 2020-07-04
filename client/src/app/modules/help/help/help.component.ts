@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogPost } from '@src/app/types';
+import { Page } from '@src/app/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -13,16 +13,19 @@ import { ButterCMSService } from '@core-client/services/butter-cms/butter-cms.se
 })
 export class HelpComponent implements OnInit {
   isActive = false;
-  helpLinks: Observable<BlogPost[]>;
+  helpLinks: Observable<Page[]>;
+  guidePageType = 'family-expenses-guide';
 
   constructor(private butterCMSService: ButterCMSService) {}
 
   ngOnInit() {
-    this.helpLinks = this.butterCMSService.getPosts(1, 10).pipe(
-      map(data => {
-        return data.data.slice(0, 5);
-      })
-    );
+    this.helpLinks = this.butterCMSService
+      .getPages(this.guidePageType, 'en', 1, 5)
+      .pipe(
+        map(data => {
+          return data.data;
+        })
+      );
   }
 
   toggleHelp() {

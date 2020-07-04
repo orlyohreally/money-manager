@@ -12,7 +12,8 @@ import { ButterCMSService } from '../butter-cms/butter-cms.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ButterCsmRouterResolverService implements Resolve<any> {
+export class ButterCsmRouterResolverService
+  implements Resolve<{ data: BlogPost; meta: BlogPostMeta }> {
   constructor(private butterCMSService: ButterCMSService) {}
   resolve(
     route: ActivatedRouteSnapshot,

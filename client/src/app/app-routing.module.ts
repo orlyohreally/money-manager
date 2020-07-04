@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./modules/user/user.module').then(m => m.UserModule),
+      import('./modules/user/user.module').then(m => m.UserModule)
   },
   {
     path: '',
@@ -49,6 +49,11 @@ const routes: Routes = [
   {
     path: 'not-found',
     loadChildren: () => ErrorModule
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./modules/pages/pages.module').then(m => m.PagesModule)
   },
   {
     path: '**',

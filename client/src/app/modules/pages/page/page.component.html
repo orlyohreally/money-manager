@@ -1,0 +1,7 @@
+<ng-container *ngIf="page | async as pageContent; else loading">
+  <h1>
+    {{ pageContent.fields.title }}
+  </h1>
+  <div [innerHTML]="pageContent.fields.content"></div>
+</ng-container>
+<ng-template #loading><shared-loader></shared-loader></ng-template>

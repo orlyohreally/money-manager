@@ -14,7 +14,7 @@ import { ButterCsmRouterResolverService } from '../butter-cms-router-resolver/bu
 @Injectable({
   providedIn: 'root'
 })
-export class ButterCsmTitleResolverService implements Resolve<any> {
+export class ButterCsmTitleResolverService implements Resolve<string> {
   constructor(
     private butterCsmRouterResolverService: ButterCsmRouterResolverService
   ) {}

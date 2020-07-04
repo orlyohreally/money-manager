@@ -16,13 +16,13 @@
       <mat-list-item *ngFor="let link of links">
         <a
           mat-button
-          [routerLink]="['/blog', link.slug]"
+          [routerLink]="['/page', guidePageType, link.slug]"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="nav-block__link_active"
           class="mat-button_stretched nav-block__link"
           target="_blank"
         >
-          {{ link.title }}
+          {{ link.fields.title }}
           <mat-icon class="help__link_external">launch</mat-icon>
         </a>
       </mat-list-item>
@@ -37,19 +37,7 @@
           class="mat-button_stretched nav-block__link"
         >
           <!-- <mat-icon>notes</mat-icon> -->
-          Go to blog
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a
-          mat-button
-          [routerLink]="['/contact-us']"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="nav-block__link_active"
-          class="mat-button_stretched nav-block__link"
-        >
-          <!-- <mat-icon>chat</mat-icon> -->
-          Contact us
+          Blog
         </a>
       </mat-list-item>
     </mat-list>

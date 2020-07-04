@@ -1,11 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule
-} from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UserFullNamePipeMock } from '@tests-utils/mocks';

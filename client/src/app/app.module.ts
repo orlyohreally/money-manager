@@ -2,7 +2,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressBarModule, MatSidenavModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -12,7 +13,6 @@ import { AppComponent } from './app.component';
 import { ServerErrorInterceptor } from '@core-client/interceptors/server-error.interceptor';
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
-import 'hammerjs';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { DataService } from './core/services/data.service';

@@ -1,11 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatCheckboxModule,
-  MatDialogRef,
-  MatInputModule
-} from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
@@ -57,7 +54,7 @@ describe('EditFamilyFormComponent', () => {
       ],
       imports: [MatCheckboxModule, MatInputModule, ReactiveFormsModule],
       providers: [
-        { provide: MatDialogRef, dialogRefSpy },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: MAT_DIALOG_DATA, useValue: mockedFamily },
         { provide: FamiliesService, useValue: familiesServiceMock.service },
         { provide: MembersService, useValue: membersServiceMock.getService() },

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { NotificationsService } from './notifications.service';
 

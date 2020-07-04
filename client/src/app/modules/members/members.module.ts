@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 // tslint:disable-next-line: max-line-length
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatProgressSpinnerModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedModule } from '../shared/shared.module';
 // tslint:disable-next-line: max-line-length
 import { MemberPaymentPercentageComponent } from './components/member-payment-percentage/member-payment-percentage.component';

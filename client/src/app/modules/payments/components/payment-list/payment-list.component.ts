@@ -6,12 +6,9 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {
-  MatPaginator,
-  MatSort,
-  MatTableDataSource,
-  Sort
-} from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { compare } from '@shared-client/functions';
 import { FamilyPaymentView } from '@src/app/types';

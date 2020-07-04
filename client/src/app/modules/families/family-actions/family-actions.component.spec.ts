@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatMenuModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MockDirective } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length

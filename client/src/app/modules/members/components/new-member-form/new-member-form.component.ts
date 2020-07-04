@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 

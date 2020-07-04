@@ -2,7 +2,7 @@ import { Directive, HostListener, Input, Optional } from '@angular/core';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '@core-client/services/dialog/dialog.service';
 // tslint:disable-next-line: max-line-length
 import { NotificationsService } from '@core-client/services/notifications/notifications.service';

@@ -6,31 +6,31 @@ import { ErrorModule } from './modules/errors/error.module';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: './modules/home/home.module#HomeModule'
+    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
   {
     path: '',
-    loadChildren: './modules/families/family.module#FamilyModule',
+    loadChildren: () => import('./modules/families/family.module').then(m => m.FamilyModule),
     canActivate: [AuthGuard]
   },
   {
     path: '',
-    loadChildren: './modules/user/user.module#UserModule',
+    loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'auth',
-    loadChildren: './modules/auth/auth.module#AuthModule'
+    loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: 'terms-and-conditions',
     loadChildren:
       // tslint:disable-next-line: max-line-length
-      './modules/terms-and-conditions/terms-and-conditions.module#TermsAndConditionsModule'
+      () => import('./modules/terms-and-conditions/terms-and-conditions.module').then(m => m.TermsAndConditionsModule)
   },
   {
     path: 'about-us',
-    loadChildren: './modules/about-us/about-us.module#AboutUsModule'
+    loadChildren: () => import('./modules/about-us/about-us.module').then(m => m.AboutUsModule)
   },
   {
     path: 'not-found',

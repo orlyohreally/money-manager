@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatPaginatorModule,
-  MatSortModule,
-  MatTableModule
-} from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length

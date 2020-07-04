@@ -5,7 +5,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 import { MockHelper } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length

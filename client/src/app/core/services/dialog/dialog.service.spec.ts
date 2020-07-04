@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { cold, getTestScheduler, hot } from 'jasmine-marbles';
 
 import { DialogService } from './dialog.service';

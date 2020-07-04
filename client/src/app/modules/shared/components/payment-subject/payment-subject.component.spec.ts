@@ -14,7 +14,7 @@ import { PaymentSubjectComponent } from './payment-subject.component';
 class ParentComponent {
   paymentSubject: PaymentSubject;
 
-  @ViewChild(PaymentSubjectComponent)
+  @ViewChild(PaymentSubjectComponent, { static: true })
   paymentSubjectComponent: PaymentSubjectComponent;
 }
 

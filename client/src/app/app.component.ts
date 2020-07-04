@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Meta, Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -24,7 +24,7 @@ import { GoogleAnalyticsService } from '@core-client/services/google-analytics/g
 export class AppComponent implements OnInit {
   pageIsLoading = true;
 
-  @ViewChild('sidenav') sideNavEl: MatSidenav;
+  @ViewChild('sidenav', { static: true }) sideNavEl: MatSidenav;
 
   private appName = 'Family Expenses';
   private defaultKeywords =

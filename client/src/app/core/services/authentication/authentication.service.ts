@@ -1,6 +1,6 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { User } from '@shared/types';
 import { LocalStorageService } from 'ngx-localstorage';
 import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';

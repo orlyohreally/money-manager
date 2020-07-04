@@ -24,7 +24,7 @@ import { GoogleAnalyticsService } from '@core-client/services/google-analytics/g
 export class AppComponent implements OnInit {
   pageIsLoading = true;
 
-  @ViewChild('sidenav') sideNavEl: MatSidenav;
+  @ViewChild('sidenav', { static: true }) sideNavEl: MatSidenav;
 
   private appName = 'Family Expenses';
   private defaultKeywords =

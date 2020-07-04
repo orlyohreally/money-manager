@@ -54,7 +54,7 @@ describe('EditFamilyFormComponent', () => {
       ],
       imports: [MatCheckboxModule, MatInputModule, ReactiveFormsModule],
       providers: [
-        { provide: MatDialogRef, dialogRefSpy },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: MAT_DIALOG_DATA, useValue: mockedFamily },
         { provide: FamiliesService, useValue: familiesServiceMock.service },
         { provide: MembersService, useValue: membersServiceMock.getService() },

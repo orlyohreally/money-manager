@@ -234,6 +234,128 @@ export class PaymentsCalculationsService {
       .reduce((acc, val) => acc.concat(val), []);
   }
 
+  getTotalExpensesPerMonthPerMember(
+    paymentsList: FamilyPaymentView[],
+    year: number
+  ): {
+    [monthIndex: number]: {
+      [id: string]: { member: FamilyMember; amount: number };
+    };
+  } {
+    const calculatedExpenses: {
+      [monthIndex: number]: {
+        [id: string]: { member: FamilyMember; amount: number };
+      };
+    } = (paymentsList || [])
+      .filter(payment => new Date(payment.paidAt).getFullYear() === year)
+      .reduce((res, payment: FamilyPaymentView) => {
+        const monthIndex: number = new Date(payment.paidAt).getMonth();
+        if (!res[monthIndex]) {
+          return {
+            ...res,
+            [monthIndex]: {
+              [payment.member._id]: {
+                member: payment.member,
+                amount: payment.amount
+              }
+            }
+          };
+        }
+        if (!res[monthIndex][payment.member._id]) {
+          return {
+            ...res,
+            [monthIndex]: {
+              ...res[monthIndex],
+              [payment.member._id]: {
+                member: payment.member,
+                amount: payment.amount
+              }
+            }
+          };
+        }
+
+        return {
+          ...res,
+          [monthIndex]: {
+            ...res[monthIndex],
+            [payment.member._id]: {
+              ...res[monthIndex][payment.member._id],
+              amount:
+                res[monthIndex][payment.member._id].amount + payment.amount
+            }
+          }
+        };
+      }, {});
+
+    console.log({ calculatedExpenses });
+    return calculatedExpenses;
+    // return Object.keys(calculatedExpenses)
+    //   .map((memberId: string) => ({
+    //     amounts: calculatedExpenses[memberId].amounts,
+    //     currency: calculatedExpenses[memberId].currency,
+    //     member: calculatedExpenses[memberId].member
+    //   }))
+    //   .reduce((acc, val) => acc.concat(val), []);
+  }
+
+  convertToColumnChart(aggregation: {
+    [monthIndex: number]: {
+      [id: string]: { member: FamilyMember; amount: number };
+    };
+  }): { data: [string, ...number[]][]; columns: string[] } {
+    const members = [];
+    const membersNames: FamilyMember[] = [];
+    const result = Object.keys(aggregation).reduce((res, monthIndex) => {
+      const date = new Date();
+      date.setMonth(parseInt(monthIndex, 10));
+      const month = date.toLocaleString('default', { month: 'long' });
+      const amounts: {
+        [memberId: string]: {
+          member: FamilyMember;
+          amount: number;
+        };
+      } = aggregation[monthIndex];
+      const payments = {};
+      Object.keys(amounts).forEach((memberId: string) => {
+        if (members.indexOf(memberId) === -1) {
+          members.push(memberId);
+          membersNames.push(amounts[memberId].member);
+        }
+        payments[members.indexOf(memberId)] = amounts[memberId].amount;
+      });
+      console.log('month', month, payments);
+
+      const membersAmounts = Object.keys(payments).reduce(
+        (amountsInArray: number[], memberIndex) => {
+          const extraZeros: number[] = [];
+          console.log(res.length, memberIndex);
+          while (
+            amountsInArray.length + extraZeros.length <
+            parseInt(memberIndex, 10)
+          ) {
+            extraZeros.push(0);
+          }
+          return [...amountsInArray, ...extraZeros, payments[memberIndex]];
+        },
+        []
+      );
+      return [...res, [month, ...membersAmounts]];
+    }, []);
+    result.forEach(monthData => {
+      while (monthData.length < members.length + 1) {
+        monthData.push(0);
+      }
+    });
+    const columns = [
+      'month',
+      ...membersNames.map(
+        member => `${member.firstName} ${member.lastName.slice(0, 1)}.`
+      )
+    ];
+    console.log({ data: result, columns });
+    return { data: result, columns };
+  }
+
   private calcForDifferentPercentages(
     payment: FamilyPaymentView,
     members: FamilyMember[]

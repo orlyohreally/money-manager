@@ -1,0 +1,9 @@
+{{ familyId | async | json }}
+<div class="reports">
+  <h1>Reports</h1>
+  <ng-container *ngIf="familyId | async as familyIdValue">
+    <reports-monthly-expenses-report
+      [familyId]="familyIdValue"
+    ></reports-monthly-expenses-report>
+  </ng-container>
+</div>

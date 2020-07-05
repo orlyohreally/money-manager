@@ -1,0 +1,48 @@
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>Year</mat-label>
+    <mat-select
+      required
+      [(ngModel)]="selectedYear"
+      (ngModelChange)="getReportData($event)"
+      name="report-year"
+    >
+      <mat-option *ngFor="let year of years" [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div sharedScrollableContent class="chart-wrapper">
+  <ng-template
+    let-reportData="reportData"
+    [ngTemplateOutletContext]="{
+      reportData: payments | async
+    }"
+    [ngTemplateOutlet]="columnChartTemplate"
+    #columnChartTemplate
+  >
+    <ng-container *ngIf="reportData?.data.length">
+      <google-chart
+        *ngIf="!!reportData"
+        [hidden]="!isColumnChartReady"
+        [data]="reportData.data"
+        [type]="chartType"
+        [columns]="reportData.columns"
+        [dynamicResize]="true"
+        [options]="options"
+        class="chart"
+        (ready)="onChartReady()"
+      ></google-chart>
+      <ng-container *ngIf="!reportData || !isColumnChartReady">
+        <ng-template [ngTemplateOutlet]="loading"></ng-template>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <shared-loader></shared-loader>
+  </div>
+</ng-template>

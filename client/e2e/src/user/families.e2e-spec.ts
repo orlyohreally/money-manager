@@ -6,7 +6,7 @@ import {
   ExpectedConditions
 } from 'protractor';
 
-import { constants, registerUser } from '@src-e2e/shared';
+import { clearLocalStorage, constants, registerUser } from '@src-e2e/shared';
 import {
   escapeRegExp,
   getPageUrl,
@@ -25,6 +25,7 @@ describe('Families Page', () => {
   });
 
   beforeEach(() => {
+    clearLocalStorage();
     resetTestedUser();
     page.login();
     page.goToPage();
@@ -93,7 +94,7 @@ describe('Families Page', () => {
     }
   );
 
-  it('should have button to update family info', () => {
+  it('should have button to update family info if user is an owner', () => {
     page.createFamily('Petrov', '$');
     const waitTimeout = 30000;
     browser.wait(
@@ -119,6 +120,31 @@ describe('Families Page', () => {
       updatedName,
       'Spent: ₪0'
     );
+  });
+
+  // tslint:disable-next-line: max-line-length
+  it('should not have button to update family info if user is only a member', () => {
+    const familyName = 'Petrov';
+    page.createFamily(familyName, '$');
+    page.logout();
+    const member = {
+      firstName: 'Ivan',
+      lastName: 'Sidorov',
+      email: 'orli.knop@ya.ru',
+      password: 'ABCabc123!@#'
+    };
+    page.register(member);
+    page.login();
+    page.addFamilyMember(familyName, member.email);
+    page.logout();
+    page.login(member);
+    page.goToFamilyPage(familyName);
+    expect(
+      getFamiliesCards()
+        .get(0)
+        .element(by.cssContainingText('mat-icon', 'create'))
+        .isPresent()
+    ).toBeFalsy();
   });
 
   function getFamiliesCards() {

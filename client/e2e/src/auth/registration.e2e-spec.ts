@@ -47,7 +47,7 @@ describe('Registration Page', () => {
     'should redirect to email verification page' +
       ' when form is valid and user was successfully registered',
     async () => {
-      page.registerAsTestedUser();
+      page.register();
       const emailParam = `email=${escapeRegExp(testedUser.email)}`;
       const tokenPattern = `verification-token=*`;
       const urlPattern = new RegExp(
@@ -65,7 +65,7 @@ describe('Registration Page', () => {
   );
 
   it('should not redirect when email is already taken', () => {
-    page.registerAsTestedUser();
+    page.register();
     page.goToPage();
 
     typeInInput('first-name', 'Ivan I', '.page-content');

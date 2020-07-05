@@ -44,7 +44,7 @@ describe('Login Page', () => {
   // tslint:disable-next-line: max-line-length
   it('should not redirect to main page when user is not registered', () => {
     deleteTestedUser();
-    page.loginAsTestedUser();
+    page.login();
 
     expect(browser.getCurrentUrl()).toEqual(page.pageUrl);
     expect(getSubmitButton('.page-content').isDisplayed).toBeTruthy();
@@ -56,7 +56,7 @@ describe('Login Page', () => {
       ' when form is valid and user is already registered',
     async () => {
       page.registerAsTestedUser();
-      page.loginAsTestedUser();
+      page.login();
 
       const currentUrl = await browser.getCurrentUrl();
       expect(currentUrl).toEqual(page.mainPageUrl);

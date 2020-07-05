@@ -14,6 +14,7 @@
           cdkFocusInitial
           formControlName="email"
           #emailField
+          name="member-email"
         />
         <mat-error *ngIf="memberForm.get('email').hasError('pattern')">
           Invalid email

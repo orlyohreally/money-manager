@@ -4,7 +4,10 @@
     class="card__avatar"
     [avatarUrl]="family | familyIcon"
   ></shared-avatar>
-  <div class="card-extra-action">
+  <div
+    class="card-extra-action"
+    *ngIf="family.userRoles.indexOf(ownerRole) > -1"
+  >
     <button
       mat-icon-button
       [matMenuTriggerFor]="menu"
@@ -41,6 +44,7 @@
         mat-icon-button
         [familyEditFamily]="family"
         matTooltip="Edit family"
+        *ngIf="family.userRoles.indexOf(ownerRole) > -1"
       >
         <mat-icon>create</mat-icon>
       </button>

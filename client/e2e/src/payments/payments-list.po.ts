@@ -26,7 +26,7 @@ export class FamilyPaymentsPage {
 
   login() {
     clearLocalStorage();
-    this.loginPage.loginAsTestedUser();
+    this.loginPage.login();
   }
 
   goToFamiliesPage() {

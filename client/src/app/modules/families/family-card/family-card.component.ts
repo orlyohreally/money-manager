@@ -1,5 +1,5 @@
 import { Component, Input, isDevMode, OnInit } from '@angular/core';
-import { FamilyView } from '@shared/types';
+import { FamilyView, Roles } from '@shared/types';
 
 @Component({
   selector: 'family-card',
@@ -10,6 +10,7 @@ import { FamilyView } from '@shared/types';
 export class FamilyCardComponent implements OnInit {
   @Input() family: FamilyView;
 
+  ownerRole = Roles.Owner;
   isDevMode = isDevMode();
 
   constructor() {}

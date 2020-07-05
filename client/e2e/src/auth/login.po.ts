@@ -28,13 +28,20 @@ export class LoginPage {
   }
 
   registerAsTestedUser() {
-    this.registrationPage.registerAsTestedUser();
+    this.registrationPage.register();
   }
 
-  loginAsTestedUser() {
+  login(
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+    } = testedUser
+  ) {
     this.goToPage();
-    typeInInput('email', testedUser.email, '.page-content');
-    typeInInput('password', testedUser.password, '.page-content');
+    typeInInput('email', user.email, '.page-content');
+    typeInInput('password', user.password, '.page-content');
     submitForm('.page-content');
   }
 

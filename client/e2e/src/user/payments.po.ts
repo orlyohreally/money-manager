@@ -28,7 +28,7 @@ export class UserPaymentsPage {
 
   login() {
     clearLocalStorage();
-    this.loginPage.loginAsTestedUser();
+    this.loginPage.login();
   }
 
   async goToPage(): Promise<void> {

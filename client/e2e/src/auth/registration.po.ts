@@ -25,15 +25,24 @@ export class RegistrationPage {
     return element(by.className('notification-message'));
   }
 
-  registerAsTestedUser() {
-    deleteTestedUser();
+  register(
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+    } = testedUser
+  ) {
+    if (testedUser.email === user.email) {
+      deleteTestedUser();
+    }
     this.goToPage();
 
-    typeInInput('first-name', testedUser.firstName, '.page-content');
-    typeInInput('last-name', testedUser.lastName, '.page-content');
-    typeInInput('email', testedUser.email, '.page-content');
-    typeInInput('password', testedUser.password, '.page-content');
-    typeInInput('password-again', testedUser.password, '.page-content');
+    typeInInput('first-name', user.firstName, '.page-content');
+    typeInInput('last-name', user.lastName, '.page-content');
+    typeInInput('email', user.email, '.page-content');
+    typeInInput('password', user.password, '.page-content');
+    typeInInput('password-again', user.password, '.page-content');
     submitForm('.page-content');
   }
 

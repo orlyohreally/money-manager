@@ -1,5 +1,5 @@
 <div>
-  <h1>Monthly family members expenses</h1>
+  <h1>Expenses per payment subjects</h1>
   <reports-year-selector (yearSet)="getReportData($event)">
   </reports-year-selector>
 </div>
@@ -7,18 +7,18 @@
   <ng-template
     let-reportData="reportData"
     [ngTemplateOutletContext]="{
-      reportData: expensesData | async
+      reportData: expenses | async
     }"
     [ngTemplateOutlet]="columnChartTemplate"
     #columnChartTemplate
   >
-    <ng-container *ngIf="reportData?.data.length">
+    <ng-container *ngIf="reportData?.length">
       <google-chart
         *ngIf="!!reportData"
         [hidden]="!isChartReady"
-        [data]="reportData.data"
+        [data]="reportData"
         [type]="chartType"
-        [columns]="reportData.columns"
+        [columns]="columns"
         [dynamicResize]="true"
         [options]="options"
         class="chart"

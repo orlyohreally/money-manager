@@ -4,29 +4,28 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
+import { FamiliesService } from '@core-client/services/families/families.service';
+// tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 
 @Component({
-  selector: 'reports-monthly-expenses-report',
-  templateUrl: './monthly-expenses-report.component.html',
-  styleUrls: ['./monthly-expenses-report.component.scss']
+  selector: 'reports-payment-subjects-expenses',
+  templateUrl: './payment-subjects-expenses.component.html',
+  styleUrls: ['./payment-subjects-expenses.component.scss']
 })
-export class MonthlyExpensesReportComponent implements OnInit, OnChanges {
+export class PaymentSubjectsExpensesComponent implements OnInit, OnChanges {
   @Input() familyId: string;
 
-  chartType = ChartType.ColumnChart;
+  chartType = ChartType.PieChart;
+  columns: ['Payment subject', 'Spent', { type: 'string'; role: 'annotation' }];
   options = {
     isStacked: true,
     legend: { position: 'top', maxLines: 3 },
     backgroundColor: 'transparent'
   };
-
-  expensesData: Observable<{
-    data: [string, ...{ v: number; f: string }[]][];
-    columns: string[];
-  }>;
-  isChartReady = false;
+  expenses: Observable<[string, { v: number; f: string }][]>;
   selectedYear: number;
+  isChartReady = false;
 
   constructor(
     private paymentsCalculationsService: PaymentsCalculationsService
@@ -38,23 +37,22 @@ export class MonthlyExpensesReportComponent implements OnInit, OnChanges {
     this.getReportData(this.selectedYear);
   }
 
-  onChartReady() {
-    this.isChartReady = true;
-  }
-
   getReportData(year: number) {
     this.selectedYear = year;
-    this.expensesData = this.paymentsCalculationsService
+    this.expenses = this.paymentsCalculationsService
       .getAggregatedPayments(this.familyId)
       .pipe(
         map(payments => {
-          return this.paymentsCalculationsService.convertToColumnChart(
-            this.paymentsCalculationsService.getTotalExpensesPerMonthPerMember(
-              payments,
-              year
-            )
+          // tslint:disable-next-line: max-line-length
+          return this.paymentsCalculationsService.aggregateFamilyExpensesPerPaymentSubject(
+            payments,
+            year
           );
         })
       );
+  }
+
+  onChartReady() {
+    this.isChartReady = true;
   }
 }

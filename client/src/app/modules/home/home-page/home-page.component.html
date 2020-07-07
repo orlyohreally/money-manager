@@ -1,33 +1,68 @@
-<!--
-  - banner with registration link
-  - create family
-  - add family members
-  - submit payments
-  - track your money payments
-  - footer
--->
 <div class="home-page">
-  <home-registration-banner></home-registration-banner>
-  <div class="section">
-    <div class="icon">
+  <div class="banner">
+    <h1 class="description">
+      Organize family and personal expenses and to keep track how much you spend
+      and on what exactly by using <b>Family Expenses</b>
+    </h1>
+    <h3>
+      This website will make your family and personal finances management easier
+    </h3>
+    <ng-container *ngIf="!(isAuthenticated | async); else linkToDashboard">
       <a
-        class="icon__link"
-        href="https://www.freepik.com/free-photos-vectors/people"
-        target="_blank"
-      >
-        <img class="icon__image" src="assets/images/family.jpg" />
-      </a>
-    </div>
-    <div class="section__content">
-      <h2>Create family and add all your family members</h2>
-      <button
-        familyNewFamily
+        class="action-link"
+        routerLink="/auth/register"
         mat-raised-button
-        class="button button_lg text-uppercase"
         color="primary"
       >
-        New family
-      </button>
+        Get started now
+      </a>
+    </ng-container>
+    <ng-template #linkToDashboard>
+      <a
+        class="action-link"
+        routerLink="user/dashboard"
+        mat-raised-button
+        color="primary"
+      >
+        Go to dashboard
+      </a>
+    </ng-template>
+  </div>
+  <div class="content">
+    <div>
+      <h2>This is what you could do with <b>Family Expenses</b> and more:</h2>
+      <div class="features">
+        <div class="feature">
+          <mat-icon class="feature__icon">verified_user</mat-icon>
+          <div>
+            Create family and give access to it to all your family members
+          </div>
+        </div>
+        <div class="feature">
+          <mat-icon class="feature__icon">view_list</mat-icon>
+          <div>
+            Add all your expenses to the payments list to track how much you and
+            your family have spent
+          </div>
+        </div>
+        <div class="feature">
+          <mat-icon class="feature__icon">analytics</mat-icon>
+          <div>
+            View charts to analyze money distribution of your families and
+            personal expenses
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Family Expenses in action</h2>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <video controls class="video-preview">
+          <source src="/assets/main/video.webm" type="video/webm" />
+          <source src="/assets/main/video.mp4" type="video/mp4" />
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+      </div>
     </div>
   </div>
 </div>

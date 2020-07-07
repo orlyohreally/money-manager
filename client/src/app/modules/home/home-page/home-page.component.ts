@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+// tslint:disable-next-line: max-line-length
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 
 @Component({
   selector: 'home-home-page',
@@ -6,11 +10,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit {
-  constructor() {}
+  isAuthenticated: Observable<boolean>;
 
-  ngOnInit() {}
+  constructor(private authService: AuthenticationService) {}
 
-  public createReport(): void {
-    // console.log('not implemented yet');
+  ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
   }
 }

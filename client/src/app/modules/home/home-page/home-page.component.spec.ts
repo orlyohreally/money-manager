@@ -1,23 +1,32 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent, MockDirective } from 'ng-mocks';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterTestingModule } from '@angular/router/testing';
 
 // tslint:disable-next-line: max-line-length
-import { NewFamilyDialogTriggerDirective } from '../../families/directives/new-family-dialog-trigger/new-family-dialog-trigger.directive';
+import { AuthenticationService } from '@core-client/services/authentication/authentication.service';
 // tslint:disable-next-line: max-line-length
-import { RegistrationBannerComponent } from '../registration-banner/registration-banner.component';
+import { AuthenticationServiceMock } from '@src/app/tests-utils/mocks';
 import { HomePageComponent } from './home-page.component';
 
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
   let fixture: ComponentFixture<HomePageComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthenticationService>;
+
+  const authServiceMock = AuthenticationServiceMock();
 
   beforeEach(async(() => {
+    authServiceSpy = authServiceMock.getService();
+
     TestBed.configureTestingModule({
-      declarations: [
-        HomePageComponent,
-        MockComponent(RegistrationBannerComponent),
-        MockDirective(NewFamilyDialogTriggerDirective)
-      ]
+      declarations: [HomePageComponent],
+      providers: [
+        {
+          provide: AuthenticationService,
+          useValue: authServiceSpy
+        }
+      ],
+      imports: [RouterTestingModule, MatIconModule]
     }).compileComponents();
   }));
 

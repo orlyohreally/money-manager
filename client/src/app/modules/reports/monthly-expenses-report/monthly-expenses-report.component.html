@@ -12,7 +12,7 @@
     [ngTemplateOutlet]="columnChartTemplate"
     #columnChartTemplate
   >
-    <ng-container *ngIf="reportData?.data.length">
+    <ng-container *ngIf="reportData?.data.length; else noData">
       <google-chart
         *ngIf="!!reportData"
         [hidden]="!isChartReady"
@@ -28,6 +28,9 @@
         <ng-template [ngTemplateOutlet]="loading"></ng-template>
       </ng-container>
     </ng-container>
+    <ng-template #noData>
+      <div fxLayout="row" fxLayoutAlign="center center">No payments yet</div>
+    </ng-template>
   </ng-template>
 </div>
 

@@ -85,9 +85,13 @@ function getPaymentsCalculationsServiceSpy() {
       'getOverpayAndDebtsList',
       'getPaymentTransactions',
       'getAggregatedPayments',
-      'getAggregatedUserPayments'
+      'getAggregatedUserPayments',
+      'getTotalExpensesPerMonthPerMember',
+      'convertToColumnChart',
+      'aggregateFamilyExpensesPerPaymentSubject'
     ]
   );
+
   paymentsCalculationsServiceSpy.getOverpayAndDebtsList.and.returnValue(
     cold('--a', { a: expenses })
   );
@@ -99,6 +103,53 @@ function getPaymentsCalculationsServiceSpy() {
   );
   paymentsCalculationsServiceSpy.getAggregatedUserPayments.and.returnValue(
     cold('----a', { a: PaymentsServiceMock().userAggregatedPayments })
+  );
+  // tslint:disable-next-line: max-line-length
+  paymentsCalculationsServiceSpy.getTotalExpensesPerMonthPerMember.and.returnValue(
+    cold('----a', {
+      a: {
+        4: {
+          'memberId-1': {
+            member: {
+              _id: 'userId-1',
+              firstName: 'firstName-1',
+              lastName: 'lastName-1'
+            } as FamilyMember,
+            amount: 100,
+            currency: 'USD'
+          }
+        },
+        6: {
+          'memberId-1': {
+            member: {
+              _id: 'userId-2',
+              firstName: 'firstName-2',
+              lastName: 'lastName-2'
+            } as FamilyMember,
+            amount: 560,
+            currency: 'USD'
+          }
+        }
+      }
+    })
+  );
+  paymentsCalculationsServiceSpy.convertToColumnChart.and.returnValue(
+    cold('----a', {
+      a: [
+        ['May', 100, 0],
+        ['July', 0, 560]
+      ]
+    })
+  );
+
+  // tslint:disable-next-line: max-line-length
+  paymentsCalculationsServiceSpy.aggregateFamilyExpensesPerPaymentSubject.and.returnValue(
+    cold('----a', {
+      a: [
+        ['Apartment', 100],
+        ['Pets', 560]
+      ]
+    })
   );
 
   return paymentsCalculationsServiceSpy;

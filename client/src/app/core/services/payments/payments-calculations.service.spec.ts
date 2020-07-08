@@ -1,5 +1,7 @@
+import { CurrencyPipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import {
   MemberFamily,
@@ -25,7 +27,6 @@ import {
   IMembersServiceMock,
   MembersServiceMock
 } from '@tests-utils/mocks/members.service.spec';
-import { first } from 'rxjs/operators';
 
 // tslint:disable-next-line: max-line-length
 import { AuthenticationService } from '../authentication/authentication.service';
@@ -48,6 +49,7 @@ describe('PaymentsCalculationsService', () => {
   let paymentSubjectsServiceMock: IPaymentSubjectsServiceMock;
   let paymentsServiceSpy: jasmine.SpyObj<PaymentsService>;
   let authenticationServiceMock: IAuthenticationServiceMock;
+  let currencyPipeSpy: jasmine.SpyObj<CurrencyPipe>;
 
   beforeEach(() => {
     paymentSubjectsServiceMock = PaymentSubjectsServiceMock();
@@ -60,6 +62,10 @@ describe('PaymentsCalculationsService', () => {
     paymentsServiceSpy = paymentsServiceMock.service;
     authenticationServiceMock = AuthenticationServiceMock();
     authenticationServiceSpy = authenticationServiceMock.getService();
+    currencyPipeSpy = jasmine.createSpyObj('CurrencyPipe', ['transform']);
+    currencyPipeSpy.transform.and.callFake(
+      (value: number, currency: string) => `${value} - ${currency}`
+    );
 
     TestBed.configureTestingModule({
       providers: [
@@ -73,7 +79,8 @@ describe('PaymentsCalculationsService', () => {
         },
         { provide: MembersService, useValue: membersServiceSpy },
         { provide: PaymentsService, useValue: paymentsServiceSpy },
-        { provide: AuthenticationService, useValue: authenticationServiceSpy }
+        { provide: AuthenticationService, useValue: authenticationServiceSpy },
+        { provide: CurrencyPipe, useValue: currencyPipeSpy }
       ]
     });
     service = TestBed.get(PaymentsCalculationsService);
@@ -372,6 +379,99 @@ describe('PaymentsCalculationsService', () => {
       expect(service.getTotalExpensesPerMember(mockedPaymentsList)).toEqual(
         expectedResponse
       );
+    }
+  );
+
+  it(
+    'aggregateFamilyExpensesPerPaymentSubject should calculate expenses' +
+      ' on payment subjects per year',
+    () => {
+      const payments: FamilyPaymentView[] = [
+        {
+          amount: 100,
+          subject: { name: 'Pets', _id: '1', icon: '' },
+          currency: 'USD',
+          paidAt: '01-02-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 170,
+          subject: { name: 'Apartment', _id: '2', icon: '' },
+          currency: 'USD',
+          paidAt: '02-02-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 120,
+          subject: { name: 'Apartment', _id: '2', icon: '' },
+          currency: 'USD',
+          paidAt: '07-08-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 1200,
+          subject: { name: 'School', _id: '3', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 5200,
+          subject: { name: 'School', _id: '3', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as FamilyPaymentView
+      ];
+
+      expect(
+        service.aggregateFamilyExpensesPerPaymentSubject(payments, 2020)
+      ).toEqual([
+        ['Pets', { v: 100, f: '100 - USD' }],
+        ['Apartment', { v: 290, f: '290 - USD' }],
+        ['School', { v: 6400, f: '6400 - USD' }]
+      ]);
+    }
+  );
+
+  it(
+    'aggregateFamilyExpensesPerPaymentSubject should calculate expenses' +
+      ' on payment subjects per month',
+    () => {
+      const payments: FamilyPaymentView[] = [
+        {
+          amount: 100,
+          subject: { name: 'Pets', _id: '1', icon: '' },
+          currency: 'USD',
+          paidAt: '01-02-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 170,
+          subject: { name: 'Apartment', _id: '2', icon: '' },
+          currency: 'USD',
+          paidAt: '02-02-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 120,
+          subject: { name: 'Apartment', _id: '2', icon: '' },
+          currency: 'USD',
+          paidAt: '07-08-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 1200,
+          subject: { name: 'School', _id: '3', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as FamilyPaymentView,
+        {
+          amount: 5200,
+          subject: { name: 'School', _id: '3', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as FamilyPaymentView
+      ];
+
+      expect(
+        service.aggregateFamilyExpensesPerPaymentSubject(payments, 2020, 0)
+      ).toEqual([
+        ['Pets', { v: 100, f: '100 - USD' }],
+        ['School', { v: 6400, f: '6400 - USD' }]
+      ]);
     }
   );
 });

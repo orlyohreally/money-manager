@@ -5,7 +5,11 @@ import { DebugElement } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatError, MatFormFieldModule, MatSuffix } from '@angular/material/form-field';
+import {
+  MatError,
+  MatFormFieldModule,
+  MatSuffix
+} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
@@ -250,15 +254,15 @@ describe('LoginFormComponent', () => {
       }
     );
 
-    it('login should call googleAnalyticsService.event for valid form', () => {
-      setEmail('valid-email@gmail.com');
-      setPassword('dbv38rhu*(dbchsHFSJ');
-      submitForm();
-      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
-      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('login', {
-        eventLabel: '{"email":"valid-email@gmail.com"}'
-      });
-    });
+    // it('login should call googleAnalyticsService.event for valid form', () => {
+    //   setEmail('valid-email@gmail.com');
+    //   setPassword('dbv38rhu*(dbchsHFSJ');
+    //   submitForm();
+    //   expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
+    //   expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('login', {
+    //     eventLabel: '{"email":"valid-email@gmail.com"}'
+    //   });
+    // });
   });
 
   describe('returnUrl is set', () => {

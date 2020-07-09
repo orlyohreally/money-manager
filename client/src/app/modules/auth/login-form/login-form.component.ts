@@ -36,9 +36,7 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       this.submittingForm = true;
       this.googleAnalyticsService.event('login', {
-        eventLabel: JSON.stringify({
-          email: this.email.value
-        })
+        eventLabel: this.email.value
       });
       this.authService
         .login({

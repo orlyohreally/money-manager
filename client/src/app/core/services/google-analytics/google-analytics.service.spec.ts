@@ -50,16 +50,17 @@ describe('GoogleAnalyticsService', () => {
       eventCategory: 'category',
       eventLabel: JSON.stringify({ email: 'email@example.com' }),
       eventAction: 'action',
-      eventValue: 'value'
+      eventValue: 10
     };
     const mockedEventName = 'login';
     service.event(mockedEventName, mockedData);
     expect(windowSpy.gtag).toHaveBeenCalledTimes(1);
-    expect(windowSpy.gtag).toHaveBeenCalledWith(
-      'event',
-      mockedEventName,
-      mockedData
-    );
+    expect(windowSpy.gtag).toHaveBeenCalledWith('event', mockedEventName, {
+      event_category: 'category',
+      event_label: '{"email":"email@example.com"}',
+      event_action: 'action',
+      event_value: 10
+    });
   });
 
   function gtag(name: string, measureId: string);

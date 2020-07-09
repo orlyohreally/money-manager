@@ -254,15 +254,17 @@ describe('LoginFormComponent', () => {
       }
     );
 
-    // it('login should call googleAnalyticsService.event for valid form', () => {
-    //   setEmail('valid-email@gmail.com');
-    //   setPassword('dbv38rhu*(dbchsHFSJ');
-    //   submitForm();
-    //   expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
-    //   expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('login', {
-    //     eventLabel: '{"email":"valid-email@gmail.com"}'
-    //   });
-    // });
+    it('login should call googleAnalyticsService.event for valid form', () => {
+      setEmail('valid-email@gmail.com');
+      setPassword('dbv38rhu*(dbchsHFSJ');
+      submitForm();
+      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledTimes(1);
+      expect(googleAnalyticsServiceSpy.event).toHaveBeenCalledWith('login', {
+        eventLabel: 'valid-email@gmail.com',
+        eventCategory: 'engagement',
+        eventAction: 'logged-in'
+      });
+    });
   });
 
   describe('returnUrl is set', () => {

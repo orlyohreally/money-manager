@@ -11,7 +11,7 @@ import { IsDevModeService } from '../is-dev-mode.service';
 export class GoogleAnalyticsService {
   constructor(
     @Inject('windowObj')
-    private window: Window & { gtag: (a, b, c, d?, e?, f?, g?) => void },
+    private window: WindowWithGA,
     private globalVariablesService: GlobalVariablesService,
     private isDevModeService: IsDevModeService
   ) {}
@@ -32,15 +32,15 @@ export class GoogleAnalyticsService {
       eventCategory?: string;
       eventLabel?: string;
       eventAction?: string;
-      eventValue?: string | number;
+      eventValue?: number;
     }
   ) {
     if (!this.isDevModeService.isDevMode()) {
-      // this.window.gtag('event', name, data);
       this.window.gtag('event', name, {
         event_category: data.eventCategory,
         event_label: data.eventLabel,
-        event_action: data.eventAction
+        event_action: data.eventAction,
+        event_value: data.eventValue
       });
     }
   }

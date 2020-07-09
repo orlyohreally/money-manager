@@ -35,7 +35,7 @@ export class LoginFormComponent implements OnInit {
     this.serverError = null;
     if (this.loginForm.valid) {
       this.submittingForm = true;
-      this.googleAnalyticsService.event('login', {
+      this.googleAnalyticsService.event('tesing-name', {
         eventLabel: this.email.value,
         eventCategory: 'category-1',
         eventAction: 'action-login-user',

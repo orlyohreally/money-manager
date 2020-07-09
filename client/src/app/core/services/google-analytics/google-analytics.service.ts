@@ -36,7 +36,14 @@ export class GoogleAnalyticsService {
     }
   ) {
     if (!this.isDevModeService.isDevMode()) {
-      this.window.gtag('send', 'event', { data });
+      this.window.gtag(
+        'send',
+        'event',
+        data.eventCategory,
+        data.eventLabel,
+        data.eventAction,
+        data.eventValue
+      );
     }
   }
 }

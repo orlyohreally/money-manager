@@ -10,7 +10,8 @@ import { IsDevModeService } from '../is-dev-mode.service';
 })
 export class GoogleAnalyticsService {
   constructor(
-    @Inject('windowObj') private window: WindowWithGA,
+    @Inject('windowObj')
+    private window: Window & { gtag: (a, b, c, d?, e?, f?) => void },
     private globalVariablesService: GlobalVariablesService,
     private isDevModeService: IsDevModeService
   ) {}
@@ -35,7 +36,7 @@ export class GoogleAnalyticsService {
     }
   ) {
     if (!this.isDevModeService.isDevMode()) {
-      this.window.gtag('event', name, data);
+      this.window.gtag('send', 'event', { data });
     }
   }
 }

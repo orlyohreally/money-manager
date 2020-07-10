@@ -12,5 +12,6 @@
     "**/.git/objects/**": true,
     "**/node_modules/**": true,
     "**/tmp/**": true
-  }
+  },
+  "editor.formatOnSave": true
 }

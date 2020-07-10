@@ -18,4 +18,8 @@ export class GlobalVariablesService {
   get gaMeasurementId(): string {
     return environment.gaMeasurementId;
   }
+
+  get name(): string {
+    return environment.name;
+  }
 }

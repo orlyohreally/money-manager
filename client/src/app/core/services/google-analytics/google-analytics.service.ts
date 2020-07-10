@@ -17,7 +17,10 @@ export class GoogleAnalyticsService {
   ) {}
 
   config(data: { [property: string]: string }) {
-    if (!this.isDevModeService.isDevMode()) {
+    if (
+      !this.isDevModeService.isDevMode() &&
+      this.globalVariablesService.name === 'production'
+    ) {
       this.window.gtag(
         'config',
         this.globalVariablesService.gaMeasurementId,
@@ -35,7 +38,10 @@ export class GoogleAnalyticsService {
       eventValue?: number;
     }
   ) {
-    if (!this.isDevModeService.isDevMode()) {
+    if (
+      !this.isDevModeService.isDevMode() &&
+      this.globalVariablesService.name === 'production'
+    ) {
       this.window.gtag('event', name, {
         event_category: data.eventCategory,
         event_label: data.eventLabel,

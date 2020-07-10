@@ -18,7 +18,7 @@ describe('GoogleAnalyticsService', () => {
         { provide: 'windowObj', useValue: windowSpy },
         {
           provide: GlobalVariablesService,
-          useValue: getGlobalVariablesServiceSpy()
+          useValue: { ...getGlobalVariablesServiceSpy(), name: 'production' }
         },
         {
           provide: IsDevModeService,

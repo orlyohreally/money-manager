@@ -1,10 +1,5 @@
 import * as moment from 'moment';
-import {
-  browser,
-  by,
-  element,
-  ExpectedConditions
-} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 import { registerUser, testedUser } from '@src-e2e/shared';
 import { getTextTitle, getTitleText, resetTestedUser } from '@src-e2e/shared/';
@@ -12,8 +7,6 @@ import { FamilyPaymentsPage } from './payments-list.po';
 
 describe('Family payments Page', () => {
   let page: FamilyPaymentsPage;
-
-  moment().format('l'); // 5/18/2020
 
   beforeAll(() => {
     registerUser();
@@ -110,6 +103,13 @@ describe('Family payments Page', () => {
         ),
         waitTimeout
       );
+      browser.wait(
+        ExpectedConditions.presenceOf(
+          element(by.css('payment-payment-list tbody tr:nth-child(2)'))
+        ),
+        waitTimeout
+      );
+
       paymentsList = getFamilyPayments();
       expect(paymentsList.count()).toEqual(2);
       page.expectPaymentToBeDisplayedCorrectly(

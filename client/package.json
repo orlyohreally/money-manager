@@ -7,7 +7,7 @@
     "build": "ng build",
     "lint": "ng lint",
     "test:unit-test": "ng test --watch=false",
-    "test:e2e": "ng e2e",
+    "test:e2e": "ng e2e --configuration=staging",
     "server:test": "cd ../server && npm run start:test",
     "e2e": "start-server-and-test server:test 3000 test:e2e",
     "start:dev": "ng serve --proxy-config proxy.conf.json",

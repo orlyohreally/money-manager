@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   backendURL: '/api/v1',
   supportEmail: 'orly.knop@gmail.com',
-  gaMeasurementId: 'xx-xxxxxxxxx-x'
+  gaMeasurementId: 'xx-xxxxxxxxx-x',
+  name: 'staging'
 };
 
 /*

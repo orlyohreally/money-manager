@@ -3,5 +3,6 @@
     "Datepicker",
     "Sidenav"
   ],
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+  "editor.formatOnSave": true
 }

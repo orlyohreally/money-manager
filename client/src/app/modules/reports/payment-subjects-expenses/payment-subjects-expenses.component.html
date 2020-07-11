@@ -1,9 +1,11 @@
 <div>
   <h1>Expenses per payment subjects</h1>
-  <reports-year-selector (yearSet)="getReportData($event)">
+  <reports-year-selector (yearSet)="getReportData($event, selectedMonth)">
   </reports-year-selector>
+  <reports-month-selector (monthSet)="getReportData(selectedYear, $event)">
+  </reports-month-selector>
 </div>
-<div class="chart-wrapper">
+<div class="payment-subjects-expenses">
   <ng-template
     let-reportData="reportData"
     [ngTemplateOutletContext]="{
@@ -13,17 +15,42 @@
     #columnChartTemplate
   >
     <ng-container *ngIf="reportData?.length; else noData">
-      <google-chart
-        *ngIf="!!reportData"
-        [hidden]="!isChartReady"
-        [data]="reportData"
-        [type]="chartType"
-        [columns]="columns"
-        [dynamicResize]="true"
-        [options]="options"
-        class="chart"
-        (ready)="onChartReady()"
-      ></google-chart>
+      <div class="chart-wrapper">
+        <google-chart
+          *ngIf="!!reportData"
+          [hidden]="!isChartReady"
+          [data]="reportData"
+          [type]="chartType"
+          [columns]="columns"
+          [dynamicResize]="true"
+          [options]="options"
+          class="chart"
+          (ready)="onChartReady()"
+        ></google-chart>
+      </div>
+      <div sharedScrollableContent>
+        <table
+          mat-table
+          [dataSource]="reportData"
+          class="payment-subjects-expenses__table"
+        >
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef>Payment Subject</th>
+            <td mat-cell *matCellDef="let element">
+              <shared-payment-subject
+                [paymentSubject]="element[1].subject"
+              ></shared-payment-subject>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="spent">
+            <th mat-header-cell *matHeaderCellDef>Spent</th>
+            <td mat-cell *matCellDef="let element">{{ element[1].f }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
       <ng-container *ngIf="!reportData || !isChartReady">
         <ng-template [ngTemplateOutlet]="loading"></ng-template>
       </ng-container>
@@ -35,7 +62,7 @@
 </div>
 
 <ng-template #loading>
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <shared-loader></shared-loader>
+  <div fxLayout="row" fxLayoutAlign="center center" class="loader">
+    <shared-loader diameter="100"></shared-loader>
   </div>
 </ng-template>

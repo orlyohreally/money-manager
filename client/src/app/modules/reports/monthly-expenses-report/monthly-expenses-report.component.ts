@@ -14,7 +14,7 @@ import { PaymentsCalculationsService } from '@core-client/services/payments/paym
 export class MonthlyExpensesReportComponent implements OnInit, OnChanges {
   @Input() familyId: string;
 
-  chartType = ChartType.ColumnChart;
+  chartType = ChartType.LineChart;
   options = {
     isStacked: true,
     legend: { position: 'top', maxLines: 3 },

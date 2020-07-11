@@ -14,6 +14,8 @@ import {
 } from '@tests-utils/mocks';
 import { FamilyIconPipeMock } from '@tests-utils/mocks/family-icon.pipe.spec';
 // tslint:disable-next-line: max-line-length
+import { DeleteFamilyDirective } from '../directives/delete-family/delete-family.directive';
+// tslint:disable-next-line: max-line-length
 import { EditFamilyDialogTriggerDirective } from '../directives/edit-family-dialog-trigger/edit-family-dialog-trigger.directive';
 import { FamilyCardComponent } from './family-card.component';
 
@@ -43,6 +45,7 @@ describe('FamilyCardComponent', () => {
         FamilyIconPipeMock,
         MockDirective(EditFamilyDialogTriggerDirective),
         MockDirective(AvatarComponent),
+        MockDirective(DeleteFamilyDirective),
         PrefixedNumberPipeMock
       ],
       imports: [MatMenuModule, MatIconModule, RouterTestingModule]

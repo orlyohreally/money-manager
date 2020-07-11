@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { FamiliesService } from '@core-client/services/families/families.service';
 // tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
+import { PaymentSubject } from '@shared/types';
 
 @Component({
   selector: 'reports-payment-subjects-expenses',
@@ -19,13 +20,16 @@ export class PaymentSubjectsExpensesComponent implements OnInit, OnChanges {
   chartType = ChartType.PieChart;
   columns: ['Payment subject', 'Spent', { type: 'string'; role: 'annotation' }];
   options = {
-    isStacked: true,
-    legend: { position: 'top', maxLines: 3 },
+    legend: { position: 'top' },
     backgroundColor: 'transparent'
   };
-  expenses: Observable<[string, { v: number; f: string }][]>;
+  expenses: Observable<
+    [string, { v: number; f: string; subject: PaymentSubject }][]
+  >;
   selectedYear: number;
+  selectedMonth: number;
   isChartReady = false;
+  displayedColumns = ['subject', 'spent'];
 
   constructor(
     private paymentsCalculationsService: PaymentsCalculationsService
@@ -34,19 +38,21 @@ export class PaymentSubjectsExpensesComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    this.getReportData(this.selectedYear);
+    this.getReportData(this.selectedYear, this.selectedMonth);
   }
 
-  getReportData(year: number) {
+  getReportData(year: number, month: number) {
     this.selectedYear = year;
+    this.selectedMonth = month;
     this.expenses = this.paymentsCalculationsService
       .getAggregatedPayments(this.familyId)
       .pipe(
         map(payments => {
           // tslint:disable-next-line: max-line-length
-          return this.paymentsCalculationsService.aggregateFamilyExpensesPerPaymentSubject(
+          return this.paymentsCalculationsService.aggregateExpensesPerSubject(
             payments,
-            year
+            year,
+            month
           );
         })
       );

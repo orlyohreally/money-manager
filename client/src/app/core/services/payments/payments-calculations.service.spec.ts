@@ -383,7 +383,7 @@ describe('PaymentsCalculationsService', () => {
   );
 
   it(
-    'aggregateFamilyExpensesPerPaymentSubject should calculate expenses' +
+    'aggregateExpensesPerSubject should calculate expenses' +
       ' on payment subjects per year',
     () => {
       const payments: FamilyPaymentView[] = [
@@ -419,18 +419,37 @@ describe('PaymentsCalculationsService', () => {
         } as FamilyPaymentView
       ];
 
-      expect(
-        service.aggregateFamilyExpensesPerPaymentSubject(payments, 2020)
-      ).toEqual([
-        ['Pets', { v: 100, f: '100 - USD' }],
-        ['Apartment', { v: 290, f: '290 - USD' }],
-        ['School', { v: 6400, f: '6400 - USD' }]
+      expect(service.aggregateExpensesPerSubject(payments, 2020)).toEqual([
+        [
+          'Pets',
+          {
+            v: 100,
+            f: '100 - USD',
+            subject: { name: 'Pets', _id: '1', icon: '' }
+          }
+        ],
+        [
+          'Apartment',
+          {
+            v: 290,
+            f: '290 - USD',
+            subject: { name: 'Apartment', _id: '2', icon: '' }
+          }
+        ],
+        [
+          'School',
+          {
+            v: 6400,
+            f: '6400 - USD',
+            subject: { name: 'School', _id: '3', icon: '' }
+          }
+        ]
       ]);
     }
   );
 
   it(
-    'aggregateFamilyExpensesPerPaymentSubject should calculate expenses' +
+    'aggregateExpensesPerSubject should calculate expenses' +
       ' on payment subjects per month',
     () => {
       const payments: FamilyPaymentView[] = [
@@ -466,11 +485,23 @@ describe('PaymentsCalculationsService', () => {
         } as FamilyPaymentView
       ];
 
-      expect(
-        service.aggregateFamilyExpensesPerPaymentSubject(payments, 2020, 0)
-      ).toEqual([
-        ['Pets', { v: 100, f: '100 - USD' }],
-        ['School', { v: 6400, f: '6400 - USD' }]
+      expect(service.aggregateExpensesPerSubject(payments, 2020, 0)).toEqual([
+        [
+          'Pets',
+          {
+            v: 100,
+            f: '100 - USD',
+            subject: { name: 'Pets', _id: '1', icon: '' }
+          }
+        ],
+        [
+          'School',
+          {
+            v: 6400,
+            f: '6400 - USD',
+            subject: { name: 'School', _id: '3', icon: '' }
+          }
+        ]
       ]);
     }
   );

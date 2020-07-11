@@ -88,7 +88,7 @@ function getPaymentsCalculationsServiceSpy() {
       'getAggregatedUserPayments',
       'getTotalExpensesPerMonthPerMember',
       'convertToColumnChart',
-      'aggregateFamilyExpensesPerPaymentSubject'
+      'aggregateExpensesPerSubject'
     ]
   );
 
@@ -143,7 +143,7 @@ function getPaymentsCalculationsServiceSpy() {
   );
 
   // tslint:disable-next-line: max-line-length
-  paymentsCalculationsServiceSpy.aggregateFamilyExpensesPerPaymentSubject.and.returnValue(
+  paymentsCalculationsServiceSpy.aggregateExpensesPerSubject.and.returnValue(
     cold('----a', {
       a: [
         ['Apartment', 100],

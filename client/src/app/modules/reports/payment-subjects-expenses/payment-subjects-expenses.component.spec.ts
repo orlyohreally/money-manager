@@ -3,7 +3,11 @@ import { MockComponent } from 'ng-mocks';
 
 // tslint:disable-next-line: max-line-length
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
+// tslint:disable-next-line: max-line-length
+import { PaymentSubjectComponent } from '@shared-client/components/payment-subject/payment-subject.component';
 import { PaymentsCalculationsServiceMock } from '@src/app/tests-utils/mocks';
+// tslint:disable-next-line: max-line-length
+import { MonthSelectorComponent } from '../month-selector/month-selector.component';
 // tslint:disable-next-line: max-line-length
 import { YearSelectorComponent } from '../year-selector/year-selector.component';
 // tslint:disable-next-line: max-line-length
@@ -22,7 +26,9 @@ describe('PaymentSubjectsExpensesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PaymentSubjectsExpensesComponent,
-        MockComponent(YearSelectorComponent)
+        MockComponent(YearSelectorComponent),
+        MockComponent(MonthSelectorComponent),
+        MockComponent(PaymentSubjectComponent)
       ],
       providers: [
         {

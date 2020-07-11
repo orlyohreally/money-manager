@@ -11,17 +11,16 @@
     }"
     [ngTemplateOutlet]="columnChartTemplate"
     #columnChartTemplate
-  >
+    >{{ isChartReady | json }}
     <ng-container *ngIf="reportData?.data.length; else noData">
       <google-chart
         *ngIf="!!reportData"
-        [hidden]="!isChartReady"
+        class="chart"
         [data]="reportData.data"
         [type]="chartType"
         [columns]="reportData.columns"
         [dynamicResize]="true"
         [options]="options"
-        class="chart"
         (ready)="onChartReady()"
       ></google-chart>
       <ng-container *ngIf="!reportData || !isChartReady">
@@ -35,7 +34,7 @@
 </div>
 
 <ng-template #loading>
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <shared-loader></shared-loader>
+  <div fxLayout="row" fxLayoutAlign="center center" class="loader">
+    <shared-loader diameter="100"></shared-loader>
   </div>
 </ng-template>

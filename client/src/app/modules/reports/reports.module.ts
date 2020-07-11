@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
 import { GoogleChartsModule } from 'angular-google-charts';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -8,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '../shared/shared.module';
 import { ReportsRoutingModule } from './reports-routing.module';
 
+// tslint:disable-next-line: max-line-length
+import { MonthSelectorComponent } from './month-selector/month-selector.component';
 // tslint:disable-next-line: max-line-length
 import { MonthlyExpensesReportComponent } from './monthly-expenses-report/monthly-expenses-report.component';
 // tslint:disable-next-line: max-line-length
@@ -20,7 +23,8 @@ import { YearSelectorComponent } from './year-selector/year-selector.component';
     ReportsComponent,
     MonthlyExpensesReportComponent,
     PaymentSubjectsExpensesComponent,
-    YearSelectorComponent
+    YearSelectorComponent,
+    MonthSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +32,7 @@ import { YearSelectorComponent } from './year-selector/year-selector.component';
     FlexLayoutModule,
     GoogleChartsModule,
     MatSelectModule,
+    MatTableModule,
     ReportsRoutingModule,
     SharedModule
   ]

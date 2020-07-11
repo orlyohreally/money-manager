@@ -4,7 +4,7 @@ import { combineLatest, from, Observable, of } from 'rxjs';
 
 import { compare } from '@shared-client/functions';
 import { OverpaidDebtPayment, PaymentExpense } from '@shared-client/types';
-import { FamilyMember, Payment, User } from '@shared/types';
+import { FamilyMember, Payment, PaymentSubject, User } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import { concatMap, map, mergeMap, toArray } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
@@ -304,6 +304,9 @@ export class PaymentsCalculationsService {
   }): { data: [string, ...{ v: number; f: string }[]][]; columns: string[] } {
     const members = [];
     const membersNames: FamilyMember[] = [];
+    const paymentsCurrency: string = Object.entries(aggregation).length
+      ? Object.entries(Object.entries(aggregation)[0][1])[0][1].currency
+      : '';
     const result = Object.keys(aggregation).reduce(
       (res: [string, ...{ v: number; f: string }[]][], monthIndex: string) => {
         const date = new Date();
@@ -351,23 +354,40 @@ export class PaymentsCalculationsService {
     ) as [string, ...{ v: number; f: string }[]][];
     result.forEach(monthData => {
       while (monthData.length < members.length + 1) {
-        monthData.push({ v: 0, f: '0' });
+        monthData.push({
+          v: 0,
+          f: this.currencyPipe.transform(0, paymentsCurrency)
+        });
       }
     });
     const columns = [
       'month',
       ...membersNames.map(
         member => `${member.firstName} ${member.lastName.slice(0, 1)}.`
-      )
+      ),
+      'Total'
     ];
-    return { data: result, columns };
+
+    const agg = result.map(monthlyPayments => {
+      const total = monthlyPayments.slice(1).reduce((res, expenses) => {
+        return res + (expenses as { v: number; f: string }).v;
+      }, 0);
+      return [
+        ...monthlyPayments,
+        { v: total, f: this.currencyPipe.transform(total, paymentsCurrency) }
+      ];
+    }) as [string, { v: number; f: string }][];
+    return {
+      data: agg,
+      columns
+    };
   }
 
-  aggregateFamilyExpensesPerPaymentSubject(
+  aggregateExpensesPerSubject(
     paymentsList: FamilyPaymentView[],
     year: number,
     month?: number
-  ): [string, { v: number; f: string }][] {
+  ): [string, { v: number; f: string; subject: PaymentSubject }][] {
     const result = (paymentsList || [])
       .filter(payment => new Date(payment.paidAt).getFullYear() === year)
       .filter(
@@ -376,7 +396,13 @@ export class PaymentsCalculationsService {
       )
       .reduce(
         (
-          res: { [subjectName: string]: { v: number; f: string } },
+          res: {
+            [subjectName: string]: {
+              v: number;
+              f: string;
+              subject: PaymentSubject;
+            };
+          },
           payment: FamilyPaymentView
         ) => {
           const value =
@@ -384,6 +410,7 @@ export class PaymentsCalculationsService {
           return {
             ...res,
             [payment.subject.name]: {
+              subject: payment.subject,
               v: value,
               f: this.currencyPipe.transform(value, payment.currency)
             }

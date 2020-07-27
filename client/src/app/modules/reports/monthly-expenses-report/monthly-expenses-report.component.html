@@ -11,7 +11,7 @@
     }"
     [ngTemplateOutlet]="columnChartTemplate"
     #columnChartTemplate
-    >{{ isChartReady | json }}
+  >
     <ng-container *ngIf="reportData?.data.length; else noData">
       <google-chart
         *ngIf="!!reportData"

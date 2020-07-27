@@ -9,7 +9,7 @@
 <div role="help links" class="help-links" *ngIf="isActive">
   <ng-container *ngIf="helpLinks | async as links; else loading">
     <mat-list>
-      <div mat-subheader class="help__title">Support center</div>
+      <div mat-subheader class="help__title">Help center</div>
       <button class="help__close-button" mat-icon-button (click)="toggleHelp()">
         <mat-icon>close</mat-icon>
       </button>
@@ -19,27 +19,29 @@
           [routerLink]="['/page', guidePageType, link.slug]"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="nav-block__link_active"
-          class="mat-button_stretched nav-block__link"
+          class="mat-button_stretched"
           target="_blank"
         >
-          {{ link.fields.title }}
+          <span class="nav-block__link">{{ link.fields.title }}</span>
           <mat-icon class="help__link_external">launch</mat-icon>
         </a>
       </mat-list-item>
-      <mat-divider></mat-divider>
-      <div mat-subheader class="help__title">Useful links</div>
-      <mat-list-item>
-        <a
-          mat-button
-          [routerLink]="['/blog']"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="nav-block__link_active"
-          class="mat-button_stretched nav-block__link"
-        >
-          <!-- <mat-icon>notes</mat-icon> -->
-          Blog
-        </a>
-      </mat-list-item>
+      <ng-container *ngIf="isDevMode">
+        <mat-divider></mat-divider>
+        <div mat-subheader class="help__title">Useful links</div>
+        <mat-list-item>
+          <a
+            mat-button
+            [routerLink]="['/blog']"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="nav-block__link_active"
+            class="mat-button_stretched nav-block__link"
+          >
+            <!-- <mat-icon>notes</mat-icon> -->
+            Blog
+          </a>
+        </mat-list-item>
+      </ng-container>
     </mat-list>
   </ng-container>
 </div>

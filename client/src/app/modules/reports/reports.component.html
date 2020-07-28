@@ -1,6 +1,6 @@
 <div class="reports">
   <h1>Reports</h1>
-  <ng-container *ngIf="familyId | async as familyIdValue">
+  <ng-container *ngIf="familyId | async as familyIdValue; else userReports">
     <reports-monthly-expenses-report
       [familyId]="familyIdValue"
     ></reports-monthly-expenses-report>
@@ -8,4 +8,7 @@
       [familyId]="familyIdValue"
     ></reports-payment-subjects-expenses>
   </ng-container>
+  <ng-template #userReports>
+    <reports-user-monthly-expenses-report></reports-user-monthly-expenses-report>
+  </ng-template>
 </div>

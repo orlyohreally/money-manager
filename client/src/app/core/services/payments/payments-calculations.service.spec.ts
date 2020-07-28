@@ -8,7 +8,7 @@ import {
   OverpaidDebtPayment,
   PaymentExpense
 } from '@shared-client/types';
-import { FamilyMember, User } from '@shared/types';
+import { FamilyMember } from '@shared/types';
 import { FamilyPaymentView, UserPaymentView } from '@src/app/types';
 import {
   AuthenticationServiceMock,
@@ -83,7 +83,7 @@ describe('PaymentsCalculationsService', () => {
         { provide: CurrencyPipe, useValue: currencyPipeSpy }
       ]
     });
-    service = TestBed.get(PaymentsCalculationsService);
+    service = TestBed.inject(PaymentsCalculationsService);
   });
 
   afterEach(() => {});
@@ -503,6 +503,141 @@ describe('PaymentsCalculationsService', () => {
           }
         ]
       ]);
+    }
+  );
+
+  it(
+    'getUserMonthlyExpenses should return calculated user ' +
+      'monthly expenses for chart',
+    () => {
+      const userPayments: UserPaymentView[] = [
+        {
+          amount: 100,
+          subject: { name: 'Pets', _id: '1', icon: '' },
+          currency: 'USD',
+          paidAt: '01-02-2020'
+        } as UserPaymentView,
+        {
+          amount: 170,
+          subject: { name: 'Apartment', _id: '2', icon: '' },
+          currency: 'USD',
+          paidAt: '02-02-2020'
+        } as UserPaymentView,
+        {
+          amount: 120,
+          subject: { name: 'Apartment', _id: '3', icon: '' },
+          currency: 'USD',
+          paidAt: '07-08-2020'
+        } as UserPaymentView,
+        {
+          amount: 1200,
+          subject: { name: 'School', _id: '4', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as UserPaymentView,
+        {
+          amount: 5200,
+          subject: { name: 'School', _id: '5', icon: '' },
+          currency: 'USD',
+          paidAt: '01-06-2020'
+        } as UserPaymentView,
+        {
+          amount: 20,
+          subject: { name: 'Apartment', _id: '6', icon: '' },
+          currency: 'USD',
+          paidAt: '07-10-2020'
+        } as UserPaymentView
+      ];
+      const expectedResponse: {
+        data: [string, ...(number | string)[]][];
+        columns: (
+          | string
+          | { type: string; role: string; p: { html: boolean } }
+        )[];
+      } = {
+        data: [
+          [
+            'Jan.',
+            6500,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>January</b><br />Total: <b>6500 - USD</b></div>'
+          ],
+          [
+            'Feb.',
+            170,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>February</b><br />Total: <b>170 - USD</b></div>'
+          ],
+          [
+            'Mar.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>March</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Apr.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>April</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'May',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>May</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Jun.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>June</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Jul.',
+            140,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>July</b><br />Total: <b>140 - USD</b></div>'
+          ],
+          [
+            'Aug.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>August</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Sep.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>September</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Oct.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>October</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Nov.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>November</b><br />Total: <b>0 - USD</b></div>'
+          ],
+          [
+            'Dec.',
+            0,
+            // tslint:disable-next-line: max-line-length
+            '<div style="padding:5px"><b>December</b><br />Total: <b>0 - USD</b></div>'
+          ]
+        ],
+        columns: [
+          'Month',
+          'Total',
+          { type: 'string', role: 'tooltip', p: { html: true } }
+        ]
+      };
+      expect(service.getUserMonthlyExpenses(userPayments, 2020)).toEqual(
+        expectedResponse
+      );
     }
   );
 });

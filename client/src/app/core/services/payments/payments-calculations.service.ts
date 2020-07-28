@@ -235,13 +235,18 @@ export class PaymentsCalculationsService {
       .reduce((acc, val) => acc.concat(val), []);
   }
 
-  getTotalExpensesPerMonthPerMember(
+  getMembersMonthlyExpenses(
     paymentsList: FamilyPaymentView[],
     year: number
   ): {
-    [monthIndex: number]: {
-      [id: string]: { member: FamilyMember; amount: number; currency: string };
-    };
+    data: [
+      string,
+      ...{
+        v: number;
+        f: string;
+      }[]
+    ][];
+    columns: string[];
   } {
     const calculatedExpenses: {
       [monthIndex: number]: {
@@ -294,10 +299,119 @@ export class PaymentsCalculationsService {
         };
       }, {});
 
-    return calculatedExpenses;
+    return this.convertToColumnChart(calculatedExpenses);
   }
 
-  convertToColumnChart(aggregation: {
+  getUserMonthlyExpenses(
+    paymentsList: UserPaymentView[],
+    year: number
+  ): {
+    data: [string, ...(number | string)[]][];
+    columns: (string | { type: string; role: string })[];
+  } {
+    const calculatedExpenses: {
+      [monthIndex: number]: {
+        amount: number;
+        currency: string;
+      };
+    } = (paymentsList || [])
+      .filter(payment => new Date(payment.paidAt).getFullYear() === year)
+      .reduce((res, payment: UserPaymentView) => {
+        const monthIndex: number = new Date(payment.paidAt).getMonth();
+        if (!res[monthIndex]) {
+          return {
+            ...res,
+            [monthIndex]: {
+              amount: payment.amount,
+              currency: payment.currency
+            }
+          };
+        }
+
+        return {
+          ...res,
+          [monthIndex]: {
+            ...res[monthIndex],
+            amount: res[monthIndex].amount + payment.amount
+          }
+        };
+      }, {});
+
+    return this.convertForChartUserMonthlyExpenses(calculatedExpenses);
+  }
+
+  aggregateExpensesPerSubject(
+    paymentsList: FamilyPaymentView[],
+    year: number,
+    month?: number
+  ): [string, { v: number; f: string; subject: PaymentSubject }][] {
+    const result = (paymentsList || [])
+      .filter(payment => new Date(payment.paidAt).getFullYear() === year)
+      .filter(
+        payment =>
+          month === undefined || new Date(payment.paidAt).getMonth() === month
+      )
+      .reduce(
+        (
+          res: {
+            [subjectName: string]: {
+              v: number;
+              f: string;
+              subject: PaymentSubject;
+            };
+          },
+          payment: FamilyPaymentView
+        ) => {
+          const value =
+            (res[payment.subject.name] || { v: 0 }).v + payment.amount;
+          return {
+            ...res,
+            [payment.subject.name]: {
+              subject: payment.subject,
+              v: value,
+              f: this.currencyPipe.transform(value, payment.currency)
+            }
+          };
+        },
+        {}
+      );
+    return Object.entries(result);
+  }
+
+  private calcForDifferentPercentages(
+    payment: FamilyPaymentView,
+    members: FamilyMember[]
+  ): OverpaidDebtPayment[] {
+    return payment.paymentPercentages
+      .map(percentage => {
+        const percentageUser = members.filter(
+          member => member._id === percentage.userId
+        )[0];
+        const debt =
+          payment.member._id === percentageUser._id
+            ? 0
+            : (payment.amount * percentage.paymentPercentage) / 100;
+        const overpaid =
+          payment.member._id === percentageUser._id
+            ? (payment.amount * (100 - percentage.paymentPercentage)) / 100
+            : 0;
+        return {
+          user: percentageUser,
+          ...(payment.member._id !== percentageUser._id && {
+            toUser: payment.member
+          }),
+          debt,
+          overpaid,
+          currency: payment.currency,
+          paidAt: payment.paidAt.toString(),
+          createdAt: payment.createdAt.toString(),
+          updatedAt: payment.updatedAt.toString()
+        } as OverpaidDebtPayment;
+      })
+      .reduce((acc, val) => acc.concat(val), []);
+  }
+
+  private convertToColumnChart(aggregation: {
     [monthIndex: number]: {
       [id: string]: { member: FamilyMember; amount: number; currency: string };
     };
@@ -383,74 +497,73 @@ export class PaymentsCalculationsService {
     };
   }
 
-  aggregateExpensesPerSubject(
-    paymentsList: FamilyPaymentView[],
-    year: number,
-    month?: number
-  ): [string, { v: number; f: string; subject: PaymentSubject }][] {
-    const result = (paymentsList || [])
-      .filter(payment => new Date(payment.paidAt).getFullYear() === year)
-      .filter(
-        payment =>
-          month === undefined || new Date(payment.paidAt).getMonth() === month
-      )
-      .reduce(
-        (
-          res: {
-            [subjectName: string]: {
-              v: number;
-              f: string;
-              subject: PaymentSubject;
-            };
-          },
-          payment: FamilyPaymentView
-        ) => {
-          const value =
-            (res[payment.subject.name] || { v: 0 }).v + payment.amount;
-          return {
-            ...res,
-            [payment.subject.name]: {
-              subject: payment.subject,
-              v: value,
-              f: this.currencyPipe.transform(value, payment.currency)
-            }
-          };
-        },
-        {}
-      );
-    return Object.entries(result);
-  }
+  private convertForChartUserMonthlyExpenses(aggregation: {
+    [monthIndex: number]: { amount: number; currency: string };
+  }): {
+    data: [string, ...(number | string)[]][];
+    columns: (string | { type: string; role: string; p: { html: boolean } })[];
+  } {
+    const monthNames: { name: string; short: string }[] = [
+      { name: 'January', short: 'Jan.' },
+      { name: 'February', short: 'Feb.' },
+      { name: 'March', short: 'Mar.' },
+      { name: 'April', short: 'Apr.' },
+      { name: 'May', short: 'May' },
+      { name: 'June', short: 'Jun.' },
+      { name: 'July', short: 'Jul.' },
+      { name: 'August', short: 'Aug.' },
+      { name: 'September', short: 'Sep.' },
+      { name: 'October', short: 'Oct.' },
+      { name: 'November', short: 'Nov.' },
+      { name: 'December', short: 'Dec.' }
+    ];
+    const paymentsCurrency: string = Object.entries(aggregation).length
+      ? Object.entries(aggregation)[0][1].currency
+      : '';
 
-  private calcForDifferentPercentages(
-    payment: FamilyPaymentView,
-    members: FamilyMember[]
-  ): OverpaidDebtPayment[] {
-    return payment.paymentPercentages
-      .map(percentage => {
-        const percentageUser = members.filter(
-          member => member._id === percentage.userId
-        )[0];
-        const debt =
-          payment.member._id === percentageUser._id
-            ? 0
-            : (payment.amount * percentage.paymentPercentage) / 100;
-        const overpaid =
-          payment.member._id === percentageUser._id
-            ? (payment.amount * (100 - percentage.paymentPercentage)) / 100
-            : 0;
-        return {
-          user: percentageUser,
-          ...(payment.member._id !== percentageUser._id && {
-            toUser: payment.member
-          }),
-          debt,
-          overpaid,
-          currency: payment.currency,
-          paidAt: payment.paidAt.toString(),
-          createdAt: payment.createdAt.toString(),
-          updatedAt: payment.updatedAt.toString()
-        } as OverpaidDebtPayment;
-      })
-      .reduce((acc, val) => acc.concat(val), []);
+    const monthsAmounts: number[] = Object.keys(aggregation).reduce(
+      (amountsInArray: number[], monthsIndex) => {
+        const extraZeros: number[] = [];
+        while (
+          amountsInArray.length + extraZeros.length <
+          parseInt(monthsIndex, 10)
+        ) {
+          extraZeros.push(0);
+        }
+        return [
+          ...amountsInArray,
+          ...extraZeros,
+          aggregation[monthsIndex].amount
+        ];
+      },
+      []
+    );
+    while (monthsAmounts.length < monthNames.length) {
+      monthsAmounts.push(0);
+    }
+
+    const data: [string, ...(number | string)[]][] = Object.entries(
+      monthsAmounts
+    ).map((monthAmount: [string, number]) => {
+      return [
+        monthNames[monthAmount[0]].short,
+        monthAmount[1],
+        `<div style="padding:5px"><b>${
+          monthNames[monthAmount[0]].name
+        }</b><br />Total: <b>${this.currencyPipe.transform(
+          monthAmount[1],
+          paymentsCurrency
+        )}</b></div>`
+      ];
+    });
+    const columns = [
+      'Month',
+      'Total',
+      { type: 'string', role: 'tooltip', p: { html: true } }
+    ];
+    return {
+      data,
+      columns
+    };
   }
 }

@@ -86,9 +86,9 @@ function getPaymentsCalculationsServiceSpy() {
       'getPaymentTransactions',
       'getAggregatedPayments',
       'getAggregatedUserPayments',
-      'getTotalExpensesPerMonthPerMember',
-      'convertToColumnChart',
-      'aggregateExpensesPerSubject'
+      'getMembersMonthlyExpenses',
+      'aggregateExpensesPerSubject',
+      'getUserMonthlyExpenses'
     ]
   );
 
@@ -105,7 +105,7 @@ function getPaymentsCalculationsServiceSpy() {
     cold('----a', { a: PaymentsServiceMock().userAggregatedPayments })
   );
   // tslint:disable-next-line: max-line-length
-  paymentsCalculationsServiceSpy.getTotalExpensesPerMonthPerMember.and.returnValue(
+  paymentsCalculationsServiceSpy.getMembersMonthlyExpenses.and.returnValue(
     cold('----a', {
       a: {
         4: {
@@ -131,14 +131,6 @@ function getPaymentsCalculationsServiceSpy() {
           }
         }
       }
-    })
-  );
-  paymentsCalculationsServiceSpy.convertToColumnChart.and.returnValue(
-    cold('----a', {
-      a: [
-        ['May', 100, 0],
-        ['July', 0, 560]
-      ]
     })
   );
 

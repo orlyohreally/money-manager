@@ -7,23 +7,22 @@ import { map } from 'rxjs/operators';
 import { PaymentsCalculationsService } from '@core-client/services/payments/payments-calculations.service';
 
 @Component({
-  selector: 'reports-monthly-expenses-report',
-  templateUrl: './monthly-expenses-report.component.html',
-  styleUrls: ['./monthly-expenses-report.component.scss']
+  selector: 'reports-user-monthly-expenses-report',
+  templateUrl: './user-monthly-expenses-report.component.html',
+  styleUrls: ['./user-monthly-expenses-report.component.scss']
 })
-export class MonthlyExpensesReportComponent implements OnInit, OnChanges {
-  @Input() familyId: string;
-
+export class UserMonthlyExpensesReportComponent implements OnInit, OnChanges {
   chartType = ChartType.LineChart;
   options = {
     isStacked: true,
-    legend: { position: 'top', maxLines: 3 },
-    backgroundColor: 'transparent'
+    legend: { position: 'none' },
+    backgroundColor: 'transparent',
+    tooltip: { isHtml: true }
   };
 
   expensesData: Observable<{
-    data: [string, ...{ v: number; f: string }[]][];
-    columns: string[];
+    data: [string, ...(string | number)[]][];
+    columns: (string | { type: string; role: string })[];
   }>;
   isChartReady = false;
   selectedYear: number;
@@ -45,10 +44,10 @@ export class MonthlyExpensesReportComponent implements OnInit, OnChanges {
   getReportData(year: number) {
     this.selectedYear = year;
     this.expensesData = this.paymentsCalculationsService
-      .getAggregatedPayments(this.familyId)
+      .getAggregatedUserPayments()
       .pipe(
         map(payments => {
-          return this.paymentsCalculationsService.getMembersMonthlyExpenses(
+          return this.paymentsCalculationsService.getUserMonthlyExpenses(
             payments,
             year
           );

@@ -48,9 +48,6 @@ describe('Families Page', () => {
       'then redirect to family page and update families list',
     () => {
       expect(getFamiliesCards().count()).toEqual(0);
-      expect(element(by.className('card-list')).getText()).toEqual(
-        'No families added yet...'
-      );
       const familyNames = ['Petrov', 'Petrov II'];
       page.createFamily(familyNames[0], '$', ['Admin']);
       const urlPattern = `${escapeRegExp(

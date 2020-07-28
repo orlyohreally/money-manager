@@ -23,5 +23,15 @@
   <shared-loader></shared-loader>
 </ng-template>
 <ng-template #noFamilies>
-  <div fxLayoutAlign="center center">No families added yet...</div>
+  <div class="family-info">
+    <p>
+      You have not created a family yet.<br />
+      Add a family to track payments and analyze how much your family members
+      spend.
+      <br />
+      <a class="info-link" routerLink="/page/family-expenses-guide/families">
+        Learn more about Family configuration.
+      </a>
+    </p>
+  </div>
 </ng-template>

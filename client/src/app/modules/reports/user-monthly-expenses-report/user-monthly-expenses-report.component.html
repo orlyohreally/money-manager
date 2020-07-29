@@ -1,0 +1,40 @@
+<div>
+  <h1>Personal monthly expenses</h1>
+  <reports-year-selector (yearSet)="getReportData($event)">
+  </reports-year-selector>
+</div>
+<div class="chart-wrapper">
+  <ng-template
+    let-reportData="reportData"
+    [ngTemplateOutletContext]="{
+      reportData: expensesData | async
+    }"
+    [ngTemplateOutlet]="columnChartTemplate"
+    #columnChartTemplate
+  >
+    <ng-container *ngIf="reportData?.data.length; else noData">
+      <google-chart
+        *ngIf="!!reportData"
+        class="chart"
+        [data]="reportData.data"
+        [type]="chartType"
+        [columns]="reportData.columns"
+        [dynamicResize]="true"
+        [options]="options"
+        (ready)="onChartReady()"
+      ></google-chart>
+      <ng-container *ngIf="!reportData || !isChartReady">
+        <ng-template [ngTemplateOutlet]="loading"></ng-template>
+      </ng-container>
+    </ng-container>
+    <ng-template #noData>
+      <div fxLayout="row" fxLayoutAlign="center center">No payments yet</div>
+    </ng-template>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <div fxLayout="row" fxLayoutAlign="center center" class="loader">
+    <shared-loader diameter="100"></shared-loader>
+  </div>
+</ng-template>

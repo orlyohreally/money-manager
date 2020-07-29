@@ -16,6 +16,8 @@ import { MonthlyExpensesReportComponent } from './monthly-expenses-report/monthl
 // tslint:disable-next-line: max-line-length
 import { PaymentSubjectsExpensesComponent } from './payment-subjects-expenses/payment-subjects-expenses.component';
 import { ReportsComponent } from './reports.component';
+// tslint:disable-next-line: max-line-length
+import { UserMonthlyExpensesReportComponent } from './user-monthly-expenses-report/user-monthly-expenses-report.component';
 import { YearSelectorComponent } from './year-selector/year-selector.component';
 
 @NgModule({
@@ -24,7 +26,8 @@ import { YearSelectorComponent } from './year-selector/year-selector.component';
     MonthlyExpensesReportComponent,
     PaymentSubjectsExpensesComponent,
     YearSelectorComponent,
-    MonthSelectorComponent
+    MonthSelectorComponent,
+    UserMonthlyExpensesReportComponent
   ],
   imports: [
     CommonModule,

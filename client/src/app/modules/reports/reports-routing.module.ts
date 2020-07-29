@@ -8,7 +8,13 @@ const routes: Routes = [
   {
     path: '',
     component: ReportsComponent,
-    resolve: { familyId: FamilyIdService }
+    resolve: { familyId: FamilyIdService },
+    data: {
+      seo: {
+        title: 'Payments reports',
+        description: 'Reports generated to analyze expenses'
+      }
+    }
   }
 ];
 

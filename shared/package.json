@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/orlyohreally/money-manager#readme",
   "dependencies": {
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
   },

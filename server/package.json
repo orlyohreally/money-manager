@@ -86,7 +86,7 @@
     "http-status-codes": "^1.4.0",
     "husky": "^4.2.5",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "module-alias": "^2.1.0",
     "mongoose": "^5.7.5",
     "multi-file-swagger": "^2.3.0",
